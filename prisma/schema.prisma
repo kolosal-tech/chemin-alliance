@@ -88,6 +88,7 @@ enum ConsentType {
   TERMS_OF_SERVICE
   COUPLE_COACH_SHARING
   CONTACT_EXCHANGE
+  AGENT_PROFILING
 }
 
 model User {
@@ -120,6 +121,7 @@ model User {
   reportsReceived     Report[]             @relation("ReportTarget")
   bookings            Booking[]
   aiCoachUsages       AiCoachUsage[]
+  agentInsights       AgentInsight[]
 }
 
 model FaithProfile {
@@ -179,6 +181,7 @@ model Match {
 
   messages        Message[]
   allianceAnswers AllianceAnswer[]
+  agentInsights   AgentInsight[]
 
   @@unique([userAId, userBId])
 }
@@ -262,6 +265,26 @@ model Booking {
   createdAt DateTime      @default(now())
 
   @@unique([coachId, slotStart])
+}
+
+// Productions des agents intelligents (portrait de préparation, bilans,
+// signaux de vigilance, résumés coach). Toujours soumis à un VisibilityLevel
+// et révocables — jamais exposés à l'autre membre.
+model AgentInsight {
+  id         String          @id @default(cuid())
+  userId     String?
+  user       User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matchId    String?
+  match      Match?          @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  agentId    String
+  kind       String
+  dataJson   Json
+  visibility VisibilityLevel @default(PRIVATE)
+  createdAt  DateTime        @default(now())
+  revokedAt  DateTime?
+
+  @@index([userId, agentId])
+  @@index([matchId, agentId])
 }
 
 model AiCoachUsage {

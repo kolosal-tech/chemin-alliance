@@ -265,5 +265,86 @@
     "toastSuccess": "Perfil guardado con éxito.",
     "toastInfo": "Habéis pasado a la etapa Discernimiento.",
     "toastWarn": "Recuerda completar tu visión familiar."
+  },
+  "agents": {
+    "prep": {
+      "title": "Compañero de Preparación",
+      "subtitle": "Una entrevista suave para discernir dónde estás — nunca un examen.",
+      "intro": "Cinco preguntas, a tu ritmo. Al final: un retrato benevolente (nunca una puntuación) y, si es útil, un camino de crecimiento. Sigues siendo libre.",
+      "consent": "Acepto que mis respuestas sean analizadas por el agente IA para elaborar mi retrato de preparación (datos sensibles, consentimiento revocable en todo momento).",
+      "start": "Comenzar la entrevista",
+      "next": "Siguiente pregunta",
+      "submit": "Recibir mi retrato",
+      "analyzing": "El compañero relee tus respuestas…",
+      "portraitTitle": "Tu retrato de preparación",
+      "neverScore": "nunca una puntuación, nunca un veredicto",
+      "dimSpiritualRooting": "Arraigo espiritual",
+      "dimEmotionalStability": "Estabilidad emocional",
+      "dimIntentionClarity": "Claridad de intención",
+      "dimSupportNetwork": "Red de apoyo",
+      "dimLifeAvailability": "Disponibilidad de vida",
+      "statusSolid": "sólido",
+      "statusGrowing": "en camino",
+      "statusAccompany": "para acompañar",
+      "overallReady": "Tu corazón parece disponible para el encuentro. Avanza a tu ritmo — el camino te acompañará en cada etapa.",
+      "overallGrowth": "Antes de lanzarte plenamente, un tiempo de crecimiento te haría bien. No es una puerta cerrada: es un regalo que te haces.",
+      "overallHuman": "Lo que llevas merece más que una aplicación: un acompañante humano puede ayudarte a atravesar esta etapa. Te conducimos con suavidad.",
+      "growthTitle": "Tu camino de crecimiento",
+      "growthBody": "Módulos guiados, coach humano verificado, y el tiempo necesario. El encuentro esperará a que estés listo/a — y será aún más hermoso.",
+      "growthCta": "Ver coaches verificados",
+      "redo": "Rehacer la entrevista",
+      "revoke": "Borrar mi retrato (RGPD)",
+      "banner": "Nuevo: haz tu entrevista de preparación — 5 preguntas para discernir dónde estás.",
+      "bannerCta": "Hacer la entrevista"
+    },
+    "facil": {
+      "title": "Temas nunca abordados juntos",
+      "none": "Todos los temas de esta etapa han sido abiertos. Hermoso trabajo de verdad.",
+      "askIt": "Hacer esta pregunta"
+    },
+    "review": {
+      "button": "Hacer mi balance de etapa",
+      "title": "Mi balance de etapa",
+      "aligned": "Temas compartidos por ambos",
+      "open": "Temas aún abiertos",
+      "empty": "Responde primero a algunas preguntas de la etapa.",
+      "private": "Este balance es privado — la otra persona no lo ve."
+    },
+    "exit": {
+      "helpTitle": "Ayudarme a formular",
+      "reasonLabel": "Lo que siento",
+      "reasonNoAlignment": "No hay la sintonía necesaria",
+      "reasonVisions": "Visiones de vida diferentes",
+      "reasonPause": "Necesito distancia",
+      "reasonOther": "Otra cosa",
+      "noteLabel": "Lo que quiero transmitir (opcional)",
+      "generate": "Proponer un mensaje",
+      "useDraft": "Usar esta propuesta"
+    },
+    "rebuild": {
+      "cardTitle": "Camino de reconstrucción",
+      "cardBody": "Una relación se cerró. Cuida tu corazón antes de volver a partir — te espera un camino en 4 pasos.",
+      "cta": "Abrir el camino",
+      "title": "Reconstruirse",
+      "wordTitle": "Una palabra para ti"
+    },
+    "copilot": {
+      "title": "Preparar la sesión con la IA",
+      "desc": "Con el acuerdo de ambos, se prepara para el coach un resumen factual del camino (etapa, temas, asuntos a profundizar — nunca vuestros mensajes).",
+      "consentLabel": "Doy mi acuerdo para compartir este resumen con el coach",
+      "generate": "Preparar el resumen",
+      "waitingOther": "Tu acuerdo está registrado. El resumen se generará cuando la otra persona también dé el suyo.",
+      "summaryTitle": "Resumen para el coach",
+      "matchLabel": "Camino concernido"
+    },
+    "watch": {
+      "title": "Señales del Vigilante",
+      "empty": "Ninguna señal de vigilancia.",
+      "signal_money_request": "Petición de dinero",
+      "signal_spiritual_manipulation": "Manipulación espiritual",
+      "signal_marriage_pressure": "Presión al matrimonio",
+      "signal_urgency_rush": "Precipitación insistente",
+      "signal_explicit_content": "Contenido inapropiado"
+    }
   }
 }

@@ -8,6 +8,7 @@ import { getStageQuestions, type Locale } from "@/lib/core-engine";
 import { AllianceThread } from "@/components/AllianceThread";
 import { Radar } from "@/components/Radar";
 import { StageActions } from "./stage-actions";
+import { FacilitatorPanel, ReviewPanel } from "./agent-panels";
 
 const STAGE_NUM: Record<string, number> = {
   DISCOVERY: 1, DIALOGUE: 2, DISCERNMENT: 3,
@@ -100,6 +101,13 @@ export default async function AlliancePage({
             stage={match.stage}
             otherName={other.displayName}
           />
+        </>
+      )}
+
+      {match.stage !== "CLOSED" && (
+        <>
+          <FacilitatorPanel matchId={match.id} />
+          <ReviewPanel matchId={match.id} />
         </>
       )}
 

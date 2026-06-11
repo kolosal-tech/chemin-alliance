@@ -11,6 +11,7 @@ import {
   detectContactLeak,
   leakKindsToActions,
 } from "@/lib/moderation/contact-detection";
+import { analyzeRisk } from "@/lib/agents/watchman";
 
 export const GET = withErrors(
   async (_req: Request, { params }: { params: { matchId: string } }) => {
@@ -121,6 +122,21 @@ export const POST = withErrors(
         contentEncrypted: encryptField(content),
       },
     });
+    // Agent Veilleur : signaux de risque -> dossier modération humaine.
+    // Jamais bloquant, jamais visible par les membres.
+    const risk = analyzeRisk(content);
+    if (risk.flagged) {
+      await prisma.agentInsight.create({
+        data: {
+          userId: user.id,
+          matchId: match.id,
+          agentId: "watchman",
+          kind: "SAFETY_SIGNAL",
+          dataJson: { signals: risk.signals, excerpt: content.slice(0, 160) },
+          visibility: "COACH_ONLY",
+        },
+      });
+    }
     await prisma.match.update({
       where: { id: match.id },
       data: { updatedAt: new Date() },

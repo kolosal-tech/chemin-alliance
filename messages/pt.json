@@ -265,5 +265,86 @@
     "toastSuccess": "Perfil guardado com sucesso.",
     "toastInfo": "Passaram à etapa Discernimento.",
     "toastWarn": "Lembre-se de completar a sua visão familiar."
+  },
+  "agents": {
+    "prep": {
+      "title": "Companheiro de Preparação",
+      "subtitle": "Uma entrevista suave para discernir onde está — nunca um exame.",
+      "intro": "Cinco perguntas, ao seu ritmo. No fim: um retrato benevolente (nunca uma pontuação) e, se útil, um caminho de crescimento. Continua livre.",
+      "consent": "Aceito que as minhas respostas sejam analisadas pelo agente IA para elaborar o meu retrato de preparação (dados sensíveis, consentimento revogável a qualquer momento).",
+      "start": "Começar a entrevista",
+      "next": "Pergunta seguinte",
+      "submit": "Receber o meu retrato",
+      "analyzing": "O companheiro relê as suas respostas…",
+      "portraitTitle": "O seu retrato de preparação",
+      "neverScore": "nunca uma pontuação, nunca um veredito",
+      "dimSpiritualRooting": "Enraizamento espiritual",
+      "dimEmotionalStability": "Estabilidade emocional",
+      "dimIntentionClarity": "Clareza de intenção",
+      "dimSupportNetwork": "Rede de apoio",
+      "dimLifeAvailability": "Disponibilidade de vida",
+      "statusSolid": "sólido",
+      "statusGrowing": "a caminho",
+      "statusAccompany": "a acompanhar",
+      "overallReady": "O seu coração parece disponível para o encontro. Avance ao seu ritmo — o percurso acompanhá-lo-á em cada etapa.",
+      "overallGrowth": "Antes de se lançar plenamente, um tempo de crescimento far-lhe-ia bem. Não é uma porta fechada: é um presente que dá a si mesmo/a.",
+      "overallHuman": "O que carrega merece mais do que uma aplicação: um acompanhante humano pode ajudar a atravessar esta estação. Conduzimo-lo/a com doçura.",
+      "growthTitle": "O seu caminho de crescimento",
+      "growthBody": "Módulos guiados, coach humano verificado, e o tempo necessário. O encontro esperará até estar pronto/a — e será ainda mais belo.",
+      "growthCta": "Ver coaches verificados",
+      "redo": "Refazer a entrevista",
+      "revoke": "Apagar o meu retrato (RGPD)",
+      "banner": "Novo: faça a sua entrevista de preparação — 5 perguntas para discernir onde está.",
+      "bannerCta": "Fazer a entrevista"
+    },
+    "facil": {
+      "title": "Temas nunca abordados juntos",
+      "none": "Todos os temas desta etapa foram abertos. Belo trabalho de verdade.",
+      "askIt": "Fazer esta pergunta"
+    },
+    "review": {
+      "button": "Fazer o meu balanço de etapa",
+      "title": "O meu balanço de etapa",
+      "aligned": "Temas partilhados pelos dois",
+      "open": "Temas ainda abertos",
+      "empty": "Responda primeiro a algumas perguntas da etapa.",
+      "private": "Este balanço é privado — a outra pessoa não o vê."
+    },
+    "exit": {
+      "helpTitle": "Ajudar-me a formular",
+      "reasonLabel": "O que sinto",
+      "reasonNoAlignment": "Não há o alinhamento necessário",
+      "reasonVisions": "Visões de vida diferentes",
+      "reasonPause": "Preciso de recuo",
+      "reasonOther": "Outra coisa",
+      "noteLabel": "O que quero transmitir (opcional)",
+      "generate": "Propor uma mensagem",
+      "useDraft": "Usar esta proposta"
+    },
+    "rebuild": {
+      "cardTitle": "Caminho de reconstrução",
+      "cardBody": "Uma relação encerrou-se. Cuide do seu coração antes de recomeçar — um caminho em 4 passos espera por si.",
+      "cta": "Abrir o caminho",
+      "title": "Reconstruir-se",
+      "wordTitle": "Uma palavra para si"
+    },
+    "copilot": {
+      "title": "Preparar a sessão com a IA",
+      "desc": "Com o acordo de ambos, é preparado para o coach um resumo factual do percurso (etapa, temas, assuntos a aprofundar — nunca as vossas mensagens).",
+      "consentLabel": "Dou o meu acordo para partilhar este resumo com o coach",
+      "generate": "Preparar o resumo",
+      "waitingOther": "O seu acordo está registado. O resumo será gerado quando a outra pessoa também der o dela.",
+      "summaryTitle": "Resumo para o coach",
+      "matchLabel": "Percurso em causa"
+    },
+    "watch": {
+      "title": "Sinais do Vigilante",
+      "empty": "Nenhum sinal de vigilância.",
+      "signal_money_request": "Pedido de dinheiro",
+      "signal_spiritual_manipulation": "Manipulação espiritual",
+      "signal_marriage_pressure": "Pressão para o casamento",
+      "signal_urgency_rush": "Precipitação insistente",
+      "signal_explicit_content": "Conteúdo inapropriado"
+    }
   }
 }

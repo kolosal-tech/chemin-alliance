@@ -157,6 +157,25 @@ d'étape passent par `validateAction()` du moteur doctrinal. La doctrine vit dan
 les YAML — jamais dans le code UI. Le message éducatif de blocage (4 langues)
 vient du ruleset.
 
+### Les 7 agents intelligents (`lib/agents/`)
+
+Tous gouvernés par les mêmes lois : ne jamais décider à la place de la personne,
+ne jamais affirmer une volonté divine, escalader vers l'humain sur le sensible.
+Chaque agent a un **fallback déterministe** — l'app complète tourne sans LLM.
+
+| Agent | Rôle | Où |
+|---|---|---|
+| Compagnon de Préparation | Entretien d'accueil → Portrait (5 dimensions qualitatives, jamais un score) → chemin de croissance ou orientation humaine. Consentement RGPD explicite, révocable. | `/preparation` |
+| Veilleur | Signaux de risque dans les messages (argent, manipulation spirituelle, pression) → dossier modération humaine, jamais bloquant seul | messagerie → `/admin/reports` |
+| Facilitateur de Dialogue | Thèmes jamais abordés par le couple + questions du ruleset | vue Alliance |
+| Bilan d'Étape | Relecture privée (ses propres réponses uniquement) | vue Alliance |
+| Sortie Digne | Détection de silence asymétrique (7 j) + brouillon de clôture respectueux | messages + sortie élégante |
+| Reconstruction | Chemin en 4 pas + mot de consolation après clôture | `/rebuilding` |
+| Copilote du Coach | Note de séance factuelle — uniquement si les DEUX consentent (COUPLE_COACH_SHARING), jamais le contenu des messages, COACH_ONLY | page coach |
+
+Stockage : table `AgentInsight` (visibilité, révocation `revokedAt`). Le portrait
+est effaçable à tout moment (`DELETE /api/agents/preparation`).
+
 ### Coach IA
 
 - Sans clé API : **mode fallback déterministe** (réponses guidées par étape, 4 langues) — la prod tourne sans dépendance payante.

@@ -3,6 +3,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/db";
 import { BookingPanel } from "./booking-panel";
+import { CopilotPanel } from "./copilot-panel";
+import { getSessionUser } from "@/lib/security/session";
 
 export default async function CoachDetailPage({
   params,
@@ -14,6 +16,20 @@ export default async function CoachDetailPage({
   const tc = await getTranslations("common");
   const coach = await prisma.coach.findUnique({ where: { id: params.id } });
   if (!coach) notFound();
+  const user = await getSessionUser();
+  const activeMatch = user
+    ? await prisma.match.findFirst({
+        where: {
+          OR: [{ userAId: user.id }, { userBId: user.id }],
+          status: "ACTIVE",
+        },
+        include: {
+          userA: { select: { id: true, displayName: true } },
+          userB: { select: { id: true, displayName: true } },
+        },
+        orderBy: { updatedAt: "desc" },
+      })
+    : null;
 
   const stars = Math.round(coach.ratingAvg);
 
@@ -87,6 +103,16 @@ export default async function CoachDetailPage({
           </p>
         )}
         <BookingPanel coachId={coach.id} priceEUR={coach.pricePerSessionEUR} />
+        {activeMatch && user && (
+          <CopilotPanel
+            matchId={activeMatch.id}
+            otherName={
+              activeMatch.userAId === user.id
+                ? activeMatch.userB.displayName
+                : activeMatch.userA.displayName
+            }
+          />
+        )}
       </div>
     </main>
   );

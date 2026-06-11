@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/db";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { StageBadge } from "@/components/StageBadge";
+import { silenceDetected } from "@/lib/agents/exit-helper";
 
 export default async function MessagesListPage({
   params,
@@ -20,8 +21,20 @@ export default async function MessagesListPage({
     include: {
       userA: { select: { id: true, displayName: true } },
       userB: { select: { id: true, displayName: true } },
+      messages: {
+        where: { kind: "USER" },
+        orderBy: { createdAt: "desc" },
+        take: 6,
+        select: { senderId: true, createdAt: true },
+      },
     },
     orderBy: { updatedAt: "desc" },
+  });
+  const closedCount = await prisma.match.count({
+    where: {
+      OR: [{ userAId: user.id }, { userBId: user.id }],
+      status: "CLOSED",
+    },
   });
 
   return (
@@ -37,6 +50,9 @@ export default async function MessagesListPage({
         )}
         {matches.map((m) => {
           const other = m.userAId === user.id ? m.userB : m.userA;
+          const lastOther = m.messages.find((x) => x.senderId !== user.id)?.createdAt ?? null;
+          const lastMine = m.messages.find((x) => x.senderId === user.id)?.createdAt ?? null;
+          const silence = silenceDetected(lastOther, lastMine);
           return (
             <Link
               key={m.id}
@@ -55,8 +71,13 @@ export default async function MessagesListPage({
                 <div className="font-display text-[16px] text-night dark:text-[#ECE7DD]">
                   {other.displayName}
                 </div>
-                <div className="mt-1">
+                <div className="mt-1 flex items-center gap-2">
                   <StageBadge stage={m.stage} />
+                  {silence && (
+                    <span className="rounded-[6px] bg-[#FBF6E9] px-2 py-0.5 text-[10px] font-semibold text-gold-ink dark:bg-[#2C2818] dark:text-gold-light">
+                      {t("alliance.exitElegant")} ?
+                    </span>
+                  )}
                 </div>
               </div>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -66,6 +87,22 @@ export default async function MessagesListPage({
           );
         })}
       </div>
+      {closedCount > 0 && (
+        <Link
+          href="/rebuilding"
+          className="mt-4 block rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800"
+        >
+          <div className="font-display text-[17px] text-night dark:text-[#ECE7DD]">
+            {t("agents.rebuild.cardTitle")}
+          </div>
+          <p className="mt-1 text-[12.5px] leading-snug text-warmgray dark:text-[#9A958B]">
+            {t("agents.rebuild.cardBody")}
+          </p>
+          <span className="lbl mt-2 inline-block text-[9px] text-gold-deep dark:text-gold-light">
+            {t("agents.rebuild.cta")} →
+          </span>
+        </Link>
+      )}
     </main>
   );
 }

@@ -265,5 +265,86 @@
     "toastSuccess": "Profile saved successfully.",
     "toastInfo": "You have moved to the Discernment stage.",
     "toastWarn": "Remember to complete your family vision."
+  },
+  "agents": {
+    "prep": {
+      "title": "Preparation Companion",
+      "subtitle": "A gentle interview to discern where you are — never an exam.",
+      "intro": "Five questions, at your pace. At the end: a kind portrait (never a score) and, if helpful, a growth path. You remain free.",
+      "consent": "I agree that my answers be analyzed by the AI agent to build my preparation portrait (sensitive data, consent revocable at any time).",
+      "start": "Begin the interview",
+      "next": "Next question",
+      "submit": "Receive my portrait",
+      "analyzing": "The companion is reading your answers…",
+      "portraitTitle": "Your preparation portrait",
+      "neverScore": "never a score, never a verdict",
+      "dimSpiritualRooting": "Spiritual rooting",
+      "dimEmotionalStability": "Emotional stability",
+      "dimIntentionClarity": "Clarity of intention",
+      "dimSupportNetwork": "Support network",
+      "dimLifeAvailability": "Life availability",
+      "statusSolid": "solid",
+      "statusGrowing": "growing",
+      "statusAccompany": "to be accompanied",
+      "overallReady": "Your heart seems available for encounter. Go at your pace — the journey will accompany you at every stage.",
+      "overallGrowth": "Before fully diving in, a season of growth would do you good. This is not a closed door: it is a gift to yourself.",
+      "overallHuman": "What you carry deserves more than an app: a human companion can help you through this season. We lead you there gently.",
+      "growthTitle": "Your growth path",
+      "growthBody": "Guided modules, a verified human coach, and the time it takes. The encounter will wait until you are ready — and it will be all the more beautiful.",
+      "growthCta": "See verified coaches",
+      "redo": "Redo the interview",
+      "revoke": "Erase my portrait (GDPR)",
+      "banner": "New: take your preparation interview — 5 questions to discern where you are.",
+      "bannerCta": "Take the interview"
+    },
+    "facil": {
+      "title": "Topics never addressed together",
+      "none": "All themes of this stage have been opened. Beautiful truth-work.",
+      "askIt": "Ask this question"
+    },
+    "review": {
+      "button": "Do my stage review",
+      "title": "My stage review",
+      "aligned": "Themes shared by both",
+      "open": "Themes still open",
+      "empty": "Answer a few stage questions first.",
+      "private": "This review is private — the other person does not see it."
+    },
+    "exit": {
+      "helpTitle": "Help me phrase it",
+      "reasonLabel": "What I feel",
+      "reasonNoAlignment": "Not the needed alignment",
+      "reasonVisions": "Different visions of life",
+      "reasonPause": "Need to step back",
+      "reasonOther": "Something else",
+      "noteLabel": "What I want to convey (optional)",
+      "generate": "Suggest a message",
+      "useDraft": "Use this suggestion"
+    },
+    "rebuild": {
+      "cardTitle": "Rebuilding path",
+      "cardBody": "A relationship has closed. Care for your heart before setting out again — a 4-step path awaits.",
+      "cta": "Open the path",
+      "title": "Rebuilding",
+      "wordTitle": "A word for you"
+    },
+    "copilot": {
+      "title": "Prepare the session with AI",
+      "desc": "With both your consents, a factual summary of the journey (stage, themes, topics to deepen — never your messages) is prepared for the coach.",
+      "consentLabel": "I agree to share this summary with the coach",
+      "generate": "Prepare the summary",
+      "waitingOther": "Your consent is recorded. The summary will be generated once the other person also consents.",
+      "summaryTitle": "Summary for the coach",
+      "matchLabel": "Journey concerned"
+    },
+    "watch": {
+      "title": "Watchman signals",
+      "empty": "No vigilance signals.",
+      "signal_money_request": "Money request",
+      "signal_spiritual_manipulation": "Spiritual manipulation",
+      "signal_marriage_pressure": "Marriage pressure",
+      "signal_urgency_rush": "Insistent rushing",
+      "signal_explicit_content": "Inappropriate content"
+    }
   }
 }

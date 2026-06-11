@@ -1,6 +1,8 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { getSuggestions } from "@/lib/matching";
+import { prisma } from "@/lib/db";
+import { Link } from "@/i18n/navigation";
 import { AllianceThread } from "@/components/AllianceThread";
 import { SuggestionCard } from "./suggestion-card";
 
@@ -13,9 +15,29 @@ export default async function SuggestionsPage({
   const t = await getTranslations();
   const user = await requirePageUser(params.locale);
   const suggestions = await getSuggestions(user.id);
+  const hasPortrait =
+    (await prisma.agentInsight.count({
+      where: { userId: user.id, agentId: "preparation", revokedAt: null },
+    })) > 0;
 
   return (
     <main className="px-5 pt-6 safe-top">
+      {!hasPortrait && (
+        <Link
+          href="/preparation"
+          className="mb-3.5 flex items-center gap-3 rounded-cardlg border border-gold/40 bg-[#FBF6E9] p-4 dark:border-[#463A1F] dark:bg-[#272117]"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="flex-none" aria-hidden>
+            <path d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z" fill="#9A7B2E" />
+          </svg>
+          <span className="flex-1 text-[13px] leading-snug text-[#6F5C2E] dark:text-[#C2B488]">
+            {t("agents.prep.banner")}
+          </span>
+          <span className="lbl flex-none text-[9px] text-gold-ink dark:text-[#E0C77A]">
+            {t("agents.prep.bannerCta")} →
+          </span>
+        </Link>
+      )}
       <header className="rounded-cardlg border border-sand-200 bg-cream/80 p-5 dark:border-anthracite-600 dark:bg-anthracite-850/80">
         <h1 className="font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
           {t("suggestions.title")}

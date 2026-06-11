@@ -22,6 +22,7 @@ export function StageActions({
 }) {
   const t = useTranslations("alliance");
   const tc = useTranslations("common");
+  const ta = useTranslations("agents");
   const router = useRouter();
   const [openQ, setOpenQ] = useState<string | null>(null);
   const [answer, setAnswer] = useState("");
@@ -31,6 +32,8 @@ export function StageActions({
   const [notice, setNotice] = useState<string | null>(null);
   const [exitOpen, setExitOpen] = useState(false);
   const [exitText, setExitText] = useState("");
+  const [exitReason, setExitReason] = useState("no_alignment");
+  const [draftBusy, setDraftBusy] = useState(false);
   const [ce, setCe] = useState(contactExchange);
 
   async function saveAnswer(qid: string) {
@@ -92,6 +95,20 @@ export function StageActions({
   }
 
   const templates = [1, 2, 3, 4].map((i) => t(`exitTemplate${i}`));
+
+  async function aiDraft() {
+    setDraftBusy(true);
+    const res = await fetch("/api/agents/exit-helper", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ matchId, reason: exitReason, note: exitText.slice(0, 500) }),
+    });
+    setDraftBusy(false);
+    if (res.ok) {
+      const d = await res.json();
+      if (d.draft) setExitText(d.draft);
+    }
+  }
 
   return (
     <div>
@@ -207,6 +224,27 @@ export function StageActions({
                   {tpl}
                 </button>
               ))}
+            </div>
+            <div className="mt-3 flex items-center gap-2">
+              <select
+                value={exitReason}
+                onChange={(e) => setExitReason(e.target.value)}
+                aria-label={ta("exit.reasonLabel")}
+                className="flex-1 rounded-btnsm border border-sand-300 bg-white px-2.5 py-2.5 text-[12.5px] text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+              >
+                <option value="no_alignment">{ta("exit.reasonNoAlignment")}</option>
+                <option value="different_visions">{ta("exit.reasonVisions")}</option>
+                <option value="need_pause">{ta("exit.reasonPause")}</option>
+                <option value="other">{ta("exit.reasonOther")}</option>
+              </select>
+              <button
+                type="button"
+                onClick={aiDraft}
+                disabled={draftBusy}
+                className="rounded-btnsm border border-gold px-3 py-2.5 text-[12.5px] font-semibold text-gold-ink disabled:opacity-60 dark:border-gold-light/60 dark:text-gold-light"
+              >
+                {ta("exit.generate")}
+              </button>
             </div>
             <textarea
               value={exitText}

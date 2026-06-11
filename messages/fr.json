@@ -265,5 +265,86 @@
     "toastSuccess": "Profil enregistré avec succès.",
     "toastInfo": "Vous êtes passés à l'étape Discernement.",
     "toastWarn": "Pensez à compléter votre vision familiale."
+  },
+  "agents": {
+    "prep": {
+      "title": "Compagnon de Préparation",
+      "subtitle": "Un entretien doux pour discerner où tu en es — jamais un examen.",
+      "intro": "Cinq questions, à ton rythme. À la fin : un portrait bienveillant (jamais un score) et, si utile, un chemin de croissance. Tu restes libre de tout.",
+      "consent": "J'accepte que mes réponses soient analysées par l'agent IA pour établir mon portrait de préparation (données sensibles, consentement révocable à tout moment).",
+      "start": "Commencer l'entretien",
+      "next": "Question suivante",
+      "submit": "Recevoir mon portrait",
+      "analyzing": "Le compagnon relit tes réponses…",
+      "portraitTitle": "Ton portrait de préparation",
+      "neverScore": "jamais un score, jamais un verdict",
+      "dimSpiritualRooting": "Enracinement spirituel",
+      "dimEmotionalStability": "Stabilité émotionnelle",
+      "dimIntentionClarity": "Clarté d'intention",
+      "dimSupportNetwork": "Réseau de soutien",
+      "dimLifeAvailability": "Disponibilité de vie",
+      "statusSolid": "solide",
+      "statusGrowing": "en chemin",
+      "statusAccompany": "à accompagner",
+      "overallReady": "Ton cœur semble disponible pour la rencontre. Avance à ton rythme — le parcours t'accompagnera à chaque étape.",
+      "overallGrowth": "Avant de te lancer pleinement, un temps de croissance te ferait du bien. Ce n'est pas une porte fermée : c'est un cadeau que tu te fais.",
+      "overallHuman": "Ce que tu portes mérite mieux qu'une application : un accompagnateur humain peut t'aider à traverser cette saison. Nous t'y conduisons avec douceur.",
+      "growthTitle": "Ton chemin de croissance",
+      "growthBody": "Modules guidés, coach humain vérifié, et le temps qu'il faut. La rencontre attendra que tu sois prêt·e — et elle n'en sera que plus belle.",
+      "growthCta": "Voir les coachs vérifiés",
+      "redo": "Refaire l'entretien",
+      "revoke": "Effacer mon portrait (RGPD)",
+      "banner": "Nouveau : fais ton entretien de préparation — 5 questions pour discerner où tu en es.",
+      "bannerCta": "Faire l'entretien"
+    },
+    "facil": {
+      "title": "Sujets jamais abordés ensemble",
+      "none": "Tous les thèmes de cette étape ont été ouverts. Beau travail de vérité.",
+      "askIt": "Poser cette question"
+    },
+    "review": {
+      "button": "Faire mon bilan d'étape",
+      "title": "Mon bilan d'étape",
+      "aligned": "Thèmes partagés à deux",
+      "open": "Thèmes encore ouverts",
+      "empty": "Réponds d'abord à quelques questions de l'étape.",
+      "private": "Ce bilan est privé — l'autre personne ne le voit pas."
+    },
+    "exit": {
+      "helpTitle": "M'aider à formuler",
+      "reasonLabel": "Ce que je ressens",
+      "reasonNoAlignment": "Pas l'alignement nécessaire",
+      "reasonVisions": "Visions de vie différentes",
+      "reasonPause": "Besoin de recul",
+      "reasonOther": "Autre chose",
+      "noteLabel": "Ce que je veux transmettre (optionnel)",
+      "generate": "Proposer un message",
+      "useDraft": "Utiliser cette proposition"
+    },
+    "rebuild": {
+      "cardTitle": "Parcours de reconstruction",
+      "cardBody": "Une relation s'est close. Prends soin de ton cœur avant de repartir — un chemin en 4 pas t'attend.",
+      "cta": "Ouvrir le parcours",
+      "title": "Se reconstruire",
+      "wordTitle": "Un mot pour toi"
+    },
+    "copilot": {
+      "title": "Préparer la séance avec l'IA",
+      "desc": "Avec votre accord à tous les deux, un résumé factuel du parcours (étape, thèmes, sujets à approfondir — jamais vos messages) est préparé pour le coach.",
+      "consentLabel": "Je donne mon accord pour partager ce résumé avec le coach",
+      "generate": "Préparer le résumé",
+      "waitingOther": "Ton accord est enregistré. Le résumé sera généré quand l'autre personne aura aussi donné le sien.",
+      "summaryTitle": "Résumé pour le coach",
+      "matchLabel": "Parcours concerné"
+    },
+    "watch": {
+      "title": "Signaux du Veilleur",
+      "empty": "Aucun signal de vigilance.",
+      "signal_money_request": "Demande d'argent",
+      "signal_spiritual_manipulation": "Manipulation spirituelle",
+      "signal_marriage_pressure": "Pression au mariage",
+      "signal_urgency_rush": "Précipitation insistante",
+      "signal_explicit_content": "Contenu déplacé"
+    }
   }
 }
