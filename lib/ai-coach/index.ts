@@ -75,7 +75,9 @@ async function askOpenAiCompatible(
   const data = (await res.json()) as {
     choices?: Array<{ message?: { content?: string } }>;
   };
-  return data.choices?.[0]?.message?.content ?? null;
+  // Les modèles "reasoning" peuvent renvoyer un contenu vide : traiter comme échec.
+  const content = data.choices?.[0]?.message?.content?.trim();
+  return content || null;
 }
 
 /**
