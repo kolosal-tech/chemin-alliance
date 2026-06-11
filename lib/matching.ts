@@ -1,0 +1,142 @@
+import type { User, FaithProfile, RelationshipProfile } from "@prisma/client";
+import { prisma } from "@/lib/db";
+
+type Candidate = User & {
+  faithProfile: FaithProfile | null;
+  relationshipProfile: RelationshipProfile | null;
+};
+
+/**
+ * Suggestions filtrées par le Filtre Anti-Malaise Local et le mode invisible.
+ * La raison d'exclusion n'est JAMAIS exposée.
+ * Max 3 suggestions — la qualité avant la quantité.
+ */
+export async function getSuggestions(userId: string): Promise<Candidate[]> {
+  const me = await prisma.user.findUniqueOrThrow({
+    where: { id: userId },
+    include: {
+      faithProfile: true,
+      relationshipProfile: true,
+      privacySettings: true,
+    },
+  });
+
+  const existing = await prisma.match.findMany({
+    where: { OR: [{ userAId: userId }, { userBId: userId }] },
+    select: { userAId: true, userBId: true },
+  });
+  const excludedIds = new Set<string>([userId]);
+  for (const m of existing) {
+    excludedIds.add(m.userAId);
+    excludedIds.add(m.userBId);
+  }
+
+  const reported = await prisma.report.findMany({
+    where: {
+      status: { in: ["OPEN", "REVIEWING"] },
+      OR: [{ reporterId: userId }, { targetUserId: userId }],
+    },
+    select: { reporterId: true, targetUserId: true },
+  });
+  for (const r of reported) {
+    excludedIds.add(r.reporterId);
+    excludedIds.add(r.targetUserId);
+  }
+
+  const candidates = await prisma.user.findMany({
+    where: {
+      id: { notIn: [...excludedIds] },
+      isVerified: true,
+      privacySettings: { isNot: { invisibleMode: true } },
+    },
+    include: {
+      faithProfile: true,
+      relationshipProfile: true,
+      privacySettings: true,
+    },
+    take: 24,
+  });
+
+  const filtered = candidates.filter((c) => {
+    // Anti-malaise : ne jamais montrer quelqu'un de la même ville approx.
+    // si l'un des deux a activé le filtre (proxy raisonnable sans géoloc fine).
+    const eitherAnti =
+      me.privacySettings?.antiMalaiseEnabled ||
+      c.privacySettings?.antiMalaiseEnabled;
+    if (
+      eitherAnti &&
+      me.cityApprox &&
+      c.cityApprox &&
+      me.cityApprox === c.cityApprox &&
+      me.faithProfile?.denomination &&
+      me.faithProfile.denomination === c.faithProfile?.denomination
+    ) {
+      return false;
+    }
+    return true;
+  });
+
+  // Tri sobre par affinité de fond (jamais montré comme score)
+  const scored = filtered
+    .map((c) => ({ c, s: affinity(me, c) }))
+    .sort((a, b) => b.s - a.s);
+
+  return scored.slice(0, 3).map((x) => x.c);
+}
+
+function affinity(a: Candidate, b: Candidate): number {
+  let s = 0;
+  if (a.faithProfile?.vertical === b.faithProfile?.vertical) s += 3;
+  if (a.faithProfile?.denomination === b.faithProfile?.denomination) s += 1;
+  if (
+    a.relationshipProfile?.wantsChildren != null &&
+    a.relationshipProfile.wantsChildren ===
+      b.relationshipProfile?.wantsChildren
+  )
+    s += 2;
+  if (
+    a.relationshipProfile?.hasChildren &&
+    b.relationshipProfile?.acceptsChildren
+  )
+    s += 2;
+  return s;
+}
+
+/**
+ * Carte de compatibilité = "sujets à approfondir", jamais un score affiché.
+ * Axes 0..1 utilisés par le radar (sobre).
+ */
+export function compatibilityTopics(a: Candidate, b: Candidate) {
+  const axes = {
+    faith: a.faithProfile?.vertical === b.faithProfile?.vertical ? 0.95 : 0.55,
+    children: childAxis(a.relationshipProfile, b.relationshipProfile),
+    finances: 0.5, // à approfondir tant que non discuté en Dialogue
+    location:
+      a.cityApprox && b.cityApprox && a.cityApprox === b.cityApprox
+        ? 0.85
+        : 0.45,
+    vision:
+      a.relationshipProfile?.intentionStatement &&
+      b.relationshipProfile?.intentionStatement
+        ? 0.8
+        : 0.6,
+  };
+  const topics = Object.entries(axes).map(([key, value]) => ({
+    key,
+    status:
+      value >= 0.8 ? "aligned" : value >= 0.6 ? "ok" : ("deepen" as string),
+  }));
+  return { axes, topics };
+}
+
+function childAxis(
+  a: RelationshipProfile | null,
+  b: RelationshipProfile | null,
+): number {
+  if (!a || !b) return 0.5;
+  if (a.wantsChildren != null && a.wantsChildren === b.wantsChildren)
+    return 0.9;
+  if (a.hasChildren && b.acceptsChildren) return 0.8;
+  if (a.hasChildren && b.acceptsChildren === false) return 0.3;
+  return 0.55;
+}

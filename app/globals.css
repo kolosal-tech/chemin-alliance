@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+.dark {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-cream text-ink font-sans antialiased;
+}
+.dark body {
+  @apply bg-anthracite-900 text-[#ECE7DD];
+}
+
+::selection {
+  background: #c9a84c;
+  color: #131d33;
+}
+
+/* Label mono — métadonnées, cadenas, étapes */
+.lbl {
+  @apply font-mono uppercase tracking-label;
+}
+
+/* ---------- Liquid glass (messagerie & éléments flottants) ---------- */
+.glass {
+  background: rgba(252, 251, 248, 0.55);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 8px 32px -12px rgba(19, 29, 51, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.dark .glass {
+  background: rgba(40, 44, 54, 0.45);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 8px 32px -12px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+/* bulle "moi" : verre teinté bleu nuit */
+.glass-self {
+  background: rgba(26, 39, 68, 0.78);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 8px 32px -12px rgba(19, 29, 51, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+.dark .glass-self {
+  background: rgba(43, 53, 82, 0.6);
+}
+/* reflet spéculaire en haut de bulle */
+.glass-bubble {
+  position: relative;
+  overflow: hidden;
+}
+.glass-bubble::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 45%;
+  border-radius: inherit;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.28),
+    rgba(255, 255, 255, 0)
+  );
+  pointer-events: none;
+}
+.dark .glass-bubble::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.09),
+    rgba(255, 255, 255, 0)
+  );
+}
+
+/* Fallback : pas de backdrop-filter -> fonds opaques équivalents */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: #fcfbf8;
+  }
+  .dark .glass {
+    background: #23262c;
+  }
+  .glass-self {
+    background: #1a2744;
+  }
+  .dark .glass-self {
+    background: #2b3552;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: #fcfbf8;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .dark .glass {
+    background: #23262c;
+  }
+  .glass-self {
+    background: #1a2744;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .dark .glass-self {
+    background: #2b3552;
+  }
+}
+
+/* ---------- Motifs sacrés flottants ---------- */
+@keyframes motif-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(0.6deg);
+  }
+}
+.motif-float {
+  animation: motif-float 14s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .motif-float {
+    animation: none;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visible — WCAG AA */
+:focus-visible {
+  outline: 2px solid #c9a84c;
+  outline-offset: 2px;
+}
+
+/* Cibles tactiles >= 44px sur mobile */
+@media (pointer: coarse) {
+  button,
+  a,
+  [role="button"] {
+    min-height: 44px;
+  }
+}
+
+/* Safe areas iOS (encoches) */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}

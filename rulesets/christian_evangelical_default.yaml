@@ -1,0 +1,252 @@
+ruleset:
+  id: christian_evangelical_default
+  name: Christian Evangelical Default
+  version: 1.0.0
+  description: Règles par défaut pour la verticale protestante évangélique.
+  principles:
+    marriage_goal_required: true
+    chastity_encouraged: true
+    explicit_content_forbidden: true
+    phone_sharing_before_trust_stage: false
+    pastoral_coaching_available: true
+    children_must_be_declared_before_engagement: true
+    anti_spiritual_manipulation_enabled: true
+    minimum_dialogue_questions: 4
+  clergy_roles:
+    - pastor
+    - elder
+    - deacon
+    - couple_mentor
+    - christian_counselor
+  vocabulary:
+    local_community:
+      fr: église locale
+      en: local church
+      es: iglesia local
+      pt: igreja local
+    spiritual_leader:
+      fr: pasteur
+      en: pastor
+      es: pastor
+      pt: pastor
+  messages:
+    CONTACT_BLOCKED_BEFORE_TRUST:
+      fr: "Pour votre sécurité, le partage de coordonnées personnelles n'est pas encore disponible à cette étape. Il sera proposé à l'étape Discernement, après validation mutuelle de confiance. Continuez votre échange ici en attendant."
+      en: "For your safety, sharing personal contact details is not yet available at this stage. It will be offered at the Discernment stage, after mutual trust is confirmed. Please continue your conversation here in the meantime."
+      es: "Por tu seguridad, compartir datos de contacto personales aún no está disponible en esta etapa. Se ofrecerá en la etapa de Discernimiento, tras la validación mutua de confianza. Continúa tu conversación aquí mientras tanto."
+      pt: "Para a sua segurança, a partilha de contactos pessoais ainda não está disponível nesta etapa. Será proposta na etapa de Discernimento, após a validação mútua de confiança. Continue a sua conversa aqui entretanto."
+    CONTACT_EXCHANGE_NOT_ACCEPTED:
+      fr: "L'échange de coordonnées doit d'abord être accepté par vous deux. Vous pouvez en faire la demande officielle depuis cette conversation."
+      en: "Contact exchange must first be accepted by both of you. You can make an official request from this conversation."
+      es: "El intercambio de contactos debe ser aceptado primero por ambos. Puedes hacer la solicitud oficial desde esta conversación."
+      pt: "A troca de contactos deve primeiro ser aceite por ambos. Pode fazer o pedido oficial a partir desta conversa."
+    ACTION_FORBIDDEN_AT_STAGE:
+      fr: "Cette action sera disponible à une étape ultérieure de votre parcours. Chaque chose en son temps."
+      en: "This action will become available at a later stage of your journey. Everything in its own time."
+      es: "Esta acción estará disponible en una etapa posterior de vuestro camino. Cada cosa a su tiempo."
+      pt: "Esta ação estará disponível numa etapa posterior do vosso percurso. Cada coisa a seu tempo."
+    CHECKS_NOT_MET:
+      fr: "Quelques conditions restent à remplir avant cette étape : prenez le temps de compléter votre dialogue."
+      en: "A few conditions remain before this step: take time to complete your dialogue."
+      es: "Quedan algunas condiciones antes de este paso: tómense el tiempo de completar su diálogo."
+      pt: "Faltam algumas condições antes deste passo: reservem tempo para completar o vosso diálogo."
+    MATCH_CLOSED:
+      fr: "Cette relation a été clôturée avec respect. Aucune action n'est plus possible ici."
+      en: "This relationship was respectfully closed. No further actions are possible here."
+      es: "Esta relación se cerró con respeto. No es posible realizar más acciones aquí."
+      pt: "Esta relação foi encerrada com respeito. Já não são possíveis ações aqui."
+  actions:
+    share_phone:
+      requires: [contact_exchange_accepted]
+      blocked_reason: CONTACT_BLOCKED_BEFORE_TRUST
+    share_email:
+      requires: [contact_exchange_accepted]
+      blocked_reason: CONTACT_BLOCKED_BEFORE_TRUST
+    share_social_network:
+      requires: [contact_exchange_accepted]
+      blocked_reason: CONTACT_BLOCKED_BEFORE_TRUST
+    send_external_link:
+      requires: [contact_exchange_accepted]
+      blocked_reason: CONTACT_BLOCKED_BEFORE_TRUST
+    request_contact_exchange:
+      requires: [no_active_report, mutual_consent, minimum_dialogue_completed]
+    advance_stage:
+      requires: [no_active_report, mutual_consent, stage_questions_completed]
+  stages:
+    discovery:
+      next: dialogue
+      allowed_actions:
+        - view_summary_profile
+        - send_interest
+        - send_limited_message
+        - send_message
+        - answer_guided_questions
+        - advance_stage
+        - close_relationship
+      forbidden_actions:
+        - share_phone
+        - share_email
+        - share_social_network
+        - send_external_link
+        - request_contact_exchange
+        - request_internal_video_call
+      questions:
+        - id: disc_motivation
+          theme: intention
+          text:
+            fr: "Qu'est-ce qui te motive à chercher une relation sérieuse ?"
+            en: "What motivates you to look for a serious relationship?"
+            es: "¿Qué te motiva a buscar una relación seria?"
+            pt: "O que te motiva a procurar uma relação séria?"
+        - id: disc_faith_daily
+          theme: faith
+          text:
+            fr: "Quelle place la foi occupe-t-elle dans ton quotidien ?"
+            en: "What place does faith hold in your daily life?"
+            es: "¿Qué lugar ocupa la fe en tu vida diaria?"
+            pt: "Que lugar ocupa a fé no teu dia a dia?"
+        - id: disc_family_vision
+          theme: family
+          text:
+            fr: "Quelle est ta vision d'une famille chrétienne ?"
+            en: "What is your vision of a Christian family?"
+            es: "¿Cuál es tu visión de una familia cristiana?"
+            pt: "Qual é a tua visão de uma família cristã?"
+    dialogue:
+      next: discernment
+      allowed_actions:
+        - send_message
+        - answer_guided_questions
+        - request_internal_audio_call
+        - advance_stage
+        - close_relationship
+      forbidden_actions:
+        - share_phone
+        - share_email
+        - share_social_network
+        - send_external_link
+        - request_contact_exchange
+      questions:
+        - id: dial_church
+          theme: church
+          text:
+            fr: "Quelle est ta relation avec ton église locale ?"
+            en: "What is your relationship with your local church?"
+            es: "¿Cuál es tu relación con tu iglesia local?"
+            pt: "Qual é a tua relação com a tua igreja local?"
+        - id: dial_children
+          theme: family
+          text:
+            fr: "Comment vois-tu l'éducation des enfants dans la foi ?"
+            en: "How do you see raising children in the faith?"
+            es: "¿Cómo ves la educación de los hijos en la fe?"
+            pt: "Como vês a educação dos filhos na fé?"
+        - id: dial_finances
+          theme: finances
+          text:
+            fr: "Comment abordes-tu la gestion des finances dans un foyer ?"
+            en: "How do you approach managing finances in a household?"
+            es: "¿Cómo abordas la gestión de las finanzas en un hogar?"
+            pt: "Como abordas a gestão das finanças num lar?"
+        - id: dial_wounds
+          theme: healing
+          text:
+            fr: "Y a-t-il un sujet important de ton parcours que tu souhaites partager, à ton rythme ?"
+            en: "Is there an important part of your story you wish to share, at your own pace?"
+            es: "¿Hay algún tema importante de tu camino que desees compartir, a tu ritmo?"
+            pt: "Há algum assunto importante do teu percurso que queiras partilhar, ao teu ritmo?"
+    discernment:
+      next: accompaniment
+      allowed_actions:
+        - send_message
+        - answer_guided_questions
+        - compatibility_report
+        - request_internal_video_call
+        - request_contact_exchange
+        - book_coach_session
+        - advance_stage
+        - close_relationship
+      forbidden_actions: []
+      required_checks:
+        - no_active_report
+        - mutual_consent
+        - minimum_dialogue_completed
+      questions:
+        - id: disc2_extended_family
+          theme: family
+          text:
+            fr: "Comment envisagez-vous la place de la famille élargie ?"
+            en: "How do you envision the place of the extended family?"
+            es: "¿Cómo ven el lugar de la familia extendida?"
+            pt: "Como veem o lugar da família alargada?"
+        - id: disc2_children_education
+          theme: family
+          text:
+            fr: "Quelle vision partagez-vous de l'éducation des enfants ?"
+            en: "What shared vision do you have for raising children?"
+            es: "¿Qué visión comparten sobre la educación de los hijos?"
+            pt: "Que visão partilham sobre a educação dos filhos?"
+    accompaniment:
+      next: commitment
+      allowed_actions:
+        - send_message
+        - answer_guided_questions
+        - compatibility_report
+        - request_internal_video_call
+        - request_contact_exchange
+        - book_coach_session
+        - share_summary_with_coach
+        - advance_stage
+        - close_relationship
+      forbidden_actions: []
+      questions:
+        - id: acc_outside_view
+          theme: accompaniment
+          text:
+            fr: "Qu'attendez-vous d'un regard extérieur qualifié sur votre relation ?"
+            en: "What do you expect from a qualified outside perspective on your relationship?"
+            es: "¿Qué esperan de una mirada externa cualificada sobre su relación?"
+            pt: "O que esperam de um olhar externo qualificado sobre a vossa relação?"
+    commitment:
+      next: marriage_preparation
+      allowed_actions:
+        - send_message
+        - answer_guided_questions
+        - compatibility_report
+        - request_internal_video_call
+        - request_contact_exchange
+        - share_phone
+        - share_email
+        - share_social_network
+        - book_coach_session
+        - advance_stage
+        - close_relationship
+      forbidden_actions: []
+      questions:
+        - id: com_checklist
+          theme: commitment
+          text:
+            fr: "Avez-vous abordé ensemble : finances, familles, blessures, enfants, église, limites avant mariage ?"
+            en: "Have you discussed together: finances, families, wounds, children, church, boundaries before marriage?"
+            es: "¿Han abordado juntos: finanzas, familias, heridas, hijos, iglesia, límites antes del matrimonio?"
+            pt: "Já abordaram juntos: finanças, famílias, feridas, filhos, igreja, limites antes do casamento?"
+    marriage_preparation:
+      next: null
+      allowed_actions:
+        - send_message
+        - answer_guided_questions
+        - request_internal_video_call
+        - share_phone
+        - share_email
+        - share_social_network
+        - book_coach_session
+        - close_relationship
+      forbidden_actions: []
+      questions:
+        - id: prep_modules
+          theme: preparation
+          text:
+            fr: "Quel module de préparation souhaitez-vous aborder en premier ?"
+            en: "Which preparation module would you like to start with?"
+            es: "¿Con qué módulo de preparación desean comenzar?"
+            pt: "Com que módulo de preparação desejam começar?"

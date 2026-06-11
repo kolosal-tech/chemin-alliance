@@ -1,0 +1,275 @@
+// Chemin d'Alliance — schéma Prisma v1
+// Données religieuses/familiales = données sensibles RGPD (art. 9).
+// Chaque champ sensible porte un VisibilityLevel ; les champs *Encrypted
+// sont chiffrés applicativement (AES-256-GCM, lib/security/crypto.ts).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+enum VisibilityLevel {
+  PUBLIC_CONTROLLED
+  AFTER_MATCH
+  AFTER_DIALOGUE
+  AFTER_DISCERNMENT
+  COACH_ONLY
+  PRIVATE
+  MANUAL_SHARE
+}
+
+enum FaithVertical {
+  CHRISTIAN_EVANGELICAL
+  CHRISTIAN_CATHOLIC
+  OTHER
+}
+
+enum AllianceStage {
+  DISCOVERY
+  DIALOGUE
+  DISCERNMENT
+  ACCOMPANIMENT
+  COMMITMENT
+  MARRIAGE_PREPARATION
+  CLOSED
+}
+
+enum ContactExchangeStatus {
+  NOT_ALLOWED
+  AVAILABLE
+  REQUESTED
+  ACCEPTED
+  DECLINED
+  REVOKED
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum MatchStatus {
+  PENDING
+  ACTIVE
+  CLOSED
+}
+
+enum MessageKind {
+  USER
+  SYSTEM
+}
+
+enum ModerationStatus {
+  SAFE
+  BLOCKED
+  FLAGGED
+}
+
+enum ReportStatus {
+  OPEN
+  REVIEWING
+  RESOLVED
+  DISMISSED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum ConsentType {
+  SENSITIVE_DATA_PROCESSING
+  TERMS_OF_SERVICE
+  COUPLE_COACH_SHARING
+  CONTACT_EXCHANGE
+}
+
+model User {
+  id                    String    @id @default(cuid())
+  email                 String    @unique
+  passwordHash          String
+  displayName           String
+  age                   Int
+  gender                String?
+  role                  UserRole  @default(USER)
+  locale                String    @default("fr")
+  rulesetId             String    @default("christian_evangelical_default")
+  isVerified            Boolean   @default(false)
+  emailVerifyToken      String?   @unique
+  photoUrl              String?
+  photoBlurredByDefault Boolean   @default(true)
+  cityApprox            String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  faithProfile        FaithProfile?
+  relationshipProfile RelationshipProfile?
+  privacySettings     PrivacySettings?
+  consents            Consent[]
+  messages            Message[]
+  matchesA            Match[]              @relation("MatchUserA")
+  matchesB            Match[]              @relation("MatchUserB")
+  allianceAnswers     AllianceAnswer[]
+  reportsMade         Report[]             @relation("Reporter")
+  reportsReceived     Report[]             @relation("ReportTarget")
+  bookings            Booking[]
+  aiCoachUsages       AiCoachUsage[]
+}
+
+model FaithProfile {
+  id                    String          @id @default(cuid())
+  userId                String          @unique
+  user                  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vertical              FaithVertical   @default(CHRISTIAN_EVANGELICAL)
+  denomination          String?
+  ministry              String?
+  engagementFrequency   String?
+  localChurchEncrypted  String?
+  localChurchVisibility VisibilityLevel @default(AFTER_DISCERNMENT)
+  testimonyEncrypted    String?
+  testimonyVisibility   VisibilityLevel @default(AFTER_MATCH)
+}
+
+model RelationshipProfile {
+  id                     String          @id @default(cuid())
+  userId                 String          @unique
+  user                   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  maritalStatus          String
+  hasChildren            Boolean         @default(false)
+  childrenVisibility     VisibilityLevel @default(AFTER_MATCH)
+  wantsChildren          Boolean?
+  acceptsChildren        Boolean?
+  familyVisionEncrypted  String?
+  familyVisionVisibility VisibilityLevel @default(AFTER_DIALOGUE)
+  intentionStatement     String?
+  intentionVisibility    VisibilityLevel @default(PUBLIC_CONTROLLED)
+}
+
+model PrivacySettings {
+  id                  String  @id @default(cuid())
+  userId              String  @unique
+  user                User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  antiMalaiseEnabled  Boolean @default(true)
+  antiMalaiseRadiusKm Int     @default(25)
+  invisibleMode       Boolean @default(false)
+  fieldVisibility     Json?
+}
+
+model Match {
+  id                 String                @id @default(cuid())
+  userAId            String
+  userBId            String
+  userA              User                  @relation("MatchUserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB              User                  @relation("MatchUserB", fields: [userBId], references: [id], onDelete: Cascade)
+  stage              AllianceStage         @default(DISCOVERY)
+  status             MatchStatus           @default(PENDING)
+  compatibilityJson  Json?
+  contactExchange    ContactExchangeStatus @default(NOT_ALLOWED)
+  advanceRequestedBy String?
+  closedBy           String?
+  closeMessage       String?
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+
+  messages        Message[]
+  allianceAnswers AllianceAnswer[]
+
+  @@unique([userAId, userBId])
+}
+
+model Message {
+  id               String           @id @default(cuid())
+  matchId          String
+  match            Match            @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  senderId         String
+  sender           User             @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  contentEncrypted String
+  kind             MessageKind      @default(USER)
+  moderationStatus ModerationStatus @default(SAFE)
+  blockedReason    String?
+  createdAt        DateTime         @default(now())
+
+  @@index([matchId, createdAt])
+}
+
+model AllianceAnswer {
+  id         String        @id @default(cuid())
+  matchId    String
+  match      Match         @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stage      AllianceStage
+  questionId String
+  answer     String
+  createdAt  DateTime      @default(now())
+
+  @@unique([matchId, userId, questionId])
+}
+
+model Consent {
+  id        String      @id @default(cuid())
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      ConsentType
+  grantedAt DateTime    @default(now())
+  revokedAt DateTime?
+
+  @@index([userId, type])
+}
+
+model Report {
+  id           String       @id @default(cuid())
+  reporterId   String
+  reporter     User         @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  targetUserId String
+  target       User         @relation("ReportTarget", fields: [targetUserId], references: [id], onDelete: Cascade)
+  reason       String
+  status       ReportStatus @default(OPEN)
+  createdAt    DateTime     @default(now())
+  resolvedAt   DateTime?
+
+  @@index([targetUserId, status])
+}
+
+model Coach {
+  id                 String    @id @default(cuid())
+  displayName        String
+  photoUrl           String?
+  certified          Boolean   @default(false)
+  specialties        String[]
+  affiliation        String
+  bio                String?
+  pricePerSessionEUR Int
+  ratingAvg          Float     @default(0)
+  reviewsCount       Int       @default(0)
+  bookings           Booking[]
+}
+
+model Booking {
+  id        String        @id @default(cuid())
+  coachId   String
+  coach     Coach         @relation(fields: [coachId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slotStart DateTime
+  status    BookingStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+
+  @@unique([coachId, slotStart])
+}
+
+model AiCoachUsage {
+  id     String   @id @default(cuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  day    DateTime @db.Date
+  count  Int      @default(0)
+
+  @@unique([userId, day])
+}

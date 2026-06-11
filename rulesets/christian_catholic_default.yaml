@@ -1,0 +1,258 @@
+ruleset:
+  id: christian_catholic_default
+  name: Catholic Default
+  version: 1.0.0
+  description: Règles par défaut pour la verticale catholique.
+  principles:
+    marriage_goal_required: true
+    marriage_as_sacrament: true
+    explicit_content_forbidden: true
+    phone_sharing_before_trust_stage: false
+    priest_coaching_available: true
+    marriage_preparation_required: true
+    openness_to_children_question_required: true
+    children_must_be_declared_before_engagement: true
+    anti_spiritual_manipulation_enabled: true
+    minimum_dialogue_questions: 4
+  clergy_roles:
+    - priest
+    - deacon
+    - parish_couple_mentor
+    - catholic_counselor
+  vocabulary:
+    local_community:
+      fr: paroisse
+      en: parish
+      es: parroquia
+      pt: paróquia
+    spiritual_leader:
+      fr: prêtre
+      en: priest
+      es: sacerdote
+      pt: padre
+    marriage_preparation:
+      fr: préparation au mariage
+      en: marriage preparation
+      es: preparación al matrimonio
+      pt: preparação para o casamento
+  messages:
+    CONTACT_BLOCKED_BEFORE_TRUST:
+      fr: "Pour votre sécurité, le partage de coordonnées personnelles n'est pas encore disponible à cette étape. Il sera proposé à l'étape Discernement, après validation mutuelle de confiance. Continuez votre échange ici en attendant."
+      en: "For your safety, sharing personal contact details is not yet available at this stage. It will be offered at the Discernment stage, after mutual trust is confirmed. Please continue your conversation here in the meantime."
+      es: "Por tu seguridad, compartir datos de contacto personales aún no está disponible en esta etapa. Se ofrecerá en la etapa de Discernimiento, tras la validación mutua de confianza. Continúa tu conversación aquí mientras tanto."
+      pt: "Para a sua segurança, a partilha de contactos pessoais ainda não está disponível nesta etapa. Será proposta na etapa de Discernimento, após a validação mútua de confiança. Continue a sua conversa aqui entretanto."
+    CONTACT_EXCHANGE_NOT_ACCEPTED:
+      fr: "L'échange de coordonnées doit d'abord être accepté par vous deux. Vous pouvez en faire la demande officielle depuis cette conversation."
+      en: "Contact exchange must first be accepted by both of you. You can make an official request from this conversation."
+      es: "El intercambio de contactos debe ser aceptado primero por ambos. Puedes hacer la solicitud oficial desde esta conversación."
+      pt: "A troca de contactos deve primeiro ser aceite por ambos. Pode fazer o pedido oficial a partir desta conversa."
+    ACTION_FORBIDDEN_AT_STAGE:
+      fr: "Cette action sera disponible à une étape ultérieure de votre parcours. Chaque chose en son temps."
+      en: "This action will become available at a later stage of your journey. Everything in its own time."
+      es: "Esta acción estará disponible en una etapa posterior de vuestro camino. Cada cosa a su tiempo."
+      pt: "Esta ação estará disponível numa etapa posterior do vosso percurso. Cada coisa a seu tempo."
+    CHECKS_NOT_MET:
+      fr: "Quelques conditions restent à remplir avant cette étape : prenez le temps de compléter votre dialogue."
+      en: "A few conditions remain before this step: take time to complete your dialogue."
+      es: "Quedan algunas condiciones antes de este paso: tómense el tiempo de completar su diálogo."
+      pt: "Faltam algumas condições antes deste passo: reservem tempo para completar o vosso diálogo."
+    MATCH_CLOSED:
+      fr: "Cette relation a été clôturée avec respect. Aucune action n'est plus possible ici."
+      en: "This relationship was respectfully closed. No further actions are possible here."
+      es: "Esta relación se cerró con respeto. No es posible realizar más acciones aquí."
+      pt: "Esta relação foi encerrada com respeito. Já não são possíveis ações aqui."
+  actions:
+    share_phone:
+      requires: [contact_exchange_accepted]
+      blocked_reason: CONTACT_BLOCKED_BEFORE_TRUST
+    share_email:
+      requires: [contact_exchange_accepted]
+      blocked_reason: CONTACT_BLOCKED_BEFORE_TRUST
+    share_social_network:
+      requires: [contact_exchange_accepted]
+      blocked_reason: CONTACT_BLOCKED_BEFORE_TRUST
+    send_external_link:
+      requires: [contact_exchange_accepted]
+      blocked_reason: CONTACT_BLOCKED_BEFORE_TRUST
+    request_contact_exchange:
+      requires: [no_active_report, mutual_consent, minimum_dialogue_completed]
+    advance_stage:
+      requires: [no_active_report, mutual_consent, stage_questions_completed]
+  stages:
+    discovery:
+      next: dialogue
+      allowed_actions:
+        - view_summary_profile
+        - send_interest
+        - send_limited_message
+        - send_message
+        - answer_guided_questions
+        - advance_stage
+        - close_relationship
+      forbidden_actions:
+        - share_phone
+        - share_email
+        - share_social_network
+        - send_external_link
+        - request_contact_exchange
+        - request_internal_video_call
+      questions:
+        - id: disc_motivation
+          theme: intention
+          text:
+            fr: "Qu'est-ce qui te motive à chercher une relation orientée vers le sacrement du mariage ?"
+            en: "What motivates you to seek a relationship oriented toward the sacrament of marriage?"
+            es: "¿Qué te motiva a buscar una relación orientada al sacramento del matrimonio?"
+            pt: "O que te motiva a procurar uma relação orientada para o sacramento do casamento?"
+        - id: disc_faith_daily
+          theme: faith
+          text:
+            fr: "Quelle place la foi et la vie de prière occupent-elles dans ton quotidien ?"
+            en: "What place do faith and prayer life hold in your daily life?"
+            es: "¿Qué lugar ocupan la fe y la vida de oración en tu vida diaria?"
+            pt: "Que lugar ocupam a fé e a vida de oração no teu dia a dia?"
+        - id: disc_parish
+          theme: church
+          text:
+            fr: "Quelle est ta relation avec ta paroisse ?"
+            en: "What is your relationship with your parish?"
+            es: "¿Cuál es tu relación con tu parroquia?"
+            pt: "Qual é a tua relação com a tua paróquia?"
+    dialogue:
+      next: discernment
+      allowed_actions:
+        - send_message
+        - answer_guided_questions
+        - request_internal_audio_call
+        - advance_stage
+        - close_relationship
+      forbidden_actions:
+        - share_phone
+        - share_email
+        - share_social_network
+        - send_external_link
+        - request_contact_exchange
+      questions:
+        - id: dial_children_openness
+          theme: family
+          text:
+            fr: "Comment accueilles-tu la question de l'ouverture à la vie et aux enfants ?"
+            en: "How do you welcome the question of openness to life and children?"
+            es: "¿Cómo acoges la cuestión de la apertura a la vida y a los hijos?"
+            pt: "Como acolhes a questão da abertura à vida e aos filhos?"
+        - id: dial_sacrament
+          theme: faith
+          text:
+            fr: "Que signifie pour toi le mariage comme sacrement ?"
+            en: "What does marriage as a sacrament mean to you?"
+            es: "¿Qué significa para ti el matrimonio como sacramento?"
+            pt: "O que significa para ti o casamento como sacramento?"
+        - id: dial_finances
+          theme: finances
+          text:
+            fr: "Comment abordes-tu la gestion des finances dans un foyer ?"
+            en: "How do you approach managing finances in a household?"
+            es: "¿Cómo abordas la gestión de las finanzas en un hogar?"
+            pt: "Como abordas a gestão das finanças num lar?"
+        - id: dial_wounds
+          theme: healing
+          text:
+            fr: "Y a-t-il un sujet important de ton parcours que tu souhaites partager, à ton rythme ?"
+            en: "Is there an important part of your story you wish to share, at your own pace?"
+            es: "¿Hay algún tema importante de tu camino que desees compartir, a tu ritmo?"
+            pt: "Há algum assunto importante do teu percurso que queiras partilhar, ao teu ritmo?"
+    discernment:
+      next: accompaniment
+      allowed_actions:
+        - send_message
+        - answer_guided_questions
+        - compatibility_report
+        - request_internal_video_call
+        - request_contact_exchange
+        - book_coach_session
+        - advance_stage
+        - close_relationship
+      forbidden_actions: []
+      required_checks:
+        - no_active_report
+        - mutual_consent
+        - minimum_dialogue_completed
+      questions:
+        - id: disc2_extended_family
+          theme: family
+          text:
+            fr: "Comment envisagez-vous la place de la famille élargie ?"
+            en: "How do you envision the place of the extended family?"
+            es: "¿Cómo ven el lugar de la familia extendida?"
+            pt: "Como veem o lugar da família alargada?"
+        - id: disc2_children_education
+          theme: family
+          text:
+            fr: "Quelle vision partagez-vous de l'éducation des enfants dans la foi ?"
+            en: "What shared vision do you have for raising children in the faith?"
+            es: "¿Qué visión comparten sobre la educación de los hijos en la fe?"
+            pt: "Que visão partilham sobre a educação dos filhos na fé?"
+    accompaniment:
+      next: commitment
+      allowed_actions:
+        - send_message
+        - answer_guided_questions
+        - compatibility_report
+        - request_internal_video_call
+        - request_contact_exchange
+        - book_coach_session
+        - share_summary_with_coach
+        - advance_stage
+        - close_relationship
+      forbidden_actions: []
+      questions:
+        - id: acc_priest
+          theme: accompaniment
+          text:
+            fr: "Souhaitez-vous être accompagnés par un prêtre ou un couple mentor de paroisse ?"
+            en: "Would you like to be accompanied by a priest or a parish mentor couple?"
+            es: "¿Desean ser acompañados por un sacerdote o un matrimonio mentor de la parroquia?"
+            pt: "Desejam ser acompanhados por um padre ou um casal mentor da paróquia?"
+    commitment:
+      next: marriage_preparation
+      allowed_actions:
+        - send_message
+        - answer_guided_questions
+        - compatibility_report
+        - request_internal_video_call
+        - request_contact_exchange
+        - share_phone
+        - share_email
+        - share_social_network
+        - book_coach_session
+        - advance_stage
+        - close_relationship
+      forbidden_actions: []
+      questions:
+        - id: com_checklist
+          theme: commitment
+          text:
+            fr: "Avez-vous abordé ensemble : finances, familles, blessures, enfants, paroisse, limites avant mariage ?"
+            en: "Have you discussed together: finances, families, wounds, children, parish, boundaries before marriage?"
+            es: "¿Han abordado juntos: finanzas, familias, heridas, hijos, parroquia, límites antes del matrimonio?"
+            pt: "Já abordaram juntos: finanças, famílias, feridas, filhos, paróquia, limites antes do casamento?"
+    marriage_preparation:
+      next: null
+      allowed_actions:
+        - send_message
+        - answer_guided_questions
+        - request_internal_video_call
+        - share_phone
+        - share_email
+        - share_social_network
+        - book_coach_session
+        - close_relationship
+      forbidden_actions: []
+      questions:
+        - id: prep_modules
+          theme: preparation
+          text:
+            fr: "La préparation au mariage est requise : par quel module souhaitez-vous commencer ?"
+            en: "Marriage preparation is required: which module would you like to start with?"
+            es: "La preparación al matrimonio es requerida: ¿con qué módulo desean comenzar?"
+            pt: "A preparação para o casamento é requerida: com que módulo desejam começar?"

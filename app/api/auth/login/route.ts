@@ -1,0 +1,29 @@
+import { NextResponse } from "next/server";
+import { z } from "zod";
+import { prisma } from "@/lib/db";
+import { clientIp, jsonError, withErrors } from "@/lib/api-helpers";
+import { verifyPassword } from "@/lib/security/password";
+import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
+import { SESSION_COOKIE, sessionCookieOptions, signSession } from "@/lib/security/jwt";
+
+const schema = z.object({
+  email: z.string().email().toLowerCase(),
+  password: z.string().min(1),
+});
+
+export const POST = withErrors(async (req: Request) => {
+  const rl = rateLimit(`login:${clientIp(req)}`, LIMITS.auth.limit, LIMITS.auth.windowMs);
+  if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
+
+  const body = schema.parse(await req.json());
+  const user = await prisma.user.findUnique({ where: { email: body.email } });
+  // Réponse identique email inconnu / mauvais mot de passe (anti-énumération)
+  if (!user || !(await verifyPassword(user.passwordHash, body.password))) {
+    return jsonError(401, "INVALID_CREDENTIALS");
+  }
+
+  const token = await signSession({ sub: user.id, role: user.role });
+  const res = NextResponse.json({ ok: true, locale: user.locale });
+  res.cookies.set(SESSION_COOKIE, token, sessionCookieOptions());
+  return res;
+});
