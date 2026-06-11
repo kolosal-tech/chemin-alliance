@@ -18,7 +18,7 @@ export default async function CoachDetailPage({
   const stars = Math.round(coach.ratingAvg);
 
   return (
-    <main className="safe-top">
+    <main className="safe-top lg:mx-auto lg:max-w-2xl">
       <div className="relative bg-night px-6 pb-6 pt-12 text-[#F2EFE8]">
         <Link href="/coaches" aria-label={tc("back")} className="absolute left-5 top-12">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>

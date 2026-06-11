@@ -69,7 +69,7 @@ export function Conversation({
   }
 
   return (
-    <div className="relative flex h-dvh flex-col">
+    <div className="fixed inset-0 z-30 mx-auto flex w-full max-w-md flex-col bg-cream dark:bg-anthracite-900 lg:max-w-2xl">
       <SacredMotif variant="olive" className="left-[-60px] top-[180px]" />
       <SacredMotif variant="dove" className="right-[-100px] bottom-[200px]" />
 
@@ -164,7 +164,7 @@ export function Conversation({
       </div>
 
       {/* Suggestions IA + saisie — verre */}
-      <div className="glass safe-bottom sticky bottom-0 z-30 border-t border-sand-200/50 px-3.5 pb-20 pt-2.5 dark:border-anthracite-600/50">
+      <div className="glass sticky bottom-0 z-30 border-t border-sand-200/50 px-3.5 pb-[calc(env(safe-area-inset-bottom)+88px)] pt-2.5 dark:border-anthracite-600/50">
         {suggestions.length > 0 && (
           <>
             <div className="mb-2 flex items-center gap-1.5">
@@ -194,7 +194,7 @@ export function Conversation({
             e.preventDefault();
             send(draft);
           }}
-          className="glass flex items-center gap-2 rounded-[24px] py-1.5 pl-4 pr-1.5"
+          className="glass flex items-center gap-2 rounded-[24px] border border-sand-300 py-1.5 pl-4 pr-1.5 dark:border-anthracite-600 dark:bg-anthracite-800/80"
         >
           <input
             value={draft}

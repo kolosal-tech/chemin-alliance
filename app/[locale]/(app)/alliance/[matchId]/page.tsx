@@ -54,7 +54,7 @@ export default async function AlliancePage({
   const { axes, topics } = compatibilityTopics(me, other);
 
   return (
-    <main className="px-5 pt-5 safe-top">
+    <main className="px-5 pt-5 safe-top lg:mx-auto lg:max-w-2xl">
       <header className="mb-3 flex items-center gap-3">
         <Link href={`/messages/${match.id}`} aria-label={t("common.back")} className="p-1">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>

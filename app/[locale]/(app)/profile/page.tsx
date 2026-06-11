@@ -29,7 +29,7 @@ export default async function ProfilePage({
   );
 
   return (
-    <main className="safe-top">
+    <main className="safe-top lg:mx-auto lg:max-w-2xl">
       <PhotoHeader
         displayName={user.displayName}
         age={user.age}

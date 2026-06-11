@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
+import { ThemeApplier } from "@/components/ThemeApplier";
 import "../globals.css";
 
 const spectral = Spectral({
@@ -85,7 +86,10 @@ export default async function LocaleLayout({
         className={`${spectral.variable} ${hanken.variable} ${splineMono.variable} font-sans`}
       >
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <ThemeApplier />
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );

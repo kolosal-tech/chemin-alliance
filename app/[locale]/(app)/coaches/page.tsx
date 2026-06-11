@@ -14,7 +14,7 @@ export default async function CoachesPage({
   const coaches = await prisma.coach.findMany({ orderBy: { ratingAvg: "desc" } });
 
   return (
-    <main className="px-5 pt-6 safe-top">
+    <main className="px-5 pt-6 safe-top lg:mx-auto lg:max-w-4xl">
       <h1 className="mb-4 font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("title")}
       </h1>
