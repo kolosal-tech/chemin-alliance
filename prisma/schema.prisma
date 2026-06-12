@@ -83,6 +83,17 @@ enum BookingStatus {
   CANCELLED
 }
 
+enum LifeSeason {
+  JOURNEY
+  MARRIED
+  PARENTS
+}
+
+enum CoupleSpaceStatus {
+  PENDING
+  ACTIVE
+}
+
 enum ConsentType {
   SENSITIVE_DATA_PROCESSING
   TERMS_OF_SERVICE
@@ -101,6 +112,7 @@ model User {
   role                  UserRole  @default(USER)
   locale                String    @default("fr")
   rulesetId             String    @default("christian_evangelical_default")
+  season                LifeSeason @default(JOURNEY)
   isVerified            Boolean   @default(false)
   emailVerifyToken      String?   @unique
   photoUrl              String?
@@ -122,6 +134,28 @@ model User {
   bookings            Booking[]
   aiCoachUsages       AiCoachUsage[]
   agentInsights       AgentInsight[]
+  coupleSpaceA        CoupleSpace?         @relation("CoupleUserA")
+  coupleSpaceB        CoupleSpace?         @relation("CoupleUserB")
+}
+
+// Espace Couple — la vie d'alliance APRÈS le mariage (saisons Mariés/Parents).
+// Créé depuis un match avancé ("nous nous sommes mariés") ou par code
+// d'invitation pour les couples déjà mariés hors plateforme.
+// Un utilisateur en saison MARRIED/PARENTS est invisible du matching.
+model CoupleSpace {
+  id         String            @id @default(cuid())
+  userAId    String            @unique
+  userA      User              @relation("CoupleUserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userBId    String?           @unique
+  userB      User?             @relation("CoupleUserB", fields: [userBId], references: [id], onDelete: SetNull)
+  status     CoupleSpaceStatus @default(PENDING)
+  origin     String            @default("EXTERNAL") // MATCH | EXTERNAL
+  matchId    String?
+  inviteCode String            @unique
+  season     LifeSeason        @default(MARRIED)
+  marriedAt  DateTime?
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
 }
 
 model FaithProfile {
@@ -278,6 +312,7 @@ model AgentInsight {
   match      Match?          @relation(fields: [matchId], references: [id], onDelete: Cascade)
   agentId    String
   kind       String
+  coupleSpaceId String?
   dataJson   Json
   visibility VisibilityLevel @default(PRIVATE)
   createdAt  DateTime        @default(now())

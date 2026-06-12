@@ -11,9 +11,12 @@ const TABS = [
   { href: "/settings/privacy", key: "settings", icon: "M12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm8 3 1.7 1.3-1.7 3-2-.6a7 7 0 0 1-1.6 1l-.4 2H12l-.4-2a7 7 0 0 1-1.6-1l-2 .6-1.7-3L8 12l-1.7-1.3 1.7-3 2 .6a7 7 0 0 1 1.6-1l.4-2h4l.4 2a7 7 0 0 1 1.6 1l2-.6 1.7 3L20 12Z" },
 ] as const;
 
-export function BottomNav() {
+export function BottomNav({ married = false }: { married?: boolean }) {
   const t = useTranslations("nav");
   const pathname = usePathname();
+  const tabs = married
+    ? [{ href: "/couple", key: "couple", icon: TABS[0].icon } as const, ...TABS.slice(1)]
+    : TABS;
 
   return (
     <nav
@@ -21,7 +24,7 @@ export function BottomNav() {
       className="glass safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-sand-200/60 dark:border-anthracite-600/60"
     >
       <div className="mx-auto flex max-w-md justify-around px-2 py-1.5">
-        {TABS.map((tab) => {
+        {tabs.map((tab) => {
           const active = pathname.startsWith(tab.href);
           return (
             <Link

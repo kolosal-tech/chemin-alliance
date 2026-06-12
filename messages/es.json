@@ -26,7 +26,8 @@
     "messages": "Mensajes",
     "coach": "Coach IA",
     "profile": "Perfil",
-    "settings": "Ajustes"
+    "settings": "Ajustes",
+    "couple": "Pareja"
   },
   "onboarding": {
     "s1Label": "Chemin d'Alliance",
@@ -346,5 +347,44 @@
       "signal_urgency_rush": "Precipitación insistente",
       "signal_explicit_content": "Contenido inapropiado"
     }
+  },
+  "couple": {
+    "title": "Espacio Pareja",
+    "subtitle": "La vida de alianza — después de la boda, el camino continúa.",
+    "introNone": "Aquí el camino no se detiene en el matrimonio. Los primeros años, la llegada de un hijo, las etapas difíciles: seguís acompañados.",
+    "marriedCta": "Nos hemos casado",
+    "marriedHint": "Disponible cuando vuestro camino llega al Compromiso.",
+    "createExternal": "Ya estamos casados — crear nuestro espacio",
+    "joinTitle": "Mi cónyuge ya tiene un código",
+    "codePlaceholder": "ALLIANCE-XXXXXX",
+    "join": "Unirme a nuestro espacio",
+    "codeInvalid": "Código inválido o ya usado.",
+    "inviteTitle": "Invita a tu cónyuge",
+    "inviteBody": "Dale este código a tu cónyuge: creará su cuenta y lo introducirá en Espacio Pareja.",
+    "pendingConfirm": "{name} indica que os habéis casado. ¿Es cierto?",
+    "confirmYes": "Sí, estamos casados",
+    "confirmCongrats": "Que vuestra alianza sea bendecida. El matching queda desactivado para ambos.",
+    "waitingPartner": "Esperando la confirmación de tu cónyuge.",
+    "with": "con {name}",
+    "seasonMARRIED": "Primeros años",
+    "seasonPARENTS": "Padres jóvenes",
+    "checkinTitle": "Check-in de la semana",
+    "checkinPrivacy": "Tus respuestas son privadas — tu cónyuge no las ve.",
+    "yes": "Sí",
+    "no": "No",
+    "unsure": "No mucho",
+    "notePlaceholder": "Una palabra si quieres precisar (privado)…",
+    "send": "Enviar al Guardián",
+    "guardianTitle": "El Guardián de la Pareja",
+    "ritualsTitle": "Rituales propuestos esta semana",
+    "childArrived": "Ha llegado un hijo",
+    "childArrivedDone": "Etapa «Padres jóvenes» activada — los check-ins se adaptan.",
+    "backToMarried": "Volver a «Primeros años»",
+    "programsTitle": "Caminos de la etapa",
+    "confideTitle": "Confiarse",
+    "confideBody": "¿Necesitas depositar algo, solo/a o en pareja? El coach IA te escucha en privado — ni tu cónyuge tiene acceso — y los coaches humanos verificados están para profundizar.",
+    "confideAi": "Hablar con el coach IA (privado)",
+    "confideHuman": "Ver coaches humanos",
+    "matchingOff": "Estáis casados: vuestro perfil ya no aparece en los encuentros."
   }
 }

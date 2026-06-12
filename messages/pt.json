@@ -26,7 +26,8 @@
     "messages": "Mensagens",
     "coach": "Coach IA",
     "profile": "Perfil",
-    "settings": "Definições"
+    "settings": "Definições",
+    "couple": "Casal"
   },
   "onboarding": {
     "s1Label": "Chemin d'Alliance",
@@ -346,5 +347,44 @@
       "signal_urgency_rush": "Precipitação insistente",
       "signal_explicit_content": "Conteúdo inapropriado"
     }
+  },
+  "couple": {
+    "title": "Espaço Casal",
+    "subtitle": "A vida de aliança — depois do casamento, o caminho continua.",
+    "introNone": "Aqui o caminho não para no casamento. Os primeiros anos, a chegada de um filho, as estações difíceis: continuam acompanhados.",
+    "marriedCta": "Casámo-nos",
+    "marriedHint": "Disponível quando o vosso percurso chega ao Compromisso.",
+    "createExternal": "Já somos casados — criar o nosso espaço",
+    "joinTitle": "O meu cônjuge já tem um código",
+    "codePlaceholder": "ALLIANCE-XXXXXX",
+    "join": "Juntar-me ao nosso espaço",
+    "codeInvalid": "Código inválido ou já usado.",
+    "inviteTitle": "Convida o teu cônjuge",
+    "inviteBody": "Dá este código ao teu cônjuge: ele cria a conta e introdu-lo no Espaço Casal.",
+    "pendingConfirm": "{name} indica que se casaram. É verdade?",
+    "confirmYes": "Sim, estamos casados",
+    "confirmCongrats": "Que a vossa aliança seja abençoada. O matching fica desativado para ambos.",
+    "waitingPartner": "À espera da confirmação do teu cônjuge.",
+    "with": "com {name}",
+    "seasonMARRIED": "Primeiros anos",
+    "seasonPARENTS": "Pais jovens",
+    "checkinTitle": "Check-in da semana",
+    "checkinPrivacy": "As tuas respostas são privadas — o teu cônjuge não as vê.",
+    "yes": "Sim",
+    "no": "Não",
+    "unsure": "Nem por isso",
+    "notePlaceholder": "Uma palavra se quiseres precisar (privado)…",
+    "send": "Enviar ao Guardião",
+    "guardianTitle": "O Guardião do Casal",
+    "ritualsTitle": "Rituais propostos esta semana",
+    "childArrived": "Chegou um filho",
+    "childArrivedDone": "Estação «Pais jovens» ativada — os check-ins adaptam-se.",
+    "backToMarried": "Voltar a «Primeiros anos»",
+    "programsTitle": "Percursos da estação",
+    "confideTitle": "Confiar-se",
+    "confideBody": "Precisas de pousar algo, sozinho/a ou a dois? O coach IA escuta-te em privado — nem o teu cônjuge tem acesso — e os coaches humanos verificados estão lá para aprofundar.",
+    "confideAi": "Falar com o coach IA (privado)",
+    "confideHuman": "Ver coaches humanos",
+    "matchingOff": "Estão casados: o vosso perfil já não aparece nos encontros."
   }
 }

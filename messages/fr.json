@@ -26,7 +26,8 @@
     "messages": "Messages",
     "coach": "Coach IA",
     "profile": "Profil",
-    "settings": "Réglages"
+    "settings": "Réglages",
+    "couple": "Couple"
   },
   "onboarding": {
     "s1Label": "Chemin d'Alliance",
@@ -346,5 +347,44 @@
       "signal_urgency_rush": "Précipitation insistante",
       "signal_explicit_content": "Contenu déplacé"
     }
+  },
+  "couple": {
+    "title": "Espace Couple",
+    "subtitle": "La vie d'alliance — après le mariage, le chemin continue.",
+    "introNone": "Ici, le chemin ne s'arrête pas au mariage. Les premières années, l'arrivée d'un enfant, les saisons difficiles : vous restez accompagnés.",
+    "marriedCta": "Nous nous sommes mariés",
+    "marriedHint": "Disponible quand votre parcours atteint l'Engagement.",
+    "createExternal": "Nous sommes déjà mariés — créer notre espace",
+    "joinTitle": "Mon conjoint a déjà un code",
+    "codePlaceholder": "ALLIANCE-XXXXXX",
+    "join": "Rejoindre notre espace",
+    "codeInvalid": "Code invalide ou déjà utilisé.",
+    "inviteTitle": "Invite ton conjoint",
+    "inviteBody": "Transmets ce code à ton conjoint : il créera son compte puis le saisira dans Espace Couple.",
+    "pendingConfirm": "{name} indique que vous vous êtes mariés. C'est vrai ?",
+    "confirmYes": "Oui, nous sommes mariés 🎍",
+    "confirmCongrats": "Que votre alliance soit bénie. Le matching est désormais désactivé pour vous deux.",
+    "waitingPartner": "En attente de la confirmation de ton conjoint.",
+    "with": "avec {name}",
+    "seasonMARRIED": "Premières années",
+    "seasonPARENTS": "Jeunes parents",
+    "checkinTitle": "Check-in de la semaine",
+    "checkinPrivacy": "Tes réponses restent privées — ton conjoint ne les voit pas.",
+    "yes": "Oui",
+    "no": "Non",
+    "unsure": "Pas vraiment",
+    "notePlaceholder": "Un mot si tu veux préciser (privé)…",
+    "send": "Envoyer au Gardien",
+    "guardianTitle": "Le Gardien du Couple",
+    "ritualsTitle": "Rituels proposés cette semaine",
+    "childArrived": "Un enfant est arrivé",
+    "childArrivedDone": "Saison « Jeunes parents » activée — les check-ins s'adaptent.",
+    "backToMarried": "Revenir à « Premières années »",
+    "programsTitle": "Parcours de saison",
+    "confideTitle": "Se confier",
+    "confideBody": "Besoin de déposer quelque chose, seul·e ou à deux ? Le coach IA t'écoute en privé — même ton conjoint n'y a pas accès — et les coachs humains vérifiés sont là pour aller en profondeur.",
+    "confideAi": "Parler au coach IA (privé)",
+    "confideHuman": "Voir les coachs humains",
+    "matchingOff": "Vous êtes mariés : votre profil n'apparaît plus dans les rencontres."
   }
 }

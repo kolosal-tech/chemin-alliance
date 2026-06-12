@@ -6,6 +6,12 @@ import { buildReviewData } from "@/lib/agents/stage-review";
 import { silenceDetected } from "@/lib/agents/exit-helper";
 import { deterministicSummary } from "@/lib/agents/coach-copilot";
 import { REBUILDING_STEPS } from "@/lib/agents/rebuilding";
+import {
+  evaluateCheckin,
+  CHECKIN_QUESTIONS,
+  SEASON_PROGRAMS,
+  generateInviteCode,
+} from "@/lib/agents/guardian";
 
 describe("Compagnon de Préparation — fallback", () => {
   const answers = (overrides: Record<string, string> = {}) =>
@@ -115,6 +121,62 @@ describe("Copilote Coach + Reconstruction", () => {
   it("parcours de reconstruction en 4 pas et 4 langues", () => {
     for (const loc of ["fr", "en", "es", "pt"] as const) {
       expect(REBUILDING_STEPS[loc]).toHaveLength(4);
+    }
+  });
+});
+
+describe("Gardien du Couple", () => {
+  it("« pas de temps à deux » -> rituel concret proposé", () => {
+    const g = evaluateCheckin(
+      "MARRIED",
+      [{ id: "chk_time_together", value: "no", note: "" }],
+      "fr",
+    );
+    expect(g.danger).toBe(false);
+    expect(g.rituals[0]).toContain("2 heures");
+  });
+
+  it("parents : « tout pour le bébé » -> rituel couple/enfant", () => {
+    const g = evaluateCheckin(
+      "PARENTS",
+      [{ id: "chk_couple_vs_child", value: "no", note: "" }],
+      "fr",
+    );
+    expect(g.rituals[0]).toContain("30 minutes");
+  });
+
+  it("sujet évité (oui) déclenche le rituel correspondant", () => {
+    const g = evaluateCheckin(
+      "MARRIED",
+      [{ id: "chk_unspoken", value: "yes", note: "" }],
+      "fr",
+    );
+    expect(g.rituals.length).toBe(1);
+  });
+
+  it("GUARDRAIL : violence dans une note -> danger, AUCUN rituel, priorité absolue", () => {
+    const g = evaluateCheckin(
+      "MARRIED",
+      [{ id: "chk_time_together", value: "no", note: "j'ai peur de lui quand il crie" }],
+      "fr",
+    );
+    expect(g.danger).toBe(true);
+    expect(g.rituals).toEqual([]);
+  });
+
+  it("questions et parcours existent en 4 langues pour les 2 saisons", () => {
+    for (const season of ["MARRIED", "PARENTS"] as const) {
+      for (const q of CHECKIN_QUESTIONS[season]) {
+        expect(q.text.fr && q.text.en && q.text.es && q.text.pt).toBeTruthy();
+      }
+      expect(SEASON_PROGRAMS[season].length).toBe(3);
+    }
+  });
+
+  it("code d'invitation lisible, sans caractères ambigus", () => {
+    for (let i = 0; i < 20; i++) {
+      const c = generateInviteCode();
+      expect(c).toMatch(/^ALLIANCE-[23456789ABCDEFGHJKMNPQRSTUVWXYZ]{6}$/);
     }
   });
 });

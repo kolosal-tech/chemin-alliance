@@ -43,9 +43,13 @@ export async function getSuggestions(userId: string): Promise<Candidate[]> {
     excludedIds.add(r.targetUserId);
   }
 
+  // Une personne mariée ne voit ni n'apparaît dans les suggestions.
+  if (me.season !== "JOURNEY") return [];
+
   const candidates = await prisma.user.findMany({
     where: {
       id: { notIn: [...excludedIds] },
+      season: "JOURNEY",
       isVerified: true,
       privacySettings: { isNot: { invisibleMode: true } },
     },

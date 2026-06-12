@@ -176,6 +176,27 @@ Chaque agent a un **fallback déterministe** — l'app complète tourne sans LLM
 Stockage : table `AgentInsight` (visibilité, révocation `revokedAt`). Le portrait
 est effaçable à tout moment (`DELETE /api/agents/preparation`).
 
+### Saisons de vie & Espace Couple (post-mariage)
+
+Le chemin ne s'arrête pas au mariage. Saisons : `JOURNEY` (rencontre) →
+`MARRIED` (premières années) → `PARENTS`. En saison mariée : **matching
+totalement désactivé** (invisible dans les deux sens), premier onglet remplacé
+par « Couple ».
+
+- **Entrées** : depuis un match en Engagement/Préparation (« Nous nous sommes
+  mariés », confirmé par le conjoint — le match se clôt) ou par **code
+  d'invitation** `ALLIANCE-XXXXXX` pour les couples déjà mariés hors plateforme.
+- **Agent 8 — Gardien du Couple** : check-ins hebdomadaires par saison
+  (réponses **privées**, jamais visibles du conjoint), rituels concrets
+  déterministes (temps à deux, charge partagée, tendresse, sujet évité),
+  mot personnalisé LLM. **Guardrail absolu** : violence/abus détecté dans une
+  note → orientation professionnelle immédiate (3919 en France), aucun rituel,
+  escalade COACH_ONLY — prime sur tout appel LLM.
+- **Parcours de saison** (4 langues) : 6 premiers mois, finances, belle-famille ;
+  arrivée d'un enfant, rester un couple, transmettre la foi.
+- **Espace Confidence** : coach IA privé (même le conjoint n'y accède pas)
+  + coachs humains vérifiés.
+
 ### Coach IA
 
 - Sans clé API : **mode fallback déterministe** (réponses guidées par étape, 4 langues) — la prod tourne sans dépendance payante.

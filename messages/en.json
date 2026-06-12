@@ -26,7 +26,8 @@
     "messages": "Messages",
     "coach": "AI Coach",
     "profile": "Profile",
-    "settings": "Settings"
+    "settings": "Settings",
+    "couple": "Couple"
   },
   "onboarding": {
     "s1Label": "Chemin d'Alliance",
@@ -346,5 +347,44 @@
       "signal_urgency_rush": "Insistent rushing",
       "signal_explicit_content": "Inappropriate content"
     }
+  },
+  "couple": {
+    "title": "Couple Space",
+    "subtitle": "Covenant life — after the wedding, the path continues.",
+    "introNone": "Here, the path does not stop at marriage. The first years, a child's arrival, hard seasons: you remain accompanied.",
+    "marriedCta": "We got married",
+    "marriedHint": "Available once your journey reaches Commitment.",
+    "createExternal": "We are already married — create our space",
+    "joinTitle": "My spouse already has a code",
+    "codePlaceholder": "ALLIANCE-XXXXXX",
+    "join": "Join our space",
+    "codeInvalid": "Invalid or already used code.",
+    "inviteTitle": "Invite your spouse",
+    "inviteBody": "Give this code to your spouse: they create an account, then enter it in Couple Space.",
+    "pendingConfirm": "{name} says you got married. Is it true?",
+    "confirmYes": "Yes, we are married",
+    "confirmCongrats": "May your covenant be blessed. Matching is now disabled for both of you.",
+    "waitingPartner": "Waiting for your spouse's confirmation.",
+    "with": "with {name}",
+    "seasonMARRIED": "First years",
+    "seasonPARENTS": "Young parents",
+    "checkinTitle": "This week's check-in",
+    "checkinPrivacy": "Your answers stay private — your spouse never sees them.",
+    "yes": "Yes",
+    "no": "No",
+    "unsure": "Not really",
+    "notePlaceholder": "A word if you wish (private)…",
+    "send": "Send to the Guardian",
+    "guardianTitle": "The Couple's Guardian",
+    "ritualsTitle": "Suggested rituals this week",
+    "childArrived": "A child has arrived",
+    "childArrivedDone": "\"Young parents\" season activated — check-ins adapt.",
+    "backToMarried": "Back to \"First years\"",
+    "programsTitle": "Season programs",
+    "confideTitle": "Confide",
+    "confideBody": "Need to lay something down, alone or together? The AI coach listens privately — even your spouse has no access — and verified human coaches are there to go deeper.",
+    "confideAi": "Talk to the AI coach (private)",
+    "confideHuman": "See human coaches",
+    "matchingOff": "You are married: your profile no longer appears in matching."
   }
 }

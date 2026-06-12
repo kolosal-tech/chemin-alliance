@@ -23,6 +23,7 @@ export function StageActions({
   const t = useTranslations("alliance");
   const tc = useTranslations("common");
   const ta = useTranslations("agents");
+  const tcp = useTranslations("couple");
   const router = useRouter();
   const [openQ, setOpenQ] = useState<string | null>(null);
   const [answer, setAnswer] = useState("");
@@ -182,6 +183,22 @@ export function StageActions({
           <p className="rounded-btn bg-[#EAF0EB] px-3.5 py-2.5 text-[13px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
             {t("contactAccepted")}
           </p>
+        )}
+        {(stage === "COMMITMENT" || stage === "MARRIAGE_PREPARATION") && (
+          <button
+            type="button"
+            onClick={async () => {
+              const res = await fetch("/api/couple", {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({ matchId }),
+              });
+              if (res.ok || res.status === 409) router.push("/couple");
+            }}
+            className="rounded-btnsm bg-gold py-3 text-sm font-semibold text-night"
+          >
+            {tcp("marriedCta")}
+          </button>
         )}
         <button
           type="button"

@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { requirePageUser } from "@/lib/security/page-auth";
+import { redirect } from "@/i18n/navigation";
 import { getSuggestions } from "@/lib/matching";
 import { prisma } from "@/lib/db";
 import { Link } from "@/i18n/navigation";
@@ -14,6 +15,9 @@ export default async function SuggestionsPage({
   setRequestLocale(params.locale);
   const t = await getTranslations();
   const user = await requirePageUser(params.locale);
+  if (user.season !== "JOURNEY") {
+    redirect({ href: "/couple", locale: params.locale });
+  }
   const suggestions = await getSuggestions(user.id);
   const hasPortrait =
     (await prisma.agentInsight.count({
