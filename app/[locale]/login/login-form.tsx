@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
+import { AllianceThread } from "@/components/AllianceThread";
 
 export function LoginForm() {
   const t = useTranslations("auth");
@@ -36,6 +37,20 @@ export function LoginForm() {
   }
 
   return (
+    <div className="min-h-dvh lg:grid lg:grid-cols-2">
+      <aside className="relative hidden overflow-hidden bg-night p-14 lg:flex lg:flex-col lg:justify-between">
+        <SacredMotif variant="dove" className="right-[-60px] top-[40px]" />
+        <div className="flex items-center gap-2.5">
+          <span aria-hidden className="inline-block h-px w-[22px] bg-gold" />
+          <span className="lbl text-[10px] text-gold">{tc("appName")}</span>
+        </div>
+        <h2 className="max-w-[16ch] font-display text-[44px] font-normal leading-[1.15] text-[#F4F1EA]">
+          {tc("tagline")}
+        </h2>
+        <div className="dark max-w-md">
+          <AllianceThread current={3} />
+        </div>
+      </aside>
     <main className="relative mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center overflow-hidden px-7 safe-top safe-bottom">
       <SacredMotif variant="tree" className="right-[-110px] top-[-20px]" />
       <div className="mb-8 flex items-center gap-2.5">
@@ -85,5 +100,6 @@ export function LoginForm() {
         </Link>
       </p>
     </main>
+    </div>
   );
 }

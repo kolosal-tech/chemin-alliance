@@ -69,7 +69,7 @@ export function Conversation({
   }
 
   return (
-    <div className="fixed inset-0 z-30 mx-auto flex w-full max-w-md flex-col bg-cream dark:bg-anthracite-900 lg:max-w-2xl">
+    <div className="fixed inset-0 z-30 mx-auto flex w-full max-w-md flex-col bg-cream dark:bg-anthracite-900 lg:left-60 lg:max-w-2xl">
       <SacredMotif variant="olive" className="left-[-60px] top-[180px]" />
       <SacredMotif variant="dove" className="right-[-100px] bottom-[200px]" />
 
@@ -164,7 +164,7 @@ export function Conversation({
       </div>
 
       {/* Suggestions IA + saisie — verre */}
-      <div className="glass sticky bottom-0 z-30 border-t border-sand-200/50 px-3.5 pb-[calc(env(safe-area-inset-bottom)+88px)] pt-2.5 dark:border-anthracite-600/50">
+      <div className="glass sticky bottom-0 z-30 border-t border-sand-200/50 px-3.5 pb-[calc(env(safe-area-inset-bottom)+88px)] lg:pb-4 pt-2.5 dark:border-anthracite-600/50">
         {suggestions.length > 0 && (
           <>
             <div className="mb-2 flex items-center gap-1.5">

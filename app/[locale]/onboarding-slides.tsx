@@ -27,7 +27,7 @@ export function OnboardingSlides() {
   );
 
   return (
-    <main className="relative mx-auto flex min-h-dvh max-w-md flex-col overflow-hidden px-7 pb-8 safe-top safe-bottom">
+    <main className="relative mx-auto flex min-h-dvh max-w-md flex-col overflow-hidden px-7 pb-8 safe-top safe-bottom lg:max-w-6xl lg:px-12">
       <div className="flex items-center justify-between pt-4">
         <div className="flex items-center gap-2.5">
           <span className="inline-block h-px w-[22px] bg-gold" aria-hidden />
@@ -41,6 +41,46 @@ export function OnboardingSlides() {
         </div>
       </div>
 
+      <section className="hidden flex-1 lg:flex lg:flex-col lg:justify-center">
+        <div className="grid grid-cols-[1.05fr_1fr] items-center gap-16 py-10">
+          <div>
+            <h1 className="font-display text-[58px] font-normal leading-[1.08] tracking-tight text-night dark:text-[#ECE7DD]">
+              {t("s1Title")}
+            </h1>
+            <p className="mt-6 max-w-[44ch] text-lg leading-relaxed text-warmgray dark:text-[#9A958B]">
+              {t("s1Body")}
+            </p>
+            <div className="mt-9 flex items-center gap-4">
+              <Link href="/register" className="rounded-btnlg bg-gold px-8 py-4 text-base font-semibold text-night">
+                {t("s1Cta")}
+              </Link>
+              <Link href="/login" className="rounded-btnlg border border-sand-400 px-7 py-4 text-[15px] font-medium text-ink dark:border-anthracite-600 dark:text-[#D7DCE6]">
+                {t("s1Login")}
+              </Link>
+            </div>
+          </div>
+          <div className="relative rounded-screen bg-night p-10 shadow-phone dark:border dark:border-anthracite-600">
+            <SacredMotif variant="dove" className="right-[-70px] top-[-50px]" />
+            <span className="lbl text-[10px] text-gold">{t("s2Label")}</span>
+            <h2 className="mb-7 mt-2 font-display text-[26px] leading-tight text-[#F4F1EA]">
+              {t("s2Title")}
+            </h2>
+            <div className="dark">
+              <AllianceThread current={3} orientation="vertical" />
+            </div>
+          </div>
+        </div>
+        <div className="grid grid-cols-3 gap-5 pb-10">
+          {(["g1", "g2", "g3"] as const).map((g) => (
+            <div key={g} className="rounded-cardlg border border-sand-200 bg-surface p-6 dark:border-anthracite-600 dark:bg-anthracite-800">
+              <div className="font-display text-[19px] text-night dark:text-[#ECE7DD]">{t(`${g}Title`)}</div>
+              <p className="mt-2 text-[13.5px] leading-normal text-[#6B665C] dark:text-[#9A958B]">{t(`${g}Body`)}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <div className="contents lg:hidden">
       {slide === 0 && (
         <section className="relative flex flex-1 flex-col rounded-screen bg-night px-7 py-9 text-[#F4F1EA] shadow-phone mt-5">
           <SacredMotif variant="dove" className="right-[-80px] top-[-40px]" />
@@ -143,6 +183,8 @@ export function OnboardingSlides() {
           </div>
         </section>
       )}
+
+      </div>
 
       <p className="sr-only">{tc("tagline")}</p>
     </main>

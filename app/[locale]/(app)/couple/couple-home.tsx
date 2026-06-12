@@ -100,7 +100,7 @@ export function CoupleHome() {
   // --- Pas d'espace ---
   if (!data.space) {
     return (
-      <main className="relative px-5 pt-6 pb-8 safe-top lg:mx-auto lg:max-w-2xl">
+      <main className="relative px-5 pt-6 pb-8 safe-top lg:mx-auto lg:max-w-3xl">
         <SacredMotif variant="tree" className="right-[-120px] top-[60px]" />
         {head}
         <p className="text-[15px] leading-relaxed text-warmgray dark:text-[#9A958B]">{t("introNone")}</p>
@@ -156,7 +156,7 @@ export function CoupleHome() {
   // --- En attente : je dois confirmer le mariage ---
   if (s.pendingMyConfirmation) {
     return (
-      <main className="relative px-5 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+      <main className="relative px-5 pt-6 safe-top lg:mx-auto lg:max-w-3xl">
         {head}
         <div className="rounded-cardlg border border-gold/40 bg-[#FBF6E9] p-5 dark:border-[#463A1F] dark:bg-[#272117]">
           <p className="font-display text-[18px] italic text-gold-ink dark:text-[#E0C77A]">
@@ -177,7 +177,7 @@ export function CoupleHome() {
   // --- En attente du conjoint ---
   if (s.status === "PENDING" || !s.partner) {
     return (
-      <main className="relative px-5 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+      <main className="relative px-5 pt-6 safe-top lg:mx-auto lg:max-w-3xl">
         {head}
         {s.inviteCode ? (
           <div className="rounded-cardlg border border-sand-200 bg-surface p-5 text-center dark:border-anthracite-600 dark:bg-anthracite-800">
@@ -198,7 +198,7 @@ export function CoupleHome() {
 
   // --- Espace actif ---
   return (
-    <main className="relative px-5 pt-6 pb-8 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="relative px-5 pt-6 pb-8 safe-top lg:mx-auto lg:max-w-3xl">
       <SacredMotif variant="flame" className="right-[-100px] top-[120px]" />
       <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">{t("title")}</span>
       <h1 className="mt-1 font-display text-[26px] text-night dark:text-[#ECE7DD]">
@@ -303,7 +303,7 @@ export function CoupleHome() {
 
       {/* Parcours de saison */}
       <h2 className="lbl mb-2.5 mt-6 text-[9.5px] text-gold-deep dark:text-gold-light">{t("programsTitle")}</h2>
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-2.5 lg:grid lg:grid-cols-3 lg:items-stretch">
         {(data.programs ?? []).map((p) => (
           <article key={p.id} className="rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
             <h3 className="font-display text-[17px] text-night dark:text-[#ECE7DD]">{p.title}</h3>
