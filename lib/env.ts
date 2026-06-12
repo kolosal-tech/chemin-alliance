@@ -26,6 +26,11 @@ const envSchema = z.object({
   OPENROUTER_API_KEY: z.string().optional(),
   OPENROUTER_MODEL: z.string().default("anthropic/claude-haiku-4.5"),
   OPENAI_API_KEY: z.string().optional(),
+  // Email transactionnel — sans clé, les liens sont loggés (dev).
+  RESEND_API_KEY: z.string().optional(),
+  EMAIL_FROM: z
+    .string()
+    .default("Chemin d'Alliance <alliance@kolosaltech.com>"),
 });
 
 function loadEnv() {

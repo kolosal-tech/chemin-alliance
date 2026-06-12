@@ -11,6 +11,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 export function OnboardingSlides() {
   const t = useTranslations("onboarding");
   const tc = useTranslations("common");
+  const tl = useTranslations("legal");
   const [slide, setSlide] = useState(0);
 
   const dots = (
@@ -70,6 +71,11 @@ export function OnboardingSlides() {
             </div>
           </div>
         </div>
+        <p className="pb-4 text-[11.5px] text-sand-500 dark:text-[#65625B]">
+          <Link href="/legal/terms" className="underline">{tl("terms")}</Link>
+          {" · "}
+          <Link href="/legal/privacy" className="underline">{tl("privacy")}</Link>
+        </p>
         <div className="grid grid-cols-3 gap-5 pb-10">
           {(["g1", "g2", "g3"] as const).map((g) => (
             <div key={g} className="rounded-cardlg border border-sand-200 bg-surface p-6 dark:border-anthracite-600 dark:bg-anthracite-800">

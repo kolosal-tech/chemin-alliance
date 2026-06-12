@@ -9,6 +9,7 @@ import { AllianceThread } from "@/components/AllianceThread";
 export function RegisterForm() {
   const t = useTranslations("auth");
   const tc = useTranslations("common");
+  const tl = useTranslations("legal");
   const locale = useLocale();
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -121,6 +122,11 @@ export function RegisterForm() {
           <input name="consentTerms" type="checkbox" className="mt-0.5 h-4 w-4 accent-[#1A2744]" />
           <span>{t("consentTerms")}</span>
         </label>
+        <p className="text-[11.5px] text-sand-500 dark:text-[#65625B]">
+          <Link href="/legal/terms" className="underline">{tl("terms")}</Link>
+          {" · "}
+          <Link href="/legal/privacy" className="underline">{tl("privacy")}</Link>
+        </p>
         {error && <p role="alert" className="text-[13px] text-danger">{error}</p>}
         <button
           type="submit"

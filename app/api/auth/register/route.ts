@@ -57,6 +57,6 @@ export const POST = withErrors(async (req: Request) => {
     select: { id: true, email: true },
   });
 
-  await sendVerificationEmail(user.email, token);
+  await sendVerificationEmail(user.email, token, body.locale);
   return NextResponse.json({ ok: true, userId: user.id }, { status: 201 });
 });

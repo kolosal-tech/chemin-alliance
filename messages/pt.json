@@ -386,5 +386,9 @@
     "confideAi": "Falar com o coach IA (privado)",
     "confideHuman": "Ver coaches humanos",
     "matchingOff": "Estão casados: o vosso perfil já não aparece nos encontros."
+  },
+  "legal": {
+    "terms": "Termos de utilização",
+    "privacy": "Política de privacidade"
   }
 }

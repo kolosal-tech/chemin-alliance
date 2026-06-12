@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import type { VisibilityLevel } from "@prisma/client";
@@ -213,6 +213,12 @@ export function PrivacyPanel({
           {t("privacy.deleteAccount")}
         </button>
       </div>
+
+      <p className="pb-8 text-center text-[11.5px] text-sand-500 dark:text-[#65625B]">
+        <Link href="/legal/terms" className="underline">{t("legal.terms")}</Link>
+        {" · "}
+        <Link href="/legal/privacy" className="underline">{t("legal.privacy")}</Link>
+      </p>
 
       {confirmDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-night/60 px-6" role="dialog" aria-modal="true">
