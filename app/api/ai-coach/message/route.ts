@@ -51,6 +51,7 @@ export const POST = withErrors(async (req: Request) => {
   const reply = await askCoach(body.question, {
     stage,
     locale: (user.locale ?? "fr") as Locale,
+    rulesetId: user.rulesetId,
   });
   return NextResponse.json({
     ...reply,

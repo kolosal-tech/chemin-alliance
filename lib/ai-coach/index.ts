@@ -1,6 +1,6 @@
 import type { AllianceStage } from "@prisma/client";
 import { aiProvider, env } from "@/lib/env";
-import type { Locale } from "@/lib/core-engine";
+import { loadRuleset, type Locale } from "@/lib/core-engine";
 import { fallbackResponse } from "./fallback";
 import { guardrailResponse, isSensitiveTopic, SYSTEM_PROMPT } from "./guardrails";
 
@@ -12,8 +12,49 @@ export type CoachReply = {
   provider: "anthropic" | "openrouter" | "openai" | "fallback";
 };
 
-function systemPrompt(stage: AllianceStage | null, locale: Locale): string {
-  return `${SYSTEM_PROMPT}\nLangue de réponse: ${locale}. Étape actuelle: ${stage ?? "aucune"}.`;
+// Registre de langage : maîtrise biblique/religieuse + sensibilité
+// coutumière et culturelle, dans le respect strict des garde-fous.
+const REGISTER_PROMPT = `MAÎTRISE DU LANGAGE :
+- Langage biblique et religieux : tu peux éclairer une réflexion par un principe ou un thème scripturaire chrétien (alliance, amour, fidélité, pardon, patience), avec sobriété. Tu n'imposes pas de versets hors contexte et tu ne prophétises jamais (cf. règle 2).
+- Langage coutumier et culturel : selon les cultures, le chemin vers le mariage engage la famille élargie et des étapes coutumières (présentation aux familles, dot/coutume) en plus du civil et du religieux. Respecte et intègre le cadre culturel de la personne sans présumer d'une seule culture ; au besoin, demande-lui son contexte.
+- Vocabulaire de sa tradition : emploie les mots justes de la tradition de la personne (voir ci-dessous).`;
+
+/** Injecte le vocabulaire et les rôles cléricaux de la tradition de la personne. */
+function doctrineContext(rulesetId: string | undefined, locale: Locale): string {
+  if (!rulesetId) return "";
+  let ruleset;
+  try {
+    ruleset = loadRuleset(rulesetId);
+  } catch {
+    return "";
+  }
+  const voc = ruleset.vocabulary ?? {};
+  const leader = voc.spiritual_leader?.[locale] ?? voc.spiritual_leader?.fr;
+  const community = voc.local_community?.[locale] ?? voc.local_community?.fr;
+  const lines = [`Tradition de la personne : ${ruleset.name}.`];
+  if (leader) lines.push(`Responsable spirituel : dis « ${leader} ».`);
+  if (community) lines.push(`Communauté locale : dis « ${community} ».`);
+  if (ruleset.clergy_roles?.length) {
+    lines.push(
+      `Accompagnateurs humains de référence : ${ruleset.clergy_roles.join(", ")}.`,
+    );
+  }
+  return "TRADITION DE LA PERSONNE :\n" + lines.join("\n");
+}
+
+function systemPrompt(
+  stage: AllianceStage | null,
+  locale: Locale,
+  rulesetId?: string,
+): string {
+  return [
+    SYSTEM_PROMPT,
+    REGISTER_PROMPT,
+    doctrineContext(rulesetId, locale),
+    `Langue de réponse: ${locale}. Étape actuelle: ${stage ?? "aucune"}.`,
+  ]
+    .filter(Boolean)
+    .join("\n\n");
 }
 
 /** Appel Anthropic Messages API. */
@@ -89,13 +130,13 @@ async function askOpenAiCompatible(
  */
 export async function askCoach(
   question: string,
-  opts: { stage: AllianceStage | null; locale: Locale },
+  opts: { stage: AllianceStage | null; locale: Locale; rulesetId?: string },
 ): Promise<CoachReply> {
   if (isSensitiveTopic(question)) {
     return { ...guardrailResponse(opts.locale), provider: aiProvider };
   }
 
-  const system = systemPrompt(opts.stage, opts.locale);
+  const system = systemPrompt(opts.stage, opts.locale, opts.rulesetId);
   try {
     let text: string | null = null;
     if (aiProvider === "anthropic") {

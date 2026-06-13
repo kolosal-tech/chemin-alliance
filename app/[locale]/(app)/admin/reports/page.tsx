@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { prisma } from "@/lib/db";
 import { getSessionUser } from "@/lib/security/session";
+import { Link } from "@/i18n/navigation";
 import { ReportActions } from "./report-actions";
 
 export default async function AdminReportsPage({
@@ -35,9 +36,15 @@ export default async function AdminReportsPage({
       <h1 className="mb-1 font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("title")}
       </h1>
-      <p className="lbl mb-4 text-[9.5px] text-gold-deep dark:text-gold-light">
+      <p className="lbl mb-2 text-[9.5px] text-gold-deep dark:text-gold-light">
         {t("reportsOpen")} · {reports.length}
       </p>
+      <Link
+        href="/admin/coaches"
+        className="mb-4 inline-block rounded-btnsm border border-sand-300 px-3 py-1.5 text-[12px] font-semibold text-ink dark:border-anthracite-600 dark:text-[#ECE7DD]"
+      >
+        Gérer les accompagnateurs (pasteurs / prêtres) →
+      </Link>
       <div className="flex flex-col gap-3">
         {reports.length === 0 && (
           <p className="rounded-card border border-sand-200 bg-surface p-5 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
