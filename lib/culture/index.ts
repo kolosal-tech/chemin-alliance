@@ -92,6 +92,22 @@ export const CULTURE_REGIONS: CultureRegion[] = [
     cautions:
       "Lobolo/dot marchandé ; syncrétisme (pratiques d'esprits / ancêtres) ; cohabitation banalisée sans engagement ; rites occultes.",
   },
+  {
+    key: "maghreb",
+    label: "Maghreb, Afrique du Nord & Moyen-Orient",
+    countries: [
+      "algérie", "algerie", "algérien", "maroc", "marocain", "tunisie",
+      "tunisien", "mauritanie", "libye", "égypte", "egypte", "liban",
+      "libanais", "syrie", "jordanie", "irak", "moyen-orient",
+      "afrique du nord", "maghreb",
+    ],
+    customarySteps:
+      "Implication forte des familles : demande officielle entre familles (khotba / fiançailles) → dot (mahr) → contrat / mariage civil → mariage religieux. Les communautés chrétiennes y sont souvent minoritaires, parfois discrètes.",
+    biblicalFrame:
+      "Honneur des familles, consentement libre et mutuel des deux époux (jamais contraint), alliance publique et fidélité ; le mahr/la dot compris comme honneur et non comme prix d'achat.",
+    cautions:
+      "Mariage arrangé ou forcé ; pression religieuse ou communautaire sur la foi du croyant (contexte majoritairement non chrétien) ; dot/mahr marchandé ; union imposée dans le secret. Le discernement protège la liberté de conscience et de foi.",
+  },
 ];
 
 /** Résout un pays/texte libre vers une région connue (ou null). */
@@ -99,11 +115,20 @@ export function resolveRegion(country?: string | null): CultureRegion | null {
   if (!country) return null;
   const c = country.trim().toLowerCase();
   if (c.length < 3) return null;
-  return (
-    CULTURE_REGIONS.find((r) =>
-      r.countries.some((x) => c.includes(x) || x.includes(c)),
-    ) ?? null
-  );
+  // On retient le token le PLUS LONG present dans la saisie : un pays specifique
+  // (« guinee equatoriale », « guinee-bissau ») l'emporte ainsi sur un token plus
+  // court d'une autre region (« guinee »), evitant les collisions de sous-chaines.
+  let best: CultureRegion | null = null;
+  let bestLen = 0;
+  for (const r of CULTURE_REGIONS) {
+    for (const token of r.countries) {
+      if (token.length > bestLen && c.includes(token)) {
+        best = r;
+        bestLen = token.length;
+      }
+    }
+  }
+  return best;
 }
 
 /** Référence compacte de toutes les régions (pour le prompt système). */

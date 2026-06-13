@@ -219,6 +219,7 @@ model Match {
   agentInsights   AgentInsight[]
 
   @@unique([userAId, userBId])
+  @@index([userBId])
 }
 
 model Message {
@@ -321,6 +322,8 @@ model AgentInsight {
 
   @@index([userId, agentId])
   @@index([matchId, agentId])
+  @@index([agentId, revokedAt])
+  @@index([coupleSpaceId])
 }
 
 model AiCoachUsage {
