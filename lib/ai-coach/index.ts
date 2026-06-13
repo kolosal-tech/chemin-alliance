@@ -1,8 +1,13 @@
 import type { AllianceStage } from "@prisma/client";
 import { aiProvider, env } from "@/lib/env";
 import { loadRuleset, type Locale } from "@/lib/core-engine";
+import { culturalGuidance } from "@/lib/culture";
 import { fallbackResponse } from "./fallback";
-import { guardrailResponse, isSensitiveTopic, SYSTEM_PROMPT } from "./guardrails";
+import {
+  guardrailResponse,
+  isSensitiveTopic,
+  SYSTEM_PROMPT,
+} from "./guardrails";
 
 export const DAILY_FREE_LIMIT = 5;
 
@@ -20,7 +25,10 @@ const REGISTER_PROMPT = `MAÎTRISE DU LANGAGE :
 - Vocabulaire de sa tradition : emploie les mots justes de la tradition de la personne (voir ci-dessous).`;
 
 /** Injecte le vocabulaire et les rôles cléricaux de la tradition de la personne. */
-function doctrineContext(rulesetId: string | undefined, locale: Locale): string {
+function doctrineContext(
+  rulesetId: string | undefined,
+  locale: Locale,
+): string {
   if (!rulesetId) return "";
   let ruleset;
   try {
@@ -46,11 +54,13 @@ function systemPrompt(
   stage: AllianceStage | null,
   locale: Locale,
   rulesetId?: string,
+  country?: string,
 ): string {
   return [
     SYSTEM_PROMPT,
     REGISTER_PROMPT,
     doctrineContext(rulesetId, locale),
+    culturalGuidance(country),
     `Langue de réponse: ${locale}. Étape actuelle: ${stage ?? "aucune"}.`,
   ]
     .filter(Boolean)
@@ -130,13 +140,23 @@ async function askOpenAiCompatible(
  */
 export async function askCoach(
   question: string,
-  opts: { stage: AllianceStage | null; locale: Locale; rulesetId?: string },
+  opts: {
+    stage: AllianceStage | null;
+    locale: Locale;
+    rulesetId?: string;
+    country?: string;
+  },
 ): Promise<CoachReply> {
   if (isSensitiveTopic(question)) {
     return { ...guardrailResponse(opts.locale), provider: aiProvider };
   }
 
-  const system = systemPrompt(opts.stage, opts.locale, opts.rulesetId);
+  const system = systemPrompt(
+    opts.stage,
+    opts.locale,
+    opts.rulesetId,
+    opts.country,
+  );
   try {
     let text: string | null = null;
     if (aiProvider === "anthropic") {

@@ -1,0 +1,65 @@
+import { describe, it, expect } from "vitest";
+import {
+  resolveRegion,
+  culturalGuidance,
+  culturalReference,
+  CULTURE_REGIONS,
+} from "@/lib/culture";
+
+describe("culture — résolution pays → région", () => {
+  it("Afrique de l'Ouest", () => {
+    expect(resolveRegion("Côte d'Ivoire")?.key).toBe("afrique_ouest");
+    expect(resolveRegion("Sénégal")?.key).toBe("afrique_ouest");
+    expect(resolveRegion("burkina faso")?.key).toBe("afrique_ouest");
+  });
+
+  it("Afrique centrale", () => {
+    expect(resolveRegion("Gabon")?.key).toBe("afrique_centrale");
+    expect(resolveRegion("Cameroun")?.key).toBe("afrique_centrale");
+  });
+
+  it("Occident (France / Amérique du Nord)", () => {
+    expect(resolveRegion("France")?.key).toBe("occident");
+    expect(resolveRegion("Canada")?.key).toBe("occident");
+  });
+
+  it("Lusophone", () => {
+    expect(resolveRegion("Brésil")?.key).toBe("lusophone");
+    expect(resolveRegion("Portugal")?.key).toBe("lusophone");
+  });
+
+  it("Asie", () => {
+    expect(resolveRegion("Vietnam")?.key).toBe("asie");
+  });
+
+  it("inconnu ou vide → null", () => {
+    expect(resolveRegion(undefined)).toBeNull();
+    expect(resolveRegion("")).toBeNull();
+    expect(resolveRegion("Atlantide")).toBeNull();
+  });
+});
+
+describe("culture — guidance pour le prompt", () => {
+  it("sans pays : demande le pays/ethnie et liste toutes les régions", () => {
+    const g = culturalGuidance();
+    expect(g).toMatch(/DEMANDE/);
+    expect(g).toMatch(/Afrique de l'Ouest/);
+    expect(g).toMatch(/lusophone/i);
+    expect(g).toMatch(/cadre biblique/i);
+  });
+
+  it("avec pays connu : cible la région et garde le cadre biblique", () => {
+    const g = culturalGuidance("Côte d'Ivoire");
+    expect(g).toMatch(/Afrique de l'Ouest/);
+    expect(g).toMatch(/dot/i);
+    expect(g).toMatch(/DEMANDE/); // demande quand même de confirmer l'ethnie
+  });
+
+  it("chaque région porte un cadre biblique et des points de vigilance", () => {
+    for (const r of CULTURE_REGIONS) {
+      expect(r.biblicalFrame.length).toBeGreaterThan(10);
+      expect(r.cautions.length).toBeGreaterThan(10);
+    }
+    expect(culturalReference()).toMatch(/À discerner/);
+  });
+});
