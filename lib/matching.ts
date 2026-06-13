@@ -1,4 +1,9 @@
-import type { User, FaithProfile, RelationshipProfile } from "@prisma/client";
+import type {
+  User,
+  FaithProfile,
+  RelationshipProfile,
+  PrivacySettings,
+} from "@prisma/client";
 import { prisma } from "@/lib/db";
 
 type Candidate = User & {
@@ -6,45 +11,52 @@ type Candidate = User & {
   relationshipProfile: RelationshipProfile | null;
 };
 
+// L'utilisateur courant, déjà chargé par la session (requireUser /
+// requirePageUser). On le réutilise au lieu de le recharger.
+type Me = User & {
+  faithProfile: FaithProfile | null;
+  relationshipProfile: RelationshipProfile | null;
+  privacySettings: PrivacySettings | null;
+};
+
 /**
  * Suggestions filtrées par le Filtre Anti-Malaise Local et le mode invisible.
  * La raison d'exclusion n'est JAMAIS exposée.
  * Max 3 suggestions — la qualité avant la quantité.
+ *
+ * `me` est passé déjà chargé (zéro requête redondante) ; les requêtes
+ * indépendantes (matchs, signalements) partent en parallèle.
  */
-export async function getSuggestions(userId: string): Promise<Candidate[]> {
-  const me = await prisma.user.findUniqueOrThrow({
-    where: { id: userId },
-    include: {
-      faithProfile: true,
-      relationshipProfile: true,
-      privacySettings: true,
-    },
-  });
+export async function getSuggestions(me: Me): Promise<Candidate[]> {
+  // Une personne mariée ne voit ni n'apparaît dans les suggestions.
+  // Court-circuit avant toute requête.
+  if (me.season !== "JOURNEY") return [];
 
-  const existing = await prisma.match.findMany({
-    where: { OR: [{ userAId: userId }, { userBId: userId }] },
-    select: { userAId: true, userBId: true },
-  });
+  const userId = me.id;
+
+  const [existing, reported] = await Promise.all([
+    prisma.match.findMany({
+      where: { OR: [{ userAId: userId }, { userBId: userId }] },
+      select: { userAId: true, userBId: true },
+    }),
+    prisma.report.findMany({
+      where: {
+        status: { in: ["OPEN", "REVIEWING"] },
+        OR: [{ reporterId: userId }, { targetUserId: userId }],
+      },
+      select: { reporterId: true, targetUserId: true },
+    }),
+  ]);
+
   const excludedIds = new Set<string>([userId]);
   for (const m of existing) {
     excludedIds.add(m.userAId);
     excludedIds.add(m.userBId);
   }
-
-  const reported = await prisma.report.findMany({
-    where: {
-      status: { in: ["OPEN", "REVIEWING"] },
-      OR: [{ reporterId: userId }, { targetUserId: userId }],
-    },
-    select: { reporterId: true, targetUserId: true },
-  });
   for (const r of reported) {
     excludedIds.add(r.reporterId);
     excludedIds.add(r.targetUserId);
   }
-
-  // Une personne mariée ne voit ni n'apparaît dans les suggestions.
-  if (me.season !== "JOURNEY") return [];
 
   const candidates = await prisma.user.findMany({
     where: {

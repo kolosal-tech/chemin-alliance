@@ -5,7 +5,7 @@ import { getSuggestions } from "@/lib/matching";
 
 export const GET = withErrors(async () => {
   const user = await requireUser();
-  const suggestions = await getSuggestions(user.id);
+  const suggestions = await getSuggestions(user);
   // Exposition minimale : jamais l'email, jamais les champs chiffrés.
   return NextResponse.json(
     suggestions.map((s) => ({

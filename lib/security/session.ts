@@ -1,8 +1,14 @@
+import { cache } from "react";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
 import { SESSION_COOKIE, verifySession } from "@/lib/security/jwt";
 
-export async function getSessionUser() {
+/**
+ * Mémoïsé par requête (React cache) : layout + page + helpers partagent
+ * UNE seule requête DB par rendu au lieu de 3. Sur l'App Router, le layout
+ * et la page rendent en parallèle et appelaient chacun cette fonction.
+ */
+export const getSessionUser = cache(async () => {
   const token = cookies().get(SESSION_COOKIE)?.value;
   if (!token) return null;
   const payload = await verifySession(token);
@@ -16,7 +22,7 @@ export async function getSessionUser() {
     },
   });
   return user;
-}
+});
 
 export async function requireUser() {
   const user = await getSessionUser();

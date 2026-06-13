@@ -18,11 +18,13 @@ export default async function SuggestionsPage({
   if (user.season !== "JOURNEY") {
     redirect({ href: "/couple", locale: params.locale });
   }
-  const suggestions = await getSuggestions(user.id);
-  const hasPortrait =
-    (await prisma.agentInsight.count({
+  const [suggestions, portraitCount] = await Promise.all([
+    getSuggestions(user),
+    prisma.agentInsight.count({
       where: { userId: user.id, agentId: "preparation", revokedAt: null },
-    })) > 0;
+    }),
+  ]);
+  const hasPortrait = portraitCount > 0;
 
   return (
     <main className="px-5 pt-6 safe-top">
