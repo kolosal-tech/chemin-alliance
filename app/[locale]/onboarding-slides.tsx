@@ -192,6 +192,16 @@ export function OnboardingSlides() {
 
       </div>
 
+      <p className="pb-2 pt-5 text-center text-[11px] text-sand-500 dark:text-[#65625B] lg:hidden">
+        <Link href="/legal/terms" className="underline">
+          {tl("terms")}
+        </Link>
+        {" · "}
+        <Link href="/legal/privacy" className="underline">
+          {tl("privacy")}
+        </Link>
+      </p>
+
       <p className="sr-only">{tc("tagline")}</p>
     </main>
   );

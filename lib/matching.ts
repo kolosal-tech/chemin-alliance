@@ -58,12 +58,18 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
     excludedIds.add(r.targetUserId);
   }
 
+  // Plateforme de mariage chrétien : suggestions de genre opposé uniquement.
+  // Si le genre n'est pas renseigné, on ne restreint pas (pas d'exclusion injuste).
+  const oppositeGender =
+    me.gender === "M" ? "F" : me.gender === "F" ? "M" : null;
+
   const candidates = await prisma.user.findMany({
     where: {
       id: { notIn: [...excludedIds] },
       season: "JOURNEY",
       isVerified: true,
       privacySettings: { isNot: { invisibleMode: true } },
+      ...(oppositeGender ? { gender: oppositeGender } : {}),
     },
     include: {
       faithProfile: true,
@@ -106,8 +112,7 @@ function affinity(a: Candidate, b: Candidate): number {
   if (a.faithProfile?.denomination === b.faithProfile?.denomination) s += 1;
   if (
     a.relationshipProfile?.wantsChildren != null &&
-    a.relationshipProfile.wantsChildren ===
-      b.relationshipProfile?.wantsChildren
+    a.relationshipProfile.wantsChildren === b.relationshipProfile?.wantsChildren
   )
     s += 2;
   if (

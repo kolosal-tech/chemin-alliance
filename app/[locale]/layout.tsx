@@ -49,6 +49,10 @@ export async function generateMetadata({
       statusBarStyle: "black-translucent",
       title: t("appName"),
     },
+    // Équivalent standard (non déprécié) de apple-mobile-web-app-capable.
+    other: {
+      "mobile-web-app-capable": "yes",
+    },
     icons: {
       icon: "/icons/icon-192.png",
       apple: "/icons/apple-touch-icon.png",

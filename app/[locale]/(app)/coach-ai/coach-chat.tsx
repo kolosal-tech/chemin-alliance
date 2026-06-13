@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
+import { RichText } from "@/components/RichText";
 
 type Entry = { id: number; role: "user" | "coach"; text: string; guardrail?: boolean };
 
@@ -139,9 +140,10 @@ export function CoachChat() {
                 </svg>
               </div>
               <div className="glass glass-bubble rounded-[14px] rounded-tl-[4px] px-3.5 py-2.5">
-                <p className="text-[13.5px] leading-normal text-[#2A2823] dark:text-[#CFCAC0]">
-                  {e.text}
-                </p>
+                <RichText
+                  text={e.text}
+                  className="text-[13.5px] leading-normal text-[#2A2823] dark:text-[#CFCAC0]"
+                />
               </div>
             </div>
           ),
