@@ -75,6 +75,8 @@
     "passwordHint": "Mínimo 12 caracteres",
     "displayName": "Nome apresentado",
     "age": "Idade",
+    "country": "País",
+    "countryHint": "Ex. Costa do Marfim, França, Brasil…",
     "vertical": "Tradição cristã",
     "verticalEvangelical": "Protestante evangélica",
     "verticalCatholic": "Católica",

@@ -75,6 +75,8 @@
     "passwordHint": "Minimum 12 characters",
     "displayName": "Display name",
     "age": "Age",
+    "country": "Country",
+    "countryHint": "E.g. Ivory Coast, France, Brazil…",
     "vertical": "Christian tradition",
     "verticalEvangelical": "Evangelical Protestant",
     "verticalCatholic": "Catholic",

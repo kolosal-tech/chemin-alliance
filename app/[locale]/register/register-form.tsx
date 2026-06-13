@@ -34,6 +34,7 @@ export function RegisterForm() {
         displayName: fd.get("displayName"),
         age: Number(fd.get("age")),
         vertical: fd.get("vertical"),
+        country: fd.get("country") || undefined,
         locale,
         consentSensitiveData: true,
         consentTerms: true,
@@ -104,6 +105,10 @@ export function RegisterForm() {
             </select>
           </label>
         </div>
+        <label className="flex flex-col gap-1.5">
+          <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">{t("country")}</span>
+          <input name="country" maxLength={80} placeholder={t("countryHint")} className={input} />
+        </label>
         <label className="flex flex-col gap-1.5">
           <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">{t("email")}</span>
           <input name="email" type="email" required autoComplete="email" className={input} />

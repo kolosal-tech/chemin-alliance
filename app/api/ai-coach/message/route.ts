@@ -52,6 +52,7 @@ export const POST = withErrors(async (req: Request) => {
     stage,
     locale: (user.locale ?? "fr") as Locale,
     rulesetId: user.rulesetId,
+    country: user.country ?? undefined,
   });
   return NextResponse.json({
     ...reply,
