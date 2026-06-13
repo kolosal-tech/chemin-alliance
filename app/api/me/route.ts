@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
+import { randomBytes } from "node:crypto";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
+import { hashPassword } from "@/lib/security/password";
 import { decryptOptional } from "@/lib/security/crypto";
 import { SESSION_COOKIE } from "@/lib/security/jwt";
 
@@ -44,10 +46,37 @@ export const PATCH = withErrors(async (req: Request) => {
   return NextResponse.json({ ok: true });
 });
 
-// RGPD : suppression réelle, cascade Prisma (profils, messages, matchs…)
+// RGPD (art.17) — effacement par ANONYMISATION : on purge toutes les données
+// personnelles et sensibles, mais on conserve le User anonymisé afin de ne PAS
+// détruire le Match et la conversation du partenaire (données de tiers). Le
+// compte devient inutilisable (mot de passe aléatoire, session invalidée) et
+// invisible (exclu du matching, deletedAt posé).
 export const DELETE = withErrors(async () => {
   const user = await requireUser();
-  await prisma.user.delete({ where: { id: user.id } });
+  const anonHash = await hashPassword(randomBytes(24).toString("hex"));
+  await prisma.$transaction([
+    prisma.faithProfile.deleteMany({ where: { userId: user.id } }),
+    prisma.relationshipProfile.deleteMany({ where: { userId: user.id } }),
+    prisma.consent.deleteMany({ where: { userId: user.id } }),
+    prisma.booking.deleteMany({ where: { userId: user.id } }),
+    prisma.aiCoachUsage.deleteMany({ where: { userId: user.id } }),
+    prisma.agentInsight.deleteMany({ where: { userId: user.id } }),
+    prisma.report.deleteMany({ where: { reporterId: user.id } }),
+    prisma.user.update({
+      where: { id: user.id },
+      data: {
+        deletedAt: new Date(),
+        email: `deleted-${user.id}@deleted.invalid`,
+        displayName: "Membre retiré",
+        passwordHash: anonHash,
+        photoUrl: null,
+        cityApprox: null,
+        country: null,
+        isVerified: false,
+        emailVerifyToken: null,
+      },
+    }),
+  ]);
   const res = NextResponse.json({ ok: true, deleted: true });
   res.cookies.set(SESSION_COOKIE, "", { maxAge: 0, path: "/" });
   return res;

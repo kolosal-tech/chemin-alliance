@@ -68,6 +68,7 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
       id: { notIn: [...excludedIds] },
       season: "JOURNEY",
       isVerified: true,
+      deletedAt: null,
       privacySettings: { isNot: { invisibleMode: true } },
       ...(oppositeGender ? { gender: oppositeGender } : {}),
     },

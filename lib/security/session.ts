@@ -21,6 +21,8 @@ export const getSessionUser = cache(async () => {
       privacySettings: true,
     },
   });
+  // Compte soft-supprimé (RGPD) : session invalide.
+  if (user?.deletedAt) return null;
   return user;
 });
 

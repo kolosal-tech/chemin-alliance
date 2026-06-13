@@ -119,6 +119,7 @@ model User {
   photoBlurredByDefault Boolean   @default(true)
   cityApprox            String?
   country               String?
+  deletedAt             DateTime?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 
@@ -157,6 +158,8 @@ model CoupleSpace {
   marriedAt  DateTime?
   createdAt  DateTime          @default(now())
   updatedAt  DateTime          @updatedAt
+
+  agentInsights AgentInsight[]
 }
 
 model FaithProfile {
@@ -315,6 +318,7 @@ model AgentInsight {
   agentId    String
   kind       String
   coupleSpaceId String?
+  coupleSpace   CoupleSpace? @relation(fields: [coupleSpaceId], references: [id], onDelete: Cascade)
   dataJson   Json
   visibility VisibilityLevel @default(PRIVATE)
   createdAt  DateTime        @default(now())
