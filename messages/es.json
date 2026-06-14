@@ -213,6 +213,16 @@
     "reviews": "{count} reseñas verificadas",
     "affiliation": "Afiliación"
   },
+  "curriculum": {
+    "kicker": "Camino guiado",
+    "title": "Preparación al matrimonio",
+    "intro": "Seis módulos bíblicos, uno por etapa del camino. Para vivir primero a solas, luego en pareja: no para aprobar un examen, sino para edificar sobre la roca.",
+    "themes": "En el corazón",
+    "reflection": "Para meditar",
+    "practice": "Esta semana",
+    "churchNote": "En tu iglesia",
+    "coachCta": "Hablarlo con un coach verificado"
+  },
   "privacy": {
     "title": "Confidencialidad",
     "antiMalaiseTitle": "Filtro Anti-Incomodidad Local",
@@ -296,6 +306,7 @@
       "growthBody": "Módulos guiados, coach humano verificado, y el tiempo necesario. El encuentro esperará a que estés listo/a — y será aún más hermoso.",
       "growthCta": "Ver coaches verificados",
       "readyCta": "Continuar hacia los encuentros",
+      "modulesCta": "Descubrir los módulos guiados",
       "growthSkip": "Prefiero avanzar a mi propio ritmo",
       "humanTitle": "Primero, acompañamiento humano",
       "humanBody": "Lo que estás atravesando merece una presencia real, no un algoritmo. Un acompañante verificado puede caminar contigo — sin juicio, a tu ritmo.",

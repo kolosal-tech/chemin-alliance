@@ -193,12 +193,20 @@ export function PreparationFlow({
 
           {/* Routage par maturité : l'agent PROPOSE, ne bloque jamais l'accès. */}
           {portrait.overall === "matching_ready" && (
-            <Link
-              href="/suggestions"
-              className="mt-4 block rounded-btnlg bg-gold py-4 text-center text-base font-semibold text-night"
-            >
-              {t("readyCta")} →
-            </Link>
+            <>
+              <Link
+                href="/suggestions"
+                className="mt-4 block rounded-btnlg bg-gold py-4 text-center text-base font-semibold text-night"
+              >
+                {t("readyCta")} →
+              </Link>
+              <Link
+                href="/preparation/modules"
+                className="mt-2 block py-2 text-center text-[12.5px] text-warmgray underline dark:text-[#9A958B]"
+              >
+                {t("modulesCta")}
+              </Link>
+            </>
           )}
 
           {portrait.overall === "growth_path" && (
@@ -206,8 +214,14 @@ export function PreparationFlow({
               <h3 className="font-display text-[18px] text-gold-ink dark:text-[#E0C77A]">{t("growthTitle")}</h3>
               <p className="mt-1.5 text-[13px] leading-normal text-[#6F5C2E] dark:text-[#C2B488]">{t("growthBody")}</p>
               <Link
+                href="/preparation/modules"
+                className="mt-3 block rounded-btnsm bg-gold py-3 text-center text-sm font-semibold text-night"
+              >
+                {t("modulesCta")}
+              </Link>
+              <Link
                 href="/coaches"
-                className="mt-3 block rounded-btnsm border border-gold bg-white py-3 text-center text-sm font-semibold text-gold-ink dark:border-[#6A5A2E] dark:bg-anthracite-800 dark:text-[#E0C77A]"
+                className="mt-2 block rounded-btnsm border border-gold bg-white py-3 text-center text-sm font-semibold text-gold-ink dark:border-[#6A5A2E] dark:bg-anthracite-800 dark:text-[#E0C77A]"
               >
                 {t("growthCta")}
               </Link>

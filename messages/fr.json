@@ -213,6 +213,16 @@
     "reviews": "{count} avis vérifiés",
     "affiliation": "Affiliation"
   },
+  "curriculum": {
+    "kicker": "Parcours guidé",
+    "title": "Préparation au mariage",
+    "intro": "Six modules bibliques, un par étape du chemin. À vivre seul·e d'abord, puis à deux : non pour réussir un examen, mais pour bâtir sur le roc.",
+    "themes": "Au cœur",
+    "reflection": "À méditer",
+    "practice": "Cette semaine",
+    "churchNote": "Dans ton Église",
+    "coachCta": "En parler avec un coach vérifié"
+  },
   "privacy": {
     "title": "Confidentialité",
     "antiMalaiseTitle": "Filtre Anti-Malaise Local",
@@ -296,6 +306,7 @@
       "growthBody": "Modules guidés, coach humain vérifié, et le temps qu'il faut. La rencontre attendra que tu sois prêt·e — et elle n'en sera que plus belle.",
       "growthCta": "Voir les coachs vérifiés",
       "readyCta": "Continuer vers les rencontres",
+      "modulesCta": "Découvrir les modules guidés",
       "growthSkip": "Je préfère avancer à mon rythme",
       "humanTitle": "Un accompagnement humain d'abord",
       "humanBody": "Ce que tu traverses mérite une présence réelle, pas un algorithme. Un accompagnateur vérifié peut marcher avec toi — sans jugement, à ton rythme.",

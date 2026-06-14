@@ -1,0 +1,291 @@
+# Curriculum de préparation au mariage — Chemin d'Alliance.
+#
+# Modules guidés, ordonnés selon les 6 étapes du parcours d'Alliance. Cadre
+# BIBLIQUE et doctrine-agnostique au tronc commun ; les spécificités doctrinales
+# (sacrement catholique, accompagnement pastoral évangélique) vivent dans
+# `vertical_notes` — JAMAIS en dur dans le code.
+#
+# `scripture` ne contient que des RÉFÉRENCES (livre chap:versets), jamais le
+# texte : respect du droit d'auteur des traductions et liberté de version.
+#
+# Chargé par lib/curriculum.ts. 4 langues : fr / en / es / pt.
+
+curriculum:
+  version: 1
+
+  modules:
+    # ─────────────────────────────────────────── ÉTAPE 1 — DÉCOUVERTE
+    - id: foundations_identity
+      stage: DISCOVERY
+      icon: seed
+      title:
+        fr: "Fondations : qui suis-je devant Dieu"
+        en: "Foundations: who am I before God"
+        es: "Cimientos: quién soy ante Dios"
+        pt: "Fundações: quem sou diante de Deus"
+      summary:
+        fr: "Avant de chercher un conjoint, recevoir son identité et sa valeur en Dieu. Un célibat habité prépare une alliance libre, non un sauvetage."
+        en: "Before seeking a spouse, receive your identity and worth in God. A whole singleness prepares a free covenant, not a rescue."
+        es: "Antes de buscar cónyuge, recibe tu identidad y valor en Dios. Una soltería plena prepara un pacto libre, no un rescate."
+        pt: "Antes de procurar cônjuge, receba a sua identidade e valor em Deus. Um celibato pleno prepara um pacto livre, não um resgate."
+      scripture:
+        - "Genèse 1:27"
+        - "Psaume 139:13-16"
+        - "1 Corinthiens 7:17"
+      themes:
+        - fr: "Recevoir sa valeur de Dieu, pas du regard de l'autre."
+          en: "Receive your worth from God, not from another's gaze."
+          es: "Recibir tu valor de Dios, no de la mirada del otro."
+          pt: "Receber o seu valor de Deus, não do olhar do outro."
+        - fr: "Guérir avant de lier : blessures, attentes, idoles du couple."
+          en: "Heal before binding: wounds, expectations, idols of romance."
+          es: "Sanar antes de unir: heridas, expectativas, ídolos de la pareja."
+          pt: "Curar antes de unir: feridas, expectativas, ídolos do casal."
+      reflection:
+        - fr: "Qu'est-ce que j'attends du mariage que Dieu seul peut donner ?"
+          en: "What do I expect from marriage that God alone can give?"
+          es: "¿Qué espero del matrimonio que solo Dios puede dar?"
+          pt: "O que espero do casamento que só Deus pode dar?"
+        - fr: "Suis-je en paix dans mon célibat aujourd'hui ? Pourquoi ?"
+          en: "Am I at peace in my singleness today? Why?"
+          es: "¿Estoy en paz en mi soltería hoy? ¿Por qué?"
+          pt: "Estou em paz no meu celibato hoje? Porquê?"
+      practice:
+        fr: "Cette semaine : écrire 3 manières dont Dieu m'appelle « bien-aimé·e », sans référence à une relation."
+        en: "This week: write 3 ways God calls me 'beloved', with no reference to a relationship."
+        es: "Esta semana: escribe 3 maneras en que Dios me llama 'amado/a', sin referencia a una relación."
+        pt: "Esta semana: escreva 3 formas como Deus me chama 'amado/a', sem referência a uma relação."
+
+    # ─────────────────────────────────────────── ÉTAPE 2 — DIALOGUE
+    - id: true_communication
+      stage: DIALOGUE
+      icon: dialogue
+      title:
+        fr: "Communication vraie"
+        en: "True communication"
+        es: "Comunicación verdadera"
+        pt: "Comunicação verdadeira"
+      summary:
+        fr: "Apprendre à parler vrai et à écouter sans se défendre. La vérité dans l'amour bâtit la confiance qui portera l'alliance."
+        en: "Learn to speak truth and listen without defending. Truth in love builds the trust a covenant rests on."
+        es: "Aprender a hablar con verdad y escuchar sin defenderse. La verdad en amor construye la confianza del pacto."
+        pt: "Aprender a falar verdade e ouvir sem se defender. A verdade no amor constrói a confiança do pacto."
+      scripture:
+        - "Éphésiens 4:15"
+        - "Jacques 1:19"
+        - "Proverbes 18:13"
+      themes:
+        - fr: "Écouter pour comprendre, pas pour répondre."
+          en: "Listen to understand, not to reply."
+          es: "Escuchar para comprender, no para responder."
+          pt: "Ouvir para compreender, não para responder."
+        - fr: "Dire le vrai avec douceur : ni fuite, ni violence."
+          en: "Say the truth gently: neither flight nor violence."
+          es: "Decir la verdad con dulzura: ni huida ni violencia."
+          pt: "Dizer a verdade com doçura: nem fuga, nem violência."
+      reflection:
+        - fr: "Comment je réagis quand on me contredit ? D'où vient cette réaction ?"
+          en: "How do I react when contradicted? Where does that come from?"
+          es: "¿Cómo reacciono cuando me contradicen? ¿De dónde viene?"
+          pt: "Como reajo quando me contradizem? De onde vem isso?"
+        - fr: "Quel sujet ai-je tendance à éviter ? Pourquoi ?"
+          en: "Which topic do I tend to avoid? Why?"
+          es: "¿Qué tema tiendo a evitar? ¿Por qué?"
+          pt: "Que assunto costumo evitar? Porquê?"
+      practice:
+        fr: "Un échange cette semaine où je reformule l'autre avant de répondre : « Si je comprends bien, tu… »"
+        en: "One exchange this week where I restate the other before answering: 'If I understand you, you…'"
+        es: "Un intercambio esta semana donde reformulo al otro antes de responder: 'Si entiendo bien, tú…'"
+        pt: "Uma conversa esta semana onde reformulo o outro antes de responder: 'Se entendo bem, tu…'"
+
+    # ─────────────────────────────────────────── ÉTAPE 3 — DISCERNEMENT
+    - id: discern_together
+      stage: DISCERNMENT
+      icon: compass
+      title:
+        fr: "Discerner ensemble"
+        en: "Discern together"
+        es: "Discernir juntos"
+        pt: "Discernir juntos"
+      summary:
+        fr: "Confronter les valeurs, les blessures et les visions de vie. Le discernement n'est pas un test à réussir mais une vérité à accueillir à deux, devant Dieu."
+        en: "Hold values, wounds and life visions up to the light. Discernment is not a test to pass but a truth to welcome together, before God."
+        es: "Confrontar valores, heridas y visiones de vida. El discernimiento no es un examen que aprobar sino una verdad que acoger juntos, ante Dios."
+        pt: "Confrontar valores, feridas e visões de vida. O discernimento não é um exame a passar mas uma verdade a acolher juntos, diante de Deus."
+      scripture:
+        - "Amos 3:3"
+        - "2 Corinthiens 6:14"
+        - "Philippiens 1:9-10"
+      themes:
+        - fr: "Aligner foi, valeurs, argent, famille, projets d'enfants."
+          en: "Align faith, values, money, family, plans for children."
+          es: "Alinear fe, valores, dinero, familia, proyectos de hijos."
+          pt: "Alinhar fé, valores, dinheiro, família, projetos de filhos."
+        - fr: "Nommer les signaux d'alarme sans les minimiser."
+          en: "Name the red flags without minimizing them."
+          es: "Nombrar las señales de alarma sin minimizarlas."
+          pt: "Nomear os sinais de alarme sem os minimizar."
+      reflection:
+        - fr: "Sur quoi sommes-nous profondément d'accord ? En désaccord ?"
+          en: "Where do we deeply agree? Where do we disagree?"
+          es: "¿En qué estamos profundamente de acuerdo? ¿En desacuerdo?"
+          pt: "Em que concordamos profundamente? Em que discordamos?"
+        - fr: "Y a-t-il un signal que mon entourage voit et que j'évite ?"
+          en: "Is there a sign those around me see that I avoid?"
+          es: "¿Hay una señal que mi entorno ve y que yo evito?"
+          pt: "Há um sinal que os que me rodeiam veem e que eu evito?"
+      practice:
+        fr: "Lister à deux 5 valeurs non négociables chacun, puis les comparer en priant."
+        en: "Each list 5 non-negotiable values, then compare them in prayer together."
+        es: "Cada uno lista 5 valores no negociables, luego compararlos orando juntos."
+        pt: "Cada um lista 5 valores inegociáveis, depois compará-los em oração juntos."
+
+    # ─────────────────────────────────────────── ÉTAPE 4 — ACCOMPAGNEMENT
+    - id: walk_accompanied
+      stage: ACCOMPANIMENT
+      icon: hands
+      title:
+        fr: "Marcher accompagnés"
+        en: "Walk accompanied"
+        es: "Caminar acompañados"
+        pt: "Caminhar acompanhados"
+      summary:
+        fr: "Aucun couple ne tient seul. S'entourer de témoins mûrs — famille, communauté, accompagnateur — qui parlent vrai et prient avec nous."
+        en: "No couple stands alone. Surround yourselves with mature witnesses — family, community, a companion — who speak truth and pray with you."
+        es: "Ninguna pareja se sostiene sola. Rodearse de testigos maduros — familia, comunidad, acompañante — que hablan con verdad y oran con ustedes."
+        pt: "Nenhum casal se sustenta sozinho. Rodear-se de testemunhas maduras — família, comunidade, acompanhante — que falam verdade e oram convosco."
+      scripture:
+        - "Ecclésiaste 4:9-12"
+        - "Proverbes 11:14"
+        - "Hébreux 10:24-25"
+      themes:
+        - fr: "Choisir des témoins qui osent nous dire non."
+          en: "Choose witnesses who dare to tell you no."
+          es: "Elegir testigos que se atrevan a decirnos no."
+          pt: "Escolher testemunhas que ousem dizer-nos não."
+        - fr: "Rendre compte : sortir du secret protège l'amour."
+          en: "Be accountable: leaving secrecy protects love."
+          es: "Rendir cuentas: salir del secreto protege el amor."
+          pt: "Prestar contas: sair do segredo protege o amor."
+      reflection:
+        - fr: "Qui peut nous reprendre avec amour, et l'écouterions-nous ?"
+          en: "Who can correct us in love, and would we listen?"
+          es: "¿Quién puede corregirnos con amor, y le escucharíamos?"
+          pt: "Quem pode corrigir-nos com amor, e ouvi-lo-íamos?"
+        - fr: "Qu'est-ce que nous cachons à nos proches sur notre relation ?"
+          en: "What do we hide from those close to us about our relationship?"
+          es: "¿Qué ocultamos a nuestros allegados sobre nuestra relación?"
+          pt: "O que escondemos dos próximos sobre a nossa relação?"
+      practice:
+        fr: "Inviter un couple ou un accompagnateur mûr à prier avec nous ce mois-ci."
+        en: "Invite a mature couple or companion to pray with you this month."
+        es: "Invitar a una pareja o acompañante maduro a orar con nosotros este mes."
+        pt: "Convidar um casal ou acompanhante maduro para orar connosco este mês."
+
+    # ─────────────────────────────────────────── ÉTAPE 5 — ENGAGEMENT
+    - id: covenant_commitment
+      stage: COMMITMENT
+      icon: ring
+      title:
+        fr: "L'alliance : promesse et liberté"
+        en: "The covenant: promise and freedom"
+        es: "El pacto: promesa y libertad"
+        pt: "A aliança: promessa e liberdade"
+      summary:
+        fr: "Le mariage chrétien est une alliance, pas un contrat : un don total et libre, image de la fidélité de Dieu. S'engager, c'est choisir d'aimer chaque jour."
+        en: "Christian marriage is a covenant, not a contract: a total, free gift, an image of God's faithfulness. To commit is to choose to love each day."
+        es: "El matrimonio cristiano es un pacto, no un contrato: un don total y libre, imagen de la fidelidad de Dios. Comprometerse es elegir amar cada día."
+        pt: "O casamento cristão é uma aliança, não um contrato: um dom total e livre, imagem da fidelidade de Deus. Comprometer-se é escolher amar cada dia."
+      scripture:
+        - "Malachie 2:14-15"
+        - "Cantique 8:6-7"
+        - "Matthieu 19:4-6"
+      themes:
+        - fr: "Alliance vs contrat : fidélité qui ne se reprend pas."
+          en: "Covenant vs contract: faithfulness that is not withdrawn."
+          es: "Pacto vs contrato: fidelidad que no se retira."
+          pt: "Aliança vs contrato: fidelidade que não se retira."
+        - fr: "S'engager librement, sans pression ni précipitation."
+          en: "Commit freely, without pressure or haste."
+          es: "Comprometerse libremente, sin presión ni prisa."
+          pt: "Comprometer-se livremente, sem pressão nem pressa."
+      reflection:
+        - fr: "Est-ce que je choisis cette personne pour ce qu'elle est, non pour combler un vide ?"
+          en: "Do I choose this person for who they are, not to fill a void?"
+          es: "¿Elijo a esta persona por quien es, no para llenar un vacío?"
+          pt: "Escolho esta pessoa por quem é, não para preencher um vazio?"
+        - fr: "Suis-je prêt·e à aimer même les jours sans émotion ?"
+          en: "Am I ready to love even on days without feeling?"
+          es: "¿Estoy listo/a para amar incluso los días sin emoción?"
+          pt: "Estou pronto/a para amar mesmo nos dias sem emoção?"
+      practice:
+        fr: "Écrire chacun ce que « pour toujours » signifie pour soi, puis se le lire."
+        en: "Each write what 'forever' means to you, then read it to each other."
+        es: "Cada uno escribe qué significa 'para siempre', luego se lo leen."
+        pt: "Cada um escreve o que significa 'para sempre', depois leem-no um ao outro."
+
+    # ─────────────────────────────────── ÉTAPE 6 — PRÉPARATION AU MARIAGE
+    - id: toward_marriage
+      stage: MARRIAGE_PREPARATION
+      icon: home
+      title:
+        fr: "Vers le mariage : le concret"
+        en: "Toward marriage: the practical"
+        es: "Hacia el matrimonio: lo concreto"
+        pt: "Rumo ao casamento: o concreto"
+      summary:
+        fr: "Préparer le foyer réel : finances, belle-famille, intimité dans l'alliance, foi partagée. L'amour se construit aussi dans les détails du quotidien."
+        en: "Prepare the real home: finances, in-laws, intimacy within covenant, shared faith. Love is also built in everyday details."
+        es: "Preparar el hogar real: finanzas, familia política, intimidad en el pacto, fe compartida. El amor también se construye en lo cotidiano."
+        pt: "Preparar o lar real: finanças, sogros, intimidade na aliança, fé partilhada. O amor também se constrói no quotidiano."
+      scripture:
+        - "Genèse 2:24"
+        - "1 Corinthiens 7:3-5"
+        - "Josué 24:15"
+      themes:
+        - fr: "Argent, belle-famille, rôles : décider ensemble avant, pas après."
+          en: "Money, in-laws, roles: decide together beforehand, not after."
+          es: "Dinero, familia política, roles: decidir juntos antes, no después."
+          pt: "Dinheiro, sogros, papéis: decidir juntos antes, não depois."
+        - fr: "L'intimité comme don réciproque, dans le respect et la patience."
+          en: "Intimacy as mutual gift, in respect and patience."
+          es: "La intimidad como don recíproco, en respeto y paciencia."
+          pt: "A intimidade como dom recíproco, em respeito e paciência."
+      reflection:
+        - fr: "Comment gérerons-nous l'argent et les limites avec nos familles ?"
+          en: "How will we handle money and boundaries with our families?"
+          es: "¿Cómo manejaremos el dinero y los límites con nuestras familias?"
+          pt: "Como vamos gerir o dinheiro e os limites com as nossas famílias?"
+        - fr: "Quelle place donnerons-nous à la prière dans notre foyer ?"
+          en: "What place will we give prayer in our home?"
+          es: "¿Qué lugar daremos a la oración en nuestro hogar?"
+          pt: "Que lugar daremos à oração no nosso lar?"
+      practice:
+        fr: "Construire ensemble un premier budget de foyer et un rythme de prière de couple."
+        en: "Build together a first household budget and a couple's prayer rhythm."
+        es: "Construir juntos un primer presupuesto del hogar y un ritmo de oración de pareja."
+        pt: "Construir juntos um primeiro orçamento do lar e um ritmo de oração de casal."
+
+  # Spécificités doctrinales — JAMAIS en dur dans le code, propres à chaque
+  # verticale. S'ajoutent au tronc commun ci-dessus selon faithProfile.vertical.
+  vertical_notes:
+    CHRISTIAN_EVANGELICAL:
+      - module: covenant_commitment
+        note:
+          fr: "Beaucoup d'Églises évangéliques proposent un accompagnement pré-marital (pré-marital counseling) avec un couple pastoral : un cadre précieux pour traverser ces modules à deux."
+          en: "Many evangelical churches offer pre-marital counseling with a pastoral couple: a precious setting to walk these modules together."
+          es: "Muchas iglesias evangélicas ofrecen consejería prematrimonial con una pareja pastoral: un marco valioso para recorrer estos módulos juntos."
+          pt: "Muitas igrejas evangélicas oferecem aconselhamento pré-matrimonial com um casal pastoral: um quadro precioso para percorrer estes módulos juntos."
+      - module: toward_marriage
+        note:
+          fr: "Sollicite ton pasteur pour la cérémonie et la bénédiction de l'alliance : le mariage est célébré devant Dieu et la communauté."
+          en: "Ask your pastor about the ceremony and the blessing of the covenant: marriage is celebrated before God and the community."
+          es: "Consulta a tu pastor sobre la ceremonia y la bendición del pacto: el matrimonio se celebra ante Dios y la comunidad."
+          pt: "Consulta o teu pastor sobre a cerimónia e a bênção da aliança: o casamento celebra-se diante de Deus e da comunidade."
+    CHRISTIAN_CATHOLIC:
+      - module: covenant_commitment
+        note:
+          fr: "Dans l'Église catholique, le mariage est un sacrement. Une préparation en paroisse (sessions de fiancés, rencontre avec le prêtre ou le diacre) accompagne ce cheminement."
+          en: "In the Catholic Church, marriage is a sacrament. A parish preparation (engaged-couple sessions, meeting with the priest or deacon) accompanies this journey."
+          es: "En la Iglesia católica, el matrimonio es un sacramento. Una preparación en la parroquia (sesiones de novios, encuentro con el sacerdote o diácono) acompaña este camino."
+          pt: "Na Igreja católica, o casamento é um sacramento. Uma preparação na paróquia (sessões de noivos, encontro com o sacerdote ou diácono) acompanha este caminho."
