@@ -133,11 +133,28 @@ model User {
   allianceAnswers     AllianceAnswer[]
   reportsMade         Report[]             @relation("Reporter")
   reportsReceived     Report[]             @relation("ReportTarget")
+  blocksMade          Block[]              @relation("Blocker")
+  blocksReceived      Block[]              @relation("Blocked")
   bookings            Booking[]
   aiCoachUsages       AiCoachUsage[]
   agentInsights       AgentInsight[]
   coupleSpaceA        CoupleSpace?         @relation("CoupleUserA")
   coupleSpaceB        CoupleSpace?         @relation("CoupleUserB")
+}
+
+// Blocage user-à-user — GRATUIT À VIE (doctrine, lib/payments/entitlements).
+// Un blocage rend les deux personnes mutuellement invisibles (matching) et
+// coupe tout échange. Jamais derrière un paywall, jamais de raison demandée.
+model Block {
+  id        String   @id @default(cuid())
+  blockerId String
+  blocker   User     @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blockedId String
+  blocked   User     @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([blockerId, blockedId])
+  @@index([blockedId])
 }
 
 // Espace Couple — la vie d'alliance APRÈS le mariage (saisons Mariés/Parents).

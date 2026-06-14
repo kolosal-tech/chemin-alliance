@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import type { AllianceStage, MessageKind } from "@prisma/client";
 import { StageBadge } from "@/components/StageBadge";
 import { SacredMotif } from "@/components/SacredMotif";
+import { BlockButton } from "@/components/BlockButton";
 
 type Msg = {
   id: string;
@@ -109,6 +110,7 @@ export function Conversation({
         >
           {t("nav.path")}
         </Link>
+        <BlockButton targetUserId={other.id} targetName={other.displayName} />
       </header>
 
       {/* Messages — verre liquide */}

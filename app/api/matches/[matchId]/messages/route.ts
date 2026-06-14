@@ -12,6 +12,7 @@ import {
   leakKindsToActions,
 } from "@/lib/moderation/contact-detection";
 import { analyzeRisk } from "@/lib/agents/watchman";
+import { isBlockedBetween } from "@/lib/blocks";
 
 export const GET = withErrors(
   async (_req: Request, { params }: { params: { matchId: string } }) => {
@@ -25,7 +26,9 @@ export const GET = withErrors(
     return NextResponse.json(
       messages
         // un message bloqué n'est visible que par son expéditeur
-        .filter((m) => m.moderationStatus !== "BLOCKED" || m.senderId === user.id)
+        .filter(
+          (m) => m.moderationStatus !== "BLOCKED" || m.senderId === user.id,
+        )
         .map((m) => ({
           id: m.id,
           senderId: m.senderId,
@@ -60,9 +63,20 @@ export const POST = withErrors(
     if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
     const match = await requireMatchMember(params.matchId, user.id);
+    // Blocage (gratuit à vie) : tout échange est coupé dans les deux sens.
+    const otherId =
+      match.userAId === user.id ? match.userBId : match.userAId;
+    if (await isBlockedBetween(user.id, otherId)) {
+      return jsonError(403, "RELATION_BLOCKED");
+    }
     const { content } = schema.parse(await req.json());
     const locale = (user.locale ?? "fr") as Locale;
-    const ctx = await buildActionContext(match, user.id, user.rulesetId, locale);
+    const ctx = await buildActionContext(
+      match,
+      user.id,
+      user.rulesetId,
+      locale,
+    );
 
     const canSend = validateAction({
       rulesetId: user.rulesetId,

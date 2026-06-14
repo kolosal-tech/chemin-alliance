@@ -223,6 +223,17 @@
     "churchNote": "In your church",
     "coachCta": "Talk it over with a verified coach"
   },
+  "block": {
+    "block": "Block",
+    "confirmTitle": "Block {name}?",
+    "confirmBody": "You will no longer see this person and they can no longer contact you. The conversation disappears on both sides.",
+    "free": "Free, always. No reason will be asked of you.",
+    "confirm": "Block",
+    "cancel": "Cancel",
+    "manageTitle": "Blocked people",
+    "empty": "You haven't blocked anyone.",
+    "unblock": "Unblock"
+  },
   "privacy": {
     "title": "Privacy",
     "antiMalaiseTitle": "Local Comfort Filter",

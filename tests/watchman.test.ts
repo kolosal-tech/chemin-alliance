@@ -7,9 +7,9 @@ function signalsOf(text: string): RiskSignal[] {
 
 describe("Veilleur 2.0 — détection d'arnaque sentimentale", () => {
   it("détecte les nouveaux tropes d'arnaque", () => {
-    expect(signalsOf("J'ai gagné un gros lot, on partage l'héritage")).toContain(
-      "inheritance_lottery",
-    );
+    expect(
+      signalsOf("J'ai gagné un gros lot, on partage l'héritage"),
+    ).toContain("inheritance_lottery");
     expect(
       signalsOf("Envoie une carte cadeau Google Play ou du bitcoin"),
     ).toContain("gift_card_crypto");
@@ -34,7 +34,9 @@ describe("Veilleur 2.0 — détection d'arnaque sentimentale", () => {
   });
 
   it("sévérité : argent/arnaque = high", () => {
-    expect(analyzeRisk("achète-moi une gift card itunes").severity).toBe("high");
+    expect(analyzeRisk("achète-moi une gift card itunes").severity).toBe(
+      "high",
+    );
     expect(analyzeRisk("on partage la loterie").severity).toBe("high");
   });
 

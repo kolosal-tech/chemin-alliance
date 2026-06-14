@@ -59,7 +59,10 @@ export default async function AdminReportsPage({
           </p>
         )}
         {reports.map((r) => (
-          <article key={r.id} className="rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
+          <article
+            key={r.id}
+            className="rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800"
+          >
             <div className="mb-2 flex items-center justify-between text-xs text-sand-600 dark:text-[#7E7A72]">
               <span>
                 {t("reporter")} <b>{r.reporter.displayName}</b> → {t("target")}{" "}
@@ -67,7 +70,9 @@ export default async function AdminReportsPage({
               </span>
               <span className="lbl text-[8.5px]">{r.status}</span>
             </div>
-            <p className="mb-3 text-sm leading-snug text-ink dark:text-[#CFCAC0]">{r.reason}</p>
+            <p className="mb-3 text-sm leading-snug text-ink dark:text-[#CFCAC0]">
+              {r.reason}
+            </p>
             <ReportActions reportId={r.id} />
           </article>
         ))}
@@ -103,7 +108,10 @@ export default async function AdminReportsPage({
                   </span>
                 )}
                 {(data.signals ?? []).map((sg) => (
-                  <span key={sg} className="rounded-[6px] bg-gold/20 px-2 py-0.5 text-[10.5px] font-semibold text-gold-ink dark:text-[#E0C77A]">
+                  <span
+                    key={sg}
+                    className="rounded-[6px] bg-gold/20 px-2 py-0.5 text-[10.5px] font-semibold text-gold-ink dark:text-[#E0C77A]"
+                  >
                     {ta(`signal_${sg}`)}
                   </span>
                 ))}

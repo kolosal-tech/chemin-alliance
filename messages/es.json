@@ -223,6 +223,17 @@
     "churchNote": "En tu iglesia",
     "coachCta": "Hablarlo con un coach verificado"
   },
+  "block": {
+    "block": "Bloquear",
+    "confirmTitle": "¿Bloquear a {name}?",
+    "confirmBody": "Ya no verás a esta persona y no podrá contactarte. La conversación desaparece de ambos lados.",
+    "free": "Gratis, siempre. No se te pedirá ninguna razón.",
+    "confirm": "Bloquear",
+    "cancel": "Cancelar",
+    "manageTitle": "Personas bloqueadas",
+    "empty": "No has bloqueado a nadie.",
+    "unblock": "Desbloquear"
+  },
   "privacy": {
     "title": "Confidencialidad",
     "antiMalaiseTitle": "Filtro Anti-Incomodidad Local",

@@ -5,6 +5,7 @@ import type {
   PrivacySettings,
 } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { blockedUserIds } from "@/lib/blocks";
 
 type Candidate = User & {
   faithProfile: FaithProfile | null;
@@ -34,7 +35,7 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
 
   const userId = me.id;
 
-  const [existing, reported] = await Promise.all([
+  const [existing, reported, blocked] = await Promise.all([
     prisma.match.findMany({
       where: { OR: [{ userAId: userId }, { userBId: userId }] },
       select: { userAId: true, userBId: true },
@@ -46,6 +47,8 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
       },
       select: { reporterId: true, targetUserId: true },
     }),
+    // Blocages (gratuit à vie) : exclusion mutuelle, jamais montré.
+    blockedUserIds(userId),
   ]);
 
   const excludedIds = new Set<string>([userId]);
@@ -57,6 +60,7 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
     excludedIds.add(r.reporterId);
     excludedIds.add(r.targetUserId);
   }
+  for (const id of blocked) excludedIds.add(id);
 
   // Plateforme de mariage chrétien : suggestions de genre opposé uniquement.
   // Si le genre n'est pas renseigné, on ne restreint pas (pas d'exclusion injuste).

@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { BlockedUsers } from "@/components/BlockedUsers";
 import type { VisibilityLevel } from "@prisma/client";
 
 const LEVEL_SEGMENTS: Record<string, { filled: number; cls: string }> = {
@@ -197,7 +198,9 @@ export function PrivacyPanel({
       )}
 
       {/* RGPD — export et suppression, jamais cachés */}
-      <div className="flex gap-2.5 pb-8">
+      <BlockedUsers />
+
+      <div className="flex gap-2.5 pb-8 pt-6">
         <a
           href="/api/me/export"
           download
