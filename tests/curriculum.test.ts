@@ -43,7 +43,9 @@ describe("curriculum — modules de préparation au mariage", () => {
     // notes doctrinales distinctes selon la verticale
     expect(evanCovenant?.verticalNote).not.toBe(cathCovenant?.verticalNote);
     // module sans note -> null
-    expect(evan.find((m) => m.id === "true_communication")?.verticalNote).toBeNull();
+    expect(
+      evan.find((m) => m.id === "true_communication")?.verticalNote,
+    ).toBeNull();
   });
 
   it("sans verticale : aucune note attachée", () => {
