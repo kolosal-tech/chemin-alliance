@@ -22,6 +22,13 @@ export default async function AdminReportsPage({
     take: 30,
     include: { user: { select: { displayName: true } } },
   });
+  // Sévérité d'abord : les signaux "high" (arnaque/argent) remontent en tête.
+  const sevRank: Record<string, number> = { high: 0, medium: 1, none: 2 };
+  signals.sort(
+    (a, b) =>
+      (sevRank[(a.dataJson as { severity?: string }).severity ?? "none"] ?? 2) -
+      (sevRank[(b.dataJson as { severity?: string }).severity ?? "none"] ?? 2),
+  );
   const reports = await prisma.report.findMany({
     where: { status: { in: ["OPEN", "REVIEWING"] } },
     orderBy: { createdAt: "desc" },
@@ -76,10 +83,25 @@ export default async function AdminReportsPage({
           </p>
         )}
         {signals.map((sig) => {
-          const data = sig.dataJson as { signals?: string[]; excerpt?: string };
+          const data = sig.dataJson as {
+            signals?: string[];
+            severity?: "none" | "medium" | "high";
+            excerpt?: string;
+          };
+          const high = data.severity === "high";
           return (
-            <article key={sig.id} className="rounded-card border border-[#EAD9A8] bg-[#FBF6E9] p-3.5 dark:border-[#463A1F] dark:bg-[#272117]">
+            <article
+              key={sig.id}
+              className={`rounded-card border p-3.5 ${high ? "border-[#D8B6B0] bg-[#FBF0EE] dark:border-[#5A3A34] dark:bg-[#2A1B18]" : "border-[#EAD9A8] bg-[#FBF6E9] dark:border-[#463A1F] dark:bg-[#272117]"}`}
+            >
               <div className="mb-1.5 flex flex-wrap items-center gap-2">
+                {data.severity && data.severity !== "none" && (
+                  <span
+                    className={`rounded-[6px] px-2 py-0.5 text-[10.5px] font-bold ${high ? "bg-danger/15 text-danger" : "bg-gold/25 text-gold-ink dark:text-[#E0C77A]"}`}
+                  >
+                    {ta(`severity_${data.severity}`)}
+                  </span>
+                )}
                 {(data.signals ?? []).map((sg) => (
                   <span key={sg} className="rounded-[6px] bg-gold/20 px-2 py-0.5 text-[10.5px] font-semibold text-gold-ink dark:text-[#E0C77A]">
                     {ta(`signal_${sg}`)}

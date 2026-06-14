@@ -132,7 +132,11 @@ export const POST = withErrors(
           matchId: match.id,
           agentId: "watchman",
           kind: "SAFETY_SIGNAL",
-          dataJson: { signals: risk.signals, excerpt: content.slice(0, 160) },
+          dataJson: {
+            signals: risk.signals,
+            severity: risk.severity,
+            excerpt: content.slice(0, 160),
+          },
           visibility: "COACH_ONLY",
         },
       });

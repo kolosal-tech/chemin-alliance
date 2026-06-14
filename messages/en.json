@@ -363,7 +363,14 @@
       "signal_spiritual_manipulation": "Spiritual manipulation",
       "signal_marriage_pressure": "Marriage pressure",
       "signal_urgency_rush": "Insistent rushing",
-      "signal_explicit_content": "Inappropriate content"
+      "signal_explicit_content": "Inappropriate content",
+      "signal_inheritance_lottery": "Inheritance / lottery",
+      "signal_gift_card_crypto": "Gift card / crypto",
+      "signal_fake_identity": "Doubtful identity",
+      "signal_off_platform_push": "Off-platform push",
+      "signal_sob_story": "Sob story",
+      "severity_high": "High risk",
+      "severity_medium": "To watch"
     }
   },
   "couple": {

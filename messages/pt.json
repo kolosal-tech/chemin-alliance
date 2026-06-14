@@ -363,7 +363,14 @@
       "signal_spiritual_manipulation": "Manipulação espiritual",
       "signal_marriage_pressure": "Pressão para o casamento",
       "signal_urgency_rush": "Precipitação insistente",
-      "signal_explicit_content": "Conteúdo inapropriado"
+      "signal_explicit_content": "Conteúdo inapropriado",
+      "signal_inheritance_lottery": "Herança / lotaria",
+      "signal_gift_card_crypto": "Cartão presente / cripto",
+      "signal_fake_identity": "Identidade duvidosa",
+      "signal_off_platform_push": "Saída da plataforma",
+      "signal_sob_story": "Relato lamuriante",
+      "severity_high": "Risco elevado",
+      "severity_medium": "A vigiar"
     }
   },
   "couple": {
