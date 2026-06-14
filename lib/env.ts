@@ -21,7 +21,9 @@ const envSchema = z.object({
     .default("development"),
   // Coach IA — optionnel : sans clé, le mode fallback déterministe est actif.
   // AI_PROVIDER force le fournisseur (sinon : Anthropic > OpenRouter > OpenAI).
-  AI_PROVIDER: z.enum(["anthropic", "openrouter", "openai", "fallback"]).optional(),
+  AI_PROVIDER: z
+    .enum(["anthropic", "openrouter", "openai", "fallback"])
+    .optional(),
   ANTHROPIC_API_KEY: z.string().optional(),
   OPENROUTER_API_KEY: z.string().optional(),
   OPENROUTER_MODEL: z.string().default("anthropic/claude-haiku-4.5"),

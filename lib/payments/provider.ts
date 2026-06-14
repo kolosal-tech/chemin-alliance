@@ -30,7 +30,11 @@ export interface PaymentProvider {
 /** Implémentation factice : aucun paiement, aucun abonnement actif. */
 export class FakePaymentProvider implements PaymentProvider {
   async createCheckout(req: CheckoutRequest): Promise<CheckoutSession> {
-    return { id: `fake_${req.userId}`, url: req.successUrl, status: "complete" };
+    return {
+      id: `fake_${req.userId}`,
+      url: req.successUrl,
+      status: "complete",
+    };
   }
   async getSubscriptionStatus(): Promise<"none" | "active"> {
     return "none";

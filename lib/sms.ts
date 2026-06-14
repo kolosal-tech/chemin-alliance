@@ -25,10 +25,7 @@ export function generateCode(): string {
 
 /** Empreinte HMAC du code (jamais stocké en clair). */
 export function hashCode(code: string): string {
-  return crypto
-    .createHmac("sha256", env.JWT_SECRET)
-    .update(code)
-    .digest("hex");
+  return crypto.createHmac("sha256", env.JWT_SECRET).update(code).digest("hex");
 }
 
 /** Envoie un SMS. En mode dev (pas de clés), logge et renvoie true. */

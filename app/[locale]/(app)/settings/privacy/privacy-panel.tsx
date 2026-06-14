@@ -111,7 +111,9 @@ export function PrivacyPanel({
         href="/premium"
         className="mb-4 flex items-center gap-3 rounded-card border border-gold/40 bg-[#FBF6E9] p-4 dark:border-[#463A1F] dark:bg-[#272117]"
       >
-        <span aria-hidden className="text-lg text-gold">★</span>
+        <span aria-hidden className="text-lg text-gold">
+          ★
+        </span>
         <span className="flex-1 text-[13px] font-semibold text-gold-ink dark:text-[#E0C77A]">
           {t("premium.title")}
         </span>
