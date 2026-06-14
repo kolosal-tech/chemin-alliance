@@ -119,6 +119,10 @@ model User {
   photoBlurredByDefault Boolean   @default(true)
   cityApprox            String?
   country               String?
+  phone                 String?
+  phoneVerified         Boolean   @default(false)
+  stripeCustomerId      String?   @unique
+  subscriptionStatus    String?
   deletedAt             DateTime?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
@@ -135,6 +139,7 @@ model User {
   reportsReceived     Report[]             @relation("ReportTarget")
   blocksMade          Block[]              @relation("Blocker")
   blocksReceived      Block[]              @relation("Blocked")
+  phoneVerifications  PhoneVerification[]
   bookings            Booking[]
   aiCoachUsages       AiCoachUsage[]
   agentInsights       AgentInsight[]
@@ -155,6 +160,21 @@ model Block {
 
   @@unique([blockerId, blockedId])
   @@index([blockedId])
+}
+
+// Vérification du numéro de téléphone (anti-bot). Code à usage unique, haché,
+// expirant. GRATUIT. L'envoi SMS est dormant tant qu'aucun prestataire (Twilio…)
+// n'est configuré en env — voir lib/sms.ts.
+model PhoneVerification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  codeHash  String
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 // Espace Couple — la vie d'alliance APRÈS le mariage (saisons Mariés/Parents).

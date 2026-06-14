@@ -234,6 +234,18 @@
     "empty": "You haven't blocked anyone.",
     "unblock": "Unblock"
   },
+  "phone": {
+    "title": "Phone number",
+    "intro": "Verify your number to strengthen trust and safety (free).",
+    "verified": "Number verified",
+    "comingSoon": "SMS verification coming soon.",
+    "sendCode": "Get a code",
+    "sentTo": "Code sent to {phone}. Enter it below.",
+    "verify": "Verify",
+    "change": "Change number",
+    "invalidPhone": "Invalid number (international format, e.g. +225…).",
+    "invalidCode": "Incorrect or expired code."
+  },
   "privacy": {
     "title": "Privacy",
     "antiMalaiseTitle": "Local Comfort Filter",

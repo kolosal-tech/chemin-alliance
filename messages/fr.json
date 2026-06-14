@@ -234,6 +234,18 @@
     "empty": "Vous n'avez bloqué personne.",
     "unblock": "Débloquer"
   },
+  "phone": {
+    "title": "Numéro de téléphone",
+    "intro": "Vérifie ton numéro pour renforcer la confiance et la sécurité (gratuit).",
+    "verified": "Numéro vérifié",
+    "comingSoon": "Vérification par SMS bientôt disponible.",
+    "sendCode": "Recevoir un code",
+    "sentTo": "Code envoyé au {phone}. Saisis-le ci-dessous.",
+    "verify": "Vérifier",
+    "change": "Changer de numéro",
+    "invalidPhone": "Numéro invalide (format international, ex. +225…).",
+    "invalidCode": "Code incorrect ou expiré."
+  },
   "privacy": {
     "title": "Confidentialité",
     "antiMalaiseTitle": "Filtre Anti-Malaise Local",
