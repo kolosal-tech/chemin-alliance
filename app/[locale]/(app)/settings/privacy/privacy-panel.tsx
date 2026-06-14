@@ -107,6 +107,19 @@ export function PrivacyPanel({
         </div>
       </div>
 
+      <Link
+        href="/premium"
+        className="mb-4 flex items-center gap-3 rounded-card border border-gold/40 bg-[#FBF6E9] p-4 dark:border-[#463A1F] dark:bg-[#272117]"
+      >
+        <span aria-hidden className="text-lg text-gold">★</span>
+        <span className="flex-1 text-[13px] font-semibold text-gold-ink dark:text-[#E0C77A]">
+          {t("premium.title")}
+        </span>
+        <span className="lbl text-[9px] text-gold-deep dark:text-gold-light">
+          {t("premium.price")} →
+        </span>
+      </Link>
+
       {/* Anti-malaise — gratuit, jamais premium */}
       <section className="mb-4 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
         <div className="flex items-start gap-3">

@@ -246,6 +246,22 @@
     "invalidPhone": "Número inválido (formato internacional, ex. +225…).",
     "invalidCode": "Código incorreto ou expirado."
   },
+  "premium": {
+    "kicker": "Apoiar a missão",
+    "title": "Chemin d'Alliance Premium",
+    "subtitle": "Vai mais longe no teu discernimento. A segurança e a dignidade ficam grátis, para sempre.",
+    "price": "9,99 €",
+    "perMonth": "por mês",
+    "feature_filters": "Filtros de pesquisa avançados",
+    "feature_discovery": "Descoberta sem limite diário",
+    "feature_report": "Relatório de discernimento aprofundado",
+    "feature_ai": "Acompanhamento IA premium (respostas mais finas)",
+    "feature_calls": "Chamadas áudio/vídeo internas (em breve)",
+    "cta": "Subscrever — 9,99 €/mês",
+    "activeBadge": "És assinante Premium. Obrigado por apoiar a missão.",
+    "comingSoon": "A subscrição estará disponível em breve.",
+    "freeNote": "Bloqueio, denúncia, eliminação de conta e filtros básicos são grátis, para sempre."
+  },
   "privacy": {
     "title": "Confidencialidade",
     "antiMalaiseTitle": "Filtro Anti-Desconforto Local",

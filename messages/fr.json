@@ -246,6 +246,22 @@
     "invalidPhone": "Numéro invalide (format international, ex. +225…).",
     "invalidCode": "Code incorrect ou expiré."
   },
+  "premium": {
+    "kicker": "Soutenir la mission",
+    "title": "Chemin d'Alliance Premium",
+    "subtitle": "Va plus loin dans ton discernement. La sécurité et la dignité, elles, restent gratuites à vie.",
+    "price": "9,99 €",
+    "perMonth": "par mois",
+    "feature_filters": "Filtres de recherche avancés",
+    "feature_discovery": "Découverte sans limite quotidienne",
+    "feature_report": "Rapport de discernement approfondi",
+    "feature_ai": "Accompagnement IA premium (réponses plus fines)",
+    "feature_calls": "Appels audio/vidéo internes (à venir)",
+    "cta": "S'abonner — 9,99 €/mois",
+    "activeBadge": "Tu es abonné·e Premium. Merci de soutenir la mission.",
+    "comingSoon": "L'abonnement sera bientôt disponible.",
+    "freeNote": "Blocage, signalement, suppression de compte et filtres de base sont gratuits, pour toujours."
+  },
   "privacy": {
     "title": "Confidentialité",
     "antiMalaiseTitle": "Filtre Anti-Malaise Local",

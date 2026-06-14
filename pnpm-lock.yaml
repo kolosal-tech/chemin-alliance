@@ -38,6 +38,9 @@ importers:
       react-dom:
         specifier: ^18
         version: 18.3.1(react@18.3.1)
+      stripe:
+        specifier: ^22.2.1
+        version: 22.2.1(@types/node@20.19.42)
       yaml:
         specifier: ^2.9.0
         version: 2.9.0
@@ -3833,6 +3836,15 @@ packages:
   strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
+
+  stripe@22.2.1:
+    resolution: {integrity: sha512-ULAtq25USBEx3yeN5zimEkfYVFETVMP5om25Ryr8ol11P62imaCZLBIEW78T7zm7Wg3wnZi+80S72yf3LCpNhw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
 
   styled-jsx@5.1.1:
     resolution: {integrity: sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==}
@@ -8261,6 +8273,10 @@ snapshots:
   strip-comments@2.0.1: {}
 
   strip-json-comments@3.1.1: {}
+
+  stripe@22.2.1(@types/node@20.19.42):
+    optionalDependencies:
+      '@types/node': 20.19.42
 
   styled-jsx@5.1.1(@babel/core@7.29.7)(react@18.3.1):
     dependencies:

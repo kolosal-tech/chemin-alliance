@@ -38,6 +38,11 @@ const envSchema = z.object({
   TWILIO_ACCOUNT_SID: z.string().optional(),
   TWILIO_AUTH_TOKEN: z.string().optional(),
   TWILIO_FROM: z.string().optional(),
+  // Paiement (Stripe) — sans clés, FakePaymentProvider (aucun abonnement).
+  STRIPE_SECRET_KEY: z.string().optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().optional(),
+  STRIPE_PRICE_PREMIUM: z.string().optional(),
+  STRIPE_PUBLISHABLE_KEY: z.string().optional(),
 });
 
 function loadEnv() {
