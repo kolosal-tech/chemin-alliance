@@ -9,6 +9,7 @@ import {
   guardianWord,
   DANGER_RESPONSE,
 } from "@/lib/agents/guardian";
+import { emergencyLine } from "@/lib/emergency";
 import type { Locale } from "@/lib/core-engine";
 
 /**
@@ -48,7 +49,7 @@ export const POST = withErrors(async (req: Request) => {
     return NextResponse.json({
       danger: true,
       rituals: [],
-      word: DANGER_RESPONSE[locale],
+      word: `${DANGER_RESPONSE[locale]} ${emergencyLine(user.country, locale)}`,
     });
   }
 

@@ -1,0 +1,63 @@
+# Ressources d'urgence par pays (code ISO majuscule) + repli international.
+# Utilisé par le garde-fou DANGER (Gardien) et la redirection du Coach IA :
+# en cas de violence/abus/détresse, on oriente AVANT tout LLM vers des relais
+# CONCRETS et locaux. Cible prioritaire : francophonie (France + Afrique) +
+# lusophone (Brésil/Portugal) + diaspora.
+#
+# ⚠️ Numéros à FAIRE VÉRIFIER et dater par un humain avant usage critique.
+# Format par entrée : general (urgence générale), violence (violences
+# conjugales/familiales), child (enfance en danger).
+
+default:
+  fr: "En cas de danger immédiat, contacte les secours d'urgence de ton pays (en Europe : 112). Un accompagnateur humain vérifié et des structures spécialisées peuvent t'aider. Tu n'es pas seul·e."
+  en: "If you are in immediate danger, call your country's emergency services (in Europe: 112). A verified human companion and specialised services can help. You are not alone."
+  es: "Si estás en peligro inmediato, llama a los servicios de emergencia de tu país (en Europa: 112). Un acompañante humano verificado y servicios especializados pueden ayudarte. No estás solo/a."
+  pt: "Se estiveres em perigo imediato, liga para os serviços de emergência do teu país (na Europa: 112). Um acompanhante humano verificado e serviços especializados podem ajudar. Não estás sozinho/a."
+
+countries:
+  FR:
+    general: "Urgences 112 · Police 17 · SAMU 15"
+    violence: "Violences Femmes Info 3919 (gratuit, anonyme) · 114 par SMS"
+    child: "Enfance en danger 119"
+  BE:
+    general: "Urgences 112"
+    violence: "Écoute Violences conjugales 0800 30 030"
+    child: "SOS Enfants 103"
+  CH:
+    general: "Urgences 112 · Police 117"
+    violence: "Aide aux victimes — La Main Tendue 143"
+  CI:
+    general: "Police 170 / 111 · Pompiers 180 · SAMU 185"
+    violence: "Plateforme violences basées sur le genre 1308"
+  SN:
+    general: "Police 17 · Pompiers 18 · SAMU 1515"
+    violence: "Numéro vert femmes/enfants 116"
+  CM:
+    general: "Police 117 · Pompiers 118"
+    violence: "Numéro d'écoute violences 1512"
+  CD:
+    general: "Police 112"
+  BJ:
+    general: "Police 117 · Pompiers 118"
+    violence: "Ligne d'assistance 138"
+  TG:
+    general: "Police 117 · Pompiers 118"
+    child: "Allô 1011 (enfance)"
+  ML:
+    general: "Police 17 · Pompiers 18"
+  BF:
+    general: "Police 17 · Pompiers 18"
+  GA:
+    general: "Police 1730 · SAMU 1300"
+  BR:
+    general: "Emergência 190 (polícia) · SAMU 192 · Bombeiros 193"
+    violence: "Central de Atendimento à Mulher 180"
+    child: "Disque 100 (direitos humanos)"
+  PT:
+    general: "Emergência 112"
+    violence: "Violência doméstica 800 202 148"
+  CA:
+    general: "911"
+  US:
+    general: "911"
+    violence: "Domestic Violence Hotline 1-800-799-7233"
