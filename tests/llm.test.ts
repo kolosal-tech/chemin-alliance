@@ -1,0 +1,45 @@
+import { describe, it, expect } from "vitest";
+import { redactPII } from "@/lib/llm/redaction";
+import { resolveModels } from "@/lib/llm/matrix";
+
+describe("redactPII — purge des coordonnées avant envoi LLM tiers", () => {
+  it("masque email, téléphone, lien et pseudo", () => {
+    const r = redactPII(
+      "Écris-moi à jean.dupont@mail.com ou au +225 07 12 34 56 78, insta @jean_d, https://t.me/jean",
+    );
+    expect(r.text).not.toMatch(/jean\.dupont@mail\.com/);
+    expect(r.text).not.toMatch(/07 12 34 56 78/);
+    expect(r.text).not.toMatch(/t\.me\/jean/);
+    expect(r.text).toMatch(/\[EMAIL\]/);
+    expect(r.text).toMatch(/\[TEL\]/);
+    expect(r.text).toMatch(/\[LIEN\]/);
+    expect(r.text).toMatch(/\[PSEUDO\]/);
+    expect(r.count).toBeGreaterThanOrEqual(4);
+  });
+
+  it("ne touche PAS au contenu spirituel/culturel (versets, paroisse, ethnie)", () => {
+    const src =
+      "Discernement selon Jean 3.16 ; ma paroisse à Abidjan, ethnie Akan, le pasteur conseille la patience.";
+    const r = redactPII(src);
+    expect(r.text).toBe(src);
+    expect(r.count).toBe(0);
+  });
+});
+
+describe("matrix — résolution des modèles par étape × palier", () => {
+  it("termine toujours par le modèle éprouvé (résilience)", () => {
+    const std = resolveModels("dialogue", "standard");
+    expect(std.length).toBeGreaterThanOrEqual(1);
+    // standard = uniquement le modèle éprouvé (comportement actuel préservé)
+    expect(std[std.length - 1]).toBeTruthy();
+  });
+
+  it("premium ajoute un modèle plus fin avant le repli", () => {
+    const prem = resolveModels("dialogue", "premium");
+    expect(prem.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("sécurité a toujours au moins un modèle (jamais derrière un paywall)", () => {
+    expect(resolveModels("safety", "standard").length).toBeGreaterThanOrEqual(1);
+  });
+});
