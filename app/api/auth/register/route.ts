@@ -20,7 +20,7 @@ const schema = z.object({
 });
 
 export const POST = withErrors(async (req: Request) => {
-  const rl = rateLimit(`register:${clientIp(req)}`, LIMITS.auth.limit, LIMITS.auth.windowMs);
+  const rl = await rateLimit(`register:${clientIp(req)}`, LIMITS.auth.limit, LIMITS.auth.windowMs);
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
   const body = schema.parse(await req.json());

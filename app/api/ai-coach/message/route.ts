@@ -14,7 +14,7 @@ const schema = z.object({
 
 export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
-  const rl = rateLimit(
+  const rl = await rateLimit(
     `ai:${user.id}:${clientIp(req)}`,
     LIMITS.aiCoach.limit,
     LIMITS.aiCoach.windowMs,

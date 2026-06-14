@@ -55,7 +55,7 @@ const schema = z.object({ content: z.string().min(1).max(4000) });
 export const POST = withErrors(
   async (req: Request, { params }: { params: { matchId: string } }) => {
     const user = await requireUser();
-    const rl = rateLimit(
+    const rl = await rateLimit(
       `msg:${user.id}`,
       LIMITS.message.limit,
       LIMITS.message.windowMs,
@@ -64,8 +64,7 @@ export const POST = withErrors(
 
     const match = await requireMatchMember(params.matchId, user.id);
     // Blocage (gratuit à vie) : tout échange est coupé dans les deux sens.
-    const otherId =
-      match.userAId === user.id ? match.userBId : match.userAId;
+    const otherId = match.userAId === user.id ? match.userBId : match.userAId;
     if (await isBlockedBetween(user.id, otherId)) {
       return jsonError(403, "RELATION_BLOCKED");
     }

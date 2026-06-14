@@ -57,13 +57,31 @@ export function Conversation({
     if (data.blocked) {
       setMessages((m) => [
         ...m,
-        { id: data.messageId, kind: "USER", mine: true, content: text, blocked: true },
-        { id: data.systemMessageId, kind: "SYSTEM", mine: true, content: data.systemMessage, blocked: false },
+        {
+          id: data.messageId,
+          kind: "USER",
+          mine: true,
+          content: text,
+          blocked: true,
+        },
+        {
+          id: data.systemMessageId,
+          kind: "SYSTEM",
+          mine: true,
+          content: data.systemMessage,
+          blocked: false,
+        },
       ]);
     } else {
       setMessages((m) => [
         ...m,
-        { id: data.messageId, kind: "USER", mine: true, content: text, blocked: false },
+        {
+          id: data.messageId,
+          kind: "USER",
+          mine: true,
+          content: text,
+          blocked: false,
+        },
       ]);
     }
     setDraft("");
@@ -77,8 +95,21 @@ export function Conversation({
       {/* Header verre */}
       <header className="glass safe-top sticky top-0 z-30 flex items-center gap-3 border-b border-sand-200/50 px-4 py-3 dark:border-anthracite-600/50">
         <Link href="/messages" aria-label={t("common.back")} className="p-1">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-            <path d="M15 5l-7 7 7 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="text-warmgray dark:text-[#9A958B]" />
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden
+          >
+            <path
+              d="M15 5l-7 7 7 7"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-warmgray dark:text-[#9A958B]"
+            />
           </svg>
         </Link>
         <span
@@ -96,7 +127,10 @@ export function Conversation({
             </span>
             {other.isVerified && (
               <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden>
-                <path d="M12 2.5l2.4 1.7 2.9-.2 1 2.8 2.4 1.6-.8 2.8.8 2.8-2.4 1.6-1 2.8-2.9-.2L12 21.5l-2.4-1.7-2.9.2-1-2.8L3.3 15.6l.8-2.8-.8-2.8 2.4-1.6 1-2.8 2.9.2L12 2.5Z" className="fill-gold dark:fill-gold-light" />
+                <path
+                  d="M12 2.5l2.4 1.7 2.9-.2 1 2.8 2.4 1.6-.8 2.8.8 2.8-2.4 1.6-1 2.8-2.9-.2L12 21.5l-2.4-1.7-2.9.2-1-2.8L3.3 15.6l.8-2.8-.8-2.8 2.4-1.6 1-2.8 2.9.2L12 2.5Z"
+                  className="fill-gold dark:fill-gold-light"
+                />
               </svg>
             )}
           </div>
@@ -128,9 +162,28 @@ export function Conversation({
               className="glass glass-bubble max-w-[90%] self-center rounded-[14px] border-[#EAD9A8]/70 bg-[#FBF6E9]/70 px-4 py-3 dark:border-[#463A1F]/70 dark:bg-[#272117]/60"
             >
               <div className="flex gap-2.5">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="mt-0.5 flex-none" aria-hidden>
-                  <rect x="5" y="11" width="14" height="9" rx="2" stroke="#9A7B2E" strokeWidth="1.7" />
-                  <path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#9A7B2E" strokeWidth="1.7" />
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="mt-0.5 flex-none"
+                  aria-hidden
+                >
+                  <rect
+                    x="5"
+                    y="11"
+                    width="14"
+                    height="9"
+                    rx="2"
+                    stroke="#9A7B2E"
+                    strokeWidth="1.7"
+                  />
+                  <path
+                    d="M8 11V8a4 4 0 0 1 8 0v3"
+                    stroke="#9A7B2E"
+                    strokeWidth="1.7"
+                  />
                   <circle cx="12" cy="15.5" r="1.3" fill="#9A7B2E" />
                 </svg>
                 <div>
@@ -154,7 +207,9 @@ export function Conversation({
             >
               <p
                 className={`text-sm leading-snug ${
-                  m.mine ? "text-[#EDEFF3]" : "text-[#2A2823] dark:text-[#CFCAC0]"
+                  m.mine
+                    ? "text-[#EDEFF3]"
+                    : "text-[#2A2823] dark:text-[#CFCAC0]"
                 } ${m.blocked ? "line-through decoration-[#9B4A3E]/60" : ""}`}
               >
                 {m.content}
@@ -170,8 +225,17 @@ export function Conversation({
         {suggestions.length > 0 && (
           <>
             <div className="mb-2 flex items-center gap-1.5">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z" fill="#9A7B2E" />
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
+                  fill="#9A7B2E"
+                />
               </svg>
               <span className="lbl text-[8.5px] text-gold-deep dark:text-gold-light">
                 {t("messaging.aiSuggestions")}
@@ -211,8 +275,21 @@ export function Conversation({
             aria-label={t("messaging.send")}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-navy disabled:opacity-50 dark:bg-gold-light"
           >
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path d="M5 12h13M12 6l6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="text-[#F4F1EA] dark:text-anthracite-900" />
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden
+            >
+              <path
+                d="M5 12h13M12 6l6 6-6 6"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-[#F4F1EA] dark:text-anthracite-900"
+              />
             </svg>
           </button>
         </form>

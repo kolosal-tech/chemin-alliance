@@ -31,6 +31,9 @@ const envSchema = z.object({
   EMAIL_FROM: z
     .string()
     .default("Chemin d'Alliance <alliance@kolosaltech.com>"),
+  // Rate-limit partagé (Upstash Redis) — sans clés, repli en mémoire par instance.
+  UPSTASH_REDIS_REST_URL: z.string().url().optional(),
+  UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
 });
 
 function loadEnv() {

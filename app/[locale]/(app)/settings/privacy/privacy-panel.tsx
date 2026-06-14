@@ -35,7 +35,9 @@ function Toggle({
       aria-label={label}
       onClick={() => onChange(!checked)}
       className={`relative h-[27px] w-[46px] flex-none rounded-[14px] transition-colors ${
-        checked ? "bg-navy dark:bg-gold-light" : "bg-sand-400 dark:bg-anthracite-600"
+        checked
+          ? "bg-navy dark:bg-gold-light"
+          : "bg-sand-400 dark:bg-anthracite-600"
       }`}
     >
       <span
@@ -136,9 +138,18 @@ export function PrivacyPanel({
             max={100}
             step={5}
             value={state.antiMalaiseRadiusKm}
-            onChange={(e) => setState((s) => ({ ...s, antiMalaiseRadiusKm: Number(e.target.value) }))}
-            onMouseUp={() => save({ antiMalaiseRadiusKm: state.antiMalaiseRadiusKm })}
-            onTouchEnd={() => save({ antiMalaiseRadiusKm: state.antiMalaiseRadiusKm })}
+            onChange={(e) =>
+              setState((s) => ({
+                ...s,
+                antiMalaiseRadiusKm: Number(e.target.value),
+              }))
+            }
+            onMouseUp={() =>
+              save({ antiMalaiseRadiusKm: state.antiMalaiseRadiusKm })
+            }
+            onTouchEnd={() =>
+              save({ antiMalaiseRadiusKm: state.antiMalaiseRadiusKm })
+            }
             aria-label={t("privacy.radius")}
             className="w-full accent-[#1A2744] dark:accent-[#D8B860]"
           />
@@ -170,7 +181,9 @@ export function PrivacyPanel({
                   <span
                     key={n}
                     className={`h-1 flex-1 rounded-[2px] ${
-                      n <= seg.filled ? seg.cls : "bg-sand-300 dark:bg-anthracite-600"
+                      n <= seg.filled
+                        ? seg.cls
+                        : "bg-sand-300 dark:bg-anthracite-600"
                     }`}
                   />
                 ))}
@@ -192,7 +205,10 @@ export function PrivacyPanel({
       </section>
 
       {notice && (
-        <p role="status" className="mb-3.5 rounded-btn bg-[#EAF0EB] px-3.5 py-2.5 text-[13px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
+        <p
+          role="status"
+          className="mb-3.5 rounded-btn bg-[#EAF0EB] px-3.5 py-2.5 text-[13px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]"
+        >
           {notice}
         </p>
       )}
@@ -218,13 +234,21 @@ export function PrivacyPanel({
       </div>
 
       <p className="pb-8 text-center text-[11.5px] text-sand-500 dark:text-[#65625B]">
-        <Link href="/legal/terms" className="underline">{t("legal.terms")}</Link>
+        <Link href="/legal/terms" className="underline">
+          {t("legal.terms")}
+        </Link>
         {" · "}
-        <Link href="/legal/privacy" className="underline">{t("legal.privacy")}</Link>
+        <Link href="/legal/privacy" className="underline">
+          {t("legal.privacy")}
+        </Link>
       </p>
 
       {confirmDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-night/60 px-6" role="dialog" aria-modal="true">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-night/60 px-6"
+          role="dialog"
+          aria-modal="true"
+        >
           <div className="w-full max-w-sm rounded-cardlg bg-surface p-5 dark:bg-anthracite-800">
             <h3 className="font-display text-xl text-night dark:text-[#ECE7DD]">
               {t("privacy.deleteConfirmTitle")}

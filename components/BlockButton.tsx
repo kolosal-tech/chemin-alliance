@@ -43,8 +43,19 @@ export function BlockButton({
         className="rounded-btn p-2 text-warmgray hover:text-danger dark:text-[#9A958B]"
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-          <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.7" />
-          <path d="M5.6 5.6l12.8 12.8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+          <circle
+            cx="12"
+            cy="12"
+            r="9"
+            stroke="currentColor"
+            strokeWidth="1.7"
+          />
+          <path
+            d="M5.6 5.6l12.8 12.8"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+          />
         </svg>
       </button>
 

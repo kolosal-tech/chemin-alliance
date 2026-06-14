@@ -12,7 +12,7 @@ const schema = z.object({ matchId: z.string().min(1) });
 
 export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
-  const rl = rateLimit(`review:${user.id}`, 6, 60 * 60_000);
+  const rl = await rateLimit(`review:${user.id}`, 6, 60 * 60_000);
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
   const { matchId } = schema.parse(await req.json());
   const match = await requireMatchMember(matchId, user.id);
