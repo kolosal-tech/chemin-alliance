@@ -14,28 +14,39 @@ export type Tier = "standard" | "optimal" | "premium";
 
 type Matrix = Record<Step, Record<Tier, string[]>>;
 
+// Modèles vérifiés sur OpenRouter (juin 2026) : tous répondent proprement
+// (non-reasoning, finish_reason=stop) AVEC l'opt-out de collecte. Les choix du
+// fondateur ont été adaptés aux slugs réellement disponibles : claude-3.5-sonnet
+// -> claude-sonnet-4.6 ; gemini-2.0-pro-exp -> gemini-2.5-flash (1M ctx, value) ;
+// deepseek-v4-pro (reasoning, contenu vide) -> deepseek-chat-v3.1 ;
+// qwen-3.5-flash -> qwen3-30b-a3b-instruct-2507.
 const DOC_MATRIX: Matrix = {
+  // Découverte : brise-glace, rédaction authentique, agilité multilingue/culturelle.
   discovery: {
-    standard: [],
-    optimal: ["google/gemini-2.0-flash-001"],
-    premium: ["anthropic/claude-3.5-sonnet"],
+    standard: ["qwen/qwen3-30b-a3b-instruct-2507"],
+    optimal: ["qwen/qwen3-30b-a3b-instruct-2507"],
+    premium: ["anthropic/claude-sonnet-4.6"],
   },
+  // Dialogue & Discernement : analyse de compatibilité, croisement des visions.
+  // Optimal = gros contexte à moindre coût ; Premium = nuance et finesse maximales.
   dialogue: {
-    standard: [],
-    optimal: ["google/gemini-2.0-flash-001"],
-    premium: ["anthropic/claude-3.5-sonnet"],
+    standard: ["google/gemini-2.5-flash"],
+    optimal: ["google/gemini-2.5-flash"],
+    premium: ["anthropic/claude-sonnet-4.6"],
   },
+  // Accompagnement : synthèse croisée, points de vigilance, suivi d'instructions
+  // strictes (rigueur). Premium = synthèse la plus nuancée.
   accompaniment: {
-    standard: [],
-    optimal: ["deepseek/deepseek-chat"],
-    premium: ["anthropic/claude-3.5-sonnet"],
+    standard: ["deepseek/deepseek-chat-v3.1"],
+    optimal: ["deepseek/deepseek-chat-v3.1"],
+    premium: ["anthropic/claude-sonnet-4.6"],
   },
-  // Sécurité & modération : toujours le meilleur disponible, indépendamment du
-  // palier payé (la sécurité n'est jamais derrière un paywall).
+  // Sécurité & modération : structuré, rigoureux, fiable sur les System Prompts.
+  // Toujours le meilleur disponible, indépendamment du palier (jamais derrière un paywall).
   safety: {
-    standard: ["openai/gpt-4o-mini"],
-    optimal: ["openai/gpt-4o-mini"],
-    premium: ["openai/gpt-4o"],
+    standard: ["deepseek/deepseek-chat-v3.1"],
+    optimal: ["deepseek/deepseek-chat-v3.1"],
+    premium: ["deepseek/deepseek-chat-v3.1"],
   },
 };
 
