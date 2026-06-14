@@ -40,6 +40,8 @@ describe("matrix — résolution des modèles par étape × palier", () => {
   });
 
   it("sécurité a toujours au moins un modèle (jamais derrière un paywall)", () => {
-    expect(resolveModels("safety", "standard").length).toBeGreaterThanOrEqual(1);
+    expect(resolveModels("safety", "standard").length).toBeGreaterThanOrEqual(
+      1,
+    );
   });
 });

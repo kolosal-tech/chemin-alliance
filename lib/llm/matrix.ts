@@ -72,5 +72,7 @@ const MATRIX = loadMatrix();
 export function resolveModels(step: Step, tier: Tier): string[] {
   const proven = env.OPENROUTER_MODEL;
   const list = MATRIX?.[step]?.[tier] ?? [];
-  return [...list, proven].filter((m, i, a) => Boolean(m) && a.indexOf(m) === i);
+  return [...list, proven].filter(
+    (m, i, a) => Boolean(m) && a.indexOf(m) === i,
+  );
 }

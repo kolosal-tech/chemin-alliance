@@ -98,7 +98,7 @@ export const RITUALS: Record<string, Record<Locale, string>> = {
   },
   unspoken: {
     fr: "Un sujet évité grandit dans l'ombre. Choisissez un moment calme, et commencez par « J'aimerais qu'on parle de… j'en ai besoin ». Si c'est trop lourd à deux, un accompagnateur peut tenir l'espace.",
-    en: "An avoided topic grows in the shadows. Pick a calm moment and start with: \"I would like us to talk about… I need it.\" If it is too heavy for two, a companion can hold the space.",
+    en: 'An avoided topic grows in the shadows. Pick a calm moment and start with: "I would like us to talk about… I need it." If it is too heavy for two, a companion can hold the space.',
     es: "Un tema evitado crece en la sombra. Elegid un momento tranquilo y empezad con «Me gustaría que habláramos de… lo necesito». Si pesa demasiado, un acompañante puede sostener el espacio.",
     pt: "Um assunto evitado cresce na sombra. Escolham um momento calmo e comecem com «Gostava que falássemos de… preciso disso». Se pesar demasiado, um acompanhante pode segurar o espaço.",
   },
@@ -135,7 +135,11 @@ export const DANGER_RESPONSE: Record<Locale, string> = {
 
 export const checkinSchema = z.object({
   answers: z.array(
-    z.object({ id: z.string(), value: z.enum(["yes", "no", "unsure"]), note: z.string().max(600).default("") }),
+    z.object({
+      id: z.string(),
+      value: z.enum(["yes", "no", "unsure"]),
+      note: z.string().max(600).default(""),
+    }),
   ),
 });
 
@@ -164,7 +168,9 @@ export function evaluateCheckin(
     // « non / pas sûr » sur un signal -> rituel concret correspondant.
     // chk_unspoken inversé : « oui il y a un sujet évité » déclenche.
     const triggered =
-      q.signal === "unspoken" ? a.value === "yes" : NEGATIVE.includes(a.value as "no" | "unsure");
+      q.signal === "unspoken"
+        ? a.value === "yes"
+        : NEGATIVE.includes(a.value as "no" | "unsure");
     if (triggered && RITUALS[q.signal]) {
       rituals.push(RITUALS[q.signal][locale] ?? RITUALS[q.signal].fr);
     }
@@ -186,7 +192,9 @@ export async function guardianWord(
 ): Promise<string | null> {
   return completeText(
     `${SYSTEM}\nLangue: ${locale}. Saison: ${season === "PARENTS" ? "jeunes parents" : "premières années de mariage"}.`,
-    answers.map((a) => `${a.id}: ${a.value}${a.note ? ` — ${a.note}` : ""}`).join("\n"),
+    answers
+      .map((a) => `${a.id}: ${a.value}${a.note ? ` — ${a.note}` : ""}`)
+      .join("\n"),
     400,
   );
 }
@@ -194,12 +202,21 @@ export async function guardianWord(
 /** Parcours de saison — contenu déterministe, 4 langues. */
 export const SEASON_PROGRAMS: Record<
   Season,
-  Array<{ id: string; title: Record<Locale, string>; body: Record<Locale, string> }>
+  Array<{
+    id: string;
+    title: Record<Locale, string>;
+    body: Record<Locale, string>;
+  }>
 > = {
   MARRIED: [
     {
       id: "prg_six_months",
-      title: { fr: "Les 6 premiers mois", en: "The first 6 months", es: "Los primeros 6 meses", pt: "Os primeiros 6 meses" },
+      title: {
+        fr: "Les 6 premiers mois",
+        en: "The first 6 months",
+        es: "Los primeros 6 meses",
+        pt: "Os primeiros 6 meses",
+      },
       body: {
         fr: "Le caractère se dévoile, les habitudes se frottent. Apprendre à se disputer proprement, poser les rythmes du foyer, protéger l'émerveillement.",
         en: "Character is revealed, habits rub against each other. Learn to argue cleanly, set the home's rhythms, protect the wonder.",
@@ -209,7 +226,12 @@ export const SEASON_PROGRAMS: Record<
     },
     {
       id: "prg_finances",
-      title: { fr: "Finances du foyer", en: "Household finances", es: "Finanzas del hogar", pt: "Finanças do lar" },
+      title: {
+        fr: "Finances du foyer",
+        en: "Household finances",
+        es: "Finanzas del hogar",
+        pt: "Finanças do lar",
+      },
       body: {
         fr: "Budget commun, transparence totale, générosité décidée à deux. L'argent est le premier champ de bataille évitable.",
         en: "Shared budget, full transparency, generosity decided together. Money is the first avoidable battlefield.",
@@ -219,7 +241,12 @@ export const SEASON_PROGRAMS: Record<
     },
     {
       id: "prg_inlaws",
-      title: { fr: "Belle-famille dans la grâce", en: "In-laws in grace", es: "Familia política en la gracia", pt: "Sogros na graça" },
+      title: {
+        fr: "Belle-famille dans la grâce",
+        en: "In-laws in grace",
+        es: "Familia política en la gracia",
+        pt: "Sogros na graça",
+      },
       body: {
         fr: "Quitter père et mère sans les rejeter : poser des frontières aimantes, parler d'une seule voix, honorer sans se laisser gouverner.",
         en: "Leaving father and mother without rejecting them: loving boundaries, speaking with one voice, honoring without being ruled.",
@@ -231,7 +258,12 @@ export const SEASON_PROGRAMS: Record<
   PARENTS: [
     {
       id: "prg_child_arrival",
-      title: { fr: "L'arrivée d'un enfant", en: "A child arrives", es: "La llegada de un hijo", pt: "A chegada de um filho" },
+      title: {
+        fr: "L'arrivée d'un enfant",
+        en: "A child arrives",
+        es: "La llegada de un hijo",
+        pt: "A chegada de um filho",
+      },
       body: {
         fr: "La joie immense et la tempête réelle : nuits brisées, corps fatigués, couple bousculé. Traverser ensemble, sans se perdre de vue.",
         en: "Immense joy and a real storm: broken nights, tired bodies, a shaken couple. Cross it together without losing sight of each other.",
@@ -241,7 +273,12 @@ export const SEASON_PROGRAMS: Record<
     },
     {
       id: "prg_stay_couple",
-      title: { fr: "Rester un couple en étant parents", en: "Staying a couple while being parents", es: "Seguir siendo pareja siendo padres", pt: "Continuar casal sendo pais" },
+      title: {
+        fr: "Rester un couple en étant parents",
+        en: "Staying a couple while being parents",
+        es: "Seguir siendo pareja siendo padres",
+        pt: "Continuar casal sendo pais",
+      },
       body: {
         fr: "L'enfant n'est pas le centre : il est le fruit. Rituels à deux non négociables, tendresse entretenue, relais acceptés sans culpabilité.",
         en: "The child is not the center: the child is the fruit. Non-negotiable couple rituals, tended tenderness, help accepted without guilt.",
@@ -251,7 +288,12 @@ export const SEASON_PROGRAMS: Record<
     },
     {
       id: "prg_faith_transmission",
-      title: { fr: "Transmettre la foi", en: "Passing on the faith", es: "Transmitir la fe", pt: "Transmitir a fé" },
+      title: {
+        fr: "Transmettre la foi",
+        en: "Passing on the faith",
+        es: "Transmitir la fe",
+        pt: "Transmitir a fé",
+      },
       body: {
         fr: "L'exemple avant la parole : prier devant l'enfant, se pardonner devant l'enfant, faire de la maison un lieu où Dieu est naturel.",
         en: "Example before words: pray in front of the child, forgive each other in front of the child, make home a place where God is natural.",

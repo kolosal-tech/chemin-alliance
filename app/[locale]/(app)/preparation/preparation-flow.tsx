@@ -191,7 +191,17 @@ export function PreparationFlow({
             {portrait.word && <p className="mt-3 text-[13.5px] leading-relaxed text-[#B9C0CE]">{portrait.word}</p>}
           </div>
 
-          {portrait.overall !== "matching_ready" && (
+          {/* Routage par maturité : l'agent PROPOSE, ne bloque jamais l'accès. */}
+          {portrait.overall === "matching_ready" && (
+            <Link
+              href="/suggestions"
+              className="mt-4 block rounded-btnlg bg-gold py-4 text-center text-base font-semibold text-night"
+            >
+              {t("readyCta")} →
+            </Link>
+          )}
+
+          {portrait.overall === "growth_path" && (
             <div className="mt-4 rounded-cardlg border border-gold/40 bg-[#FBF6E9] p-5 dark:border-[#463A1F] dark:bg-[#272117]">
               <h3 className="font-display text-[18px] text-gold-ink dark:text-[#E0C77A]">{t("growthTitle")}</h3>
               <p className="mt-1.5 text-[13px] leading-normal text-[#6F5C2E] dark:text-[#C2B488]">{t("growthBody")}</p>
@@ -200,6 +210,26 @@ export function PreparationFlow({
                 className="mt-3 block rounded-btnsm border border-gold bg-white py-3 text-center text-sm font-semibold text-gold-ink dark:border-[#6A5A2E] dark:bg-anthracite-800 dark:text-[#E0C77A]"
               >
                 {t("growthCta")}
+              </Link>
+              {/* Jamais bloquant : la personne reste libre d'avancer. */}
+              <Link
+                href="/suggestions"
+                className="mt-2 block py-2 text-center text-[12.5px] text-warmgray underline dark:text-[#9A958B]"
+              >
+                {t("growthSkip")}
+              </Link>
+            </div>
+          )}
+
+          {portrait.overall === "human_support" && (
+            <div className="mt-4 rounded-cardlg border border-[#C9D2E4] bg-[#EEF1F7] p-5 dark:border-[#2A3550] dark:bg-[#171F2E]">
+              <h3 className="font-display text-[18px] text-[#2A3550] dark:text-[#B9C6E0]">{t("humanTitle")}</h3>
+              <p className="mt-1.5 text-[13px] leading-normal text-[#46506A] dark:text-[#9FAAC4]">{t("humanBody")}</p>
+              <Link
+                href="/coaches"
+                className="mt-3 block rounded-btnsm bg-night py-3 text-center text-sm font-semibold text-[#F2EFE8] dark:bg-[#23314F]"
+              >
+                {t("humanCta")}
               </Link>
             </div>
           )}
