@@ -36,10 +36,10 @@ const envSchema = z.object({
   // Rate-limit partagé (Upstash Redis) — sans clés, repli en mémoire par instance.
   UPSTASH_REDIS_REST_URL: z.string().url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
-  // Vérification SMS (Twilio) — sans clés, le code est loggé (dormant).
+  // Vérification SMS via Twilio Verify — sans clés, le code est loggé (dormant).
   TWILIO_ACCOUNT_SID: z.string().optional(),
   TWILIO_AUTH_TOKEN: z.string().optional(),
-  TWILIO_FROM: z.string().optional(),
+  TWILIO_VERIFY_SERVICE_SID: z.string().optional(),
   // Paiement (Stripe) — sans clés, FakePaymentProvider (aucun abonnement).
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),

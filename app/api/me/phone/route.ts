@@ -4,11 +4,18 @@ import { prisma } from "@/lib/db";
 import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit } from "@/lib/security/rate-limit";
-import { generateCode, hashCode, sendSms, smsEnabled } from "@/lib/sms";
+import {
+  generateCode,
+  hashCode,
+  smsEnabled,
+  startVerification,
+  checkVerification,
+} from "@/lib/sms";
 
-// Vérification du numéro de téléphone — GRATUITE (anti-bot). Code à 6 chiffres,
-// haché, expirant en 10 min, 5 tentatives max. Envoi dormant tant que Twilio
-// n'est pas configuré (le code est alors loggé côté serveur).
+// Vérification du numéro de téléphone — GRATUITE (anti-bot).
+// Prod : Twilio Verify (code + envoi + livraison mondiale gérés par Twilio).
+// Repli dev (Twilio non configuré) : code auto-géré à 6 chiffres, haché,
+// expirant en 10 min, 5 tentatives max, loggé côté serveur.
 
 const CODE_TTL_MS = 10 * 60_000;
 const MAX_ATTEMPTS = 5;
@@ -38,29 +45,37 @@ export const GET = withErrors(async () => {
   });
 });
 
-/** POST : enregistre le numéro (non vérifié) et envoie un code. */
+/** POST : enregistre le numéro (non vérifié) et déclenche l'envoi du code. */
 export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
   const rl = await rateLimit(`phone-start:${user.id}`, 5, 60 * 60_000);
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
   const { phone } = startSchema.parse(await req.json());
 
-  const code = generateCode();
-  await prisma.$transaction([
-    prisma.user.update({
-      where: { id: user.id },
-      data: { phone, phoneVerified: false },
-    }),
-    prisma.phoneVerification.deleteMany({ where: { userId: user.id } }),
-    prisma.phoneVerification.create({
-      data: {
-        userId: user.id,
-        codeHash: hashCode(code),
-        expiresAt: new Date(Date.now() + CODE_TTL_MS),
-      },
-    }),
-  ]);
-  await sendSms(phone, `Chemin d'Alliance — code de vérification : ${code}`);
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { phone, phoneVerified: false },
+  });
+
+  if (smsEnabled()) {
+    // Twilio Verify génère et envoie le code lui-même.
+    await startVerification(phone);
+  } else {
+    // Repli dev : code auto-géré, stocké haché, loggé côté serveur.
+    const code = generateCode();
+    await prisma.$transaction([
+      prisma.phoneVerification.deleteMany({ where: { userId: user.id } }),
+      prisma.phoneVerification.create({
+        data: {
+          userId: user.id,
+          codeHash: hashCode(code),
+          expiresAt: new Date(Date.now() + CODE_TTL_MS),
+        },
+      }),
+    ]);
+    console.info(`\n[sms dev — non envoyé] ${phone} code: ${code}\n`);
+  }
+
   return NextResponse.json({ sent: true, smsConfigured: smsEnabled() });
 });
 
@@ -71,6 +86,23 @@ export const PATCH = withErrors(async (req: Request) => {
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
   const { code } = verifySchema.parse(await req.json());
 
+  if (smsEnabled()) {
+    // Vérification déléguée à Twilio Verify.
+    const me = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: { phone: true },
+    });
+    if (!me?.phone) return jsonError(400, "NO_PHONE");
+    const ok = await checkVerification(me.phone, code);
+    if (!ok) return jsonError(400, "CODE_INVALID");
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { phoneVerified: true },
+    });
+    return NextResponse.json({ verified: true });
+  }
+
+  // Repli dev : validation du code auto-géré.
   const pv = await prisma.phoneVerification.findFirst({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },

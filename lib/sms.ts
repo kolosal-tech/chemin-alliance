@@ -2,60 +2,91 @@ import crypto from "node:crypto";
 import { env } from "@/lib/env";
 
 /**
- * Envoi de SMS (vérification de numéro). Provider-agnostique, DORMANT par
- * défaut : sans clés Twilio en env, le code est seulement loggé côté serveur
- * (comme lib/email.ts en dev). Brancher Twilio = renseigner les 3 variables.
+ * Vérification du numéro de téléphone (anti-bot) via **Twilio Verify**.
  *
- * GRATUIT côté utilisateur — la vérification protège, elle ne se monétise pas.
+ * Twilio Verify gère lui-même la génération du code, l'envoi SMS, la livraison
+ * MONDIALE (essentiel pour Afrique de l'Ouest / Brésil) et la protection contre
+ * la fraude — pas de numéro à provisionner ni d'enregistrement A2P.
+ *
+ * DORMANT par défaut : sans les 3 variables Twilio, on retombe sur un code
+ * auto-géré, seulement loggé côté serveur (mode dev). GRATUIT côté utilisateur.
  */
 const sid = process.env.TWILIO_ACCOUNT_SID;
 const token = process.env.TWILIO_AUTH_TOKEN;
-const from = process.env.TWILIO_FROM;
-const smsConfigured = Boolean(sid && token && from);
+const verifyService = process.env.TWILIO_VERIFY_SERVICE_SID;
+const verifyConfigured = Boolean(sid && token && verifyService);
 
-/** Un prestataire SMS est-il configuré ? (sinon : mode dev, code loggé) */
+/** Twilio Verify est-il configuré ? (sinon : mode dev, code loggé) */
 export function smsEnabled(): boolean {
-  return smsConfigured;
+  return verifyConfigured;
 }
 
-/** Code numérique à 6 chiffres, tirage cryptographique. */
+/** Code numérique à 6 chiffres, tirage cryptographique (repli dev seulement). */
 export function generateCode(): string {
   return String(crypto.randomInt(0, 1_000_000)).padStart(6, "0");
 }
 
-/** Empreinte HMAC du code (jamais stocké en clair). */
+/** Empreinte HMAC du code (repli dev — jamais stocké en clair). */
 export function hashCode(code: string): string {
   return crypto.createHmac("sha256", env.JWT_SECRET).update(code).digest("hex");
 }
 
-/** Envoie un SMS. En mode dev (pas de clés), logge et renvoie true. */
-export async function sendSms(to: string, body: string): Promise<boolean> {
-  if (!smsConfigured) {
-    console.info(`\n[sms] (dev — non envoyé) ${to}: ${body}\n`);
-    return true;
-  }
+function basicAuth(): string {
+  return "Basic " + Buffer.from(`${sid}:${token}`).toString("base64");
+}
+
+/**
+ * Démarre une vérification : Twilio Verify envoie un code SMS au numéro.
+ * Renvoie true si la demande a été acceptée par Twilio.
+ */
+export async function startVerification(to: string): Promise<boolean> {
+  if (!verifyConfigured) return false;
   try {
     const res = await fetch(
-      `https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`,
+      `https://verify.twilio.com/v2/Services/${verifyService}/Verifications`,
       {
         method: "POST",
         headers: {
-          authorization:
-            "Basic " + Buffer.from(`${sid}:${token}`).toString("base64"),
+          authorization: basicAuth(),
           "content-type": "application/x-www-form-urlencoded",
         },
-        body: new URLSearchParams({
-          To: to,
-          From: from!,
-          Body: body,
-        }).toString(),
+        body: new URLSearchParams({ To: to, Channel: "sms" }).toString(),
       },
     );
     if (!res.ok) {
-      console.error(`[sms] Twilio ${res.status}`);
+      console.error(`[verify] Twilio start ${res.status}`);
       return false;
     }
     return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Vérifie le code saisi auprès de Twilio Verify.
+ * Renvoie true si `status === "approved"`.
+ */
+export async function checkVerification(
+  to: string,
+  code: string,
+): Promise<boolean> {
+  if (!verifyConfigured) return false;
+  try {
+    const res = await fetch(
+      `https://verify.twilio.com/v2/Services/${verifyService}/VerificationCheck`,
+      {
+        method: "POST",
+        headers: {
+          authorization: basicAuth(),
+          "content-type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({ To: to, Code: code }).toString(),
+      },
+    );
+    if (!res.ok) return false;
+    const data = (await res.json()) as { status?: string };
+    return data.status === "approved";
   } catch {
     return false;
   }
