@@ -13,6 +13,9 @@ const schema = z.object({
   displayName: z.string().min(2).max(40),
   age: z.number().int().min(18).max(99),
   vertical: z.enum(["CHRISTIAN_EVANGELICAL", "CHRISTIAN_CATHOLIC"]),
+  // "discern" = célibataire en chemin vers le mariage (matching) ;
+  // "married" = déjà marié·e -> Espace Couple, jamais dans le matching.
+  intent: z.enum(["discern", "married"]).default("discern"),
   country: z.string().max(80).optional(),
   locale: z.enum(["fr", "en", "es", "pt"]).default("fr"),
   consentSensitiveData: z.literal(true),
@@ -34,6 +37,8 @@ export const POST = withErrors(async (req: Request) => {
       ? "christian_catholic_default"
       : "christian_evangelical_default";
 
+  const married = body.intent === "married";
+
   const user = await prisma.user.create({
     data: {
       email: body.email,
@@ -43,9 +48,13 @@ export const POST = withErrors(async (req: Request) => {
       country: body.country || null,
       locale: body.locale,
       rulesetId,
+      // Déjà marié·e -> saison MARRIED : Espace Couple, jamais dans le matching.
+      season: married ? "MARRIED" : "JOURNEY",
       emailVerifyToken: token,
       faithProfile: { create: { vertical: body.vertical } },
-      relationshipProfile: { create: { maritalStatus: "single" } },
+      relationshipProfile: {
+        create: { maritalStatus: married ? "married" : "single" },
+      },
       privacySettings: { create: {} },
       consents: {
         createMany: {

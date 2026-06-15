@@ -70,6 +70,11 @@
   "auth": {
     "loginTitle": "Happy to see you again",
     "registerTitle": "Create your profile",
+    "intentTitle": "You're joining Chemin d'Alliance to…",
+    "intentDiscern": "Discern toward marriage",
+    "intentDiscernHint": "I'm single and walking toward an encounter.",
+    "intentMarried": "We're already married",
+    "intentMarriedHint": "Couple Space: support for our covenant life (no matching).",
     "email": "Email address",
     "password": "Password",
     "passwordHint": "Minimum 12 characters",
@@ -353,7 +358,9 @@
       "redo": "Redo the interview",
       "revoke": "Erase my portrait (GDPR)",
       "banner": "New: take your preparation interview — 5 questions to discern where you are.",
-      "bannerCta": "Take the interview"
+      "bannerCta": "Take the interview",
+      "bannerBadge": "Recommended · 2 min",
+      "bannerTitle": "Start with your interview"
     },
     "facil": {
       "title": "Topics never addressed together",

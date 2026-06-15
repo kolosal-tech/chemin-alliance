@@ -70,6 +70,11 @@
   "auth": {
     "loginTitle": "Qué alegría verte de nuevo",
     "registerTitle": "Crea tu perfil",
+    "intentTitle": "Te unes a Chemin d'Alliance para…",
+    "intentDiscern": "Discernir hacia el matrimonio",
+    "intentDiscernHint": "Soy soltero/a y camino hacia un encuentro.",
+    "intentMarried": "Ya estamos casados",
+    "intentMarriedHint": "Espacio de Pareja: acompañamiento de nuestra vida de alianza (sin encuentros).",
     "email": "Correo electrónico",
     "password": "Contraseña",
     "passwordHint": "Mínimo 12 caracteres",
@@ -353,7 +358,9 @@
       "redo": "Rehacer la entrevista",
       "revoke": "Borrar mi retrato (RGPD)",
       "banner": "Nuevo: haz tu entrevista de preparación — 5 preguntas para discernir dónde estás.",
-      "bannerCta": "Hacer la entrevista"
+      "bannerCta": "Hacer la entrevista",
+      "bannerBadge": "Recomendado · 2 min",
+      "bannerTitle": "Empieza por tu entrevista"
     },
     "facil": {
       "title": "Temas nunca abordados juntos",

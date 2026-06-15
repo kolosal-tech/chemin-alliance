@@ -70,6 +70,11 @@
   "auth": {
     "loginTitle": "Heureux de vous revoir",
     "registerTitle": "Créer votre profil",
+    "intentTitle": "Tu rejoins Chemin d'Alliance pour…",
+    "intentDiscern": "Discerner vers le mariage",
+    "intentDiscernHint": "Je suis célibataire et je chemine vers une rencontre.",
+    "intentMarried": "Nous sommes déjà mariés",
+    "intentMarriedHint": "Espace Couple : accompagnement de notre vie d'alliance (sans rencontres).",
     "email": "Adresse email",
     "password": "Mot de passe",
     "passwordHint": "12 caractères minimum",
@@ -353,7 +358,9 @@
       "redo": "Refaire l'entretien",
       "revoke": "Effacer mon portrait (RGPD)",
       "banner": "Nouveau : fais ton entretien de préparation — 5 questions pour discerner où tu en es.",
-      "bannerCta": "Faire l'entretien"
+      "bannerCta": "Faire l'entretien",
+      "bannerBadge": "Recommandé · 2 min",
+      "bannerTitle": "Commence par ton entretien"
     },
     "facil": {
       "title": "Sujets jamais abordés ensemble",

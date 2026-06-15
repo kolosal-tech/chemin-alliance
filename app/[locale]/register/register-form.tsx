@@ -34,6 +34,7 @@ export function RegisterForm() {
         displayName: fd.get("displayName"),
         age: Number(fd.get("age")),
         vertical: fd.get("vertical"),
+        intent: fd.get("intent") || "discern",
         country: fd.get("country") || undefined,
         locale,
         consentSensitiveData: true,
@@ -88,6 +89,25 @@ export function RegisterForm() {
       <SacredMotif variant="olive" className="right-[-110px] top-[-30px]" />
       <h1 className="font-display text-[32px] text-night dark:text-[#ECE7DD]">{t("registerTitle")}</h1>
       <form onSubmit={submit} className="mt-7 flex flex-col gap-4">
+        <fieldset className="flex flex-col gap-1.5">
+          <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">{t("intentTitle")}</span>
+          <div className="grid grid-cols-1 gap-2">
+            <label className="flex cursor-pointer items-start gap-3 rounded-btn border border-sand-400 bg-white p-3 transition-colors has-[:checked]:border-gold has-[:checked]:bg-[#FBF6E9] dark:border-anthracite-600 dark:bg-anthracite-700 dark:has-[:checked]:border-gold-light dark:has-[:checked]:bg-[#272117]">
+              <input name="intent" type="radio" value="discern" defaultChecked className="mt-0.5 h-4 w-4 accent-[#1A2744]" />
+              <span>
+                <span className="block text-sm font-semibold text-ink dark:text-[#ECE7DD]">{t("intentDiscern")}</span>
+                <span className="block text-[12px] leading-snug text-warmgray dark:text-[#9A958B]">{t("intentDiscernHint")}</span>
+              </span>
+            </label>
+            <label className="flex cursor-pointer items-start gap-3 rounded-btn border border-sand-400 bg-white p-3 transition-colors has-[:checked]:border-gold has-[:checked]:bg-[#FBF6E9] dark:border-anthracite-600 dark:bg-anthracite-700 dark:has-[:checked]:border-gold-light dark:has-[:checked]:bg-[#272117]">
+              <input name="intent" type="radio" value="married" className="mt-0.5 h-4 w-4 accent-[#1A2744]" />
+              <span>
+                <span className="block text-sm font-semibold text-ink dark:text-[#ECE7DD]">{t("intentMarried")}</span>
+                <span className="block text-[12px] leading-snug text-warmgray dark:text-[#9A958B]">{t("intentMarriedHint")}</span>
+              </span>
+            </label>
+          </div>
+        </fieldset>
         <label className="flex flex-col gap-1.5">
           <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">{t("displayName")}</span>
           <input name="displayName" required minLength={2} maxLength={40} className={input} />
