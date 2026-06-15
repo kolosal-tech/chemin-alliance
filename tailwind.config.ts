@@ -32,8 +32,8 @@ const config: Config = {
           600: "#2C2E34",
         },
         sand: {
-          100: "#F0ECE2",
-          200: "#E8E3D8",
+          100: "#E7DFD0",
+          200: "#D8CDB9",
           300: "#E2DDD2",
           400: "#D4CDBE",
           500: "#A9A293",

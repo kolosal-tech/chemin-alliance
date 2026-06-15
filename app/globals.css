@@ -9,8 +9,16 @@
   color-scheme: dark;
 }
 
+/* Jamais de scroll horizontal : les motifs décoratifs débordent le viewport
+   (SacredMotif en right/left négatifs) -> on les rogne au lieu d'élargir la page. */
+html,
 body {
-  @apply bg-cream text-ink font-sans antialiased;
+  overflow-x: hidden;
+}
+/* Mode jour : fond beige chaud (canvas) pour que les cartes claires (surface)
+   ressortent — sinon blanc-sur-blanc, sans contraste. */
+body {
+  @apply bg-canvas text-ink font-sans antialiased;
 }
 .dark body {
   @apply bg-anthracite-900 text-[#ECE7DD];
