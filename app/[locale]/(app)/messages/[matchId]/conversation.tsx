@@ -140,8 +140,17 @@ export function Conversation({
         </div>
         <Link
           href={`/alliance/${matchId}`}
-          className="lbl rounded-btn border border-gold/50 px-2.5 py-2 text-[8.5px] text-gold-deep dark:border-gold-light/40 dark:text-gold-light"
+          className="flex flex-none items-center gap-1.5 rounded-full border border-gold/40 bg-gold/10 px-3 py-1.5 text-[11px] font-semibold text-gold-deep transition-colors hover:bg-gold/20 dark:border-gold-light/30 dark:bg-gold-light/10 dark:text-gold-light"
         >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.7" />
+            <path
+              d="M15.6 8.4l-2.1 5.1-5.1 2.1 2.1-5.1 5.1-2.1Z"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinejoin="round"
+            />
+          </svg>
           {t("nav.path")}
         </Link>
         <BlockButton targetUserId={other.id} targetName={other.displayName} />
