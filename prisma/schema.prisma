@@ -85,6 +85,7 @@ enum BookingStatus {
 
 enum LifeSeason {
   JOURNEY
+  ENGAGED
   MARRIED
   PARENTS
 }
@@ -249,6 +250,7 @@ model Match {
   compatibilityJson  Json?
   contactExchange    ContactExchangeStatus @default(NOT_ALLOWED)
   advanceRequestedBy String?
+  requestedById      String?
   closedBy           String?
   closeMessage       String?
   createdAt          DateTime              @default(now())

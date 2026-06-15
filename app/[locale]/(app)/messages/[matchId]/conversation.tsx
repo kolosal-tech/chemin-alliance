@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import type { AllianceStage, MessageKind } from "@prisma/client";
 import { StageBadge } from "@/components/StageBadge";
 import { SacredMotif } from "@/components/SacredMotif";
@@ -24,16 +24,68 @@ export function Conversation({
   matchId,
   stage,
   other,
+  awaitingMyAccept,
+  awaitingOther,
   suggestions,
   initialMessages,
 }: {
   matchId: string;
   stage: AllianceStage;
   other: { id: string; displayName: string; isVerified: boolean };
+  awaitingMyAccept?: boolean;
+  awaitingOther?: boolean;
   suggestions: string[];
   initialMessages: Msg[];
 }) {
   const t = useTranslations();
+  const router = useRouter();
+  const [pending, setPending] = useState(awaitingMyAccept ?? false);
+  const [acceptBusy, setAcceptBusy] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
+
+  async function acceptMatch() {
+    if (acceptBusy) return;
+    setAcceptBusy(true);
+    setActionError(null);
+    try {
+      const res = await fetch(`/api/matches/${matchId}/accept`, {
+        method: "POST",
+      });
+      if (res.ok) {
+        setPending(false);
+        router.refresh();
+      } else {
+        setActionError(t("messaging.actionFailed"));
+      }
+    } catch {
+      setActionError(t("messaging.actionFailed"));
+    } finally {
+      setAcceptBusy(false);
+    }
+  }
+
+  async function declineMatch() {
+    if (acceptBusy) return;
+    setAcceptBusy(true);
+    setActionError(null);
+    try {
+      const res = await fetch(`/api/matches/${matchId}/close`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ message: t("messaging.declineMessage") }),
+      });
+      if (res.ok) {
+        router.push("/messages");
+        router.refresh();
+      } else {
+        setActionError(t("messaging.actionFailed"));
+        setAcceptBusy(false);
+      }
+    } catch {
+      setActionError(t("messaging.actionFailed"));
+      setAcceptBusy(false);
+    }
+  }
   const [messages, setMessages] = useState<Msg[]>(initialMessages);
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
@@ -142,8 +194,20 @@ export function Conversation({
           href={`/alliance/${matchId}`}
           className="flex flex-none items-center gap-1.5 rounded-full border border-gold/40 bg-gold/10 px-3 py-1.5 text-[11px] font-semibold text-gold-deep transition-colors hover:bg-gold/20 dark:border-gold-light/30 dark:bg-gold-light/10 dark:text-gold-light"
         >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden>
-            <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.7" />
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+              stroke="currentColor"
+              strokeWidth="1.7"
+            />
             <path
               d="M15.6 8.4l-2.1 5.1-5.1 2.1 2.1-5.1 5.1-2.1Z"
               stroke="currentColor"
@@ -155,6 +219,42 @@ export function Conversation({
         </Link>
         <BlockButton targetUserId={other.id} targetName={other.displayName} />
       </header>
+
+      {pending && (
+        <div className="mx-3 mt-3 rounded-card border border-gold/50 bg-[#FBF6E9]/80 p-4 dark:border-gold-light/40 dark:bg-[#272117]/70">
+          <p className="text-[13.5px] leading-snug text-[#6F5C2E] dark:text-[#C2B488]">
+            {t("messaging.acceptPrompt", { name: other.displayName })}
+          </p>
+          <div className="mt-3 flex gap-2">
+            <button
+              type="button"
+              onClick={acceptMatch}
+              disabled={acceptBusy}
+              className="flex-1 rounded-btnsm bg-navy py-2.5 text-[13px] font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
+            >
+              {t("messaging.acceptCta")}
+            </button>
+            <button
+              type="button"
+              onClick={declineMatch}
+              disabled={acceptBusy}
+              className="rounded-btnsm border border-sand-300 px-4 py-2.5 text-[13px] font-medium text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
+            >
+              {t("messaging.declineCta")}
+            </button>
+          </div>
+          {actionError && (
+            <p role="alert" className="mt-2 text-[12.5px] text-danger">
+              {actionError}
+            </p>
+          )}
+        </div>
+      )}
+      {awaitingOther && !pending && (
+        <p className="mx-3 mt-3 rounded-card border border-sand-200 bg-surface px-4 py-3 text-[12.5px] text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
+          {t("messaging.awaitingOther", { name: other.displayName })}
+        </p>
+      )}
 
       {/* Messages — verre liquide */}
       <div className="flex flex-1 flex-col gap-3 overflow-y-auto px-4 py-4 pb-2">
@@ -229,8 +329,13 @@ export function Conversation({
         <div ref={endRef} />
       </div>
 
-      {/* Suggestions IA + saisie — verre */}
-      <div className="glass sticky bottom-0 z-30 border-t border-sand-200/50 px-3.5 pb-[calc(env(safe-area-inset-bottom)+88px)] lg:pb-4 pt-2.5 dark:border-anthracite-600/50">
+      {/* Suggestions IA + saisie — verre. Masqué tant que la rencontre n'est
+          pas acceptée par le destinataire (il doit d'abord accepter). */}
+      <div
+        className={`glass sticky bottom-0 z-30 border-t border-sand-200/50 px-3.5 pb-[calc(env(safe-area-inset-bottom)+88px)] lg:pb-4 pt-2.5 dark:border-anthracite-600/50 ${
+          pending ? "hidden" : ""
+        }`}
+      >
         {suggestions.length > 0 && (
           <>
             <div className="mb-2 flex items-center gap-1.5">

@@ -10,9 +10,14 @@ export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
   const { targetUserId } = schema.parse(await req.json());
   if (targetUserId === user.id) return jsonError(400, "INVALID_TARGET");
+  // Hors matching : seuls les profils JOURNEY ouvrent une rencontre.
+  if (user.season !== "JOURNEY") return jsonError(403, "NOT_IN_MATCHING");
 
   const target = await prisma.user.findUnique({ where: { id: targetUserId } });
-  if (!target) return jsonError(404, "NOT_FOUND");
+  // Cible inexistante OU sortie du matching (fiancés/mariés) -> 404 :
+  // on ne divulgue pas la saison d'un tiers.
+  if (!target || target.season !== "JOURNEY")
+    return jsonError(404, "NOT_FOUND");
 
   const [a, b] = [user.id, targetUserId].sort();
   const existing = await prisma.match.findUnique({
@@ -21,7 +26,7 @@ export const POST = withErrors(async (req: Request) => {
   if (existing) return jsonError(409, "MATCH_EXISTS");
 
   const match = await prisma.match.create({
-    data: { userAId: a, userBId: b, status: "PENDING" },
+    data: { userAId: a, userBId: b, status: "PENDING", requestedById: user.id },
   });
   return NextResponse.json({ ok: true, matchId: match.id }, { status: 201 });
 });

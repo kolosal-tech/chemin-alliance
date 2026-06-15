@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { fallbackPortrait, INTERVIEW_QUESTIONS } from "@/lib/agents/preparation";
+import {
+  fallbackPortrait,
+  INTERVIEW_QUESTIONS,
+} from "@/lib/agents/preparation";
 import { analyzeRisk } from "@/lib/agents/watchman";
 import { uncoveredThemes } from "@/lib/agents/facilitator";
 import { buildReviewData } from "@/lib/agents/stage-review";
@@ -31,14 +34,19 @@ describe("Compagnon de Préparation — fallback", () => {
 
   it("deuil récent -> dimension accompany + growth_path (jamais un rejet)", () => {
     const p = fallbackPortrait(
-      answers({ prep_season: "Je suis veuve, le deuil est encore là, c'était il y a quelques mois." }),
+      answers({
+        prep_season:
+          "Je suis veuve, le deuil est encore là, c'était il y a quelques mois.",
+      }),
     );
     expect(p.dimensions.emotionalStability.status).toBe("accompany");
     expect(p.overall).toBe("growth_path");
   });
 
   it("détresse -> human_support (priorité absolue, sans LLM)", () => {
-    const p = fallbackPortrait(answers({ prep_season: "je n'en peux plus, détresse totale" }));
+    const p = fallbackPortrait(
+      answers({ prep_season: "je n'en peux plus, détresse totale" }),
+    );
     expect(p.overall).toBe("human_support");
   });
 
@@ -51,7 +59,9 @@ describe("Compagnon de Préparation — fallback", () => {
 
 describe("Veilleur — signaux de risque", () => {
   it("détecte une demande d'argent", () => {
-    const r = analyzeRisk("J'ai une urgence financière, envoie-moi 200 euros par Western Union");
+    const r = analyzeRisk(
+      "J'ai une urgence financière, envoie-moi 200 euros par Western Union",
+    );
     expect(r.flagged).toBe(true);
     expect(r.signals).toContain("money_request");
   });
@@ -60,10 +70,16 @@ describe("Veilleur — signaux de risque", () => {
     expect(r.signals).toContain("spiritual_manipulation");
   });
   it("détecte la pression au mariage", () => {
-    expect(analyzeRisk("Il faut qu'on se marie vite, tu n'as pas le choix").signals).toContain("marriage_pressure");
+    expect(
+      analyzeRisk("Il faut qu'on se marie vite, tu n'as pas le choix").signals,
+    ).toContain("marriage_pressure");
   });
   it("ne flagge pas un message ordinaire sur la foi", () => {
-    expect(analyzeRisk("Dieu est bon, j'ai beaucoup prié cette semaine pour ma famille.").flagged).toBe(false);
+    expect(
+      analyzeRisk(
+        "Dieu est bon, j'ai beaucoup prié cette semaine pour ma famille.",
+      ).flagged,
+    ).toBe(false);
   });
 });
 
@@ -72,14 +88,21 @@ describe("Facilitateur — thèmes non couverts", () => {
     const { themes, suggestions } = uncoveredThemes(
       "christian_evangelical_default",
       "DIALOGUE",
-      ["disc_motivation", "disc_faith_daily", "disc_family_vision", "dial_church"],
+      [
+        "disc_motivation",
+        "disc_faith_daily",
+        "disc_family_vision",
+        "dial_church",
+      ],
     );
     expect(themes).toContain("finances");
     expect(themes).not.toContain("church");
     expect(suggestions.length).toBeGreaterThan(0);
   });
   it("match clôturé -> rien", () => {
-    expect(uncoveredThemes("christian_evangelical_default", "CLOSED", []).themes).toEqual([]);
+    expect(
+      uncoveredThemes("christian_evangelical_default", "CLOSED", []).themes,
+    ).toEqual([]);
   });
 });
 
@@ -89,7 +112,11 @@ describe("Bilan d'étape — données privées", () => {
       { questionId: "q1", answer: "ma réponse", userId: "me" },
       { questionId: "q2", answer: "autre réponse", userId: "me" },
     ] as never[];
-    const data = buildReviewData(mine, ["q1", "q3"], { q1: "foi", q2: "finances", q3: "famille" });
+    const data = buildReviewData(mine, ["q1", "q3"], {
+      q1: "foi",
+      q2: "finances",
+      q3: "famille",
+    });
     expect(data.alignedThemes).toEqual(["foi"]);
     expect(data.openThemes.sort()).toEqual(["famille", "finances"]);
     expect(JSON.stringify(data)).not.toContain("q3:");
@@ -112,7 +139,13 @@ describe("Sortie Digne — détection de silence", () => {
 describe("Copilote Coach + Reconstruction", () => {
   it("résumé déterministe sans contenu de messages", () => {
     const s = deterministicSummary(
-      { stage: "DISCERNMENT", sinceDays: 12, coveredThemes: ["foi"], openThemes: ["finances"], compatibility: [{ key: "faith", status: "aligned" }] },
+      {
+        stage: "DISCERNMENT",
+        sinceDays: 12,
+        coveredThemes: ["foi"],
+        openThemes: ["finances"],
+        compatibility: [{ key: "faith", status: "aligned" }],
+      },
       "fr",
     );
     expect(s).toContain("DISCERNMENT");
@@ -157,19 +190,57 @@ describe("Gardien du Couple", () => {
   it("GUARDRAIL : violence dans une note -> danger, AUCUN rituel, priorité absolue", () => {
     const g = evaluateCheckin(
       "MARRIED",
-      [{ id: "chk_time_together", value: "no", note: "j'ai peur de lui quand il crie" }],
+      [
+        {
+          id: "chk_time_together",
+          value: "no",
+          note: "j'ai peur de lui quand il crie",
+        },
+      ],
       "fr",
     );
     expect(g.danger).toBe(true);
     expect(g.rituals).toEqual([]);
   });
 
+  it("GUARDRAIL intimité : coercition/non-consentement -> danger, aucun rituel", () => {
+    const g = evaluateCheckin(
+      "MARRIED",
+      [
+        {
+          id: "chk_intimacy",
+          value: "no",
+          note: "il me force, je n'ai pas envie",
+        },
+      ],
+      "fr",
+    );
+    expect(g.danger).toBe(true);
+    expect(g.rituals).toEqual([]);
+  });
+
+  it("NON-RÉGRESSION : mots anodins (obligé/contrainte/forcé) ne déclenchent PAS le danger", () => {
+    for (const note of [
+      "on est obligé de revoir le budget ce mois-ci",
+      "il y a une contrainte de temps avec le travail",
+      "je me suis forcé à sourire toute la semaine",
+      "this forces me to rethink our schedule",
+    ]) {
+      const g = evaluateCheckin(
+        "MARRIED",
+        [{ id: "chk_time_together", value: "no", note }],
+        "fr",
+      );
+      expect(g.danger).toBe(false);
+    }
+  });
+
   it("questions et parcours existent en 4 langues pour les 2 saisons", () => {
-    for (const season of ["MARRIED", "PARENTS"] as const) {
+    for (const season of ["ENGAGED", "MARRIED", "PARENTS"] as const) {
       for (const q of CHECKIN_QUESTIONS[season]) {
         expect(q.text.fr && q.text.en && q.text.es && q.text.pt).toBeTruthy();
       }
-      expect(SEASON_PROGRAMS[season].length).toBe(3);
+      expect(SEASON_PROGRAMS[season].length).toBe(4);
     }
   });
 

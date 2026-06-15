@@ -33,6 +33,7 @@ export function RegisterForm() {
         password: fd.get("password"),
         displayName: fd.get("displayName"),
         age: Number(fd.get("age")),
+        gender: fd.get("gender"),
         vertical: fd.get("vertical"),
         intent: fd.get("intent") || "discern",
         country: fd.get("country") || undefined,
@@ -118,6 +119,22 @@ export function RegisterForm() {
                   </span>
                 </span>
               </label>
+              <label className="flex cursor-pointer items-start gap-3 rounded-btn border border-[#E6D2A8] bg-[#FBF6E9] p-3 transition-colors has-[:checked]:border-gold has-[:checked]:bg-[#F6ECCF] dark:border-[#463A1F] dark:bg-[#272117] dark:has-[:checked]:border-gold-light dark:has-[:checked]:bg-[#2C2512]">
+                <input
+                  name="intent"
+                  type="radio"
+                  value="engaged"
+                  className="mt-0.5 h-4 w-4 accent-[#9A7B2E]"
+                />
+                <span>
+                  <span className="block text-sm font-semibold text-ink dark:text-[#ECE7DD]">
+                    {t("intentEngaged")}
+                  </span>
+                  <span className="block text-[12px] leading-snug text-warmgray dark:text-[#9A958B]">
+                    {t("intentEngagedHint")}
+                  </span>
+                </span>
+              </label>
               <label className="flex cursor-pointer items-start gap-3 rounded-btn border border-[#BFD0E6] bg-[#EAF1F8] p-3 transition-colors has-[:checked]:border-navy has-[:checked]:bg-[#D7E4F2] dark:border-[#2A3550] dark:bg-[#161E2C] dark:has-[:checked]:border-[#5B73A8] dark:has-[:checked]:bg-[#1B2740]">
                 <input
                   name="intent"
@@ -147,6 +164,18 @@ export function RegisterForm() {
               maxLength={40}
               className={input}
             />
+          </label>
+          <label className="flex flex-col gap-1.5">
+            <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">
+              {t("gender")}
+            </span>
+            <select name="gender" required defaultValue="" className={input}>
+              <option value="" disabled>
+                {t("genderPlaceholder")}
+              </option>
+              <option value="F">{t("genderF")}</option>
+              <option value="M">{t("genderM")}</option>
+            </select>
           </label>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">

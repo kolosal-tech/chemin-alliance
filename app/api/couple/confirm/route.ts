@@ -16,8 +16,19 @@ export const POST = withErrors(async () => {
       where: { id: space.id },
       data: { status: "ACTIVE", marriedAt: new Date() },
     }),
-    prisma.user.update({ where: { id: space.userAId }, data: { season: "MARRIED" } }),
+    prisma.user.update({
+      where: { id: space.userAId },
+      data: { season: "MARRIED" },
+    }),
     prisma.user.update({ where: { id: user.id }, data: { season: "MARRIED" } }),
+    prisma.relationshipProfile.update({
+      where: { userId: space.userAId },
+      data: { maritalStatus: "married" },
+    }),
+    prisma.relationshipProfile.update({
+      where: { userId: user.id },
+      data: { maritalStatus: "married" },
+    }),
   ];
   if (space.matchId) {
     // Le chemin de rencontre se termine en beauté : le match se clôt.

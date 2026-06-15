@@ -13,6 +13,10 @@ export const POST = withErrors(
   async (req: Request, { params }: { params: { matchId: string } }) => {
     const user = await requireUser();
     const match = await requireMatchMember(params.matchId, user.id);
+    // Déjà clôturé (ex: l'autre a clos entre-temps) : idempotent, ne réécrit rien.
+    if (match.status === "CLOSED") {
+      return NextResponse.json({ ok: true, closed: true });
+    }
     const { message } = schema.parse(await req.json());
 
     await prisma.$transaction([

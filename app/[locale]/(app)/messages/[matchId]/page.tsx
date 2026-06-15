@@ -26,6 +26,12 @@ export default async function ConversationPage({
   }
   const other = match.userAId === user.id ? match.userB : match.userA;
   const locale = params.locale as Locale;
+  const awaitingMyAccept =
+    match.status === "PENDING" &&
+    match.requestedById != null &&
+    match.requestedById !== user.id;
+  const awaitingOther =
+    match.status === "PENDING" && match.requestedById === user.id;
   const suggestions =
     match.stage === "CLOSED"
       ? []
@@ -38,9 +44,13 @@ export default async function ConversationPage({
       matchId={match.id}
       stage={match.stage}
       other={other}
+      awaitingMyAccept={awaitingMyAccept}
+      awaitingOther={awaitingOther}
       suggestions={suggestions}
       initialMessages={match.messages
-        .filter((m) => m.moderationStatus !== "BLOCKED" || m.senderId === user.id)
+        .filter(
+          (m) => m.moderationStatus !== "BLOCKED" || m.senderId === user.id,
+        )
         .map((m) => ({
           id: m.id,
           kind: m.kind,

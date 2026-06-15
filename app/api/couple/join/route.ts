@@ -19,14 +19,45 @@ export const POST = withErrors(async (req: Request) => {
   });
   if (!space || space.userBId) return jsonError(404, "CODE_INVALID");
   if (space.userAId === user.id) return jsonError(400, "CODE_OWN");
+  // Cohérence de saison : on ne mélange pas fiancés et déjà-mariés.
+  if (user.season !== "JOURNEY" && user.season !== space.season) {
+    return jsonError(409, "SEASON_MISMATCH");
+  }
 
-  await prisma.$transaction([
-    prisma.coupleSpace.update({
-      where: { id: space.id },
-      data: { userBId: user.id, status: "ACTIVE", marriedAt: space.marriedAt ?? new Date() },
-    }),
-    prisma.user.update({ where: { id: space.userAId }, data: { season: space.season } }),
-    prisma.user.update({ where: { id: user.id }, data: { season: space.season } }),
-  ]);
+  const married = space.season === "MARRIED" || space.season === "PARENTS";
+  const maritalStatus = space.season === "ENGAGED" ? "engaged" : "married";
+  // Rattachement atomique : seul le premier conjoint qui rejoint « gagne » la
+  // place (userBId null -> user.id). Un second appel quasi simultané voit
+  // count=0 et n'altère AUCUNE saison/statut — pas d'orphelin sorti du matching.
+  const claimed = await prisma.$transaction(async (tx) => {
+    const res = await tx.coupleSpace.updateMany({
+      where: { id: space.id, userBId: null },
+      data: {
+        userBId: user.id,
+        status: "ACTIVE",
+        // Ne stampe une date de mariage que pour un espace marié (pas fiancés).
+        marriedAt: married ? (space.marriedAt ?? new Date()) : space.marriedAt,
+      },
+    });
+    if (res.count !== 1) return false;
+    await tx.user.update({
+      where: { id: space.userAId },
+      data: { season: space.season },
+    });
+    await tx.user.update({
+      where: { id: user.id },
+      data: { season: space.season },
+    });
+    await tx.relationshipProfile.update({
+      where: { userId: space.userAId },
+      data: { maritalStatus },
+    });
+    await tx.relationshipProfile.update({
+      where: { userId: user.id },
+      data: { maritalStatus },
+    });
+    return true;
+  });
+  if (!claimed) return jsonError(404, "CODE_INVALID");
   return NextResponse.json({ ok: true });
 });

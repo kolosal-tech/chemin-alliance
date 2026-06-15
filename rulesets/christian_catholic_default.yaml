@@ -192,6 +192,13 @@ ruleset:
             en: "What shared vision do you have for raising children in the faith?"
             es: "¿Qué visión comparten sobre la educación de los hijos en la fe?"
             pt: "Que visão partilham sobre a educação dos filhos na fé?"
+        - id: disc2_chastity
+          theme: intimacy
+          text:
+            fr: "Comment vivez-vous la chasteté comme un chemin d'amour pendant ce temps de discernement — quelles limites vous aident à vous respecter et à vous préparer au don total des époux ?"
+            en: "How do you live chastity as a path of love during this time of discernment — what boundaries help you respect each other and prepare for the total gift of the spouses?"
+            es: "¿Cómo viven la castidad como un camino de amor durante este tiempo de discernimiento — qué límites les ayudan a respetarse y a prepararse para el don total de los esposos?"
+            pt: "Como vivem a castidade como um caminho de amor durante este tempo de discernimento — que limites vos ajudam a respeitar-se e a preparar-se para o dom total dos esposos?"
     accompaniment:
       next: commitment
       allowed_actions:
@@ -236,6 +243,13 @@ ruleset:
             en: "Have you discussed together: finances, families, wounds, children, parish, boundaries before marriage?"
             es: "¿Han abordado juntos: finanzas, familias, heridas, hijos, parroquia, límites antes del matrimonio?"
             pt: "Já abordaram juntos: finanças, famílias, feridas, filhos, paróquia, limites antes do casamento?"
+        - id: com_intimacy
+          theme: intimacy
+          text:
+            fr: "Pouvez-vous parler avec confiance et pudeur de l'intimité des époux — le don réciproque des corps, ouvert à la vie, comme langage de l'amour conjugal où les deux ne font qu'une seule chair (Gn 2.24) — et accueillir vos fragilités sans tabou ?"
+            en: "Can you speak with trust and modesty about the intimacy of spouses — the mutual gift of bodies, open to life, as the language of conjugal love where the two become one flesh (Gen 2:24) — welcoming your fragilities without taboo?"
+            es: "¿Pueden hablar con confianza y pudor de la intimidad de los esposos — el don recíproco de los cuerpos, abierto a la vida, como lenguaje del amor conyugal donde los dos se hacen una sola carne (Gn 2:24) — acogiendo vuestras fragilidades sin tabú?"
+            pt: "Conseguem falar com confiança e pudor da intimidade dos esposos — o dom recíproco dos corpos, aberto à vida, como linguagem do amor conjugal onde os dois se tornam uma só carne (Gn 2:24) — acolhendo as vossas fragilidades sem tabu?"
     marriage_preparation:
       next: null
       allowed_actions:

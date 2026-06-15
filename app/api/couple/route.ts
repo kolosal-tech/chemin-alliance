@@ -3,7 +3,11 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
-import { generateInviteCode, CHECKIN_QUESTIONS, SEASON_PROGRAMS } from "@/lib/agents/guardian";
+import {
+  generateInviteCode,
+  CHECKIN_QUESTIONS,
+  SEASON_PROGRAMS,
+} from "@/lib/agents/guardian";
 import type { Locale } from "@/lib/core-engine";
 
 async function mySpace(userId: string) {
@@ -34,6 +38,7 @@ export const GET = withErrors(async () => {
     });
     return NextResponse.json({
       space: null,
+      season: user.season,
       eligibleMatch: eligibleMatch && {
         id: eligibleMatch.id,
         other:
@@ -44,7 +49,12 @@ export const GET = withErrors(async () => {
     });
   }
   const locale = (user.locale ?? "fr") as Locale;
-  const season = space.season === "PARENTS" ? "PARENTS" : "MARRIED";
+  const season =
+    space.season === "PARENTS"
+      ? "PARENTS"
+      : space.season === "ENGAGED"
+        ? "ENGAGED"
+        : "MARRIED";
   const lastCheckin = await prisma.agentInsight.findFirst({
     where: { userId: user.id, agentId: "guardian", kind: "CHECKIN" },
     orderBy: { createdAt: "desc" },
@@ -104,19 +114,37 @@ export const POST = withErrors(async (req: Request) => {
         inviteCode: generateInviteCode(),
       },
     });
-    return NextResponse.json({ ok: true, spaceId: space.id, pendingPartner: true }, { status: 201 });
+    return NextResponse.json(
+      { ok: true, spaceId: space.id, pendingPartner: true },
+      { status: 201 },
+    );
   }
 
-  // Couple externe déjà marié : espace solo + code à transmettre au conjoint.
+  // Garde : seuls les fiancés ou les déjà-mariés créent un espace externe.
+  // Un user en discernement (JOURNEY) ne peut pas s'auto-promouvoir MARRIED
+  // par cette voie — il passe par le chemin match (matchId ci-dessus).
+  if (user.season !== "ENGAGED" && user.season !== "MARRIED") {
+    return jsonError(409, "NOT_ELIGIBLE");
+  }
+
+  // Couple externe (déjà fiancés ou déjà mariés) : espace solo + code conjoint.
+  const engaged = user.season === "ENGAGED";
   const space = await prisma.coupleSpace.create({
     data: {
       userAId: user.id,
-      origin: "EXTERNAL",
+      origin: engaged ? "ENGAGED" : "EXTERNAL",
+      season: engaged ? "ENGAGED" : "MARRIED",
       inviteCode: generateInviteCode(),
-      marriedAt: new Date(),
+      marriedAt: engaged ? null : new Date(),
     },
   });
-  await prisma.user.update({ where: { id: user.id }, data: { season: "MARRIED" } });
+  // Fiancés : la saison ENGAGED est déjà posée à l'inscription, on n'y touche pas.
+  if (!engaged) {
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { season: "MARRIED" },
+    });
+  }
   return NextResponse.json(
     { ok: true, spaceId: space.id, inviteCode: space.inviteCode },
     { status: 201 },

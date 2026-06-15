@@ -68,6 +68,15 @@ export const POST = withErrors(
     if (await isBlockedBetween(user.id, otherId)) {
       return jsonError(403, "RELATION_BLOCKED");
     }
+    // Demande non encore acceptée : seul le demandeur peut envoyer (message
+    // d'ouverture). Le destinataire doit d'abord accepter la rencontre.
+    if (
+      match.status === "PENDING" &&
+      match.requestedById &&
+      match.requestedById !== user.id
+    ) {
+      return jsonError(403, "MATCH_PENDING_ACCEPT");
+    }
     const { content } = schema.parse(await req.json());
     const locale = (user.locale ?? "fr") as Locale;
     const ctx = await buildActionContext(

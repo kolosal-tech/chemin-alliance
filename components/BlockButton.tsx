@@ -50,7 +50,13 @@ export function BlockButton({
       >
         {/* Personne bloquée (et non un panneau d'interdiction). */}
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-          <circle cx="10" cy="8" r="3.3" stroke="currentColor" strokeWidth="1.6" />
+          <circle
+            cx="10"
+            cy="8"
+            r="3.3"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
           <path
             d="M4 19.3c0-3.2 2.7-5.3 6-5.3 1.1 0 2.2.3 3 .7"
             stroke="currentColor"

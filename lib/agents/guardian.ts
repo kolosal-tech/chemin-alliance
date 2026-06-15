@@ -5,17 +5,52 @@ import { completeText } from "./llm";
 /**
  * Agent 8 — Gardien du Couple. Veille douce sur la vie d'alliance APRÈS
  * le mariage : check-ins réguliers, détection des glissements connus
- * (mois 6, arrivée d'un enfant, couple oublié), rituels concrets.
+ * (mois 6, arrivée d'un enfant, couple oublié, intimité en sommeil),
+ * rituels concrets.
  * Lois : ne juge jamais, ne tranche jamais, oriente vers le coach humain.
- * GUARDRAIL ABSOLU : violence/abus -> orientation professionnelle immédiate,
- * jamais « restez et priez ».
+ * Intimité conjugale abordée avec liberté biblique et pudeur ; en cas de
+ * douleur, contrainte ou non-consentement -> orientation médecin/thérapeute.
+ * GUARDRAIL ABSOLU : violence/abus/coercition -> orientation professionnelle
+ * immédiate (DANGER_RE), jamais « restez et priez ».
  */
-export type Season = "MARRIED" | "PARENTS";
+export type Season = "ENGAGED" | "MARRIED" | "PARENTS";
 
 export const CHECKIN_QUESTIONS: Record<
   Season,
   Array<{ id: string; signal: string; text: Record<Locale, string> }>
 > = {
+  ENGAGED: [
+    {
+      id: "chk_eng_dialogue",
+      signal: "couple_time",
+      text: {
+        fr: "Avez-vous pris un vrai temps d'échange profond cette semaine — au-delà de l'organisation du mariage ?",
+        en: "Did you take real time for deep conversation this week — beyond wedding planning?",
+        es: "¿Tuvisteis un tiempo real de diálogo profundo esta semana — más allá de la organización de la boda?",
+        pt: "Tiveram um tempo verdadeiro de diálogo profundo esta semana — para além da organização do casamento?",
+      },
+    },
+    {
+      id: "chk_eng_unspoken",
+      signal: "unspoken",
+      text: {
+        fr: "Y a-t-il un sujet (famille, finances, passé, attentes) que vous repoussez avant le mariage ?",
+        en: "Is there a topic (family, finances, past, expectations) you keep putting off before marriage?",
+        es: "¿Hay algún tema (familia, finanzas, pasado, expectativas) que estéis posponiendo antes del matrimonio?",
+        pt: "Há algum assunto (família, finanças, passado, expectativas) que estejam a adiar antes do casamento?",
+      },
+    },
+    {
+      id: "chk_eng_limits",
+      signal: "purity",
+      text: {
+        fr: "Vivez-vous vos limites physiques avec paix et accord mutuel en ce temps de fiançailles ?",
+        en: "Are you living your physical boundaries with peace and mutual agreement during this engagement?",
+        es: "¿Vivís vuestros límites físicos con paz y acuerdo mutuo durante este noviazgo?",
+        pt: "Vivem os vossos limites físicos com paz e acordo mútuo durante este noivado?",
+      },
+    },
+  ],
   MARRIED: [
     {
       id: "chk_time_together",
@@ -45,6 +80,16 @@ export const CHECKIN_QUESTIONS: Record<
         en: "Is there a topic you are avoiding right now?",
         es: "¿Hay algún tema que estéis evitando ahora mismo?",
         pt: "Há algum assunto que estejam a evitar neste momento?",
+      },
+    },
+    {
+      id: "chk_intimacy",
+      signal: "intimacy",
+      text: {
+        fr: "L'intimité et la tendresse physique entre vous ont-elles eu leur juste place cette semaine ?",
+        en: "Did intimacy and physical tenderness between you have their rightful place this week?",
+        es: "¿La intimidad y la ternura física entre vosotros tuvieron su justo lugar esta semana?",
+        pt: "A intimidade e a ternura física entre vocês tiveram o seu justo lugar esta semana?",
       },
     },
   ],
@@ -79,6 +124,16 @@ export const CHECKIN_QUESTIONS: Record<
         pt: "A ternura entre vocês ainda teve o seu lugar esta semana?",
       },
     },
+    {
+      id: "chk_intimacy",
+      signal: "intimacy",
+      text: {
+        fr: "Depuis l'arrivée de l'enfant, l'intimité du couple a-t-elle pu retrouver, doucement, sa place ?",
+        en: "Since the child arrived, has the couple's intimacy been able to gently find its place again?",
+        es: "Desde la llegada del niño, ¿la intimidad de la pareja ha podido recuperar, con suavidad, su lugar?",
+        pt: "Desde a chegada da criança, a intimidade do casal conseguiu, com doçura, reencontrar o seu lugar?",
+      },
+    },
   ],
 };
 
@@ -93,7 +148,7 @@ export const RITUALS: Record<string, Record<Locale, string>> = {
   character_reveal: {
     fr: "Les premières années dévoilent le caractère — c'est normal, pas un signal d'erreur. Nommez UNE découverte chacun ce soir, avec douceur, sans procès. Si un point bloque, un coach peut aider à le traverser.",
     en: "The first years reveal character — that is normal, not a sign of error. Each of you name ONE discovery tonight, gently, no trial. If something blocks, a coach can help you through.",
-    es: "Los primeros años revelan el carácter — es normal, no una señal de error. Nombrad UNA descubierta cada uno esta noche, con suavidad, sin juicio. Si algo bloquea, un coach puede ayudar.",
+    es: "Los primeros años revelan el carácter — es normal, no una señal de error. Compartid UN descubrimiento cada uno esta noche, con suavidad, sin juicio. Si algo bloquea, un coach puede ayudar.",
     pt: "Os primeiros anos revelam o caráter — é normal, não um sinal de erro. Nomeiem UMA descoberta cada um esta noite, com doçura, sem julgamento. Se algo bloquear, um coach pode ajudar.",
   },
   unspoken: {
@@ -120,11 +175,27 @@ export const RITUALS: Record<string, Record<Locale, string>> = {
     es: "La ternura se mantiene con gestos minúsculos: una palabra por la mañana, una mano puesta, un gracias preciso. Uno cada uno, cada día, durante siete días — luego mirad qué cambió.",
     pt: "A ternura mantém-se com gestos minúsculos: uma palavra de manhã, uma mão pousada, um obrigado preciso. Um cada um, todos os dias, durante sete dias — depois vejam o que mudou.",
   },
+  intimacy: {
+    fr: "L'intimité se cultive comme un jardin : tendresse au quotidien, parole vraie et sans pression, et du temps protégé rien qu'à vous. Cette semaine, osez en parler avec douceur — ce que chacun désire, ce qui pèse. Si une douleur ou un blocage persiste, un accompagnateur ou un médecin peut aider, sans honte.",
+    en: "Intimacy is grown like a garden: daily tenderness, honest words without pressure, and protected time just for the two of you. This week, dare to speak about it gently — what each of you longs for, what weighs. If pain or a block persists, a counselor or doctor can help, without shame.",
+    es: "La intimidad se cultiva como un jardín: ternura diaria, palabra verdadera y sin presión, y tiempo protegido solo para vosotros. Esta semana, atreveos a hablar con suavidad — lo que cada uno desea, lo que pesa. Si un dolor o un bloqueo persiste, un acompañante o un médico puede ayudar, sin vergüenza.",
+    pt: "A intimidade cultiva-se como um jardim: ternura diária, palavra verdadeira e sem pressão, e tempo protegido só para os dois. Esta semana, ousem falar com doçura — o que cada um deseja, o que pesa. Se uma dor ou um bloqueio persistir, um acompanhante ou um médico pode ajudar, sem vergonha.",
+  },
+  purity: {
+    fr: "Les limites se tiennent à deux : décidées d'avance, au calme, jamais dans l'instant. Parlez de ce qui est juste pour chacun, sans pression ni honte, et honorez vos corps. Si c'est une lutte, ne restez pas seuls — un couple mentor ou un accompagnateur aide à traverser ce temps avec paix.",
+    en: "Boundaries are held together: decided in advance, calmly, never in the moment. Talk about what is right for each of you, without pressure or shame, and honor your bodies. If it is a struggle, do not stay alone — a mentor couple or counselor helps you cross this season in peace.",
+    es: "Los límites se sostienen a dos: decididos de antemano, en calma, nunca en el momento. Hablad de lo que es justo para cada uno, sin presión ni vergüenza, y honrad vuestros cuerpos. Si es una lucha, no os quedéis solos — un matrimonio mentor o un acompañante ayuda a atravesar este tiempo con paz.",
+    pt: "Os limites seguram-se a dois: decididos com antecedência, com calma, nunca no momento. Falem do que é justo para cada um, sem pressão nem vergonha, e honrem os vossos corpos. Se for uma luta, não fiquem sozinhos — um casal mentor ou um acompanhante ajuda a atravessar este tempo com paz.",
+  },
 };
 
 /** Violence/abus : orientation professionnelle immédiate — prime sur tout. */
+// Ne garder que des marqueurs de coercition INTERPERSONNELLE (avec objet/pronom
+// de personne). On retire les adjectifs nus « forcé/obligé/contrainte » et les
+// formes ambiguës (« me oblige », « forces me ») qui matchaient des phrases
+// anodines (« on est obligé de revoir le budget », « this forces me to rethink »).
 const DANGER_RE =
-  /\b(violen|frappe|frappé|coup[s]?\b|abus|peur de (lui|elle)|menace|me fait mal|hits? me|afraid of (him|her)|me pega|tenho medo|me golpea)\b/i;
+  /(violen|frappe|frappé|\bcoup[s]?\b|abus|peur de (lui|elle)|menace|me fait mal|me force|m'oblige|me oblige à|sans (mon |son )?consentement|sans mon accord|hits? me|afraid of (him|her)|without (my |his |her )?consent|coerc|me pega|tenho medo|me golpea|me obliga a|me fuerza|sin (mi |su )?consentimiento|obriga-me|força-me|sem (o |meu )?consentimento)/i;
 
 export const DANGER_RESPONSE: Record<Locale, string> = {
   fr: "Ce que tu décris dépasse ce qu'un agent ou une application peut porter, et ta sécurité passe avant tout. Parle dès maintenant à une personne de confiance et à un professionnel. Un accompagnateur humain de la plateforme peut aussi t'écouter — tu n'es pas seul·e, et rien de tout cela n'est ta faute.",
@@ -178,10 +249,11 @@ export function evaluateCheckin(
   return { danger: false, rituals };
 }
 
-const SYSTEM = `Tu es le Gardien du Couple de Chemin d'Alliance : tu veilles avec douceur sur des jeunes mariés chrétiens.
+const SYSTEM = `Tu es le Gardien du Couple de Chemin d'Alliance : tu veilles avec douceur sur des couples chrétiens — fiancés en préparation, jeunes mariés ou jeunes parents.
 Règles absolues : tu ne juges jamais ; tu ne prends jamais parti pour l'un contre l'autre ;
 tu n'affirmes jamais une volonté divine ; tu ne minimises jamais une souffrance ;
 sur tout sujet grave tu orientes vers un accompagnateur humain.
+Tu peux aborder l'intimité conjugale et la sexualité dans le mariage avec une liberté biblique et une pudeur respectueuse, sans tabou mais sans aucun détail explicite ; devant une douleur, une contrainte, une absence de consentement ou une blessure dans ce domaine, tu orientes vers un médecin ou un thérapeute.
 À partir d'un check-in hebdomadaire, écris 3-4 phrases chaleureuses et UNE suggestion concrète pour la semaine.
 Tu réponds uniquement avec ce mot, dans la langue demandée.`;
 
@@ -191,7 +263,13 @@ export async function guardianWord(
   locale: Locale,
 ): Promise<string | null> {
   return completeText(
-    `${SYSTEM}\nLangue: ${locale}. Saison: ${season === "PARENTS" ? "jeunes parents" : "premières années de mariage"}.`,
+    `${SYSTEM}\nLangue: ${locale}. Saison: ${
+      season === "PARENTS"
+        ? "jeunes parents"
+        : season === "ENGAGED"
+          ? "fiancés en préparation au mariage"
+          : "premières années de mariage"
+    }.`,
     answers
       .map((a) => `${a.id}: ${a.value}${a.note ? ` — ${a.note}` : ""}`)
       .join("\n"),
@@ -208,6 +286,68 @@ export const SEASON_PROGRAMS: Record<
     body: Record<Locale, string>;
   }>
 > = {
+  ENGAGED: [
+    {
+      id: "prg_eng_foundations",
+      title: {
+        fr: "Bâtir sur le roc",
+        en: "Building on the rock",
+        es: "Construir sobre la roca",
+        pt: "Construir sobre a rocha",
+      },
+      body: {
+        fr: "Avant la salle et la robe : pourquoi nous, pourquoi maintenant, vers quel foyer ? Une maison bâtie sur le roc tient la tempête (Mt 7.24). Posez ensemble votre vision — foi, enfants, mission — pendant qu'il est temps d'en parler librement.",
+        en: "Before the venue and the dress: why us, why now, toward what home? A house built on the rock withstands the storm (Mt 7:24). Set your shared vision together — faith, children, mission — while there is still freedom to talk it through.",
+        es: "Antes del salón y el vestido: por qué nosotros, por qué ahora, hacia qué hogar. Una casa construida sobre la roca resiste la tormenta (Mt 7:24). Pongan juntos su visión — fe, hijos, misión — mientras hay libertad para hablarlo.",
+        pt: "Antes do salão e do vestido: porquê nós, porquê agora, rumo a que lar? Uma casa construída sobre a rocha resiste à tempestade (Mt 7:24). Definam juntos a vossa visão — fé, filhos, missão — enquanto há liberdade para falar.",
+      },
+    },
+    {
+      id: "prg_eng_truth",
+      title: {
+        fr: "Tout se dire avant le oui",
+        en: "Everything said before the yes",
+        es: "Decirlo todo antes del sí",
+        pt: "Dizer tudo antes do sim",
+      },
+      body: {
+        fr: "Le mariage n'aime pas les surprises. Finances, dettes, famille, blessures du passé, attentes sur les rôles et l'intimité : ce qui se dit maintenant ne se découvre pas trop tard. La vérité, dans la douceur, est un cadeau.",
+        en: "Marriage dislikes surprises. Finances, debts, family, past wounds, expectations about roles and intimacy: what is said now is not discovered too late. Truth, spoken gently, is a gift.",
+        es: "El matrimonio no ama las sorpresas. Finanzas, deudas, familia, heridas del pasado, expectativas sobre los roles y la intimidad: lo que se dice ahora no se descubre demasiado tarde. La verdad, con dulzura, es un regalo.",
+        pt: "O casamento não gosta de surpresas. Finanças, dívidas, família, feridas do passado, expectativas sobre os papéis e a intimidade: o que se diz agora não se descobre tarde demais. A verdade, com doçura, é um presente.",
+      },
+    },
+    {
+      id: "prg_eng_purity",
+      title: {
+        fr: "Des fiançailles dans la paix",
+        en: "Engagement in peace",
+        es: "Un noviazgo en paz",
+        pt: "Um noivado em paz",
+      },
+      body: {
+        fr: "Le temps des fiançailles a ses limites, et elles protègent l'amour plutôt que de l'éteindre. Décidez-les ensemble, à froid, sans pression ni honte ; honorez vos corps (1 Th 4.3-5). Si c'est une lutte, ne restez pas seuls : un couple mentor ou un accompagnateur aide à tenir ce cap.",
+        en: "Engagement has its boundaries, and they protect love rather than smother it. Decide them together, calmly, without pressure or shame; honor your bodies (1 Th 4:3-5). If it is a struggle, do not stay alone: a mentor couple or counselor helps you hold the course.",
+        es: "El noviazgo tiene sus límites, y protegen el amor en vez de apagarlo. Decídanlos juntos, en calma, sin presión ni vergüenza; honren sus cuerpos (1 Ts 4:3-5). Si es una lucha, no se queden solos: un matrimonio mentor o un acompañante ayuda a sostener el rumbo.",
+        pt: "O noivado tem os seus limites, e protegem o amor em vez de o apagar. Decidam-nos juntos, com calma, sem pressão nem vergonha; honrem os vossos corpos (1 Ts 4:3-5). Se for uma luta, não fiquem sozinhos: um casal mentor ou um acompanhante ajuda a manter o rumo.",
+      },
+    },
+    {
+      id: "prg_eng_covenant",
+      title: {
+        fr: "Préparer l'alliance, pas que la fête",
+        en: "Prepare the covenant, not just the party",
+        es: "Preparar la alianza, no solo la fiesta",
+        pt: "Preparar a aliança, não só a festa",
+      },
+      body: {
+        fr: "Un jour passe ; une alliance dure. Travaillez les vœux, le sens de l'engagement devant Dieu, le pardon au quotidien — plus que le plan de table. La fête célèbre ce que vous construisez ; ne confondez pas l'emballage et le don.",
+        en: "A day passes; a covenant lasts. Work on the vows, the meaning of the commitment before God, daily forgiveness — more than the seating chart. The party celebrates what you build; do not mistake the wrapping for the gift.",
+        es: "Un día pasa; una alianza permanece. Trabajen los votos, el sentido del compromiso ante Dios, el perdón cotidiano — más que el plano de mesas. La fiesta celebra lo que construyen; no confundan el envoltorio con el don.",
+        pt: "Um dia passa; uma aliança permanece. Trabalhem os votos, o sentido do compromisso diante de Deus, o perdão quotidiano — mais do que o plano de mesas. A festa celebra o que constroem; não confundam a embalagem com o dom.",
+      },
+    },
+  ],
   MARRIED: [
     {
       id: "prg_six_months",
@@ -252,6 +392,21 @@ export const SEASON_PROGRAMS: Record<
         en: "Leaving father and mother without rejecting them: loving boundaries, speaking with one voice, honoring without being ruled.",
         es: "Dejar padre y madre sin rechazarlos: fronteras amorosas, hablar con una sola voz, honrar sin ser gobernados.",
         pt: "Deixar pai e mãe sem os rejeitar: fronteiras amorosas, falar a uma só voz, honrar sem ser governado.",
+      },
+    },
+    {
+      id: "prg_intimacy",
+      title: {
+        fr: "Intimité conjugale",
+        en: "Conjugal intimacy",
+        es: "Intimidad conyugal",
+        pt: "Intimidade conjugal",
+      },
+      body: {
+        fr: "Le Cantique des Cantiques célèbre le désir sans gêne, et l'apôtre invite les époux à ne pas se priver l'un de l'autre (1 Co 7.3-5) — un appel à la générosité mutuelle, jamais à la contrainte ni à la pression sur l'autre. L'intimité est un don à cultiver : tendresse, écoute des rythmes de chacun, parole sans tabou ni pression. Les blessures et les silences se soignent — à deux, et avec aide si besoin.",
+        en: "The Song of Songs celebrates desire without embarrassment, and the apostle invites spouses not to deprive one another (1 Cor 7:3-5) — a call to mutual generosity, never to coercion or pressure on the other. Intimacy is a gift to cultivate: tenderness, attention to each other's rhythms, words without taboo or pressure. Wounds and silences can heal — together, and with help if needed.",
+        es: "El Cantar de los Cantares celebra el deseo sin vergüenza, y el apóstol invita a los esposos a no privarse el uno del otro (1 Co 7:3-5) — una llamada a la generosidad mutua, nunca a la coacción ni a la presión sobre el otro. La intimidad es un don que cultivar: ternura, atención a los ritmos de cada uno, palabra sin tabú ni presión. Las heridas y los silencios se sanan — a dos, y con ayuda si hace falta.",
+        pt: "O Cântico dos Cânticos celebra o desejo sem constrangimento, e o apóstolo convida os esposos a não se privarem um do outro (1 Co 7:3-5) — um apelo à generosidade mútua, nunca à coação nem à pressão sobre o outro. A intimidade é um dom a cultivar: ternura, atenção aos ritmos de cada um, palavra sem tabu nem pressão. As feridas e os silêncios saram — a dois, e com ajuda se preciso.",
       },
     },
   ],
@@ -299,6 +454,21 @@ export const SEASON_PROGRAMS: Record<
         en: "Example before words: pray in front of the child, forgive each other in front of the child, make home a place where God is natural.",
         es: "El ejemplo antes que la palabra: orar delante del niño, perdonarse delante del niño, hacer del hogar un lugar donde Dios es natural.",
         pt: "O exemplo antes da palavra: orar diante da criança, perdoarem-se diante da criança, fazer do lar um lugar onde Deus é natural.",
+      },
+    },
+    {
+      id: "prg_intimacy_after_child",
+      title: {
+        fr: "Retrouver l'intimité après l'enfant",
+        en: "Rediscovering intimacy after a child",
+        es: "Reencontrar la intimidad tras el hijo",
+        pt: "Reencontrar a intimidade após o filho",
+      },
+      body: {
+        fr: "Après une naissance, la fatigue, le corps qui change et le manque de temps mettent l'intimité en sommeil — c'est fréquent, et ce n'est pas un échec. On la retrouve par petits pas : la tendresse d'abord, la patience pour le corps de la mère, la parole sans reproche. Sans précipitation, mais sans l'oublier.",
+        en: "After a birth, fatigue, the changing body, and lack of time put intimacy to sleep — this is common, and not a failure. It returns step by step: tenderness first, patience for the mother's body, words without reproach. Unhurried, but not forgotten.",
+        es: "Tras un nacimiento, el cansancio, el cuerpo que cambia y la falta de tiempo adormecen la intimidad — es frecuente, y no es un fracaso. Se recupera paso a paso: primero la ternura, paciencia con el cuerpo de la madre, palabra sin reproche. Sin prisa, pero sin olvidarla.",
+        pt: "Após um nascimento, o cansaço, o corpo que muda e a falta de tempo adormecem a intimidade — é frequente, e não é um fracasso. Recupera-se passo a passo: primeiro a ternura, paciência com o corpo da mãe, palavra sem censura. Sem pressa, mas sem a esquecer.",
       },
     },
   ],

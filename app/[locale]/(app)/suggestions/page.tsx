@@ -36,8 +36,17 @@ export default async function SuggestionsPage({
           <div className="rounded-[16.5px] bg-gradient-to-br from-[#FBF3DC] to-[#F3E6BE] p-4 dark:from-[#2B2410] dark:to-[#211A0B]">
             <div className="flex items-center gap-3">
               <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-gradient-to-br from-gold-light to-gold-deep shadow-inner">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-                  <path d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z" fill="#fff" />
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden
+                >
+                  <path
+                    d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
+                    fill="#fff"
+                  />
                 </svg>
               </span>
               <div className="min-w-0 flex-1">
@@ -100,7 +109,8 @@ export default async function SuggestionsPage({
               maritalStatus: s.relationshipProfile?.maritalStatus ?? null,
               hasChildren: s.relationshipProfile?.hasChildren ?? false,
               intentionStatement:
-                s.relationshipProfile?.intentionVisibility === "PUBLIC_CONTROLLED"
+                s.relationshipProfile?.intentionVisibility ===
+                "PUBLIC_CONTROLLED"
                   ? (s.relationshipProfile?.intentionStatement ?? null)
                   : null,
               gradient: i % 3,

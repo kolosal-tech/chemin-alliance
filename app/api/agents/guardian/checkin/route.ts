@@ -32,7 +32,12 @@ export const POST = withErrors(async (req: Request) => {
   if (!space) return jsonError(404, "NO_SPACE");
 
   const locale = (user.locale ?? "fr") as Locale;
-  const season = space.season === "PARENTS" ? "PARENTS" : "MARRIED";
+  const season =
+    space.season === "PARENTS"
+      ? "PARENTS"
+      : space.season === "ENGAGED"
+        ? "ENGAGED"
+        : "MARRIED";
   const evaluated = evaluateCheckin(season, body.answers, locale);
 
   if (evaluated.danger) {

@@ -50,8 +50,10 @@ export default async function MessagesListPage({
         )}
         {matches.map((m) => {
           const other = m.userAId === user.id ? m.userB : m.userA;
-          const lastOther = m.messages.find((x) => x.senderId !== user.id)?.createdAt ?? null;
-          const lastMine = m.messages.find((x) => x.senderId === user.id)?.createdAt ?? null;
+          const lastOther =
+            m.messages.find((x) => x.senderId !== user.id)?.createdAt ?? null;
+          const lastMine =
+            m.messages.find((x) => x.senderId === user.id)?.createdAt ?? null;
           const silence = silenceDetected(lastOther, lastMine);
           return (
             <Link
@@ -73,6 +75,13 @@ export default async function MessagesListPage({
                 </div>
                 <div className="mt-1 flex items-center gap-2">
                   <StageBadge stage={m.stage} />
+                  {m.status === "PENDING" &&
+                    m.requestedById &&
+                    m.requestedById !== user.id && (
+                      <span className="rounded-[6px] bg-navy px-2 py-0.5 text-[10px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900">
+                        {t("messaging.newRequest")}
+                      </span>
+                    )}
                   {silence && (
                     <span className="rounded-[6px] bg-[#FBF6E9] px-2 py-0.5 text-[10px] font-semibold text-gold-ink dark:bg-[#2C2818] dark:text-gold-light">
                       {t("alliance.exitElegant")} ?
@@ -80,8 +89,19 @@ export default async function MessagesListPage({
                   )}
                 </div>
               </div>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path d="M9 6l6 6-6 6" stroke="#C9A84C" strokeWidth="1.8" strokeLinecap="round" />
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  d="M9 6l6 6-6 6"
+                  stroke="#C9A84C"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
               </svg>
             </Link>
           );
