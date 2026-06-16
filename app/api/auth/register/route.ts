@@ -9,9 +9,15 @@ import { sendVerificationEmail } from "@/lib/email";
 
 const schema = z.object({
   email: z.string().email().toLowerCase(),
-  password: z.string().min(12).max(128),
+  password: z
+    .string()
+    .min(12)
+    .max(128)
+    // Complexité minimale : au moins une minuscule, une majuscule et un chiffre.
+    // Rejette les mots de passe faibles type "123456789012".
+    .regex(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/),
   displayName: z.string().min(2).max(40),
-  age: z.number().int().min(18).max(99),
+  age: z.number().int().min(18).max(110),
   gender: z.enum(["F", "M"]),
   vertical: z.enum(["CHRISTIAN_EVANGELICAL", "CHRISTIAN_CATHOLIC"]),
   // "discern" = célibataire en chemin vers le mariage (matching) ;

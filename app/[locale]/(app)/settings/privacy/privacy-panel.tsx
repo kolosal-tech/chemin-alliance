@@ -108,7 +108,7 @@ export function PrivacyPanel({
       </div>
 
       <Link
-        href="/premium"
+        href="/settings/premium"
         className="mb-4 flex items-center gap-3 rounded-card border border-gold/40 bg-[#FBF6E9] p-4 dark:border-[#463A1F] dark:bg-[#272117]"
       >
         <span aria-hidden className="text-lg text-gold">

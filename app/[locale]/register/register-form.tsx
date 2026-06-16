@@ -22,6 +22,16 @@ export function RegisterForm() {
       setError(t("errorConsentRequired"));
       return;
     }
+    const pwd = String(fd.get("password") ?? "");
+    if (
+      pwd.length < 12 ||
+      !/[a-z]/.test(pwd) ||
+      !/[A-Z]/.test(pwd) ||
+      !/\d/.test(pwd)
+    ) {
+      setError(t("passwordWeak"));
+      return;
+    }
     setBusy(true);
     setError(null);
     const email = String(fd.get("email"));
@@ -75,6 +85,11 @@ export function RegisterForm() {
 
   const input =
     "rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
+  // Cartes d'intention : un SEUL style — fond neutre par défaut, sélection
+  // claire (bordure + fond or + anneau). Avant : 3 fonds différents même non
+  // cochés -> on ne voyait pas lequel était sélectionné.
+  const intentCard =
+    "flex cursor-pointer items-start gap-3 rounded-btn border border-sand-400 bg-white p-3 transition-colors has-[:checked]:border-gold has-[:checked]:bg-[#FBF6E9] has-[:checked]:ring-1 has-[:checked]:ring-gold dark:border-anthracite-600 dark:bg-anthracite-700 dark:has-[:checked]:border-gold-light dark:has-[:checked]:bg-[#272117] dark:has-[:checked]:ring-gold-light";
 
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-2">
@@ -102,13 +117,13 @@ export function RegisterForm() {
               {t("intentTitle")}
             </span>
             <div className="grid grid-cols-1 gap-2">
-              <label className="flex cursor-pointer items-start gap-3 rounded-btn border border-sand-400 bg-white p-3 transition-colors has-[:checked]:border-gold has-[:checked]:bg-[#FBF6E9] dark:border-anthracite-600 dark:bg-anthracite-700 dark:has-[:checked]:border-gold-light dark:has-[:checked]:bg-[#272117]">
+              <label className={intentCard}>
                 <input
                   name="intent"
                   type="radio"
                   value="discern"
                   defaultChecked
-                  className="mt-0.5 h-4 w-4 accent-[#1A2744]"
+                  className="mt-0.5 h-4 w-4 accent-[#9A7B2E]"
                 />
                 <span>
                   <span className="block text-sm font-semibold text-ink dark:text-[#ECE7DD]">
@@ -119,7 +134,7 @@ export function RegisterForm() {
                   </span>
                 </span>
               </label>
-              <label className="flex cursor-pointer items-start gap-3 rounded-btn border border-[#E6D2A8] bg-[#FBF6E9] p-3 transition-colors has-[:checked]:border-gold has-[:checked]:bg-[#F6ECCF] dark:border-[#463A1F] dark:bg-[#272117] dark:has-[:checked]:border-gold-light dark:has-[:checked]:bg-[#2C2512]">
+              <label className={intentCard}>
                 <input
                   name="intent"
                   type="radio"
@@ -135,12 +150,12 @@ export function RegisterForm() {
                   </span>
                 </span>
               </label>
-              <label className="flex cursor-pointer items-start gap-3 rounded-btn border border-[#BFD0E6] bg-[#EAF1F8] p-3 transition-colors has-[:checked]:border-navy has-[:checked]:bg-[#D7E4F2] dark:border-[#2A3550] dark:bg-[#161E2C] dark:has-[:checked]:border-[#5B73A8] dark:has-[:checked]:bg-[#1B2740]">
+              <label className={intentCard}>
                 <input
                   name="intent"
                   type="radio"
                   value="married"
-                  className="mt-0.5 h-4 w-4 accent-[#1A2744]"
+                  className="mt-0.5 h-4 w-4 accent-[#9A7B2E]"
                 />
                 <span>
                   <span className="block text-sm font-semibold text-ink dark:text-[#ECE7DD]">
@@ -186,7 +201,7 @@ export function RegisterForm() {
                 name="age"
                 type="number"
                 min={18}
-                max={99}
+                max={110}
                 required
                 className={input}
               />
