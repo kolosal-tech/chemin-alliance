@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { sealInsight } from "@/lib/agent-insight";
 import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit } from "@/lib/security/rate-limit";
@@ -47,7 +48,7 @@ export const POST = withErrors(async (req: Request) => {
         coupleSpaceId: space.id,
         agentId: "guardian",
         kind: "DANGER_ESCALATION",
-        dataJson: { escalated: true },
+        dataJson: sealInsight({ escalated: true }),
         visibility: "COACH_ONLY",
       },
     });
@@ -65,7 +66,7 @@ export const POST = withErrors(async (req: Request) => {
       coupleSpaceId: space.id,
       agentId: "guardian",
       kind: "CHECKIN",
-      dataJson: { answers: body.answers, rituals: evaluated.rituals },
+      dataJson: sealInsight({ answers: body.answers, rituals: evaluated.rituals }),
       visibility: "PRIVATE",
     },
   });

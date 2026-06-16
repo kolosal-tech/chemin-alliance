@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { sealInsight, openInsight } from "@/lib/agent-insight";
 import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit } from "@/lib/security/rate-limit";
@@ -25,7 +26,7 @@ export const GET = withErrors(async () => {
     orderBy: { createdAt: "desc" },
   });
   const portrait = insight
-    ? portraitSchema.safeParse(insight.dataJson)
+    ? portraitSchema.safeParse(openInsight(insight.dataJson))
     : null;
   return NextResponse.json({
     portrait: portrait?.success ? portrait.data : null,
@@ -59,7 +60,7 @@ export const POST = withErrors(async (req: Request) => {
       userId: user.id,
       agentId: "preparation",
       kind: "PORTRAIT",
-      dataJson: portrait,
+      dataJson: sealInsight(portrait),
       visibility: "PRIVATE",
     },
   });

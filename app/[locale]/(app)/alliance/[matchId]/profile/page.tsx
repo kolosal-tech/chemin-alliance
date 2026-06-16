@@ -1,0 +1,132 @@
+import { notFound } from "next/navigation";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import { prisma } from "@/lib/db";
+import { requirePageUser } from "@/lib/security/page-auth";
+import { buildMatchProfileView } from "@/lib/match-profile";
+
+// Étape d'alliance (1..3) → clé de stage, pour le libellé « se révèle à… ».
+const STEP_STAGE: Record<number, string> = {
+  1: "DISCOVERY",
+  2: "DIALOGUE",
+  3: "DISCERNMENT",
+};
+
+export default async function MatchProfilePage({
+  params,
+}: {
+  params: { locale: string; matchId: string };
+}) {
+  setRequestLocale(params.locale);
+  const t = await getTranslations();
+  const user = await requirePageUser(params.locale);
+
+  const match = await prisma.match.findUnique({
+    where: { id: params.matchId },
+    include: {
+      userA: { include: { faithProfile: true, relationshipProfile: true } },
+      userB: { include: { faithProfile: true, relationshipProfile: true } },
+    },
+  });
+  if (!match || (match.userAId !== user.id && match.userBId !== user.id)) {
+    notFound();
+  }
+
+  const other = match.userAId === user.id ? match.userB : match.userA;
+  const fields = buildMatchProfileView(
+    { faith: other.faithProfile, relationship: other.relationshipProfile },
+    { matched: true, stage: match.stage },
+  );
+
+  return (
+    <main className="px-5 pt-5 safe-top lg:mx-auto lg:max-w-2xl">
+      <header className="mb-4 flex items-center gap-3">
+        <Link
+          href={`/alliance/${match.id}`}
+          aria-label={t("common.back")}
+          className="p-1"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <path
+              d="M15 5l-7 7 7 7"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-warmgray dark:text-[#9A958B]"
+            />
+          </svg>
+        </Link>
+        <div>
+          <div className="lbl text-[9px] text-gold-deep dark:text-gold-light">
+            {t("matchProfile.eyebrow")}
+          </div>
+          <div className="font-display text-lg text-night dark:text-[#ECE7DD]">
+            {other.displayName}
+            {other.age ? `, ${other.age}` : ""}
+          </div>
+          {other.cityApprox && (
+            <div className="text-[12px] text-sand-600 dark:text-[#9A958B]">
+              {other.cityApprox}
+            </div>
+          )}
+        </div>
+      </header>
+
+      <p className="mb-4 rounded-card border border-sand-200 bg-surface px-4 py-3 text-[12.5px] leading-normal text-sand-700 dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#B6B1A7]">
+        {t("matchProfile.intro")}
+      </p>
+
+      {fields.length === 0 ? (
+        <p className="rounded-card bg-sand-100 px-4 py-6 text-center text-[13px] text-sand-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
+          {t("matchProfile.empty")}
+        </p>
+      ) : (
+        <ul className="flex flex-col gap-2.5">
+          {fields.map((f) => (
+            <li
+              key={f.key}
+              className="rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800"
+            >
+              <div className="lbl mb-1.5 text-[9px] text-gold-deep dark:text-gold-light">
+                {t(`matchProfile.field.${f.key}`)}
+              </div>
+              {f.visible ? (
+                <p className="text-[14px] leading-normal text-night dark:text-[#ECE7DD]">
+                  {f.value === null
+                    ? t("matchProfile.notProvided")
+                    : f.key === "children"
+                      ? t(`matchProfile.children_${f.value}`)
+                      : f.value}
+                </p>
+              ) : (
+                <p className="flex items-center gap-1.5 text-[12.5px] text-sand-500 dark:text-[#7E7A72]">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden>
+                    <rect
+                      x="5"
+                      y="11"
+                      width="14"
+                      height="9"
+                      rx="2"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                    />
+                    <path
+                      d="M8 11V8a4 4 0 1 1 8 0v3"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  {t("matchProfile.lockedAt", {
+                    stage: t(`stages.${STEP_STAGE[f.unlocksAtStep] ?? "DISCERNMENT"}`),
+                  })}
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </main>
+  );
+}

@@ -41,7 +41,6 @@ export type FreeFeature = (typeof FREE_FOREVER)[number];
  * de FREE_FOREVER (vérifié au chargement). N'inclut jamais sécurité/dignité.
  */
 export const PREMIUM_FEATURES = [
-  "advanced_filters", // filtres fins (distance, langues, etc.)
   "unlimited_discovery", // découverte sans quota quotidien
   "deep_discernement_report", // rapport de discernement approfondi
   "internal_calls", // appels audio/vidéo internes gradués

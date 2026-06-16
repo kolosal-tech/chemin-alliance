@@ -222,7 +222,8 @@
     "contactRequested": "Pedido enviado. A aguardar o acordo de {name}.",
     "contactAccept": "Aceitar",
     "contactDecline": "Recusar",
-    "contactAccepted": "Troca aceite. Já podem partilhar os vossos contactos."
+    "contactAccepted": "Troca aceite. Já podem partilhar os vossos contactos.",
+    "viewProfile": "Ver perfil"
   },
   "messaging": {
     "title": "Mensagens",
@@ -304,7 +305,6 @@
     "subtitle": "Vai mais longe no teu discernimento. A segurança e a dignidade ficam grátis, para sempre.",
     "price": "9,99 €",
     "perMonth": "por mês",
-    "feature_filters": "Filtros de pesquisa avançados",
     "feature_discovery": "Descoberta sem limite diário",
     "feature_report": "Relatório de discernimento aprofundado",
     "feature_ai": "Acompanhamento IA premium (respostas mais finas)",
@@ -526,5 +526,21 @@
   "legal": {
     "terms": "Termos de utilização",
     "privacy": "Política de privacidade"
+  },
+  "matchProfile": {
+    "eyebrow": "Perfil do match",
+    "intro": "Algumas informações revelam-se à medida que o vosso caminho avança e a confiança cresce.",
+    "empty": "Este perfil ainda não foi preenchido.",
+    "notProvided": "Não indicado",
+    "lockedAt": "Revela-se na etapa «{stage}»",
+    "field": {
+      "intention": "Intenção",
+      "testimony": "Testemunho",
+      "children": "Filhos",
+      "familyVision": "Visão familiar",
+      "localChurch": "Igreja local"
+    },
+    "children_yes": "Sim",
+    "children_no": "Não"
   }
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { sealInsight } from "@/lib/agent-insight";
 import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { requireMatchMember } from "@/lib/alliance";
@@ -45,7 +46,7 @@ export const POST = withErrors(async (req: Request) => {
       matchId: match.id,
       agentId: "stage-review",
       kind: "STAGE_REVIEW",
-      dataJson: review,
+      dataJson: sealInsight(review),
       visibility: "PRIVATE",
     },
   });

@@ -6,7 +6,7 @@ import { SubscribeButton } from "./subscribe-button";
 
 export const dynamic = "force-dynamic";
 
-const FEATURES = ["filters", "discovery", "report", "ai", "calls"] as const;
+const FEATURES = ["discovery", "report", "ai", "calls"] as const;
 
 export default async function PremiumPage({
   params,

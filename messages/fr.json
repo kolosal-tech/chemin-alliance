@@ -222,7 +222,8 @@
     "contactRequested": "Demande envoyée. En attente de l'accord de {name}.",
     "contactAccept": "Accepter",
     "contactDecline": "Décliner",
-    "contactAccepted": "Échange accepté. Vous pouvez désormais partager vos coordonnées."
+    "contactAccepted": "Échange accepté. Vous pouvez désormais partager vos coordonnées.",
+    "viewProfile": "Voir le profil"
   },
   "messaging": {
     "title": "Messages",
@@ -304,7 +305,6 @@
     "subtitle": "Va plus loin dans ton discernement. La sécurité et la dignité, elles, restent gratuites à vie.",
     "price": "9,99 €",
     "perMonth": "par mois",
-    "feature_filters": "Filtres de recherche avancés",
     "feature_discovery": "Découverte sans limite quotidienne",
     "feature_report": "Rapport de discernement approfondi",
     "feature_ai": "Accompagnement IA premium (réponses plus fines)",
@@ -526,5 +526,21 @@
   "legal": {
     "terms": "Conditions d'utilisation",
     "privacy": "Politique de confidentialité"
+  },
+  "matchProfile": {
+    "eyebrow": "Profil du match",
+    "intro": "Certaines informations se dévoilent au fil de votre cheminement, à mesure que la confiance grandit.",
+    "empty": "Ce profil n'a pas encore été complété.",
+    "notProvided": "Non précisé",
+    "lockedAt": "Se révèle à l'étape « {stage} »",
+    "field": {
+      "intention": "Intention",
+      "testimony": "Témoignage",
+      "children": "Enfants",
+      "familyVision": "Vision familiale",
+      "localChurch": "Église locale"
+    },
+    "children_yes": "Oui",
+    "children_no": "Non"
   }
 }

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { prisma } from "@/lib/db";
+import { openInsight } from "@/lib/agent-insight";
 import { getSessionUser } from "@/lib/security/session";
 import { Link } from "@/i18n/navigation";
 import { ReportActions } from "./report-actions";
@@ -26,8 +27,8 @@ export default async function AdminReportsPage({
   const sevRank: Record<string, number> = { high: 0, medium: 1, none: 2 };
   signals.sort(
     (a, b) =>
-      (sevRank[(a.dataJson as { severity?: string }).severity ?? "none"] ?? 2) -
-      (sevRank[(b.dataJson as { severity?: string }).severity ?? "none"] ?? 2),
+      (sevRank[openInsight<{ severity?: string }>(a.dataJson)?.severity ?? "none"] ?? 2) -
+      (sevRank[openInsight<{ severity?: string }>(b.dataJson)?.severity ?? "none"] ?? 2),
   );
   const reports = await prisma.report.findMany({
     where: { status: { in: ["OPEN", "REVIEWING"] } },
@@ -88,11 +89,12 @@ export default async function AdminReportsPage({
           </p>
         )}
         {signals.map((sig) => {
-          const data = sig.dataJson as {
-            signals?: string[];
-            severity?: "none" | "medium" | "high";
-            excerpt?: string;
-          };
+          const data =
+            openInsight<{
+              signals?: string[];
+              severity?: "none" | "medium" | "high";
+              excerpt?: string;
+            }>(sig.dataJson) ?? {};
           const high = data.severity === "high";
           return (
             <article

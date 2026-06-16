@@ -64,7 +64,7 @@ describe("entitlements — garde anti-dark-pattern", () => {
   });
 
   it("assertGatable accepte une feature premium", () => {
-    expect(() => assertGatable("advanced_filters")).not.toThrow();
+    expect(() => assertGatable("unlimited_discovery")).not.toThrow();
     expect(() => assertGatable("internal_calls")).not.toThrow();
   });
 });

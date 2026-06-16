@@ -69,6 +69,12 @@ export default async function AlliancePage({
           <div className="font-display text-lg text-night dark:text-[#ECE7DD]">
             {t("alliance.with", { name: other.displayName })}
           </div>
+          <Link
+            href={`/alliance/${match.id}/profile`}
+            className="mt-0.5 inline-flex items-center gap-1 text-[11.5px] text-gold-deep underline-offset-2 hover:underline dark:text-gold-light"
+          >
+            {t("alliance.viewProfile")}
+          </Link>
         </div>
       </header>
 
