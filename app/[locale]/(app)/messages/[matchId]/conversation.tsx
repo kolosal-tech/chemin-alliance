@@ -7,6 +7,7 @@ import type { AllianceStage, MessageKind } from "@prisma/client";
 import { StageBadge } from "@/components/StageBadge";
 import { SacredMotif } from "@/components/SacredMotif";
 import { BlockButton } from "@/components/BlockButton";
+import { ReportButton } from "@/components/ReportButton";
 
 type Msg = {
   id: string;
@@ -217,6 +218,7 @@ export function Conversation({
           </svg>
           {t("nav.path")}
         </Link>
+        <ReportButton targetUserId={other.id} />
         <BlockButton targetUserId={other.id} targetName={other.displayName} />
       </header>
 
