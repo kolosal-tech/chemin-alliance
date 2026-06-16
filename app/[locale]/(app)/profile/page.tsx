@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { LockBadge } from "@/components/LockBadge";
 import { PhotoHeader } from "./photo-header";
@@ -75,6 +76,13 @@ export default async function ProfilePage({
             />
           </div>
         </div>
+
+        <Link
+          href="/profile/edit"
+          className="mb-6 block rounded-btnlg bg-navy py-3.5 text-center text-sm font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+        >
+          {t("profile.editProfile")}
+        </Link>
 
         <h2 className="lbl mb-3 text-[9.5px] text-gold-deep dark:text-gold-light">
           {t("profile.spiritualIdentity")}
