@@ -3,12 +3,14 @@ import { encryptField } from "@/lib/security/crypto";
 import { buildMatchProfileView } from "@/lib/match-profile";
 import type { VisibilityLevel } from "@prisma/client";
 
-function faith(over: Partial<{
-  testimonyEncrypted: string | null;
-  testimonyVisibility: VisibilityLevel;
-  localChurchEncrypted: string | null;
-  localChurchVisibility: VisibilityLevel;
-}> = {}) {
+function faith(
+  over: Partial<{
+    testimonyEncrypted: string | null;
+    testimonyVisibility: VisibilityLevel;
+    localChurchEncrypted: string | null;
+    localChurchVisibility: VisibilityLevel;
+  }> = {},
+) {
   return {
     testimonyEncrypted: encryptField("Sauvé en 2018, baptisé à Ouaga."),
     testimonyVisibility: "AFTER_MATCH" as VisibilityLevel,
@@ -18,14 +20,16 @@ function faith(over: Partial<{
   };
 }
 
-function relationship(over: Partial<{
-  intentionStatement: string | null;
-  intentionVisibility: VisibilityLevel;
-  hasChildren: boolean;
-  childrenVisibility: VisibilityLevel;
-  familyVisionEncrypted: string | null;
-  familyVisionVisibility: VisibilityLevel;
-}> = {}) {
+function relationship(
+  over: Partial<{
+    intentionStatement: string | null;
+    intentionVisibility: VisibilityLevel;
+    hasChildren: boolean;
+    childrenVisibility: VisibilityLevel;
+    familyVisionEncrypted: string | null;
+    familyVisionVisibility: VisibilityLevel;
+  }> = {},
+) {
   return {
     intentionStatement: "Fonder un foyer chrétien",
     intentionVisibility: "PUBLIC_CONTROLLED" as VisibilityLevel,
@@ -57,7 +61,10 @@ describe("buildMatchProfileView — exposition progressive", () => {
   it("AFTER_MATCH (témoignage) caché sans match, déchiffré une fois matché", () => {
     const profile = { faith: faith(), relationship: null };
 
-    const locked = buildMatchProfileView(profile, { matched: false, stage: null });
+    const locked = buildMatchProfileView(profile, {
+      matched: false,
+      stage: null,
+    });
     expect(get(locked, "testimony").visible).toBe(false);
     expect(get(locked, "testimony").value).toBeNull();
 
@@ -66,7 +73,9 @@ describe("buildMatchProfileView — exposition progressive", () => {
       stage: "DISCOVERY",
     });
     expect(get(unlocked, "testimony").visible).toBe(true);
-    expect(get(unlocked, "testimony").value).toBe("Sauvé en 2018, baptisé à Ouaga.");
+    expect(get(unlocked, "testimony").value).toBe(
+      "Sauvé en 2018, baptisé à Ouaga.",
+    );
   });
 
   it("AFTER_DIALOGUE (vision familiale) caché en Découverte, visible dès Dialogue", () => {
@@ -102,7 +111,9 @@ describe("buildMatchProfileView — exposition progressive", () => {
       stage: "DISCERNMENT",
     });
     expect(get(discernment, "localChurch").visible).toBe(true);
-    expect(get(discernment, "localChurch").value).toBe("Assemblée de Dieu, Tampouy");
+    expect(get(discernment, "localChurch").value).toBe(
+      "Assemblée de Dieu, Tampouy",
+    );
   });
 
   it("enfants (booléen) rendu oui/non quand visible", () => {
@@ -120,7 +131,10 @@ describe("buildMatchProfileView — exposition progressive", () => {
 
   it("expose l'étape de déverrouillage pour les champs verrouillés", () => {
     const profile = { faith: faith(), relationship: relationship() };
-    const fields = buildMatchProfileView(profile, { matched: false, stage: null });
+    const fields = buildMatchProfileView(profile, {
+      matched: false,
+      stage: null,
+    });
     expect(get(fields, "testimony").unlocksAtStep).toBe(1); // AFTER_MATCH
     expect(get(fields, "familyVision").unlocksAtStep).toBe(2); // AFTER_DIALOGUE
     expect(get(fields, "localChurch").unlocksAtStep).toBe(3); // AFTER_DISCERNMENT

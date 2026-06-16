@@ -8,6 +8,7 @@ import { StageBadge } from "@/components/StageBadge";
 import { SacredMotif } from "@/components/SacredMotif";
 import { BlockButton } from "@/components/BlockButton";
 import { ReportButton } from "@/components/ReportButton";
+import { SafetyBanner } from "@/components/SafetyBanner";
 
 type Msg = {
   id: string;
@@ -229,6 +230,8 @@ export function Conversation({
         <ReportButton targetUserId={other.id} />
         <BlockButton targetUserId={other.id} targetName={other.displayName} />
       </header>
+
+      <SafetyBanner matchId={matchId} />
 
       {pending && (
         <div className="mx-3 mt-3 rounded-card border border-gold/50 bg-[#FBF6E9]/80 p-4 dark:border-gold-light/40 dark:bg-[#272117]/70">

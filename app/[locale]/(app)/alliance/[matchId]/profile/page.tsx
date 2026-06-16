@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/db";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { buildMatchProfileView } from "@/lib/match-profile";
+import { TrustBadge } from "@/components/TrustBadge";
 
 // Étape d'alliance (1..3) → clé de stage, pour le libellé « se révèle à… ».
 const STEP_STAGE: Record<number, string> = {
@@ -46,7 +47,13 @@ export default async function MatchProfilePage({
           aria-label={t("common.back")}
           className="p-1"
         >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden
+          >
             <path
               d="M15 5l-7 7 7 7"
               stroke="currentColor"
@@ -70,6 +77,13 @@ export default async function MatchProfilePage({
               {other.cityApprox}
             </div>
           )}
+          <div className="mt-1.5">
+            <TrustBadge
+              emailVerified={other.isVerified}
+              phoneVerified={other.phoneVerified}
+              size="sm"
+            />
+          </div>
         </div>
       </header>
 
@@ -101,7 +115,13 @@ export default async function MatchProfilePage({
                 </p>
               ) : (
                 <p className="flex items-center gap-1.5 text-[12.5px] text-sand-500 dark:text-[#7E7A72]">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden
+                  >
                     <rect
                       x="5"
                       y="11"
@@ -119,7 +139,9 @@ export default async function MatchProfilePage({
                     />
                   </svg>
                   {t("matchProfile.lockedAt", {
-                    stage: t(`stages.${STEP_STAGE[f.unlocksAtStep] ?? "DISCERNMENT"}`),
+                    stage: t(
+                      `stages.${STEP_STAGE[f.unlocksAtStep] ?? "DISCERNMENT"}`,
+                    ),
                   })}
                 </p>
               )}

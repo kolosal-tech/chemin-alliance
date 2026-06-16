@@ -3,7 +3,11 @@ import { sealInsight, openInsight } from "@/lib/agent-insight";
 
 describe("agent-insight — chiffrement de dataJson", () => {
   it("round-trip : openInsight(sealInsight(x)) restitue l'objet", () => {
-    const data = { severity: "high", signals: ["loterie", "crypto"], excerpt: "gagné 5000€" };
+    const data = {
+      severity: "high",
+      signals: ["loterie", "crypto"],
+      excerpt: "gagné 5000€",
+    };
     const sealed = sealInsight(data);
     expect(openInsight(sealed)).toEqual(data);
   });
@@ -16,7 +20,10 @@ describe("agent-insight — chiffrement de dataJson", () => {
   });
 
   it("compat rétro : un objet legacy en clair est renvoyé tel quel", () => {
-    const legacy = { severity: "medium", summary: "ancien insight non chiffré" };
+    const legacy = {
+      severity: "medium",
+      summary: "ancien insight non chiffré",
+    };
     expect(openInsight(legacy)).toEqual(legacy);
   });
 

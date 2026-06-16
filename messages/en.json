@@ -27,7 +27,8 @@
     "coach": "AI Coach",
     "profile": "Profile",
     "settings": "Settings",
-    "couple": "Couple"
+    "couple": "Couple",
+    "devotional": "Reflect"
   },
   "onboarding": {
     "s1Label": "Chemin d'Alliance",
@@ -569,6 +570,73 @@
       "passwordRules": "Password too weak (12+ chars, lowercase, uppercase, digit).",
       "passwordMismatch": "Passwords do not match.",
       "general": "Something went wrong. Try again."
+    }
+  },
+  "devotional": {
+    "subtitle": "Time with God, every day.",
+    "title": "Today's devotional",
+    "meditation": "Meditation",
+    "reflection": "To reflect on",
+    "prayer": "Prayer",
+    "markDone": "I took this time 🙏",
+    "completedToday": "Done today",
+    "streakCurrent": "Streak",
+    "streakLongest": "Best",
+    "newRecord": "New record!",
+    "error": "Something went wrong. Try again."
+  },
+  "trust": {
+    "title": "Trust & verification",
+    "intro": "Verification protects the community and shows you're serious. Your contact details (email, phone) stay private — only the verified status is visible.",
+    "statusTitle": "Your level",
+    "emailLevel": "Email verified",
+    "emailDone": "Your email is verified. Thank you!",
+    "emailTodo": "Verify your email to appear in suggestions.",
+    "completeEmail": "Verify",
+    "phoneLevel": "Phone verified",
+    "phoneDone": "Your phone is verified.",
+    "phoneSoon": "SMS verification coming soon.",
+    "privacyNote": "We never show your email or phone. Only the verification badge is public.",
+    "linkTitle": "Trust & verification",
+    "badge": {
+      "email": "Verified",
+      "both": "Verified profile",
+      "phone": "Phone verified"
+    }
+  },
+  "antiScam": {
+    "pageTitle": "Spot a scam",
+    "pageDesc": "A few markers to move forward in confidence and recognize the traps of romance scams.",
+    "redFlagsTitle": "Warning signs",
+    "redFlag_money": "You're asked for money, a transfer, a gift card or crypto.",
+    "redFlag_urgency": "Sudden urgency or pressure to decide quickly.",
+    "redFlag_offplatform": "Pushing to leave the platform (WhatsApp, email) very early.",
+    "redFlag_identity": "Inconsistencies in the story or identity; refusing a video call.",
+    "redFlag_sobstory": "A sob story (illness, military abroad, blocked inheritance).",
+    "redFlag_pressure": "Declarations of love or marriage pressure very quickly.",
+    "stepsTitle": "Good reflexes",
+    "step_never": "Never send money, and never share bank details.",
+    "step_slow": "Take your time: a healthy relationship is not rushed.",
+    "step_video": "Suggest a video call before sharing personal information.",
+    "step_tools": "Use Report and Block — free, anytime.",
+    "step_coach": "When in doubt, talk to a verified coach.",
+    "reminder": "Your safety comes first. When in doubt, report and block — no need to justify yourself.",
+    "bannerTitle": "Stay alert",
+    "bannerBody": "This conversation shows patterns we've seen in scams. Take your time, and never share money or sensitive details.",
+    "learnMore": "Learn more",
+    "dismiss": "Close",
+    "linkTitle": "Spot a scam",
+    "signalLabel": {
+      "money_request": "Money request",
+      "spiritual_manipulation": "Spiritual pressure",
+      "marriage_pressure": "Marriage pressure",
+      "urgency_rush": "Unusual urgency",
+      "explicit_content": "Inappropriate content",
+      "inheritance_lottery": "Inheritance / lottery",
+      "gift_card_crypto": "Gift card / crypto",
+      "fake_identity": "Doubtful identity",
+      "off_platform_push": "Leaving the platform",
+      "sob_story": "Sob story"
     }
   }
 }

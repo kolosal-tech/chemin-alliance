@@ -27,7 +27,8 @@
     "coach": "Coach IA",
     "profile": "Profil",
     "settings": "Réglages",
-    "couple": "Couple"
+    "couple": "Couple",
+    "devotional": "Méditer"
   },
   "onboarding": {
     "s1Label": "Chemin d'Alliance",
@@ -569,6 +570,73 @@
       "passwordRules": "Mot de passe trop faible (12+ car., minuscule, majuscule, chiffre).",
       "passwordMismatch": "Les mots de passe ne correspondent pas.",
       "general": "Une erreur est survenue. Réessaie."
+    }
+  },
+  "devotional": {
+    "subtitle": "Un temps avec Dieu, chaque jour.",
+    "title": "Dévotionnel du jour",
+    "meditation": "Méditation",
+    "reflection": "Pour réfléchir",
+    "prayer": "Prière",
+    "markDone": "J'ai pris ce temps 🙏",
+    "completedToday": "Fait aujourd'hui",
+    "streakCurrent": "Série",
+    "streakLongest": "Record",
+    "newRecord": "Nouveau record !",
+    "error": "Une erreur est survenue. Réessaie."
+  },
+  "trust": {
+    "title": "Confiance & vérification",
+    "intro": "La vérification protège la communauté et montre ton sérieux. Tes coordonnées (email, téléphone) restent privées — seul l'état vérifié est visible.",
+    "statusTitle": "Ton niveau",
+    "emailLevel": "Email vérifié",
+    "emailDone": "Ton email est vérifié. Merci !",
+    "emailTodo": "Vérifie ton email pour apparaître dans les suggestions.",
+    "completeEmail": "Vérifier",
+    "phoneLevel": "Téléphone vérifié",
+    "phoneDone": "Ton téléphone est vérifié.",
+    "phoneSoon": "Vérification par SMS bientôt disponible.",
+    "privacyNote": "Nous ne montrons jamais ton email ni ton téléphone. Seul le badge de vérification est public.",
+    "linkTitle": "Confiance & vérification",
+    "badge": {
+      "email": "Vérifié",
+      "both": "Profil vérifié",
+      "phone": "Tél. vérifié"
+    }
+  },
+  "antiScam": {
+    "pageTitle": "Reconnaître une arnaque",
+    "pageDesc": "Quelques repères pour avancer en confiance et reconnaître les pièges des escroqueries sentimentales.",
+    "redFlagsTitle": "Signaux d'alerte",
+    "redFlag_money": "On te demande de l'argent, un virement, une carte cadeau ou de la crypto.",
+    "redFlag_urgency": "Une urgence ou une pression soudaine pour décider vite.",
+    "redFlag_offplatform": "On insiste pour quitter la plateforme (WhatsApp, e-mail) très tôt.",
+    "redFlag_identity": "Des incohérences dans l'histoire ou l'identité ; refus d'appel vidéo.",
+    "redFlag_sobstory": "Un récit larmoyant (maladie, militaire à l'étranger, héritage bloqué).",
+    "redFlag_pressure": "Des déclarations d'amour ou une pression au mariage très rapides.",
+    "stepsTitle": "Les bons réflexes",
+    "step_never": "N'envoie jamais d'argent, et ne partage aucune coordonnée bancaire.",
+    "step_slow": "Prends ton temps : une relation saine ne se précipite pas.",
+    "step_video": "Propose un appel vidéo avant de partager des informations personnelles.",
+    "step_tools": "Utilise Signaler et Bloquer — c'est gratuit, à tout moment.",
+    "step_coach": "Dans le doute, parle à un coach vérifié.",
+    "reminder": "Ta sécurité passe avant tout. En cas de doute, signale et bloque — sans avoir à te justifier.",
+    "bannerTitle": "Vigilance",
+    "bannerBody": "Cette conversation présente des signaux déjà vus dans des arnaques. Prends ton temps, ne partage jamais d'argent ni de coordonnées sensibles.",
+    "learnMore": "En savoir plus",
+    "dismiss": "Fermer",
+    "linkTitle": "Reconnaître une arnaque",
+    "signalLabel": {
+      "money_request": "Demande d'argent",
+      "spiritual_manipulation": "Pression spirituelle",
+      "marriage_pressure": "Pression au mariage",
+      "urgency_rush": "Urgence inhabituelle",
+      "explicit_content": "Contenu déplacé",
+      "inheritance_lottery": "Héritage / loterie",
+      "gift_card_crypto": "Carte cadeau / crypto",
+      "fake_identity": "Identité douteuse",
+      "off_platform_push": "Sortie de plateforme",
+      "sob_story": "Récit larmoyant"
     }
   }
 }

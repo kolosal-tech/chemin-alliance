@@ -135,6 +135,30 @@ export function PrivacyPanel({
         <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">→</span>
       </Link>
 
+      <Link
+        href="/settings/trust"
+        className="mb-4 flex items-center gap-3 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800"
+      >
+        <span aria-hidden className="text-lg text-sage dark:text-[#7FA98C]">
+          ✓
+        </span>
+        <span className="flex-1 text-[13px] font-semibold text-night dark:text-[#ECE7DD]">
+          {t("trust.linkTitle")}
+        </span>
+        <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">→</span>
+      </Link>
+
+      <Link
+        href="/safety"
+        className="mb-4 flex items-center gap-3 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800"
+      >
+        <span aria-hidden className="text-lg">🛡️</span>
+        <span className="flex-1 text-[13px] font-semibold text-night dark:text-[#ECE7DD]">
+          {t("antiScam.linkTitle")}
+        </span>
+        <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">→</span>
+      </Link>
+
       {/* Anti-malaise — gratuit, jamais premium */}
       <section className="mb-4 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
         <div className="flex items-start gap-3">

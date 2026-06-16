@@ -88,7 +88,9 @@ export function buildMatchProfileView(
     fields.push({
       key: "testimony",
       visible: testimonyVisible,
-      value: testimonyVisible ? decryptOptional(faith.testimonyEncrypted) : null,
+      value: testimonyVisible
+        ? decryptOptional(faith.testimonyEncrypted)
+        : null,
       unlocksAtStep: unlocksAtStep(faith.testimonyVisibility),
     });
   }

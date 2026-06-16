@@ -1,0 +1,268 @@
+# Dévotionnels quotidiens — tronc commun chrétien, doctrine-agnostique.
+# Le dévotionnel du jour est choisi de façon déterministe (jour de l'année).
+# Chaque entrée : verset + méditation + question de réflexion + amorce de prière.
+devotionals:
+  - id: amour-patient
+    reference: 1 Corinthiens 13:4
+    verse:
+      fr: "L'amour est patient, l'amour est bon."
+      en: "Love is patient, love is kind."
+      es: "El amor es paciente, es bondadoso."
+      pt: "O amor é paciente, o amor é bondoso."
+    meditation:
+      fr: "La patience n'est pas l'attente passive, c'est une bonté active. Aimer, c'est laisser à l'autre le temps de grandir."
+      en: "Patience is not passive waiting; it is active kindness. To love is to give the other room to grow."
+      es: "La paciencia no es esperar pasivo; es bondad activa. Amar es dar al otro espacio para crecer."
+      pt: "A paciência não é espera passiva; é bondade ativa. Amar é dar ao outro espaço para crescer."
+    reflection:
+      fr: "Où puis-je offrir plus de patience aujourd'hui ?"
+      en: "Where can I offer more patience today?"
+      es: "¿Dónde puedo ofrecer más paciencia hoy?"
+      pt: "Onde posso oferecer mais paciência hoje?"
+    prayer:
+      fr: "Seigneur, apprends-moi à aimer avec patience et bonté."
+      en: "Lord, teach me to love with patience and kindness."
+      es: "Señor, enséñame a amar con paciencia y bondad."
+      pt: "Senhor, ensina-me a amar com paciência e bondade."
+  - id: confiance
+    reference: Proverbes 3:5
+    verse:
+      fr: "Confie-toi en l'Éternel de tout ton cœur."
+      en: "Trust in the Lord with all your heart."
+      es: "Confía en el Señor de todo tu corazón."
+      pt: "Confia no Senhor de todo o teu coração."
+    meditation:
+      fr: "Le discernement commence quand je cesse de tout maîtriser pour remettre mon chemin à Dieu."
+      en: "Discernment begins when I stop controlling everything and entrust my path to God."
+      es: "El discernimiento empieza cuando dejo de controlarlo todo y confío mi camino a Dios."
+      pt: "O discernimento começa quando deixo de controlar tudo e confio o meu caminho a Deus."
+    reflection:
+      fr: "Qu'est-ce que je tiens trop serré et que je peux confier ?"
+      en: "What am I holding too tightly that I can entrust?"
+      es: "¿Qué estoy aferrando demasiado y puedo confiar?"
+      pt: "O que estou a segurar demasiado e posso confiar?"
+    prayer:
+      fr: "Père, je remets mon avenir et mes relations entre tes mains."
+      en: "Father, I place my future and my relationships in your hands."
+      es: "Padre, pongo mi futuro y mis relaciones en tus manos."
+      pt: "Pai, coloco o meu futuro e as minhas relações nas tuas mãos."
+  - id: ecoute
+    reference: Jacques 1:19
+    verse:
+      fr: "Prompt à écouter, lent à parler."
+      en: "Quick to listen, slow to speak."
+      es: "Pronto para escuchar, lento para hablar."
+      pt: "Pronto para ouvir, lento para falar."
+    meditation:
+      fr: "Écouter vraiment, c'est faire de la place à l'autre avant de faire de la place à ma réponse."
+      en: "To truly listen is to make room for the other before making room for my reply."
+      es: "Escuchar de verdad es dar espacio al otro antes que a mi respuesta."
+      pt: "Ouvir de verdade é dar espaço ao outro antes da minha resposta."
+    reflection:
+      fr: "Ai-je écouté pour comprendre, ou pour répondre ?"
+      en: "Did I listen to understand, or to reply?"
+      es: "¿Escuché para comprender o para responder?"
+      pt: "Ouvi para compreender ou para responder?"
+    prayer:
+      fr: "Seigneur, donne-moi un cœur qui écoute avant de parler."
+      en: "Lord, give me a heart that listens before it speaks."
+      es: "Señor, dame un corazón que escuche antes de hablar."
+      pt: "Senhor, dá-me um coração que escuta antes de falar."
+  - id: pardon
+    reference: Colossiens 3:13
+    verse:
+      fr: "Pardonnez-vous, comme le Seigneur vous a pardonné."
+      en: "Forgive one another, as the Lord forgave you."
+      es: "Perdónense, como el Señor los perdonó."
+      pt: "Perdoai-vos, como o Senhor vos perdoou."
+    meditation:
+      fr: "Pardonner ne nie pas la blessure ; cela refuse qu'elle ait le dernier mot."
+      en: "Forgiveness does not deny the wound; it refuses to let it have the last word."
+      es: "Perdonar no niega la herida; se niega a que tenga la última palabra."
+      pt: "Perdoar não nega a ferida; recusa que ela tenha a última palavra."
+    reflection:
+      fr: "Y a-t-il une rancune que je peux déposer aujourd'hui ?"
+      en: "Is there a grudge I can lay down today?"
+      es: "¿Hay un rencor que pueda soltar hoy?"
+      pt: "Há um ressentimento que posso largar hoje?"
+    prayer:
+      fr: "Seigneur, aide-moi à pardonner comme tu m'as pardonné."
+      en: "Lord, help me forgive as you have forgiven me."
+      es: "Señor, ayúdame a perdonar como tú me has perdonado."
+      pt: "Senhor, ajuda-me a perdoar como tu me perdoaste."
+  - id: fidelite
+    reference: Ruth 1:16
+    verse:
+      fr: "Où tu iras j'irai ; ton Dieu sera mon Dieu."
+      en: "Where you go I will go; your God will be my God."
+      es: "Adonde tú vayas, iré; tu Dios será mi Dios."
+      pt: "Aonde fores irei; o teu Deus será o meu Deus."
+    meditation:
+      fr: "La fidélité se construit dans les petits engagements tenus, jour après jour."
+      en: "Faithfulness is built in small commitments kept, day after day."
+      es: "La fidelidad se construye en pequeños compromisos cumplidos, día tras día."
+      pt: "A fidelidade constrói-se em pequenos compromissos cumpridos, dia após dia."
+    reflection:
+      fr: "Quel petit engagement puis-je honorer fidèlement ?"
+      en: "What small commitment can I honor faithfully?"
+      es: "¿Qué pequeño compromiso puedo honrar con fidelidad?"
+      pt: "Que pequeno compromisso posso honrar com fidelidade?"
+    prayer:
+      fr: "Dieu fidèle, rends-moi fidèle dans les petites choses."
+      en: "Faithful God, make me faithful in small things."
+      es: "Dios fiel, hazme fiel en lo pequeño."
+      pt: "Deus fiel, torna-me fiel nas pequenas coisas."
+  - id: humilite
+    reference: Philippiens 2:3
+    verse:
+      fr: "Estimez les autres supérieurs à vous-mêmes."
+      en: "Value others above yourselves."
+      es: "Estimen a los demás como superiores a ustedes mismos."
+      pt: "Considerai os outros superiores a vós mesmos."
+    meditation:
+      fr: "L'humilité ne se rabaisse pas ; elle élève l'autre et fait de la place à la grâce."
+      en: "Humility does not belittle itself; it lifts the other and makes room for grace."
+      es: "La humildad no se rebaja; eleva al otro y da espacio a la gracia."
+      pt: "A humildade não se rebaixa; eleva o outro e dá espaço à graça."
+    reflection:
+      fr: "Comment puis-je honorer l'autre avant moi-même aujourd'hui ?"
+      en: "How can I honor the other before myself today?"
+      es: "¿Cómo puedo honrar al otro antes que a mí hoy?"
+      pt: "Como posso honrar o outro antes de mim hoje?"
+    prayer:
+      fr: "Seigneur, donne-moi un cœur humble et serviable."
+      en: "Lord, give me a humble and serving heart."
+      es: "Señor, dame un corazón humilde y servicial."
+      pt: "Senhor, dá-me um coração humilde e servo."
+  - id: purete
+    reference: 1 Thessaloniciens 4:3
+    verse:
+      fr: "Ce que Dieu veut, c'est votre sanctification."
+      en: "It is God's will that you be sanctified."
+      es: "La voluntad de Dios es vuestra santificación."
+      pt: "A vontade de Deus é a vossa santificação."
+    meditation:
+      fr: "La pureté n'est pas une privation : c'est garder le meilleur pour le bon moment et la bonne personne."
+      en: "Purity is not deprivation: it is keeping the best for the right time and the right person."
+      es: "La pureza no es privación: es guardar lo mejor para el momento y la persona correctos."
+      pt: "A pureza não é privação: é guardar o melhor para o tempo e a pessoa certos."
+    reflection:
+      fr: "Qu'est-ce que je veux honorer et préserver dans cette relation ?"
+      en: "What do I want to honor and preserve in this relationship?"
+      es: "¿Qué quiero honrar y preservar en esta relación?"
+      pt: "O que quero honrar e preservar nesta relação?"
+    prayer:
+      fr: "Seigneur, garde mon cœur et mes choix dans ta lumière."
+      en: "Lord, keep my heart and my choices in your light."
+      es: "Señor, guarda mi corazón y mis decisiones en tu luz."
+      pt: "Senhor, guarda o meu coração e as minhas escolhas na tua luz."
+  - id: le-temps
+    reference: Ecclésiaste 3:1
+    verse:
+      fr: "Il y a un temps pour tout."
+      en: "There is a time for everything."
+      es: "Todo tiene su tiempo."
+      pt: "Há um tempo para tudo."
+    meditation:
+      fr: "Le discernement respecte les saisons : ne pas cueillir un fruit avant qu'il soit mûr."
+      en: "Discernment respects seasons: do not pick a fruit before it is ripe."
+      es: "El discernimiento respeta las estaciones: no recojas un fruto antes de que madure."
+      pt: "O discernimento respeita as estações: não colhas um fruto antes de amadurecer."
+    reflection:
+      fr: "Est-ce que je presse les choses, ou je respecte leur temps ?"
+      en: "Am I rushing things, or respecting their time?"
+      es: "¿Estoy apresurando las cosas o respetando su tiempo?"
+      pt: "Estou a apressar as coisas ou a respeitar o seu tempo?"
+    prayer:
+      fr: "Seigneur, apprends-moi à respecter ton calendrier, pas le mien."
+      en: "Lord, teach me to honor your timing, not mine."
+      es: "Señor, enséñame a respetar tu tiempo, no el mío."
+      pt: "Senhor, ensina-me a respeitar o teu tempo, não o meu."
+  - id: priere-commune
+    reference: Matthieu 18:20
+    verse:
+      fr: "Là où deux se réunissent en mon nom, je suis au milieu d'eux."
+      en: "Where two gather in my name, I am there among them."
+      es: "Donde dos se reúnen en mi nombre, allí estoy en medio de ellos."
+      pt: "Onde dois se reúnem em meu nome, ali estou no meio deles."
+    meditation:
+      fr: "Une relation tient à trois : toi, l'autre, et Dieu invité au centre."
+      en: "A relationship holds on three: you, the other, and God invited to the center."
+      es: "Una relación se sostiene en tres: tú, el otro y Dios invitado al centro."
+      pt: "Uma relação sustenta-se em três: tu, o outro e Deus convidado ao centro."
+    reflection:
+      fr: "Est-ce que j'invite Dieu dans mes décisions relationnelles ?"
+      en: "Am I inviting God into my relational decisions?"
+      es: "¿Estoy invitando a Dios en mis decisiones de relación?"
+      pt: "Estou a convidar Deus nas minhas decisões de relação?"
+    prayer:
+      fr: "Seigneur, sois au centre de mes liens et de mes choix."
+      en: "Lord, be at the center of my bonds and my choices."
+      es: "Señor, sé el centro de mis vínculos y decisiones."
+      pt: "Senhor, sê o centro dos meus laços e escolhas."
+  - id: esperance
+    reference: Romains 15:13
+    verse:
+      fr: "Que le Dieu de l'espérance vous remplisse de joie et de paix."
+      en: "May the God of hope fill you with joy and peace."
+      es: "Que el Dios de la esperanza os llene de gozo y paz."
+      pt: "Que o Deus da esperança vos encha de alegria e paz."
+    meditation:
+      fr: "L'espérance ne nie pas l'attente ; elle la traverse avec paix, sachant que Dieu agit."
+      en: "Hope does not deny the waiting; it walks through it in peace, knowing God is at work."
+      es: "La esperanza no niega la espera; la atraviesa en paz, sabiendo que Dios obra."
+      pt: "A esperança não nega a espera; atravessa-a em paz, sabendo que Deus age."
+    reflection:
+      fr: "Où ai-je besoin d'espérance et de paix aujourd'hui ?"
+      en: "Where do I need hope and peace today?"
+      es: "¿Dónde necesito esperanza y paz hoy?"
+      pt: "Onde preciso de esperança e paz hoje?"
+    prayer:
+      fr: "Dieu d'espérance, remplis mon attente de ta paix."
+      en: "God of hope, fill my waiting with your peace."
+      es: "Dios de esperanza, llena mi espera con tu paz."
+      pt: "Deus de esperança, enche a minha espera com a tua paz."
+  - id: parole-douce
+    reference: Proverbes 15:1
+    verse:
+      fr: "Une réponse douce calme la fureur."
+      en: "A gentle answer turns away wrath."
+      es: "La respuesta amable calma el furor."
+      pt: "Uma resposta branda acalma o furor."
+    meditation:
+      fr: "Le ton compte autant que les mots. La douceur désarme là où la dureté blesse."
+      en: "Tone matters as much as words. Gentleness disarms where harshness wounds."
+      es: "El tono importa tanto como las palabras. La dulzura desarma donde la dureza hiere."
+      pt: "O tom importa tanto como as palavras. A doçura desarma onde a dureza fere."
+    reflection:
+      fr: "Comment puis-je répondre avec plus de douceur ?"
+      en: "How can I respond with more gentleness?"
+      es: "¿Cómo puedo responder con más dulzura?"
+      pt: "Como posso responder com mais doçura?"
+    prayer:
+      fr: "Seigneur, mets sur mes lèvres des paroles qui apaisent."
+      en: "Lord, put on my lips words that bring peace."
+      es: "Señor, pon en mis labios palabras que traigan paz."
+      pt: "Senhor, põe nos meus lábios palavras que tragam paz."
+  - id: fondation
+    reference: Matthieu 7:24
+    verse:
+      fr: "Celui qui met en pratique mes paroles bâtit sur le roc."
+      en: "Whoever puts my words into practice builds on the rock."
+      es: "Quien pone en práctica mis palabras edifica sobre la roca."
+      pt: "Quem põe em prática as minhas palavras edifica sobre a rocha."
+    meditation:
+      fr: "Une relation solide ne repose pas sur l'émotion seule, mais sur des valeurs vécues."
+      en: "A solid relationship rests not on emotion alone, but on values lived out."
+      es: "Una relación sólida no se apoya solo en la emoción, sino en valores vividos."
+      pt: "Uma relação sólida não assenta só na emoção, mas em valores vividos."
+    reflection:
+      fr: "Sur quelle fondation est-ce que je construis ?"
+      en: "On what foundation am I building?"
+      es: "¿Sobre qué fundamento estoy construyendo?"
+      pt: "Sobre que fundamento estou a construir?"
+    prayer:
+      fr: "Seigneur, que ma vie et mes liens soient bâtis sur toi, le roc."
+      en: "Lord, may my life and my bonds be built on you, the rock."
+      es: "Señor, que mi vida y mis vínculos se edifiquen sobre ti, la roca."
+      pt: "Senhor, que a minha vida e os meus laços sejam edificados em ti, a rocha."

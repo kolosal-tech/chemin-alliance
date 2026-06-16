@@ -27,7 +27,8 @@
     "coach": "Coach IA",
     "profile": "Perfil",
     "settings": "Definições",
-    "couple": "Casal"
+    "couple": "Casal",
+    "devotional": "Meditar"
   },
   "onboarding": {
     "s1Label": "Chemin d'Alliance",
@@ -569,6 +570,73 @@
       "passwordRules": "Palavra-passe demasiado fraca (12+ car., minúscula, maiúscula, número).",
       "passwordMismatch": "As palavras-passe não coincidem.",
       "general": "Ocorreu um erro. Tenta novamente."
+    }
+  },
+  "devotional": {
+    "subtitle": "Um tempo com Deus, todos os dias.",
+    "title": "Devocional de hoje",
+    "meditation": "Meditação",
+    "reflection": "Para refletir",
+    "prayer": "Oração",
+    "markDone": "Reservei este tempo 🙏",
+    "completedToday": "Feito hoje",
+    "streakCurrent": "Sequência",
+    "streakLongest": "Recorde",
+    "newRecord": "Novo recorde!",
+    "error": "Ocorreu um erro. Tenta novamente."
+  },
+  "trust": {
+    "title": "Confiança e verificação",
+    "intro": "A verificação protege a comunidade e mostra a tua seriedade. Os teus dados (email, telefone) ficam privados — só o estado verificado é visível.",
+    "statusTitle": "O teu nível",
+    "emailLevel": "Email verificado",
+    "emailDone": "O teu email está verificado. Obrigado!",
+    "emailTodo": "Verifica o teu email para apareceres nas sugestões.",
+    "completeEmail": "Verificar",
+    "phoneLevel": "Telefone verificado",
+    "phoneDone": "O teu telefone está verificado.",
+    "phoneSoon": "Verificação por SMS em breve.",
+    "privacyNote": "Nunca mostramos o teu email nem o teu telefone. Só o selo de verificação é público.",
+    "linkTitle": "Confiança e verificação",
+    "badge": {
+      "email": "Verificado",
+      "both": "Perfil verificado",
+      "phone": "Tel. verificado"
+    }
+  },
+  "antiScam": {
+    "pageTitle": "Reconhecer uma burla",
+    "pageDesc": "Algumas pistas para avançar com confiança e reconhecer as armadilhas das burlas sentimentais.",
+    "redFlagsTitle": "Sinais de alerta",
+    "redFlag_money": "Pedem-te dinheiro, uma transferência, um cartão-presente ou cripto.",
+    "redFlag_urgency": "Urgência ou pressão repentina para decidir depressa.",
+    "redFlag_offplatform": "Insistência em sair da plataforma (WhatsApp, email) muito cedo.",
+    "redFlag_identity": "Incoerências na história ou identidade; recusa de videochamada.",
+    "redFlag_sobstory": "Uma história comovente (doença, militar no estrangeiro, herança bloqueada).",
+    "redFlag_pressure": "Declarações de amor ou pressão para o casamento muito rápidas.",
+    "stepsTitle": "Bons reflexos",
+    "step_never": "Nunca envies dinheiro nem partilhes dados bancários.",
+    "step_slow": "Leva o teu tempo: uma relação saudável não se apressa.",
+    "step_video": "Propõe uma videochamada antes de partilhar informação pessoal.",
+    "step_tools": "Usa Denunciar e Bloquear — grátis, a qualquer momento.",
+    "step_coach": "Na dúvida, fala com um coach verificado.",
+    "reminder": "A tua segurança vem primeiro. Na dúvida, denuncia e bloqueia — sem teres de te justificar.",
+    "bannerTitle": "Atenção",
+    "bannerBody": "Esta conversa mostra padrões já vistos em burlas. Leva o teu tempo e nunca partilhes dinheiro nem dados sensíveis.",
+    "learnMore": "Saber mais",
+    "dismiss": "Fechar",
+    "linkTitle": "Reconhecer uma burla",
+    "signalLabel": {
+      "money_request": "Pedido de dinheiro",
+      "spiritual_manipulation": "Pressão espiritual",
+      "marriage_pressure": "Pressão para o casamento",
+      "urgency_rush": "Urgência incomum",
+      "explicit_content": "Conteúdo impróprio",
+      "inheritance_lottery": "Herança / lotaria",
+      "gift_card_crypto": "Cartão-presente / cripto",
+      "fake_identity": "Identidade duvidosa",
+      "off_platform_push": "Sair da plataforma",
+      "sob_story": "História comovente"
     }
   }
 }

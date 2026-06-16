@@ -11,8 +11,13 @@ import { StageActions } from "./stage-actions";
 import { FacilitatorPanel, ReviewPanel } from "./agent-panels";
 
 const STAGE_NUM: Record<string, number> = {
-  DISCOVERY: 1, DIALOGUE: 2, DISCERNMENT: 3,
-  ACCOMPANIMENT: 4, COMMITMENT: 5, MARRIAGE_PREPARATION: 6, CLOSED: 6,
+  DISCOVERY: 1,
+  DIALOGUE: 2,
+  DISCERNMENT: 3,
+  ACCOMPANIMENT: 4,
+  COMMITMENT: 5,
+  MARRIAGE_PREPARATION: 6,
+  CLOSED: 6,
 };
 
 export default async function AlliancePage({
@@ -57,9 +62,26 @@ export default async function AlliancePage({
   return (
     <main className="px-5 pt-5 safe-top lg:mx-auto lg:max-w-2xl">
       <header className="mb-3 flex items-center gap-3">
-        <Link href={`/messages/${match.id}`} aria-label={t("common.back")} className="p-1">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-            <path d="M15 5l-7 7 7 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="text-warmgray dark:text-[#9A958B]" />
+        <Link
+          href={`/messages/${match.id}`}
+          aria-label={t("common.back")}
+          className="p-1"
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden
+          >
+            <path
+              d="M15 5l-7 7 7 7"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-warmgray dark:text-[#9A958B]"
+            />
           </svg>
         </Link>
         <div>
@@ -89,7 +111,9 @@ export default async function AlliancePage({
             {t("stages.sinceDays", { days: sinceDays })}
           </span>
         </div>
-        <div className="my-1.5 font-display text-[26px]">{t(`stages.${match.stage}`)}</div>
+        <div className="my-1.5 font-display text-[26px]">
+          {t(`stages.${match.stage}`)}
+        </div>
         <p className="text-[13px] leading-normal text-[#B9C0CE]">
           {match.stage !== "CLOSED" ? t(`stages.desc${match.stage}`) : ""}
         </p>

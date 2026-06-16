@@ -90,4 +90,6 @@ export const LIMITS = {
   emailChange: { limit: 3, windowMs: 60 * 60_000 },
   portal: { limit: 8, windowMs: 60 * 60_000 },
   unread: { limit: 90, windowMs: 60_000 },
+  devotional: { limit: 20, windowMs: 60_000 },
+  safetySignal: { limit: 40, windowMs: 60_000 },
 } as const;
