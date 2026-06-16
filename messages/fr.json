@@ -312,7 +312,10 @@
     "cta": "S'abonner — 9,99 €/mois",
     "activeBadge": "Tu es abonné·e Premium. Merci de soutenir la mission.",
     "comingSoon": "L'abonnement sera bientôt disponible.",
-    "freeNote": "Blocage, signalement, suppression de compte et filtres de base sont gratuits, pour toujours."
+    "freeNote": "Blocage, signalement, suppression de compte et filtres de base sont gratuits, pour toujours.",
+    "manage": "Gérer mon abonnement",
+    "manageInfo": "Modifie ton moyen de paiement ou annule ton abonnement à tout moment.",
+    "manageError": "Impossible d'ouvrir la gestion de l'abonnement. Réessaie plus tard."
   },
   "privacy": {
     "title": "Confidentialité",
@@ -542,5 +545,30 @@
     },
     "children_yes": "Oui",
     "children_no": "Non"
+  },
+  "account": {
+    "title": "Compte",
+    "linkTitle": "Identifiants — email & mot de passe",
+    "passwordSection": "Changer le mot de passe",
+    "currentPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le nouveau mot de passe",
+    "passwordRules": "12 caractères minimum, avec minuscule, majuscule et chiffre.",
+    "passwordSaved": "Mot de passe mis à jour.",
+    "emailSection": "Changer l'adresse email",
+    "currentEmail": "Email actuel",
+    "unverified": "non vérifié",
+    "newEmail": "Nouvelle adresse email",
+    "emailVerificationSent": "Un lien de confirmation a été envoyé à ta nouvelle adresse.",
+    "error": {
+      "wrongPassword": "Mot de passe actuel incorrect.",
+      "passwordSameAsCurrent": "Le nouveau mot de passe est identique à l'actuel.",
+      "rateLimited": "Trop de tentatives. Réessaie plus tard.",
+      "emailTaken": "Cette adresse n'est pas disponible.",
+      "invalidEmail": "Adresse email invalide.",
+      "passwordRules": "Mot de passe trop faible (12+ car., minuscule, majuscule, chiffre).",
+      "passwordMismatch": "Les mots de passe ne correspondent pas.",
+      "general": "Une erreur est survenue. Réessaie."
+    }
   }
 }

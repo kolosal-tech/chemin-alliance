@@ -86,4 +86,8 @@ export const LIMITS = {
   invite: { limit: 8, windowMs: 60 * 60_000 },
   report: { limit: 12, windowMs: 60 * 60_000 },
   passwordReset: { limit: 5, windowMs: 60 * 60_000 },
+  passwordChange: { limit: 5, windowMs: 60 * 60_000 },
+  emailChange: { limit: 3, windowMs: 60 * 60_000 },
+  portal: { limit: 8, windowMs: 60 * 60_000 },
+  unread: { limit: 90, windowMs: 60_000 },
 } as const;

@@ -24,6 +24,7 @@ import { paymentProvider } from "./provider";
  */
 export const FREE_FOREVER = [
   "block_user", // blocage d'un profil
+  "pass_user", // passer un profil (exclusion unilatérale des suggestions)
   "report_user", // signalement / modération
   "delete_account", // suppression / anonymisation RGPD
   "export_data", // portabilité RGPD

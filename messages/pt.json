@@ -312,7 +312,10 @@
     "cta": "Subscrever — 9,99 €/mês",
     "activeBadge": "És assinante Premium. Obrigado por apoiar a missão.",
     "comingSoon": "A subscrição estará disponível em breve.",
-    "freeNote": "Bloqueio, denúncia, eliminação de conta e filtros básicos são grátis, para sempre."
+    "freeNote": "Bloqueio, denúncia, eliminação de conta e filtros básicos são grátis, para sempre.",
+    "manage": "Gerir a minha subscrição",
+    "manageInfo": "Altera o teu método de pagamento ou cancela a subscrição quando quiseres.",
+    "manageError": "Não foi possível abrir a gestão da subscrição. Tenta mais tarde."
   },
   "privacy": {
     "title": "Confidencialidade",
@@ -542,5 +545,30 @@
     },
     "children_yes": "Sim",
     "children_no": "Não"
+  },
+  "account": {
+    "title": "Conta",
+    "linkTitle": "Credenciais — email e palavra-passe",
+    "passwordSection": "Mudar a palavra-passe",
+    "currentPassword": "Palavra-passe atual",
+    "newPassword": "Nova palavra-passe",
+    "confirmPassword": "Confirmar a nova palavra-passe",
+    "passwordRules": "Pelo menos 12 caracteres, com minúscula, maiúscula e um número.",
+    "passwordSaved": "Palavra-passe atualizada.",
+    "emailSection": "Mudar o endereço de email",
+    "currentEmail": "Email atual",
+    "unverified": "não verificado",
+    "newEmail": "Novo endereço de email",
+    "emailVerificationSent": "Foi enviado um link de confirmação para o teu novo endereço.",
+    "error": {
+      "wrongPassword": "A palavra-passe atual está incorreta.",
+      "passwordSameAsCurrent": "A nova palavra-passe é igual à atual.",
+      "rateLimited": "Demasiadas tentativas. Tenta mais tarde.",
+      "emailTaken": "Este endereço não está disponível.",
+      "invalidEmail": "Endereço de email inválido.",
+      "passwordRules": "Palavra-passe demasiado fraca (12+ car., minúscula, maiúscula, número).",
+      "passwordMismatch": "As palavras-passe não coincidem.",
+      "general": "Ocorreu um erro. Tenta novamente."
+    }
   }
 }

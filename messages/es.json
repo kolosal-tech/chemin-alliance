@@ -312,7 +312,10 @@
     "cta": "Suscribirse — 9,99 €/mes",
     "activeBadge": "Eres suscriptor/a Premium. Gracias por apoyar la misión.",
     "comingSoon": "La suscripción estará disponible pronto.",
-    "freeNote": "Bloqueo, denuncia, eliminación de cuenta y filtros básicos son gratis, para siempre."
+    "freeNote": "Bloqueo, denuncia, eliminación de cuenta y filtros básicos son gratis, para siempre.",
+    "manage": "Gestionar mi suscripción",
+    "manageInfo": "Cambia tu método de pago o cancela tu suscripción cuando quieras.",
+    "manageError": "No se pudo abrir la gestión de la suscripción. Inténtalo más tarde."
   },
   "privacy": {
     "title": "Confidencialidad",
@@ -542,5 +545,30 @@
     },
     "children_yes": "Sí",
     "children_no": "No"
+  },
+  "account": {
+    "title": "Cuenta",
+    "linkTitle": "Credenciales — email y contraseña",
+    "passwordSection": "Cambiar la contraseña",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar la nueva contraseña",
+    "passwordRules": "Mínimo 12 caracteres, con minúscula, mayúscula y un número.",
+    "passwordSaved": "Contraseña actualizada.",
+    "emailSection": "Cambiar el correo electrónico",
+    "currentEmail": "Correo actual",
+    "unverified": "sin verificar",
+    "newEmail": "Nuevo correo electrónico",
+    "emailVerificationSent": "Se ha enviado un enlace de confirmación a tu nueva dirección.",
+    "error": {
+      "wrongPassword": "La contraseña actual es incorrecta.",
+      "passwordSameAsCurrent": "La nueva contraseña es igual a la actual.",
+      "rateLimited": "Demasiados intentos. Inténtalo más tarde.",
+      "emailTaken": "Esta dirección no está disponible.",
+      "invalidEmail": "Correo electrónico no válido.",
+      "passwordRules": "Contraseña demasiado débil (12+ car., minúscula, mayúscula, número).",
+      "passwordMismatch": "Las contraseñas no coinciden.",
+      "general": "Algo salió mal. Inténtalo de nuevo."
+    }
   }
 }

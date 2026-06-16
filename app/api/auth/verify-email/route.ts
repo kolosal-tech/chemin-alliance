@@ -11,10 +11,13 @@ export const GET = withErrors(async (req: Request) => {
     where: { emailVerifyToken: token },
   });
   if (!user) return jsonError(400, "TOKEN_INVALID");
+  if (user.emailVerifyExpires && user.emailVerifyExpires.getTime() < Date.now()) {
+    return jsonError(400, "TOKEN_EXPIRED");
+  }
 
   await prisma.user.update({
     where: { id: user.id },
-    data: { isVerified: true, emailVerifyToken: null },
+    data: { isVerified: true, emailVerifyToken: null, emailVerifyExpires: null },
   });
 
   return NextResponse.redirect(`${env.APP_URL}/${user.locale}/login?verified=1`);

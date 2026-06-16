@@ -116,6 +116,7 @@ model User {
   season                LifeSeason @default(JOURNEY)
   isVerified            Boolean   @default(false)
   emailVerifyToken      String?   @unique
+  emailVerifyExpires    DateTime?
   passwordResetToken    String?   @unique
   passwordResetExpires  DateTime?
   photoUrl              String?
@@ -142,6 +143,8 @@ model User {
   reportsReceived     Report[]             @relation("ReportTarget")
   blocksMade          Block[]              @relation("Blocker")
   blocksReceived      Block[]              @relation("Blocked")
+  passesMade          Pass[]               @relation("Passer")
+  passesReceived      Pass[]               @relation("Passed")
   phoneVerifications  PhoneVerification[]
   bookings            Booking[]
   aiCoachUsages       AiCoachUsage[]
@@ -163,6 +166,21 @@ model Block {
 
   @@unique([blockerId, blockedId])
   @@index([blockedId])
+}
+
+// Passage unilatéral : je passe un profil et ne le revois plus dans MES
+// suggestions. NON réciproque (≠ Block) : l'autre peut encore m'être proposé.
+// GRATUIT À VIE (doctrine, lib/payments/entitlements -> "pass_user").
+model Pass {
+  id        String   @id @default(cuid())
+  passerId  String
+  passer    User     @relation("Passer", fields: [passerId], references: [id], onDelete: Cascade)
+  passedId  String
+  passed    User     @relation("Passed", fields: [passedId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([passerId, passedId])
+  @@index([passedId])
 }
 
 // Vérification du numéro de téléphone (anti-bot). Code à usage unique, haché,
@@ -257,6 +275,8 @@ model Match {
   closeMessage       String?
   createdAt          DateTime              @default(now())
   updatedAt          DateTime              @updatedAt
+  lastReadAtUserA    DateTime?
+  lastReadAtUserB    DateTime?
 
   messages        Message[]
   allianceAnswers AllianceAnswer[]
@@ -264,6 +284,8 @@ model Match {
 
   @@unique([userAId, userBId])
   @@index([userBId])
+  @@index([userAId, lastReadAtUserA])
+  @@index([userBId, lastReadAtUserB])
 }
 
 model Message {

@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { StageBadge } from "@/components/StageBadge";
 import { silenceDetected } from "@/lib/agents/exit-helper";
+import { unreadByMatch } from "@/lib/unread";
 
 export default async function MessagesListPage({
   params,
@@ -30,6 +31,7 @@ export default async function MessagesListPage({
     },
     orderBy: { updatedAt: "desc" },
   });
+  const unread = await unreadByMatch(user.id);
   const closedCount = await prisma.match.count({
     where: {
       OR: [{ userAId: user.id }, { userBId: user.id }],
@@ -89,6 +91,11 @@ export default async function MessagesListPage({
                   )}
                 </div>
               </div>
+              {unread[m.id] ? (
+                <span className="min-w-[20px] flex-none rounded-full bg-[#C0392B] px-1.5 py-0.5 text-center text-[11px] font-bold text-white">
+                  {unread[m.id]}
+                </span>
+              ) : null}
               <svg
                 width="16"
                 height="16"

@@ -44,6 +44,14 @@ export function Conversation({
   const [acceptBusy, setAcceptBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
+  useEffect(() => {
+    // Marque la conversation comme lue à l'ouverture réelle (pas au prefetch
+    // serveur du lien, qui exécuterait un render et fausserait le "lu").
+    fetch(`/api/matches/${matchId}/mark-read`, { method: "POST" }).catch(
+      () => {},
+    );
+  }, [matchId]);
+
   async function acceptMatch() {
     if (acceptBusy) return;
     setAcceptBusy(true);

@@ -30,7 +30,7 @@ export function SuggestionCard({
   featured?: boolean;
 }) {
   const t = useTranslations();
-  const [state, setState] = useState<"idle" | "sent" | "passed">("idle");
+  const [state, setState] = useState<"idle" | "sent" | "passing" | "passed">("idle");
 
   async function discover() {
     const res = await fetch("/api/matches/request", {
@@ -39,6 +39,16 @@ export function SuggestionCard({
       body: JSON.stringify({ targetUserId: profile.id }),
     });
     if (res.ok || res.status === 409) setState("sent");
+  }
+
+  async function pass() {
+    setState("passing");
+    const res = await fetch("/api/passes", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ targetUserId: profile.id }),
+    });
+    setState(res.ok ? "passed" : "idle");
   }
 
   if (state === "passed") return null;
@@ -123,8 +133,9 @@ export function SuggestionCard({
           </button>
           <button
             type="button"
-            onClick={() => setState("passed")}
-            className="rounded-btnsm border border-sand-400 px-4 py-3 text-sm font-medium text-[#6B665C] dark:border-anthracite-600 dark:text-[#9A958B]"
+            onClick={pass}
+            disabled={state === "passing"}
+            className="rounded-btnsm border border-sand-400 px-4 py-3 text-sm font-medium text-[#6B665C] disabled:opacity-50 dark:border-anthracite-600 dark:text-[#9A958B]"
           >
             {t("suggestions.pass")}
           </button>

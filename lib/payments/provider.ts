@@ -25,6 +25,10 @@ export type CheckoutSession = {
 export interface PaymentProvider {
   createCheckout(req: CheckoutRequest): Promise<CheckoutSession>;
   getSubscriptionStatus(userId: string): Promise<"none" | "active">;
+  createBillingPortalSession(
+    userId: string,
+    returnUrl: string,
+  ): Promise<{ url: string }>;
 }
 
 /** Implémentation factice : aucun paiement, aucun abonnement actif. */
@@ -38,6 +42,12 @@ export class FakePaymentProvider implements PaymentProvider {
   }
   async getSubscriptionStatus(): Promise<"none" | "active"> {
     return "none";
+  }
+  async createBillingPortalSession(
+    _userId: string,
+    returnUrl: string,
+  ): Promise<{ url: string }> {
+    return { url: returnUrl };
   }
 }
 
@@ -90,6 +100,24 @@ export class StripePaymentProvider implements PaymentProvider {
       select: { subscriptionStatus: true },
     });
     return u?.subscriptionStatus === "active" ? "active" : "none";
+  }
+
+  async createBillingPortalSession(
+    userId: string,
+    returnUrl: string,
+  ): Promise<{ url: string }> {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { stripeCustomerId: true },
+    });
+    if (!user?.stripeCustomerId) {
+      throw Object.assign(new Error("NO_STRIPE_CUSTOMER"), { status: 400 });
+    }
+    const session = await this.stripe.billingPortal.sessions.create({
+      customer: user.stripeCustomerId,
+      return_url: returnUrl,
+    });
+    return { url: session.url };
   }
 }
 

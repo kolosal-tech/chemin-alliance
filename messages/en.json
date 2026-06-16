@@ -312,7 +312,10 @@
     "cta": "Subscribe — €9.99/month",
     "activeBadge": "You are a Premium subscriber. Thank you for supporting the mission.",
     "comingSoon": "Subscription will be available soon.",
-    "freeNote": "Blocking, reporting, account deletion and basic filters are free, forever."
+    "freeNote": "Blocking, reporting, account deletion and basic filters are free, forever.",
+    "manage": "Manage my subscription",
+    "manageInfo": "Update your payment method or cancel your subscription anytime.",
+    "manageError": "Could not open subscription management. Try again later."
   },
   "privacy": {
     "title": "Privacy",
@@ -542,5 +545,30 @@
     },
     "children_yes": "Yes",
     "children_no": "No"
+  },
+  "account": {
+    "title": "Account",
+    "linkTitle": "Credentials — email & password",
+    "passwordSection": "Change password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "passwordRules": "At least 12 characters, with lowercase, uppercase and a digit.",
+    "passwordSaved": "Password updated.",
+    "emailSection": "Change email address",
+    "currentEmail": "Current email",
+    "unverified": "unverified",
+    "newEmail": "New email address",
+    "emailVerificationSent": "A confirmation link has been sent to your new address.",
+    "error": {
+      "wrongPassword": "Current password is incorrect.",
+      "passwordSameAsCurrent": "The new password is the same as the current one.",
+      "rateLimited": "Too many attempts. Try again later.",
+      "emailTaken": "This address is not available.",
+      "invalidEmail": "Invalid email address.",
+      "passwordRules": "Password too weak (12+ chars, lowercase, uppercase, digit).",
+      "passwordMismatch": "Passwords do not match.",
+      "general": "Something went wrong. Try again."
+    }
   }
 }

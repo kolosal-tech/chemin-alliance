@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 
@@ -19,6 +20,23 @@ export function BottomNav({ married = false }: { married?: boolean }) {
   const t = useTranslations("nav");
   const tc = useTranslations("common");
   const pathname = usePathname();
+  const [unread, setUnread] = useState(0);
+  useEffect(() => {
+    let alive = true;
+    const load = () =>
+      fetch("/api/me/unread-count")
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          if (alive && d) setUnread(d.total as number);
+        })
+        .catch(() => {});
+    load();
+    const id = setInterval(load, 25000);
+    return () => {
+      alive = false;
+      clearInterval(id);
+    };
+  }, []);
   const tabs = married
     ? [{ href: "/couple", key: "couple", icon: TABS[0].icon } as const, ...TABS.slice(1)]
     : TABS;
@@ -45,7 +63,7 @@ export function BottomNav({ married = false }: { married?: boolean }) {
               key={tab.href}
               href={tab.href}
               aria-current={active ? "page" : undefined}
-              className={`flex min-w-[60px] flex-col items-center gap-0.5 rounded-btn px-2 py-1.5 text-[10px] font-medium lg:min-w-0 lg:flex-row lg:gap-3 lg:px-4 lg:py-3 lg:text-sm ${
+              className={`relative flex min-w-[60px] flex-col items-center gap-0.5 rounded-btn px-2 py-1.5 text-[10px] font-medium lg:min-w-0 lg:flex-row lg:gap-3 lg:px-4 lg:py-3 lg:text-sm ${
                 active
                   ? "text-gold-deep dark:text-gold-light lg:bg-gold/10"
                   : "text-warmgray hover:lg:bg-sand-100/60 dark:text-[#9A958B] dark:hover:lg:bg-anthracite-700/60"
@@ -54,6 +72,11 @@ export function BottomNav({ married = false }: { married?: boolean }) {
               <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden className="flex-none">
                 <path d={tab.icon} fill={active ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
               </svg>
+              {tab.key === "messages" && unread > 0 && (
+                <span className="absolute right-2 top-0.5 min-w-[16px] rounded-full bg-[#C0392B] px-1 text-center text-[9px] font-bold leading-[15px] text-white lg:static lg:ml-auto lg:self-center">
+                  {unread > 9 ? "9+" : unread}
+                </span>
+              )}
               {t(tab.key)}
             </Link>
           );

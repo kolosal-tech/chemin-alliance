@@ -3,6 +3,7 @@ import { requirePageUser } from "@/lib/security/page-auth";
 import { prisma } from "@/lib/db";
 import { stripeEnabled } from "@/lib/payments/provider";
 import { SubscribeButton } from "./subscribe-button";
+import { PortalButton } from "./portal-button";
 
 export const dynamic = "force-dynamic";
 
@@ -58,9 +59,12 @@ export default async function PremiumPage({
         </ul>
 
         {active ? (
-          <p className="mt-4 rounded-btn bg-[#EAF0EB] px-3.5 py-3 text-center text-[13.5px] font-semibold text-sage dark:bg-[#1B2A20]">
-            {t("activeBadge")}
-          </p>
+          <>
+            <p className="mt-4 rounded-btn bg-[#EAF0EB] px-3.5 py-3 text-center text-[13.5px] font-semibold text-sage dark:bg-[#1B2A20]">
+              {t("activeBadge")}
+            </p>
+            {stripeEnabled && <PortalButton label={t("manage")} />}
+          </>
         ) : stripeEnabled ? (
           <SubscribeButton label={t("cta")} />
         ) : (

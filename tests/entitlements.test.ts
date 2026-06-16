@@ -61,6 +61,7 @@ describe("entitlements — garde anti-dark-pattern", () => {
     expect(() => assertGatable("block_user")).toThrow(/GRATUIT À VIE/);
     expect(() => assertGatable("report_user")).toThrow();
     expect(() => assertGatable("delete_account")).toThrow();
+    expect(() => assertGatable("pass_user")).toThrow(/GRATUIT À VIE/);
   });
 
   it("assertGatable accepte une feature premium", () => {
