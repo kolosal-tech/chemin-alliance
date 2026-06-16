@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { type FormEvent, useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
@@ -39,6 +39,11 @@ export function CoupleHome() {
     word: string | null;
   } | null>(null);
   const [busy, setBusy] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [sendState, setSendState] = useState<
+    "idle" | "sending" | "sent" | "error"
+  >("idle");
 
   const load = useCallback(() => {
     fetch("/api/couple")
@@ -120,6 +125,32 @@ export function CoupleHome() {
     });
     setBusy(false);
     if (res.ok) setGuidance(await res.json());
+  }
+  async function copyCode(value: string) {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }
+  async function sendInvite(e: FormEvent) {
+    e.preventDefault();
+    const email = inviteEmail.trim();
+    if (!email || sendState === "sending") return;
+    setSendState("sending");
+    const res = await fetch("/api/couple/invite", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ email }),
+    }).catch(() => null);
+    if (res && res.ok) {
+      setSendState("sent");
+      setInviteEmail("");
+    } else {
+      setSendState("error");
+    }
   }
 
   if (!data) {
@@ -249,6 +280,56 @@ export function CoupleHome() {
             <p className="mx-auto mt-4 inline-block rounded-btn border border-gold bg-[#FBF6E9] px-5 py-3 font-mono text-lg tracking-widest text-gold-ink dark:border-[#6A5A2E] dark:bg-[#272117] dark:text-[#E0C77A]">
               {s.inviteCode}
             </p>
+            <div className="mt-3">
+              <button
+                type="button"
+                onClick={() => copyCode(s.inviteCode!)}
+                className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-300 px-4 py-2 text-[13px] font-semibold text-navy dark:border-anthracite-600 dark:text-gold-light"
+              >
+                {copied ? t("codeCopied") : t("copyCode")}
+              </button>
+            </div>
+
+            <form
+              onSubmit={sendInvite}
+              className="mt-5 border-t border-sand-200 pt-4 text-left dark:border-anthracite-600"
+            >
+              <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">
+                {t("sendByEmail")}
+              </span>
+              <div className="mt-2 flex gap-2">
+                <input
+                  type="email"
+                  value={inviteEmail}
+                  onChange={(e) => {
+                    setInviteEmail(e.target.value);
+                    if (sendState !== "idle") setSendState("idle");
+                  }}
+                  placeholder={t("partnerEmailPlaceholder")}
+                  className="flex-1 rounded-btnsm border border-sand-300 bg-white px-3 py-2.5 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+                />
+                <button
+                  type="submit"
+                  disabled={sendState === "sending" || !inviteEmail.trim()}
+                  className="rounded-btnsm bg-navy px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
+                >
+                  {sendState === "sending" ? t("sending") : t("sendInvite")}
+                </button>
+              </div>
+              {sendState === "sent" && (
+                <p
+                  role="status"
+                  className="mt-2 text-[12.5px] text-[#2E7D5B] dark:text-[#7FC9A6]"
+                >
+                  {t("inviteSent")}
+                </p>
+              )}
+              {sendState === "error" && (
+                <p role="alert" className="mt-2 text-[12.5px] text-danger">
+                  {t("inviteError")}
+                </p>
+              )}
+            </form>
           </div>
         ) : (
           <p className="rounded-btn bg-[#EAEDF2] px-3.5 py-3 text-[13.5px] text-[#2A3550] dark:bg-[#1A2233] dark:text-[#B9C6E0]">

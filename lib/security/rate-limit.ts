@@ -83,4 +83,5 @@ export const LIMITS = {
   auth: { limit: 10, windowMs: 15 * 60_000 },
   message: { limit: 30, windowMs: 60_000 },
   aiCoach: { limit: 10, windowMs: 60_000 },
+  invite: { limit: 8, windowMs: 60 * 60_000 },
 } as const;
