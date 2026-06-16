@@ -76,3 +76,15 @@ export function resolveModels(step: Step, tier: Tier): string[] {
     (m, i, a) => Boolean(m) && a.indexOf(m) === i,
   );
 }
+
+/**
+ * Palier LLM d'un utilisateur depuis son état d'abonnement (`User.subscriptionStatus`,
+ * source de vérité mise à jour par le webhook Stripe). « active » -> premium ;
+ * sinon standard. Aligné sur `getUserPlan` / `canAccess("premium_llm_tier")`.
+ * La Sécurité reste sur le meilleur modèle quel que soit le palier (jamais payante).
+ */
+export function tierForSubscription(
+  subscriptionStatus: string | null | undefined,
+): Tier {
+  return subscriptionStatus === "active" ? "premium" : "standard";
+}

@@ -1,6 +1,7 @@
 import type { AllianceStage } from "@prisma/client";
 import { aiProvider } from "@/lib/env";
 import { callLLM } from "@/lib/llm/gateway";
+import type { Tier } from "@/lib/llm/matrix";
 import { loadRuleset, type Locale } from "@/lib/core-engine";
 import { culturalGuidance } from "@/lib/culture";
 import { fallbackResponse } from "./fallback";
@@ -82,6 +83,7 @@ export async function askCoach(
     locale: Locale;
     rulesetId?: string;
     country?: string;
+    tier?: Tier;
   },
 ): Promise<CoachReply> {
   if (isSensitiveTopic(question)) {
@@ -96,7 +98,13 @@ export async function askCoach(
   );
   // Le coach relève de la Découverte (entrée) ou du Dialogue/Discernement.
   const step = opts.stage === "DISCOVERY" ? "discovery" : "dialogue";
-  const text = await callLLM({ system, user: question, step, maxTokens: 512 });
+  const text = await callLLM({
+    system,
+    user: question,
+    step,
+    maxTokens: 512,
+    tier: opts.tier,
+  });
   if (text) return { text, guardrail: false, provider: aiProvider };
 
   return {

@@ -5,6 +5,7 @@ import { clientIp, jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import { askCoach, DAILY_FREE_LIMIT } from "@/lib/ai-coach";
+import { tierForSubscription } from "@/lib/llm/matrix";
 import type { Locale } from "@/lib/core-engine";
 
 const schema = z.object({
@@ -53,6 +54,8 @@ export const POST = withErrors(async (req: Request) => {
     locale: (user.locale ?? "fr") as Locale,
     rulesetId: user.rulesetId,
     country: user.country ?? undefined,
+    // Palier LLM : premium (opus-4.8) pour un abonnement actif, sinon standard.
+    tier: tierForSubscription(user.subscriptionStatus),
   });
   return NextResponse.json({
     ...reply,
