@@ -12,6 +12,7 @@ export const POST = withErrors(async (req: Request) => {
   if (targetUserId === user.id) return jsonError(400, "INVALID_TARGET");
   // Hors matching : seuls les profils JOURNEY ouvrent une rencontre.
   if (user.season !== "JOURNEY") return jsonError(403, "NOT_IN_MATCHING");
+  if (!user.isVerified) return jsonError(403, "EMAIL_NOT_VERIFIED");
 
   const target = await prisma.user.findUnique({ where: { id: targetUserId } });
   // Cible inexistante OU sortie du matching (fiancés/mariés) -> 404 :

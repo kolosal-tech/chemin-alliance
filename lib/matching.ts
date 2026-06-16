@@ -33,6 +33,9 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
   // Une personne mariée ne voit ni n'apparaît dans les suggestions.
   // Court-circuit avant toute requête.
   if (me.season !== "JOURNEY") return [];
+  // Email non vérifié : pas d'engagement tant que l'email n'est pas confirmé
+  // (le VerifyBanner invite à vérifier). On n'apparaît déjà pas aux autres.
+  if (!me.isVerified) return [];
 
   const userId = me.id;
 

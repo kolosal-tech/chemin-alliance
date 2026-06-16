@@ -56,6 +56,7 @@ const schema = z.object({ content: z.string().min(1).max(4000) });
 export const POST = withErrors(
   async (req: Request, { params }: { params: { matchId: string } }) => {
     const user = await requireUser();
+    if (!user.isVerified) return jsonError(403, "EMAIL_NOT_VERIFIED");
     const rl = await rateLimit(
       `msg:${user.id}`,
       LIMITS.message.limit,
