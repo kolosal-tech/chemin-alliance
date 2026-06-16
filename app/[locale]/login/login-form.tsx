@@ -84,6 +84,14 @@ export function LoginForm() {
             className="rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
           />
         </label>
+        <div className="-mt-1 text-right">
+          <Link
+            href="/forgot-password"
+            className="text-[12.5px] text-gold-deep dark:text-gold-light"
+          >
+            {t("forgotLink")}
+          </Link>
+        </div>
         {error && <p role="alert" className="text-[13px] text-danger">{error}</p>}
         <button
           type="submit"

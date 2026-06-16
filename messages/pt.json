@@ -108,7 +108,21 @@
     "errorCredentials": "Email ou palavra-passe incorretos.",
     "errorEmailTaken": "Já existe uma conta com este email.",
     "errorConsentRequired": "Ambos os consentimentos são necessários para continuar.",
-    "rateLimited": "Demasiadas tentativas. Aguarde alguns minutos."
+    "rateLimited": "Demasiadas tentativas. Aguarde alguns minutos.",
+    "forgotLink": "Esqueceste a palavra-passe?",
+    "forgotTitle": "Palavra-passe esquecida",
+    "forgotIntro": "Introduz o email da tua conta e enviamos-te um link para escolher uma nova palavra-passe.",
+    "forgotSubmit": "Enviar o link",
+    "forgotSent": "Se existir uma conta com este endereço, acabámos de enviar um link de redefinição. Verifica a tua pasta de spam.",
+    "backToLogin": "Voltar ao início de sessão",
+    "resetTitle": "Nova palavra-passe",
+    "resetIntro": "Escolhe uma nova palavra-passe para proteger a tua conta.",
+    "newPassword": "Nova palavra-passe",
+    "confirmPassword": "Confirma a palavra-passe",
+    "resetSubmit": "Redefinir a minha palavra-passe",
+    "resetMismatch": "As duas palavras-passe não coincidem.",
+    "resetDone": "Palavra-passe alterada. A redirecionar para o início de sessão…",
+    "resetInvalid": "Este link é inválido ou expirou. Pede um novo link de redefinição."
   },
   "profile": {
     "title": "Perfil",

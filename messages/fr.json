@@ -108,7 +108,21 @@
     "errorCredentials": "Email ou mot de passe incorrect.",
     "errorEmailTaken": "Un compte existe déjà avec cet email.",
     "errorConsentRequired": "Les deux consentements sont nécessaires pour continuer.",
-    "rateLimited": "Trop de tentatives. Patientez quelques minutes."
+    "rateLimited": "Trop de tentatives. Patientez quelques minutes.",
+    "forgotLink": "Mot de passe oublié ?",
+    "forgotTitle": "Mot de passe oublié",
+    "forgotIntro": "Saisis l'adresse email de ton compte : nous t'enverrons un lien pour choisir un nouveau mot de passe.",
+    "forgotSubmit": "Envoyer le lien",
+    "forgotSent": "Si un compte existe avec cette adresse, un lien de réinitialisation vient d'être envoyé. Pense à vérifier tes spams.",
+    "backToLogin": "Retour à la connexion",
+    "resetTitle": "Nouveau mot de passe",
+    "resetIntro": "Choisis un nouveau mot de passe pour sécuriser ton compte.",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirme le mot de passe",
+    "resetSubmit": "Réinitialiser mon mot de passe",
+    "resetMismatch": "Les deux mots de passe ne correspondent pas.",
+    "resetDone": "Mot de passe modifié. Redirection vers la connexion…",
+    "resetInvalid": "Ce lien est invalide ou expiré. Redemande un lien de réinitialisation."
   },
   "profile": {
     "title": "Profil",

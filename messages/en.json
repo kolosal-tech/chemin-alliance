@@ -108,7 +108,21 @@
     "errorCredentials": "Incorrect email or password.",
     "errorEmailTaken": "An account already exists with this email.",
     "errorConsentRequired": "Both consents are required to continue.",
-    "rateLimited": "Too many attempts. Please wait a few minutes."
+    "rateLimited": "Too many attempts. Please wait a few minutes.",
+    "forgotLink": "Forgot your password?",
+    "forgotTitle": "Forgot password",
+    "forgotIntro": "Enter your account email and we'll send you a link to choose a new password.",
+    "forgotSubmit": "Send the link",
+    "forgotSent": "If an account exists for this address, a reset link has just been sent. Remember to check your spam folder.",
+    "backToLogin": "Back to sign in",
+    "resetTitle": "New password",
+    "resetIntro": "Choose a new password to secure your account.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "resetSubmit": "Reset my password",
+    "resetMismatch": "The two passwords don't match.",
+    "resetDone": "Password changed. Redirecting to sign in…",
+    "resetInvalid": "This link is invalid or expired. Request a new reset link."
   },
   "profile": {
     "title": "Profile",

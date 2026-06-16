@@ -46,6 +46,24 @@ SELECT unnest(enum_range(NULL::"LifeSeason"));   -- doit inclure ENGAGED
 ```
 Puis tester une inscription "Nous sommes déjà fiancés" sur le site.
 
+## Migration 0006 — passwordResetToken / passwordResetExpires (reset MDP)
+Vrai changement neuf (colonnes nullables additives). À appliquer AVANT/au déploiement
+du code reset-password, sinon les routes `/api/auth/forgot-password` et
+`/reset-password` renvoient P2022 (colonne absente).
+
+SQL Editor Supabase (idempotent, ne casse pas si déjà appliqué) :
+```sql
+ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "passwordResetToken" TEXT;
+ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "passwordResetExpires" TIMESTAMP(3);
+CREATE UNIQUE INDEX IF NOT EXISTS "User_passwordResetToken_key" ON "User"("passwordResetToken");
+```
+Puis marquer appliqué (DATABASE_URL = prod, URL directe 5432) :
+```bash
+npx prisma migrate resolve --applied 0006_password_reset
+npx prisma migrate status   # => up to date
+```
+Vérif : `SELECT column_name FROM information_schema.columns WHERE table_name='User' AND column_name LIKE 'passwordReset%';` (2 lignes).
+
 ## Futures migrations
 Le build Vercel n'exécute pas `migrate deploy`. Tant que ce n'est pas automatisé
 (step release `prisma migrate deploy` sur URL directe), appliquer chaque nouvelle

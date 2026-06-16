@@ -27,6 +27,10 @@ export const POST = withErrors(async () => {
       data: { emailVerifyToken: token },
     });
   }
-  await sendVerificationEmail(user.email, token, (user.locale ?? "fr") as Locale);
+  await sendVerificationEmail(
+    user.email,
+    token,
+    (user.locale ?? "fr") as Locale,
+  );
   return NextResponse.json({ ok: true });
 });

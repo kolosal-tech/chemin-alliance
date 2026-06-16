@@ -116,6 +116,8 @@ model User {
   season                LifeSeason @default(JOURNEY)
   isVerified            Boolean   @default(false)
   emailVerifyToken      String?   @unique
+  passwordResetToken    String?   @unique
+  passwordResetExpires  DateTime?
   photoUrl              String?
   photoBlurredByDefault Boolean   @default(true)
   cityApprox            String?

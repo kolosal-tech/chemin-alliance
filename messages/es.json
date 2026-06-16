@@ -108,7 +108,21 @@
     "errorCredentials": "Correo o contraseña incorrectos.",
     "errorEmailTaken": "Ya existe una cuenta con este correo.",
     "errorConsentRequired": "Ambos consentimientos son necesarios para continuar.",
-    "rateLimited": "Demasiados intentos. Espera unos minutos."
+    "rateLimited": "Demasiados intentos. Espera unos minutos.",
+    "forgotLink": "¿Olvidaste tu contraseña?",
+    "forgotTitle": "Contraseña olvidada",
+    "forgotIntro": "Introduce el correo de tu cuenta y te enviaremos un enlace para elegir una nueva contraseña.",
+    "forgotSubmit": "Enviar el enlace",
+    "forgotSent": "Si existe una cuenta con esta dirección, acabamos de enviar un enlace de restablecimiento. Revisa tu carpeta de spam.",
+    "backToLogin": "Volver a iniciar sesión",
+    "resetTitle": "Nueva contraseña",
+    "resetIntro": "Elige una nueva contraseña para proteger tu cuenta.",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirma la contraseña",
+    "resetSubmit": "Restablecer mi contraseña",
+    "resetMismatch": "Las dos contraseñas no coinciden.",
+    "resetDone": "Contraseña cambiada. Redirigiendo al inicio de sesión…",
+    "resetInvalid": "Este enlace no es válido o ha caducado. Solicita un nuevo enlace."
   },
   "profile": {
     "title": "Perfil",

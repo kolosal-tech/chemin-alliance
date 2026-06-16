@@ -46,8 +46,20 @@ export default async function ProfilePage({
           )}
           {user.isVerified && (
             <span className="flex items-center gap-1 rounded-[9px] bg-[#EAF0EB] px-2.5 py-1.5 text-xs font-semibold text-sage dark:bg-[#1B2A20] dark:text-[#7FA98C]">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path d="M5 13l4 4 10-11" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  d="M5 13l4 4 10-11"
+                  stroke="currentColor"
+                  strokeWidth="2.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
               {t("common.verified")}
             </span>
@@ -115,7 +127,9 @@ export default async function ProfilePage({
                 })}
               </div>
             </div>
-            <LockBadge level={faith?.localChurchVisibility ?? "AFTER_DISCERNMENT"} />
+            <LockBadge
+              level={faith?.localChurchVisibility ?? "AFTER_DISCERNMENT"}
+            />
           </div>
         </div>
 
@@ -127,8 +141,19 @@ export default async function ProfilePage({
             « {rel?.intentionStatement ?? "—"} »
           </p>
           <div className="mt-2.5 flex items-center gap-1.5">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path d="M12 21c-1-6-7-7-7-12a3.5 3.5 0 0 1 7-1 3.5 3.5 0 0 1 7 1c0 5-6 6-7 12Z" stroke="#9A7B2E" strokeWidth="1.6" strokeLinejoin="round" />
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden
+            >
+              <path
+                d="M12 21c-1-6-7-7-7-12a3.5 3.5 0 0 1 7-1 3.5 3.5 0 0 1 7 1c0 5-6 6-7 12Z"
+                stroke="#9A7B2E"
+                strokeWidth="1.6"
+                strokeLinejoin="round"
+              />
             </svg>
             <span className="text-xs font-semibold text-gold-deep dark:text-gold-light">
               {t("profile.intentionMarriage")}
@@ -142,7 +167,9 @@ export default async function ProfilePage({
         <div className="flex items-center justify-between gap-3 pb-6">
           <div>
             <div className="text-sm font-medium text-ink dark:text-[#ECE7DD]">
-              {rel?.wantsChildren ? t("profile.wantsChildren") : t(`profile.${statusKey(rel?.maritalStatus)}`)}
+              {rel?.wantsChildren
+                ? t("profile.wantsChildren")
+                : t(`profile.${statusKey(rel?.maritalStatus)}`)}
               {rel?.acceptsChildren ? ` · ${t("profile.acceptsChildren")}` : ""}
             </div>
             <div className="text-xs text-sand-600 dark:text-[#7E7A72]">

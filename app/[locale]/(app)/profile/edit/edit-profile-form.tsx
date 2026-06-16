@@ -81,7 +81,11 @@ export function EditProfileForm() {
     setSaving(true);
     setError(null);
     const wc =
-      d.wantsChildren === "yes" ? true : d.wantsChildren === "no" ? false : null;
+      d.wantsChildren === "yes"
+        ? true
+        : d.wantsChildren === "no"
+          ? false
+          : null;
     const json = (b: unknown) => ({
       method: "PATCH",
       headers: { "content-type": "application/json" },
@@ -89,23 +93,32 @@ export function EditProfileForm() {
     });
     try {
       const res = await Promise.all([
-        fetch("/api/me", json({
-          displayName: d.displayName.trim(),
-          cityApprox: d.cityApprox.trim() || null,
-          photoBlurredByDefault: d.photoBlurredByDefault,
-        })),
-        fetch("/api/me/faith-profile", json({
-          denomination: d.denomination.trim() || null,
-          ministry: d.ministry.trim() || null,
-          engagementFrequency: d.engagementFrequency.trim() || null,
-          localChurch: d.localChurch.trim() || null,
-          testimony: d.testimony.trim() || null,
-        })),
-        fetch("/api/me/relationship-profile", json({
-          wantsChildren: wc,
-          intentionStatement: d.intentionStatement.trim() || null,
-          familyVision: d.familyVision.trim() || null,
-        })),
+        fetch(
+          "/api/me",
+          json({
+            displayName: d.displayName.trim(),
+            cityApprox: d.cityApprox.trim() || null,
+            photoBlurredByDefault: d.photoBlurredByDefault,
+          }),
+        ),
+        fetch(
+          "/api/me/faith-profile",
+          json({
+            denomination: d.denomination.trim() || null,
+            ministry: d.ministry.trim() || null,
+            engagementFrequency: d.engagementFrequency.trim() || null,
+            localChurch: d.localChurch.trim() || null,
+            testimony: d.testimony.trim() || null,
+          }),
+        ),
+        fetch(
+          "/api/me/relationship-profile",
+          json({
+            wantsChildren: wc,
+            intentionStatement: d.intentionStatement.trim() || null,
+            familyVision: d.familyVision.trim() || null,
+          }),
+        ),
       ]);
       if (res.every((r) => r.ok)) {
         setSaved(true);
@@ -135,7 +148,12 @@ export function EditProfileForm() {
   const field = (
     key: keyof Data,
     label: string,
-    opts: { area?: boolean; max?: number; min?: number; required?: boolean } = {},
+    opts: {
+      area?: boolean;
+      max?: number;
+      min?: number;
+      required?: boolean;
+    } = {},
   ) => (
     <label className="flex flex-col gap-1.5">
       <span className={lbl}>{label}</span>
@@ -179,7 +197,11 @@ export function EditProfileForm() {
           <h2 className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
             {t("secIdentity")}
           </h2>
-          {field("displayName", t("displayName"), { min: 2, max: 40, required: true })}
+          {field("displayName", t("displayName"), {
+            min: 2,
+            max: 40,
+            required: true,
+          })}
           {field("cityApprox", t("cityLabel"), { max: 80 })}
           <label className="flex items-center gap-3 text-[13px] text-ink dark:text-[#ECE7DD]">
             <input
@@ -207,13 +229,18 @@ export function EditProfileForm() {
           <h2 className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
             {t("secRelation")}
           </h2>
-          {field("intentionStatement", t("intentionStatementLabel"), { area: true, max: 280 })}
+          {field("intentionStatement", t("intentionStatementLabel"), {
+            area: true,
+            max: 280,
+          })}
           {field("familyVision", t("familyVision"), { area: true, max: 2000 })}
           <label className="flex flex-col gap-1.5">
             <span className={lbl}>{t("wantsChildrenLabel")}</span>
             <select
               value={d.wantsChildren}
-              onChange={(e) => set("wantsChildren", e.target.value as Data["wantsChildren"])}
+              onChange={(e) =>
+                set("wantsChildren", e.target.value as Data["wantsChildren"])
+              }
               className={input}
             >
               <option value="">{t("unspecified")}</option>
@@ -229,7 +256,10 @@ export function EditProfileForm() {
           </p>
         )}
         {saved && (
-          <p role="status" className="text-[13px] text-[#2E7D5B] dark:text-[#7FC9A6]">
+          <p
+            role="status"
+            className="text-[13px] text-[#2E7D5B] dark:text-[#7FC9A6]"
+          >
             {t("saved")}
           </p>
         )}
