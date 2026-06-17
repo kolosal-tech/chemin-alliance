@@ -241,7 +241,9 @@
     "declineCta": "Recusar",
     "declineMessage": "Obrigado pela tua proposta. Depois de refletir, prefiro não continuar, e desejo-te sinceramente o melhor.",
     "awaitingOther": "À espera da resposta de {name}.",
-    "actionFailed": "Não foi possível concluir a ação. Verifica a tua ligação e tenta novamente."
+    "actionFailed": "Não foi possível concluir a ação. Verifica a tua ligação e tenta novamente.",
+    "delete": "Eliminar",
+    "deleteConfirm": "Eliminar esta mensagem?"
   },
   "aiCoach": {
     "title": "Coach IA",

@@ -99,7 +99,21 @@ export function Conversation({
   const [messages, setMessages] = useState<Msg[]>(initialMessages);
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
+  // id du message dont on demande confirmation de suppression (null = aucun).
+  const [confirmId, setConfirmId] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
+
+  // Supprimer SON message (corriger une erreur). Optimiste : on retire la bulle
+  // dès l'accusé OK du serveur ; on peut ensuite renvoyer un message corrigé.
+  async function deleteMessage(id: string) {
+    const res = await fetch(`/api/matches/${matchId}/messages/${id}`, {
+      method: "DELETE",
+    });
+    if (res.ok) {
+      setMessages((m) => m.filter((x) => x.id !== id));
+    }
+    setConfirmId(null);
+  }
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: "end" });
@@ -269,76 +283,151 @@ export function Conversation({
         </p>
       )}
 
-      {/* Messages — verre liquide */}
-      <div className="flex flex-1 flex-col gap-3 overflow-y-auto px-4 py-4 pb-2">
+      {/* Messages — verre liquide. min-h-0 indispensable : sans lui, flex-1
+          ne se contraint pas, la colonne déborde et le bloc de saisie collant
+          recouvre les derniers messages. */}
+      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4 py-4 pb-2">
         {messages.length === 0 && (
           <p className="mx-auto mt-8 max-w-[32ch] text-center text-sm text-sand-600 dark:text-[#7E7A72]">
             {t("messaging.emptyState")}
           </p>
         )}
-        {messages.map((m) =>
-          m.kind === "SYSTEM" ? (
-            <div
-              key={m.id}
-              role="status"
-              className="glass glass-bubble max-w-[90%] self-center rounded-[14px] border-[#EAD9A8]/70 bg-[#FBF6E9]/70 px-4 py-3 dark:border-[#463A1F]/70 dark:bg-[#272117]/60"
-            >
-              <div className="flex gap-2.5">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  className="mt-0.5 flex-none"
-                  aria-hidden
-                >
-                  <rect
-                    x="5"
-                    y="11"
-                    width="14"
-                    height="9"
-                    rx="2"
-                    stroke="#9A7B2E"
-                    strokeWidth="1.7"
-                  />
-                  <path
-                    d="M8 11V8a4 4 0 0 1 8 0v3"
-                    stroke="#9A7B2E"
-                    strokeWidth="1.7"
-                  />
-                  <circle cx="12" cy="15.5" r="1.3" fill="#9A7B2E" />
-                </svg>
-                <div>
-                  <div className="mb-0.5 text-[13px] font-semibold text-gold-ink dark:text-[#E0C77A]">
-                    {t("messaging.contactPendingTitle")}
+        {messages.map((m) => {
+          if (m.kind === "SYSTEM") {
+            return (
+              <div
+                key={m.id}
+                role="status"
+                className="glass glass-bubble max-w-[90%] self-center rounded-[14px] border-[#EAD9A8]/70 bg-[#FBF6E9]/70 px-4 py-3 dark:border-[#463A1F]/70 dark:bg-[#272117]/60"
+              >
+                <div className="flex gap-2.5">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    className="mt-0.5 flex-none"
+                    aria-hidden
+                  >
+                    <rect
+                      x="5"
+                      y="11"
+                      width="14"
+                      height="9"
+                      rx="2"
+                      stroke="#9A7B2E"
+                      strokeWidth="1.7"
+                    />
+                    <path
+                      d="M8 11V8a4 4 0 0 1 8 0v3"
+                      stroke="#9A7B2E"
+                      strokeWidth="1.7"
+                    />
+                    <circle cx="12" cy="15.5" r="1.3" fill="#9A7B2E" />
+                  </svg>
+                  <div>
+                    <div className="mb-0.5 text-[13px] font-semibold text-gold-ink dark:text-[#E0C77A]">
+                      {t("messaging.contactPendingTitle")}
+                    </div>
+                    <p className="text-[12.5px] leading-normal text-[#6F5C2E] dark:text-[#C2B488]">
+                      {m.content}
+                    </p>
                   </div>
-                  <p className="text-[12.5px] leading-normal text-[#6F5C2E] dark:text-[#C2B488]">
-                    {m.content}
-                  </p>
                 </div>
               </div>
-            </div>
-          ) : (
+            );
+          }
+
+          const text = (
+            <p
+              className={`text-sm leading-snug ${
+                m.mine ? "text-[#EDEFF3]" : "text-[#2A2823] dark:text-[#CFCAC0]"
+              } ${m.blocked ? "line-through decoration-[#9B4A3E]/60" : ""}`}
+            >
+              {m.content}
+            </p>
+          );
+
+          // Message reçu : bulle simple alignée à gauche.
+          if (!m.mine) {
+            return (
+              <div
+                key={m.id}
+                className={`glass glass-bubble max-w-[78%] self-start rounded-[18px] rounded-tl-[4px] px-3.5 py-2.5 ${
+                  m.blocked ? "opacity-60" : ""
+                }`}
+              >
+                {text}
+              </div>
+            );
+          }
+
+          // Mon message : bulle + icône corbeille (corriger une erreur).
+          return (
             <div
               key={m.id}
-              className={`glass-bubble max-w-[78%] px-3.5 py-2.5 ${
-                m.mine
-                  ? "glass-self self-end rounded-[18px] rounded-tr-[4px]"
-                  : "glass self-start rounded-[18px] rounded-tl-[4px]"
-              } ${m.blocked ? "opacity-60" : ""}`}
+              className="flex max-w-[85%] flex-col items-end gap-1 self-end"
             >
-              <p
-                className={`text-sm leading-snug ${
-                  m.mine
-                    ? "text-[#EDEFF3]"
-                    : "text-[#2A2823] dark:text-[#CFCAC0]"
-                } ${m.blocked ? "line-through decoration-[#9B4A3E]/60" : ""}`}
-              >
-                {m.content}
-              </p>
+              <div className="flex items-end gap-1.5">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setConfirmId((c) => (c === m.id ? null : m.id))
+                  }
+                  aria-label={t("messaging.delete")}
+                  className="mb-1 flex-none rounded-full p-1 text-warmgray/55 transition-colors hover:text-danger dark:text-[#7E7A72]"
+                >
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden
+                  >
+                    <path
+                      d="M5 7h14M10 7V5h4v2M7 7l1 13h8l1-13"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+                <div
+                  className={`glass-bubble glass-self min-w-0 rounded-[18px] rounded-tr-[4px] px-3.5 py-2.5 ${
+                    m.blocked ? "opacity-60" : ""
+                  }`}
+                >
+                  {text}
+                </div>
+              </div>
+              {confirmId === m.id && (
+                <div
+                  role="group"
+                  className="flex items-center gap-2.5 pr-1 text-[11.5px]"
+                >
+                  <span className="text-warmgray dark:text-[#9A958B]">
+                    {t("messaging.deleteConfirm")}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => deleteMessage(m.id)}
+                    className="font-semibold text-danger"
+                  >
+                    {t("messaging.delete")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmId(null)}
+                    className="text-warmgray dark:text-[#9A958B]"
+                  >
+                    {t("common.cancel")}
+                  </button>
+                </div>
+              )}
             </div>
-          ),
-        )}
+          );
+        })}
         <div ref={endRef} />
       </div>
 

@@ -241,7 +241,9 @@
     "declineCta": "Rechazar",
     "declineMessage": "Gracias por tu propuesta. Tras reflexionar, prefiero no continuar, y te deseo sinceramente lo mejor.",
     "awaitingOther": "Esperando la respuesta de {name}.",
-    "actionFailed": "No se pudo completar la acción. Revisa tu conexión e inténtalo de nuevo."
+    "actionFailed": "No se pudo completar la acción. Revisa tu conexión e inténtalo de nuevo.",
+    "delete": "Eliminar",
+    "deleteConfirm": "¿Eliminar este mensaje?"
   },
   "aiCoach": {
     "title": "Coach IA",

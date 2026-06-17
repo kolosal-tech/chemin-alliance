@@ -241,7 +241,9 @@
     "declineCta": "Décliner",
     "declineMessage": "Merci pour ta proposition. Après réflexion, je préfère ne pas donner suite, et je te souhaite sincèrement le meilleur.",
     "awaitingOther": "En attente de la réponse de {name}.",
-    "actionFailed": "Action impossible. Vérifie ta connexion et réessaie."
+    "actionFailed": "Action impossible. Vérifie ta connexion et réessaie.",
+    "delete": "Supprimer",
+    "deleteConfirm": "Supprimer ce message ?"
   },
   "aiCoach": {
     "title": "Coach IA",

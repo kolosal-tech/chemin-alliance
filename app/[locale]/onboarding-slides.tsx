@@ -27,6 +27,26 @@ export function OnboardingSlides() {
     </div>
   );
 
+  // Retour à la slide précédente (le carousel mobile n'avançait que vers l'avant).
+  const back = (to: number) => (
+    <button
+      type="button"
+      onClick={() => setSlide(to)}
+      className="-ml-1 mb-4 flex w-fit items-center gap-1 text-[13px] font-medium text-warmgray dark:text-[#9A958B]"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+        <path
+          d="M15 5l-7 7 7 7"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+      {tc("back")}
+    </button>
+  );
+
   return (
     <main className="relative mx-auto flex min-h-dvh max-w-md flex-col overflow-hidden px-7 pb-8 safe-top safe-bottom lg:max-w-6xl lg:px-12">
       <div className="flex items-center justify-between pt-4">
@@ -120,6 +140,7 @@ export function OnboardingSlides() {
       {slide === 1 && (
         <section className="relative mt-5 flex flex-1 flex-col rounded-screen bg-cream px-8 py-8 shadow-phone dark:bg-anthracite-850">
           <SacredMotif variant="olive" className="bottom-[-60px] right-[-100px]" />
+          {back(0)}
           <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">{t("s2Label")}</span>
           <h2 className="mb-6 mt-2 font-display text-[30px] leading-[1.15] text-night dark:text-[#ECE7DD]">
             {t("s2Title")}
@@ -141,6 +162,7 @@ export function OnboardingSlides() {
       {slide === 2 && (
         <section className="relative mt-5 flex flex-1 flex-col rounded-screen bg-cream px-7 py-8 shadow-phone dark:bg-anthracite-850">
           <SacredMotif variant="flame" className="right-[-90px] top-[-30px]" />
+          {back(1)}
           <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">{t("s3Label")}</span>
           <h2 className="mb-6 mt-2 font-display text-[30px] leading-[1.15] text-night dark:text-[#ECE7DD]">
             {t("s3Title")}

@@ -241,7 +241,9 @@
     "declineCta": "Decline",
     "declineMessage": "Thank you for reaching out. After reflection, I'd rather not continue, and I sincerely wish you the best.",
     "awaitingOther": "Waiting for {name} to respond.",
-    "actionFailed": "Action failed. Check your connection and try again."
+    "actionFailed": "Action failed. Check your connection and try again.",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this message?"
   },
   "aiCoach": {
     "title": "AI Coach",
