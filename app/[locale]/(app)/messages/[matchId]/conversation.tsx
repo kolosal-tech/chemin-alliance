@@ -286,7 +286,7 @@ export function Conversation({
       {/* Messages — verre liquide. min-h-0 indispensable : sans lui, flex-1
           ne se contraint pas, la colonne déborde et le bloc de saisie collant
           recouvre les derniers messages. */}
-      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4 py-4 pb-2">
+      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4 py-4 pb-2 [&>*]:shrink-0">
         {messages.length === 0 && (
           <p className="mx-auto mt-8 max-w-[32ch] text-center text-sm text-sand-600 dark:text-[#7E7A72]">
             {t("messaging.emptyState")}
