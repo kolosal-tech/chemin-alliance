@@ -1,4 +1,10 @@
 {
+  "install": {
+    "title": "Instalar Chemin d'Alliance",
+    "cta": "Instalar a aplicação",
+    "iosHint": "Toca em Partilhar e depois «Adicionar ao ecrã principal».",
+    "dismiss": "Fechar"
+  },
   "common": {
     "appName": "Chemin d'Alliance",
     "tagline": "Encontrar-se com fé, discernimento e confidencialidade.",

@@ -7,6 +7,7 @@ import { AllianceThread } from "@/components/AllianceThread";
 import { SacredMotif } from "@/components/SacredMotif";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { InstallPrompt } from "@/components/InstallPrompt";
 
 export function OnboardingSlides() {
   const t = useTranslations("onboarding");
@@ -289,6 +290,7 @@ export function OnboardingSlides() {
       </p>
 
       <p className="sr-only">{tc("tagline")}</p>
+      <InstallPrompt />
     </main>
   );
 }

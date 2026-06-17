@@ -1,4 +1,10 @@
 {
+  "install": {
+    "title": "Install Chemin d'Alliance",
+    "cta": "Install the app",
+    "iosHint": "Tap Share, then “Add to Home Screen”.",
+    "dismiss": "Close"
+  },
   "common": {
     "appName": "Chemin d'Alliance",
     "tagline": "Meet with faith, discernment and privacy.",
