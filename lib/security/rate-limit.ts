@@ -92,4 +92,8 @@ export const LIMITS = {
   unread: { limit: 90, windowMs: 60_000 },
   devotional: { limit: 20, windowMs: 60_000 },
   safetySignal: { limit: 40, windowMs: 60_000 },
+  // Suggestions : empêche le scraping du vivier via appels répétés.
+  suggestions: { limit: 40, windowMs: 60_000 },
+  // Rejoindre un espace couple : freine le brute-force du code d'invitation.
+  coupleJoin: { limit: 10, windowMs: 60 * 60_000 },
 } as const;

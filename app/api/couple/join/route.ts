@@ -3,12 +3,22 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
+import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 
 const schema = z.object({ code: z.string().min(6).max(20) });
 
 /** Le conjoint rejoint l'espace par code d'invitation. */
 export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
+  // Anti-brute-force du code ALLIANCE-XXXXXX : plafond ferme PAR UTILISATEUR.
+  // On ne mêle PAS l'IP à la clé — sinon chaque IP relance un budget neuf et
+  // un attaquant qui tourne ses IP contourne le plafond (cf. couple/invite).
+  const rl = await rateLimit(
+    `couple-join:${user.id}`,
+    LIMITS.coupleJoin.limit,
+    LIMITS.coupleJoin.windowMs,
+  );
+  if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
   const existing = await prisma.coupleSpace.findFirst({
     where: { OR: [{ userAId: user.id }, { userBId: user.id }] },
   });

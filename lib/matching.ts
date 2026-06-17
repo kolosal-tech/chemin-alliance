@@ -110,29 +110,157 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
     return true;
   });
 
-  // Tri sobre par affinité de fond (jamais montré comme score)
+  // Classement par affinité de fond (jamais montré comme score). Un jitter
+  // déterministe par jour casse l'ordre figé sans hasard non-reproductible :
+  // deux cohortes ne voient plus exactement les mêmes 3 profils.
+  const now = Date.now();
   const scored = filtered
-    .map((c) => ({ c, s: affinity(me, c) }))
+    .map((c) => ({
+      c,
+      s: matchScore(me, c, now) + dailyJitter(me.id, c.id, now) * 4,
+    }))
     .sort((a, b) => b.s - a.s);
 
   return scored.slice(0, 3).map((x) => x.c);
 }
 
-function affinity(a: Candidate, b: Candidate): number {
+// ---- Score d'affinité pondéré (0..100) ------------------------------------
+// Remplace l'ancien score entier 0..8 qui n'exploitait que vertical +
+// denomination + enfants. On pondère désormais foi, vision de mariage,
+// pratique, enfants, géographie, dénomination et activité récente.
+// La somme des maxima vaut exactement 100. Fonction PURE et testable :
+// `now` est injecté pour rester déterministe en test.
+
+const WEIGHTS = {
+  faith: 30,
+  vision: 18,
+  practice: 12,
+  children: 12,
+  geo: 10,
+  denomination: 8,
+  activity: 10,
+} as const;
+
+/** Alignement de tradition (vertical). Info manquante = neutre. */
+function faithScore(a: Candidate, b: Candidate): number {
+  const va = a.faithProfile?.vertical;
+  const vb = b.faithProfile?.vertical;
+  if (!va || !vb) return WEIGHTS.faith * 0.4;
+  if (va === vb) return WEIGHTS.faith;
+  // OTHER reste souple ; deux traditions chrétiennes distinctes = écart net.
+  if (va === "OTHER" || vb === "OTHER") return WEIGHTS.faith * 0.4;
+  return WEIGHTS.faith * 0.15;
+}
+
+/**
+ * Vision du mariage. Le contenu (intention, vision familiale) est
+ * souvent chiffré/non comparable : on récompense l'engagement partagé
+ * (avoir posé une intention + une vision) comme signal de sérieux.
+ */
+function visionScore(a: Candidate, b: Candidate): number {
+  const ia = !!a.relationshipProfile?.intentionStatement;
+  const ib = !!b.relationshipProfile?.intentionStatement;
+  const fa = !!a.relationshipProfile?.familyVisionEncrypted;
+  const fb = !!b.relationshipProfile?.familyVisionEncrypted;
+  const intent = ia && ib ? 12 : ia || ib ? 6 : 0;
+  const family = fa && fb ? 6 : fa || fb ? 3 : 0;
+  return intent + family;
+}
+
+/** Fréquence de pratique (champ libre) : égalité = fort, sinon partiel. */
+function practiceScore(a: Candidate, b: Candidate): number {
+  const pa = a.faithProfile?.engagementFrequency?.trim().toLowerCase();
+  const pb = b.faithProfile?.engagementFrequency?.trim().toLowerCase();
+  if (!pa || !pb) return WEIGHTS.practice * 0.5;
+  return pa === pb ? WEIGHTS.practice : WEIGHTS.practice * 0.35;
+}
+
+/** Enfants : désir aligné + enfants existants acceptés des deux côtés. */
+function childrenScore(a: Candidate, b: Candidate): number {
+  const ra = a.relationshipProfile;
+  const rb = b.relationshipProfile;
+  if (!ra || !rb) return WEIGHTS.children * 0.5;
   let s = 0;
-  if (a.faithProfile?.vertical === b.faithProfile?.vertical) s += 3;
-  if (a.faithProfile?.denomination === b.faithProfile?.denomination) s += 1;
-  if (
-    a.relationshipProfile?.wantsChildren != null &&
-    a.relationshipProfile.wantsChildren === b.relationshipProfile?.wantsChildren
-  )
-    s += 2;
-  if (
-    a.relationshipProfile?.hasChildren &&
-    b.relationshipProfile?.acceptsChildren
-  )
-    s += 2;
-  return s;
+  if (ra.wantsChildren != null && rb.wantsChildren != null) {
+    s += ra.wantsChildren === rb.wantsChildren ? 8 : 0;
+  } else {
+    s += 4; // inconnu : neutre
+  }
+  if (ra.hasChildren || rb.hasChildren) {
+    // Si l'un a des enfants, l'autre ne doit pas les refuser explicitement.
+    const aAcceptsB = !rb.hasChildren || ra.acceptsChildren !== false;
+    const bAcceptsA = !ra.hasChildren || rb.acceptsChildren !== false;
+    s += aAcceptsB && bAcceptsA ? 4 : 0;
+  } else {
+    s += 4; // aucun enfant : pas de friction
+  }
+  return Math.min(WEIGHTS.children, s);
+}
+
+/** Proximité : même ville approx > même pays > ailleurs. */
+function geoScore(a: Candidate, b: Candidate): number {
+  if (a.cityApprox && b.cityApprox && a.cityApprox === b.cityApprox)
+    return WEIGHTS.geo;
+  if (a.country && b.country && a.country === b.country)
+    return WEIGHTS.geo * 0.5;
+  return WEIGHTS.geo * 0.2;
+}
+
+/** Dénomination : bonus fin d'alignement précis. */
+function denominationScore(a: Candidate, b: Candidate): number {
+  const da = a.faithProfile?.denomination;
+  const db = b.faithProfile?.denomination;
+  if (!da || !db) return WEIGHTS.denomination * 0.5;
+  return da === db ? WEIGHTS.denomination : WEIGHTS.denomination * 0.25;
+}
+
+/** Activité récente du candidat — favorise les profils vivants. */
+function activityScore(c: Candidate, now: number): number {
+  const t =
+    c.updatedAt instanceof Date
+      ? c.updatedAt.getTime()
+      : new Date(c.updatedAt).getTime();
+  if (Number.isNaN(t)) return WEIGHTS.activity * 0.3;
+  const days = (now - t) / 86_400_000;
+  if (days <= 14) return WEIGHTS.activity;
+  if (days <= 60) return WEIGHTS.activity * 0.6;
+  return WEIGHTS.activity * 0.3;
+}
+
+/**
+ * Score d'affinité 0..100 entre `a` (l'utilisateur) et `b` (le candidat).
+ * Pur et déterministe — jamais affiché : sert uniquement au classement.
+ */
+export function matchScore(
+  a: Candidate,
+  b: Candidate,
+  now: number = Date.now(),
+): number {
+  const s =
+    faithScore(a, b) +
+    visionScore(a, b) +
+    practiceScore(a, b) +
+    childrenScore(a, b) +
+    geoScore(a, b) +
+    denominationScore(a, b) +
+    activityScore(b, now);
+  return Math.round(Math.max(0, Math.min(100, s)));
+}
+
+/**
+ * Jitter déterministe [0,1) par (utilisateur, candidat, jour). Hash FNV-1a :
+ * stable sur la journée, tourne chaque jour. Amplitude faible côté appelant
+ * (≈4 pts) — les très bons matchs restent en tête, les quasi-ex æquo permutent.
+ */
+function dailyJitter(meId: string, candId: string, now: number): number {
+  const day = Math.floor(now / 86_400_000);
+  const seed = `${meId}:${candId}:${day}`;
+  let h = 2166136261;
+  for (let i = 0; i < seed.length; i++) {
+    h ^= seed.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return ((h >>> 0) % 1000) / 1000;
 }
 
 /**

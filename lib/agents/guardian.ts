@@ -1,3 +1,4 @@
+import { randomInt } from "node:crypto";
 import { z } from "zod";
 import type { Locale } from "@/lib/core-engine";
 import { completeText } from "./llm";
@@ -475,11 +476,13 @@ export const SEASON_PROGRAMS: Record<
 };
 
 export function generateInviteCode(): string {
-  // Code lisible type ALLIANCE-7F3K9Q (sans 0/O/1/I)
+  // Code lisible type ALLIANCE-7F3K9Q (sans 0/O/1/I).
+  // RNG cryptographique (randomInt) plutôt que Math.random : le code est un
+  // secret d'accès à un espace couple — il doit être non devinable et non biaisé.
   const chars = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
   let code = "";
   for (let i = 0; i < 6; i++) {
-    code += chars[Math.floor(Math.random() * chars.length)];
+    code += chars[randomInt(chars.length)];
   }
   return `ALLIANCE-${code}`;
 }

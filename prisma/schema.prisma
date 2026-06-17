@@ -154,6 +154,10 @@ model User {
   agentInsights       AgentInsight[]
   coupleSpaceA        CoupleSpace?         @relation("CoupleUserA")
   coupleSpaceB        CoupleSpace?         @relation("CoupleUserB")
+
+  // Vivier de matching : getSuggestions filtre sur season + isVerified +
+  // gender + deletedAt. Sans cet index, full scan dès quelques milliers de profils.
+  @@index([season, isVerified, gender, deletedAt])
 }
 
 // Blocage user-à-user — GRATUIT À VIE (doctrine, lib/payments/entitlements).
