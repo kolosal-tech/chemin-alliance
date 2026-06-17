@@ -5,12 +5,14 @@ import { clientIp, jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import { askCoach, DAILY_FREE_LIMIT } from "@/lib/ai-coach";
+import { encryptField } from "@/lib/security/crypto";
 import { tierForSubscription } from "@/lib/llm/matrix";
 import type { Locale } from "@/lib/core-engine";
 
 const schema = z.object({
   question: z.string().min(1).max(2000),
   matchId: z.string().optional(),
+  mode: z.enum(["individual", "couple"]).default("individual"),
 });
 
 export const POST = withErrors(async (req: Request) => {
@@ -57,6 +59,26 @@ export const POST = withErrors(async (req: Request) => {
     // Palier LLM : premium (opus-4.8) pour un abonnement actif, sinon standard.
     tier: tierForSubscription(user.subscriptionStatus),
   });
+  // Persistance chiffrée : la question + la réponse, pour qu'elles survivent
+  // au rechargement de la page (le coach était jusque-là sans mémoire).
+  await prisma.coachMessage.createMany({
+    data: [
+      {
+        userId: user.id,
+        mode: body.mode,
+        role: "user",
+        contentEncrypted: encryptField(body.question),
+      },
+      {
+        userId: user.id,
+        mode: body.mode,
+        role: "coach",
+        contentEncrypted: encryptField(reply.text ?? ""),
+        guardrail: Boolean(reply.guardrail),
+      },
+    ],
+  });
+
   return NextResponse.json({
     ...reply,
     remaining: Math.max(0, DAILY_FREE_LIMIT - usage.count),

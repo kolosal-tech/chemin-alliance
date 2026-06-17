@@ -151,6 +151,7 @@ model User {
   phoneVerifications  PhoneVerification[]
   bookings            Booking[]
   aiCoachUsages       AiCoachUsage[]
+  coachMessages       CoachMessage[]
   agentInsights       AgentInsight[]
   coupleSpaceA        CoupleSpace?         @relation("CoupleUserA")
   coupleSpaceB        CoupleSpace?         @relation("CoupleUserB")
@@ -408,4 +409,19 @@ model AiCoachUsage {
   count  Int      @default(0)
 
   @@unique([userId, day])
+}
+
+// Persistance des échanges avec le Coach IA. Contenu chiffré au repos
+// (sujets sensibles). `mode` sépare les fils individuel / couple.
+model CoachMessage {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mode             String   @default("individual")
+  role             String
+  contentEncrypted String
+  guardrail        Boolean  @default(false)
+  createdAt        DateTime @default(now())
+
+  @@index([userId, mode, createdAt])
 }
