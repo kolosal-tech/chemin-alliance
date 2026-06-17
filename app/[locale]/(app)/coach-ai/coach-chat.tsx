@@ -123,7 +123,9 @@ export function CoachChat({
         </div>
       </header>
 
-      <div className="flex flex-1 flex-col gap-3 overflow-y-auto px-4 py-4">
+      {/* min-h-0 : sans lui, flex-1 ne se contraint pas, la liste déborde et
+          les bulles se chevauchent (header/composer collants par-dessus). */}
+      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4 py-4">
         {/* Bandeau de transparence — obligatoire */}
         <div
           className="glass glass-bubble rounded-[13px] border-[#D4DAE4]/70 bg-[#EAEDF2]/70 px-4 py-3 dark:border-[#2A3A56]/70 dark:bg-[#1A2233]/60"
