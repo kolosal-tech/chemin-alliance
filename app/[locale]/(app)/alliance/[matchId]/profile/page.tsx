@@ -4,7 +4,9 @@ import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/db";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { buildMatchProfileView } from "@/lib/match-profile";
+import { decryptOptional } from "@/lib/security/crypto";
 import { TrustBadge } from "@/components/TrustBadge";
+import { BlessingRequest } from "./blessing-request";
 
 // Étape d'alliance (1..3) → clé de stage, pour le libellé « se révèle à… ».
 const STEP_STAGE: Record<number, string> = {
@@ -25,8 +27,20 @@ export default async function MatchProfilePage({
   const match = await prisma.match.findUnique({
     where: { id: params.matchId },
     include: {
-      userA: { include: { faithProfile: true, relationshipProfile: true } },
-      userB: { include: { faithProfile: true, relationshipProfile: true } },
+      userA: {
+        include: {
+          faithProfile: true,
+          relationshipProfile: true,
+          sponsor: { select: { relation: true } },
+        },
+      },
+      userB: {
+        include: {
+          faithProfile: true,
+          relationshipProfile: true,
+          sponsor: { select: { relation: true } },
+        },
+      },
     },
   });
   if (!match || (match.userAId !== user.id && match.userBId !== user.id)) {
@@ -38,6 +52,12 @@ export default async function MatchProfilePage({
     { faith: other.faithProfile, relationship: other.relationshipProfile },
     { matched: true, stage: match.stage },
   );
+
+  // Ma demande de bénédiction pour CE match (la plus récente).
+  const myBlessing = await prisma.blessing.findFirst({
+    where: { userId: user.id, matchId: match.id },
+    orderBy: { createdAt: "desc" },
+  });
 
   return (
     <main className="px-5 pt-5 safe-top lg:mx-auto lg:max-w-2xl">
@@ -77,12 +97,17 @@ export default async function MatchProfilePage({
               {other.cityApprox}
             </div>
           )}
-          <div className="mt-1.5">
+          <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
             <TrustBadge
               emailVerified={other.isVerified}
               phoneVerified={other.phoneVerified}
               size="sm"
             />
+            {other.sponsor && (
+              <span className="inline-flex items-center gap-1 rounded-[6px] bg-gold/15 px-2 py-0.5 text-[9.5px] font-semibold text-gold-ink dark:bg-[#272117] dark:text-[#E0C77A]">
+                🤝 {t("sponsor.badge")}
+              </span>
+            )}
           </div>
         </div>
       </header>
@@ -149,6 +174,19 @@ export default async function MatchProfilePage({
           ))}
         </ul>
       )}
+
+      <BlessingRequest
+        matchId={match.id}
+        initialStatus={
+          (myBlessing?.status as "PENDING" | "BLESSED" | "CAUTION") ?? null
+        }
+        note={
+          myBlessing &&
+          (myBlessing.status === "BLESSED" || myBlessing.status === "CAUTION")
+            ? decryptOptional(myBlessing.noteEncrypted)
+            : null
+        }
+      />
     </main>
   );
 }
