@@ -32,6 +32,7 @@ export function withErrors<T extends unknown[]>(
       if (status === 401) return jsonError(401, "UNAUTHORIZED");
       if (status === 403) return jsonError(403, "FORBIDDEN");
       if (status === 404) return jsonError(404, "NOT_FOUND");
+      if (status === 503) return jsonError(503, "SERVICE_UNAVAILABLE");
       console.error("[api]", err);
       return jsonError(500, "INTERNAL_ERROR");
     }

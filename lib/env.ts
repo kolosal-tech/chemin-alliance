@@ -55,6 +55,9 @@ const envSchema = z.object({
   SUPABASE_URL: z.string().url().optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
   SUPABASE_PHOTO_BUCKET: z.string().default("profile-photos"),
+  // Cron de rétention (Vercel Cron) — sans secret, les routes /api/cron/* sont
+  // dormantes (503) : rien ne se déclenche tant que CRON_SECRET n'est pas posé.
+  CRON_SECRET: z.string().optional(),
 });
 
 function loadEnv() {

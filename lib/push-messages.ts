@@ -71,3 +71,22 @@ export function requestAcceptedNotification(
     tag: `accept-${matchId}`,
   };
 }
+
+/** Rappel du dévotionnel du jour (cron quotidien). Neutre, zéro PII. */
+export function devotionPushPayload(
+  rawLocale: string | null | undefined,
+): PushPayload {
+  const l = loc(rawLocale);
+  const body = {
+    fr: "Votre méditation du jour vous attend",
+    en: "Your daily meditation is ready",
+    es: "Tu meditación del día te espera",
+    pt: "A sua meditação do dia está pronta",
+  }[l];
+  return {
+    title: APP_NAME,
+    body,
+    url: `/${l}/devotional`,
+    tag: "devotional-daily",
+  };
+}
