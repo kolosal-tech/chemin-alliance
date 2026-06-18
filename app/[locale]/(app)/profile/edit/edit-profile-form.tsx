@@ -16,6 +16,11 @@ type Data = {
   intentionStatement: string;
   familyVision: string;
   wantsChildren: "yes" | "no" | "";
+  maritalStatus: "single" | "widowed" | "divorced" | "single_parent" | "";
+  hasChildren: "yes" | "no" | "";
+  interests: string;
+  personality: string;
+  aspirations: string;
 };
 
 const EMPTY: Data = {
@@ -30,6 +35,11 @@ const EMPTY: Data = {
   intentionStatement: "",
   familyVision: "",
   wantsChildren: "",
+  maritalStatus: "",
+  hasChildren: "",
+  interests: "",
+  personality: "",
+  aspirations: "",
 };
 
 export function EditProfileForm() {
@@ -65,6 +75,11 @@ export function EditProfileForm() {
               : rel.wantsChildren === false
                 ? "no"
                 : "",
+          maritalStatus: rel.maritalStatus ?? "",
+          hasChildren: rel.hasChildren ? "yes" : "no",
+          interests: rel.interests ?? "",
+          personality: rel.personality ?? "",
+          aspirations: rel.aspirations ?? "",
         });
       })
       .catch(() => setError(tc("error")));
@@ -115,6 +130,11 @@ export function EditProfileForm() {
           "/api/me/relationship-profile",
           json({
             wantsChildren: wc,
+            maritalStatus: d.maritalStatus || undefined,
+            hasChildren: d.hasChildren === "yes",
+            interests: d.interests.trim() || null,
+            personality: d.personality.trim() || null,
+            aspirations: d.aspirations.trim() || null,
             intentionStatement: d.intentionStatement.trim() || null,
             familyVision: d.familyVision.trim() || null,
           }),
@@ -229,11 +249,44 @@ export function EditProfileForm() {
           <h2 className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
             {t("secRelation")}
           </h2>
+          <label className="flex flex-col gap-1.5">
+            <span className={lbl}>{t("maritalStatus")}</span>
+            <select
+              value={d.maritalStatus}
+              onChange={(e) =>
+                set("maritalStatus", e.target.value as Data["maritalStatus"])
+              }
+              className={input}
+            >
+              <option value="">{t("unspecified")}</option>
+              <option value="single">{t("single")}</option>
+              <option value="widowed">{t("widowed")}</option>
+              <option value="divorced">{t("divorced")}</option>
+              <option value="single_parent">{t("singleParent")}</option>
+            </select>
+          </label>
+          <label className="flex flex-col gap-1.5">
+            <span className={lbl}>{t("hasChildrenLabel")}</span>
+            <select
+              value={d.hasChildren}
+              onChange={(e) =>
+                set("hasChildren", e.target.value as Data["hasChildren"])
+              }
+              className={input}
+            >
+              <option value="">{t("unspecified")}</option>
+              <option value="yes">{tc("yes")}</option>
+              <option value="no">{tc("no")}</option>
+            </select>
+          </label>
           {field("intentionStatement", t("intentionStatementLabel"), {
             area: true,
             max: 280,
           })}
           {field("familyVision", t("familyVision"), { area: true, max: 2000 })}
+          {field("interests", t("interestsLabel"), { area: true, max: 500 })}
+          {field("personality", t("personalityLabel"), { area: true, max: 500 })}
+          {field("aspirations", t("aspirationsLabel"), { area: true, max: 500 })}
           <label className="flex flex-col gap-1.5">
             <span className={lbl}>{t("wantsChildrenLabel")}</span>
             <select

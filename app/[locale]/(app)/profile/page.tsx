@@ -179,6 +179,46 @@ export default async function ProfilePage({
           <LockBadge level={rel?.familyVisionVisibility ?? "AFTER_DIALOGUE"} />
         </div>
 
+        {(rel?.interests || rel?.personality || rel?.aspirations) && (
+          <>
+            <h2 className="lbl mb-3 text-[9.5px] text-gold-deep dark:text-gold-light">
+              {t("profile.aboutMe")}
+            </h2>
+            <div className="mb-6 flex flex-col gap-3.5 text-sm">
+              {rel?.interests && (
+                <div>
+                  <div className="text-xs font-semibold text-gold-deep dark:text-gold-light">
+                    {t("profile.interestsLabel")}
+                  </div>
+                  <p className="mt-0.5 leading-normal text-ink dark:text-[#ECE7DD]">
+                    {rel.interests}
+                  </p>
+                </div>
+              )}
+              {rel?.personality && (
+                <div>
+                  <div className="text-xs font-semibold text-gold-deep dark:text-gold-light">
+                    {t("profile.personalityLabel")}
+                  </div>
+                  <p className="mt-0.5 leading-normal text-ink dark:text-[#ECE7DD]">
+                    {rel.personality}
+                  </p>
+                </div>
+              )}
+              {rel?.aspirations && (
+                <div>
+                  <div className="text-xs font-semibold text-gold-deep dark:text-gold-light">
+                    {t("profile.aspirationsLabel")}
+                  </div>
+                  <p className="mt-0.5 leading-normal text-ink dark:text-[#ECE7DD]">
+                    {rel.aspirations}
+                  </p>
+                </div>
+              )}
+            </div>
+          </>
+        )}
+
         <LogoutButton />
       </div>
     </main>

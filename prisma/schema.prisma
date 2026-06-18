@@ -256,6 +256,9 @@ model RelationshipProfile {
   familyVisionVisibility VisibilityLevel @default(AFTER_DIALOGUE)
   intentionStatement     String?
   intentionVisibility    VisibilityLevel @default(PUBLIC_CONTROLLED)
+  interests              String?
+  personality            String?
+  aspirations            String?
 }
 
 model PrivacySettings {

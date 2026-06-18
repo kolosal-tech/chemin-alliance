@@ -20,6 +20,9 @@ const schema = z.object({
   familyVisionVisibility: visibility.optional(),
   intentionStatement: z.string().max(280).nullable().optional(),
   intentionVisibility: visibility.optional(),
+  interests: z.string().max(500).nullable().optional(),
+  personality: z.string().max(500).nullable().optional(),
+  aspirations: z.string().max(500).nullable().optional(),
 });
 
 export const PATCH = withErrors(async (req: Request) => {
