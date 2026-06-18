@@ -45,6 +45,11 @@ const envSchema = z.object({
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
   STRIPE_PRICE_PREMIUM: z.string().optional(),
   STRIPE_PUBLISHABLE_KEY: z.string().optional(),
+  // Web Push (PWA) — sans clés VAPID, les notifications push sont dormantes.
+  // Générer : node -e "console.log(require('web-push').generateVAPIDKeys())"
+  WEB_PUSH_EMAIL: z.string().default("mailto:alliance@kolosaltech.com"),
+  WEB_PUSH_PRIVATE_KEY: z.string().optional(),
+  NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY: z.string().optional(),
 });
 
 function loadEnv() {

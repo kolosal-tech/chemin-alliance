@@ -3,6 +3,11 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
+import { sendPushToUser } from "@/lib/push";
+import { newRequestNotification } from "@/lib/push-messages";
+
+// web-push (via lib/push) requiert le runtime Node.
+export const runtime = "nodejs";
 
 const schema = z.object({ targetUserId: z.string().min(1) });
 
@@ -29,5 +34,11 @@ export const POST = withErrors(async (req: Request) => {
   const match = await prisma.match.create({
     data: { userAId: a, userBId: b, status: "PENDING", requestedById: user.id },
   });
+  // Notification push best-effort à la personne sollicitée (jamais bloquant).
+  try {
+    await sendPushToUser(targetUserId, newRequestNotification(target.locale));
+  } catch (err) {
+    console.error("[push] notif demande échouée", err);
+  }
   return NextResponse.json({ ok: true, matchId: match.id }, { status: 201 });
 });

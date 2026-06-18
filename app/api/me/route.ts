@@ -62,6 +62,7 @@ export const DELETE = withErrors(async () => {
     prisma.aiCoachUsage.deleteMany({ where: { userId: user.id } }),
     prisma.agentInsight.deleteMany({ where: { userId: user.id } }),
     prisma.report.deleteMany({ where: { reporterId: user.id } }),
+    prisma.pushSubscription.deleteMany({ where: { userId: user.id } }),
     prisma.user.update({
       where: { id: user.id },
       data: {

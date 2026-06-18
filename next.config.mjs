@@ -5,6 +5,7 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const withPWA = withPWAInit({
   dest: "public",
+  customWorkerSrc: "worker",
   disable: process.env.NODE_ENV === "development",
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
@@ -39,7 +40,11 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    serverComponentsExternalPackages: ["@node-rs/argon2", "@prisma/client"],
+    serverComponentsExternalPackages: [
+      "@node-rs/argon2",
+      "@prisma/client",
+      "web-push",
+    ],
   },
   async headers() {
     const headers = [{ source: "/(.*)", headers: securityHeaders }];

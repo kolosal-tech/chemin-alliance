@@ -132,7 +132,9 @@ export function PrivacyPanel({
         <span className="flex-1 text-[13px] font-semibold text-night dark:text-[#ECE7DD]">
           {t("account.linkTitle")}
         </span>
-        <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">→</span>
+        <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">
+          →
+        </span>
       </Link>
 
       <Link
@@ -145,18 +147,39 @@ export function PrivacyPanel({
         <span className="flex-1 text-[13px] font-semibold text-night dark:text-[#ECE7DD]">
           {t("trust.linkTitle")}
         </span>
-        <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">→</span>
+        <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">
+          →
+        </span>
+      </Link>
+
+      <Link
+        href="/settings/notifications"
+        className="mb-4 flex items-center gap-3 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800"
+      >
+        <span aria-hidden className="text-lg text-gold">
+          🔔
+        </span>
+        <span className="flex-1 text-[13px] font-semibold text-night dark:text-[#ECE7DD]">
+          {t("notifications.linkTitle")}
+        </span>
+        <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">
+          →
+        </span>
       </Link>
 
       <Link
         href="/safety"
         className="mb-4 flex items-center gap-3 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800"
       >
-        <span aria-hidden className="text-lg">🛡️</span>
+        <span aria-hidden className="text-lg">
+          🛡️
+        </span>
         <span className="flex-1 text-[13px] font-semibold text-night dark:text-[#ECE7DD]">
           {t("antiScam.linkTitle")}
         </span>
-        <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">→</span>
+        <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">
+          →
+        </span>
       </Link>
 
       {/* Anti-malaise — gratuit, jamais premium */}

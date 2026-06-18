@@ -14,6 +14,11 @@ import {
 } from "@/lib/moderation/contact-detection";
 import { analyzeRisk } from "@/lib/agents/watchman";
 import { isBlockedBetween } from "@/lib/blocks";
+import { sendPushToUser } from "@/lib/push";
+import { newMessageNotification } from "@/lib/push-messages";
+
+// web-push (via lib/push) requiert le runtime Node.
+export const runtime = "nodejs";
 
 export const GET = withErrors(
   async (_req: Request, { params }: { params: { matchId: string } }) => {
@@ -169,6 +174,20 @@ export const POST = withErrors(
       where: { id: match.id },
       data: { updatedAt: new Date() },
     });
+    // Notification push best-effort au destinataire (jamais bloquant).
+    // Le corps ne révèle jamais le contenu (chiffré) : seul l'expéditeur.
+    try {
+      const recipient = await prisma.user.findUnique({
+        where: { id: otherId },
+        select: { locale: true },
+      });
+      await sendPushToUser(
+        otherId,
+        newMessageNotification(recipient?.locale, match.id),
+      );
+    } catch (err) {
+      console.error("[push] notif message échouée", err);
+    }
     return NextResponse.json(
       { blocked: false, messageId: message.id },
       { status: 201 },

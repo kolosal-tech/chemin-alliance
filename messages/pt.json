@@ -1,4 +1,22 @@
 {
+  "notifications": {
+    "linkTitle": "Notificações",
+    "back": "Definições",
+    "title": "Notificações",
+    "intro": "Seja avisado de uma nova mensagem ou de um novo pedido, mesmo com a aplicação fechada.",
+    "events": "Nova mensagem, novo pedido, pedido aceite",
+    "statusOn": "Notificações ativadas",
+    "statusOff": "Notificações desativadas",
+    "enable": "Ativar notificações",
+    "disable": "Desativar",
+    "busy": "Aguarde…",
+    "unsupported": "O seu navegador não suporta notificações push.",
+    "soon": "As notificações ainda não estão ativadas neste servidor.",
+    "denied": "Notificações bloqueadas. Permita-as nas definições do navegador e volte aqui.",
+    "iosHint": "No iPhone: adicione primeiro a aplicação ao ecrã principal (Partilhar → Adicionar ao ecrã principal) e depois ative as notificações a partir da app instalada.",
+    "errorEnable": "Não foi possível ativar. Tente novamente.",
+    "errorDisable": "Não foi possível desativar. Tente novamente."
+  },
   "install": {
     "title": "Instalar Chemin d'Alliance",
     "cta": "Instalar a aplicação",

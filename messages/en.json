@@ -1,4 +1,22 @@
 {
+  "notifications": {
+    "linkTitle": "Notifications",
+    "back": "Settings",
+    "title": "Notifications",
+    "intro": "Get notified of a new message or a new request, even when the app is closed.",
+    "events": "New message, new request, request accepted",
+    "statusOn": "Notifications on",
+    "statusOff": "Notifications off",
+    "enable": "Enable notifications",
+    "disable": "Disable",
+    "busy": "Please wait…",
+    "unsupported": "Your browser does not support push notifications.",
+    "soon": "Notifications are not enabled on this server yet.",
+    "denied": "Notifications are blocked. Allow them in your browser settings, then come back here.",
+    "iosHint": "On iPhone: first add the app to your home screen (Share → Add to Home Screen), then enable notifications from the installed app.",
+    "errorEnable": "Could not enable. Please try again.",
+    "errorDisable": "Could not disable. Please try again."
+  },
   "install": {
     "title": "Install Chemin d'Alliance",
     "cta": "Install the app",

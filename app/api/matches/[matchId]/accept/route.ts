@@ -3,6 +3,11 @@ import { prisma } from "@/lib/db";
 import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { requireMatchMember } from "@/lib/alliance";
+import { sendPushToUser } from "@/lib/push";
+import { requestAcceptedNotification } from "@/lib/push-messages";
+
+// web-push (via lib/push) requiert le runtime Node.
+export const runtime = "nodejs";
 
 export const POST = withErrors(
   async (_req: Request, { params }: { params: { matchId: string } }) => {
@@ -19,6 +24,21 @@ export const POST = withErrors(
         where: { id: match.id },
         data: { status: "ACTIVE" },
       });
+      // Notifie le demandeur que sa demande est acceptée (best-effort).
+      if (match.requestedById && match.requestedById !== user.id) {
+        try {
+          const requester = await prisma.user.findUnique({
+            where: { id: match.requestedById },
+            select: { locale: true },
+          });
+          await sendPushToUser(
+            match.requestedById,
+            requestAcceptedNotification(requester?.locale, match.id),
+          );
+        } catch (err) {
+          console.error("[push] notif acceptation échouée", err);
+        }
+      }
     }
     return NextResponse.json({ ok: true });
   },

@@ -155,6 +155,7 @@ model User {
   agentInsights       AgentInsight[]
   coupleSpaceA        CoupleSpace?         @relation("CoupleUserA")
   coupleSpaceB        CoupleSpace?         @relation("CoupleUserB")
+  pushSubscriptions   PushSubscription[]
 
   // Vivier de matching : getSuggestions filtre sur season + isVerified +
   // gender + deletedAt. Sans cet index, full scan dès quelques milliers de profils.
@@ -424,4 +425,20 @@ model CoachMessage {
   createdAt        DateTime @default(now())
 
   @@index([userId, mode, createdAt])
+}
+
+// Abonnement Web Push (PWA, iOS 16.4+ / Android). Un device = un endpoint.
+// `endpoint` est l'URL du service push du navigateur (unique). `p256dh`/`auth`
+// sont les clés de chiffrement du payload fournies par le navigateur.
+// Purge automatique sur 404/410 lors d'un envoi (cf. lib/push.ts).
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }

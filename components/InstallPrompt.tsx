@@ -39,8 +39,7 @@ export function InstallPrompt() {
     const ua = window.navigator.userAgent;
     const ios = /iphone|ipad|ipod/i.test(ua);
     // iPad récent se présente comme « Macintosh » + écran tactile.
-    const iPadOS =
-      /Macintosh/.test(ua) && (navigator.maxTouchPoints ?? 0) > 1;
+    const iPadOS = /Macintosh/.test(ua) && (navigator.maxTouchPoints ?? 0) > 1;
     if (ios || iPadOS) {
       setIsIos(true);
       setShow(true);
@@ -80,7 +79,13 @@ export function InstallPrompt() {
           aria-hidden
           className="mt-0.5 flex h-8 w-8 flex-none items-center justify-center rounded-[9px] bg-gold/15"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden
+          >
             <path
               d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
               className="fill-gold"
@@ -111,7 +116,13 @@ export function InstallPrompt() {
           aria-label={t("dismiss")}
           className="-mr-1 -mt-1 flex-none rounded-full p-1.5 text-[#A6AEC0] hover:text-[#F4F1EA]"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden
+          >
             <path
               d="M6 6l12 12M18 6L6 18"
               stroke="currentColor"
