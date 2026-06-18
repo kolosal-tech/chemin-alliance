@@ -33,9 +33,13 @@ export function BottomNav({ married = false }: { married?: boolean }) {
         .catch(() => {});
     load();
     const id = setInterval(load, 25000);
+    // Rafraîchissement immédiat quand une conversation vient d'être lue.
+    const onRefresh = () => load();
+    window.addEventListener("unread:refresh", onRefresh);
     return () => {
       alive = false;
       clearInterval(id);
+      window.removeEventListener("unread:refresh", onRefresh);
     };
   }, []);
   const tabs = married

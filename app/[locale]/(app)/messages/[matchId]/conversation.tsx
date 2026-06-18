@@ -48,9 +48,16 @@ export function Conversation({
   useEffect(() => {
     // Marque la conversation comme lue à l'ouverture réelle (pas au prefetch
     // serveur du lien, qui exécuterait un render et fausserait le "lu").
-    fetch(`/api/matches/${matchId}/mark-read`, { method: "POST" }).catch(
-      () => {},
-    );
+    // Puis : rafraîchit le badge nav tout de suite (sans attendre le poll 25 s)
+    // et efface les notifications push iOS de ce fil (iOS ne les retire pas
+    // tout seul à la lecture).
+    fetch(`/api/matches/${matchId}/mark-read`, { method: "POST" })
+      .then(() => window.dispatchEvent(new Event("unread:refresh")))
+      .catch(() => {});
+    navigator.serviceWorker?.ready
+      .then((reg) => reg.getNotifications({ tag: `msg-${matchId}` }))
+      .then((list) => list.forEach((n) => n.close()))
+      .catch(() => {});
   }, [matchId]);
 
   async function acceptMatch() {
