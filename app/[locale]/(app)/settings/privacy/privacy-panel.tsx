@@ -153,6 +153,21 @@ export function PrivacyPanel({
       </Link>
 
       <Link
+        href="/settings/sponsor"
+        className="mb-4 flex items-center gap-3 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800"
+      >
+        <span aria-hidden className="text-lg">
+          🤝
+        </span>
+        <span className="flex-1 text-[13px] font-semibold text-night dark:text-[#ECE7DD]">
+          {t("sponsor.linkTitle")}
+        </span>
+        <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">
+          →
+        </span>
+      </Link>
+
+      <Link
         href="/settings/notifications"
         className="mb-4 flex items-center gap-3 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800"
       >
