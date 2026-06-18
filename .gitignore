@@ -37,3 +37,6 @@ next-env.d.ts
 
 # secrets
 .env
+
+# Scratch du client playwright-cli (captures, snapshots)
+.playwright-cli/
