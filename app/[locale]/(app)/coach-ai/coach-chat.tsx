@@ -64,7 +64,7 @@ export function CoachChat({
   return (
     <div className="fixed inset-0 z-30 mx-auto flex w-full max-w-md flex-col bg-cream dark:bg-anthracite-900 lg:left-60 lg:max-w-2xl">
       <SacredMotif variant="flame" className="right-[-90px] top-[160px]" />
-      <header className="glass safe-top sticky top-0 z-30 border-b border-sand-200/50 px-4 pb-3 pt-3 dark:border-anthracite-600/50">
+      <header className="glass safe-top z-30 border-b border-sand-200/50 px-4 pb-3 pt-3 dark:border-anthracite-600/50">
         <div className="mb-3 flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-night dark:bg-gold-light">
             <svg
@@ -126,7 +126,7 @@ export function CoachChat({
       {/* min-h-0 contraint le scroller ; [&>*]:shrink-0 empêche les bulles de
           se comprimer (sinon, contenu > hauteur => flex-shrink écrase et coupe
           le texte, ex. le bandeau overflow-hidden) — on veut qu'elles scrollent. */}
-      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4 py-4 [&>*]:shrink-0">
+      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-4 py-4 [&>*]:shrink-0">
         {/* Bandeau de transparence — obligatoire */}
         <div
           className="glass glass-bubble rounded-[13px] border-[#D4DAE4]/70 bg-[#EAEDF2]/70 px-4 py-3 dark:border-[#2A3A56]/70 dark:bg-[#1A2233]/60"
@@ -249,7 +249,7 @@ export function CoachChat({
         )}
       </div>
 
-      <div className="glass sticky bottom-0 z-30 border-t border-sand-200/50 px-3.5 pb-[calc(env(safe-area-inset-bottom)+88px)] lg:pb-4 pt-3 dark:border-anthracite-600/50">
+      <div className="glass z-30 border-t border-sand-200/50 px-3.5 pb-[calc(env(safe-area-inset-bottom)+88px)] lg:pb-4 pt-3 dark:border-anthracite-600/50">
         <form
           onSubmit={ask}
           className="glass flex items-center gap-2 rounded-[24px] border border-sand-300 py-1.5 pl-4 pr-1.5 dark:border-anthracite-600 dark:bg-anthracite-800/80"

@@ -169,7 +169,7 @@ export function Conversation({
       <SacredMotif variant="dove" className="right-[-100px] bottom-[200px]" />
 
       {/* Header verre */}
-      <header className="glass safe-top sticky top-0 z-30 flex items-center gap-3 border-b border-sand-200/50 px-4 py-3 dark:border-anthracite-600/50">
+      <header className="glass safe-top z-30 flex items-center gap-3 border-b border-sand-200/50 px-4 py-3 dark:border-anthracite-600/50">
         <Link href="/messages" aria-label={t("common.back")} className="p-1">
           <svg
             width="20"
@@ -286,7 +286,7 @@ export function Conversation({
       {/* Messages — verre liquide. min-h-0 indispensable : sans lui, flex-1
           ne se contraint pas, la colonne déborde et le bloc de saisie collant
           recouvre les derniers messages. */}
-      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4 py-4 pb-2 [&>*]:shrink-0">
+      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-4 py-4 pb-2 [&>*]:shrink-0">
         {messages.length === 0 && (
           <p className="mx-auto mt-8 max-w-[32ch] text-center text-sm text-sand-600 dark:text-[#7E7A72]">
             {t("messaging.emptyState")}
@@ -434,7 +434,7 @@ export function Conversation({
       {/* Suggestions IA + saisie — verre. Masqué tant que la rencontre n'est
           pas acceptée par le destinataire (il doit d'abord accepter). */}
       <div
-        className={`glass sticky bottom-0 z-30 border-t border-sand-200/50 px-3.5 pb-[calc(env(safe-area-inset-bottom)+88px)] lg:pb-4 pt-2.5 dark:border-anthracite-600/50 ${
+        className={`glass z-30 border-t border-sand-200/50 px-3.5 pb-[calc(env(safe-area-inset-bottom)+88px)] lg:pb-4 pt-2.5 dark:border-anthracite-600/50 ${
           pending ? "hidden" : ""
         }`}
       >
