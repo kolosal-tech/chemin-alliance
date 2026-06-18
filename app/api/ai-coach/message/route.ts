@@ -26,19 +26,26 @@ export const POST = withErrors(async (req: Request) => {
 
   const body = schema.parse(await req.json());
 
-  // Quota gratuit quotidien (compteur en DB)
-  const day = new Date();
-  day.setUTCHours(0, 0, 0, 0);
-  const usage = await prisma.aiCoachUsage.upsert({
-    where: { userId_day: { userId: user.id, day } },
-    create: { userId: user.id, day, count: 1 },
-    update: { count: { increment: 1 } },
-  });
-  if (usage.count > DAILY_FREE_LIMIT) {
-    return NextResponse.json(
-      { quotaExceeded: true, limit: DAILY_FREE_LIMIT },
-      { status: 429 },
-    );
+  // Quota quotidien : l'entitlement premium "unlimited_discovery" lève le
+  // plafond pour un abonné actif (un payant ne doit pas être bridé comme un
+  // gratuit). Sinon, compteur atomique en DB.
+  const isPremium = user.subscriptionStatus === "active";
+  let remaining: number | null = null;
+  if (!isPremium) {
+    const day = new Date();
+    day.setUTCHours(0, 0, 0, 0);
+    const usage = await prisma.aiCoachUsage.upsert({
+      where: { userId_day: { userId: user.id, day } },
+      create: { userId: user.id, day, count: 1 },
+      update: { count: { increment: 1 } },
+    });
+    if (usage.count > DAILY_FREE_LIMIT) {
+      return NextResponse.json(
+        { quotaExceeded: true, limit: DAILY_FREE_LIMIT },
+        { status: 429 },
+      );
+    }
+    remaining = Math.max(0, DAILY_FREE_LIMIT - usage.count);
   }
 
   let stage = null;
@@ -79,8 +86,6 @@ export const POST = withErrors(async (req: Request) => {
     ],
   });
 
-  return NextResponse.json({
-    ...reply,
-    remaining: Math.max(0, DAILY_FREE_LIMIT - usage.count),
-  });
+  // remaining = null pour un abonné premium (illimité) ; sinon jetons restants.
+  return NextResponse.json({ ...reply, remaining });
 });

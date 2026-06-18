@@ -63,6 +63,12 @@ async function redisRateLimit(
  * Vérifie et consomme un jeton pour `key`. Renvoie `allowed=false` si la limite
  * est atteinte sur la fenêtre `windowMs`.
  */
+// Le repli mémoire ne doit jamais être SILENCIEUX : sur Vercel, chaque instance
+// serverless a son propre buffer -> la limite partagée s'évapore. On loggue donc
+// le premier échec Redis pour qu'une mauvaise config (ex. URL non-REST) soit
+// visible en prod au lieu de dégrader le rate-limit en cachette.
+let redisFallbackWarned = false;
+
 export async function rateLimit(
   key: string,
   limit: number,
@@ -71,8 +77,16 @@ export async function rateLimit(
   if (redis) {
     try {
       return await redisRateLimit(key, limit, windowMs);
-    } catch {
-      // Réseau Redis indisponible -> repli mémoire (jamais bloquer l'app).
+    } catch (err) {
+      if (!redisFallbackWarned) {
+        redisFallbackWarned = true;
+        console.warn(
+          "[rate-limit] Upstash Redis injoignable — repli sur la limite EN MÉMOIRE (par instance, non partagée). " +
+            "Vérifier UPSTASH_REDIS_REST_URL (doit être l'URL REST https://…upstash.io, pas redis://…:6379) et UPSTASH_REDIS_REST_TOKEN.",
+          err instanceof Error ? err.message : String(err),
+        );
+      }
+      // Repli mémoire : jamais bloquer l'app, mais l'incident est désormais tracé.
     }
   }
   return memoryRateLimit(key, limit, windowMs);

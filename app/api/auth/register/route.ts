@@ -77,6 +77,9 @@ export const POST = withErrors(async (req: Request) => {
       rulesetId,
       season,
       emailVerifyToken: token,
+      // Symétrie avec le changement d'email (me/email) : le lien d'inscription
+      // expire après 24 h (verify-email vérifie cette date, null-safe).
+      emailVerifyExpires: new Date(Date.now() + 24 * 60 * 60 * 1000),
       faithProfile: { create: { vertical: body.vertical } },
       relationshipProfile: {
         create: { maritalStatus },

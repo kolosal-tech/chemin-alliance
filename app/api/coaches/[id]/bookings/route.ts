@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { jsonError, withErrors } from "@/lib/api-helpers";
@@ -22,8 +23,17 @@ export const POST = withErrors(
         },
       });
       return NextResponse.json({ ok: true, bookingId: booking.id }, { status: 201 });
-    } catch {
-      return jsonError(409, "SLOT_TAKEN");
+    } catch (err) {
+      // 409 UNIQUEMENT pour la violation d'unicité (slot déjà réservé).
+      // Toute autre erreur (panne DB, etc.) doit remonter en 500, pas être
+      // masquée en "créneau pris".
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === "P2002"
+      ) {
+        return jsonError(409, "SLOT_TAKEN");
+      }
+      throw err;
     }
   },
 );
