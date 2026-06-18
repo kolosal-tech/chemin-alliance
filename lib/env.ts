@@ -50,6 +50,11 @@ const envSchema = z.object({
   WEB_PUSH_EMAIL: z.string().default("mailto:alliance@kolosaltech.com"),
   WEB_PUSH_PRIVATE_KEY: z.string().optional(),
   NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY: z.string().optional(),
+  // Photos de profil (Supabase Storage) — sans clés, l'upload est désactivé
+  // (bouton masqué). SERVICE_ROLE_KEY = secret serveur (jamais exposé client).
+  SUPABASE_URL: z.string().url().optional(),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
+  SUPABASE_PHOTO_BUCKET: z.string().default("profile-photos"),
 });
 
 function loadEnv() {

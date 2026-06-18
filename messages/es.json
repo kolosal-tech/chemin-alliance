@@ -192,7 +192,9 @@
     "single": "Soltero/a",
     "widowed": "Viudo/a",
     "divorced": "Divorciado/a",
-    "singleParent": "Padre/madre soltero/a"
+    "singleParent": "Padre/madre soltero/a",
+    "photoChange": "Cambiar foto",
+    "photoError": "Error al subir la foto. Inténtalo de nuevo."
   },
   "visibility": {
     "PUBLIC_CONTROLLED": "Público",

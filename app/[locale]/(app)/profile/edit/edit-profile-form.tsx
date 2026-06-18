@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 
@@ -42,7 +42,7 @@ const EMPTY: Data = {
   aspirations: "",
 };
 
-export function EditProfileForm() {
+export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
   const t = useTranslations("profile");
   const tc = useTranslations("common");
   const router = useRouter();
@@ -50,6 +50,29 @@ export function EditProfileForm() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [photoBusy, setPhotoBusy] = useState(false);
+
+  async function onPhotoChange(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setError(null);
+    setPhotoBusy(true);
+    try {
+      const fd = new FormData();
+      fd.append("photo", file);
+      const res = await fetch("/api/me/photo", { method: "POST", body: fd });
+      if (!res.ok) throw new Error("upload");
+      const j = (await res.json()) as { photoUrl: string };
+      setPhotoUrl(j.photoUrl);
+      router.refresh();
+    } catch {
+      setError(t("photoError"));
+    } finally {
+      setPhotoBusy(false);
+      e.target.value = "";
+    }
+  }
 
   useEffect(() => {
     fetch("/api/me")
@@ -81,6 +104,7 @@ export function EditProfileForm() {
           personality: rel.personality ?? "",
           aspirations: rel.aspirations ?? "",
         });
+        setPhotoUrl(u.photoUrl ?? null);
       })
       .catch(() => setError(tc("error")));
   }, [tc]);
@@ -217,6 +241,34 @@ export function EditProfileForm() {
           <h2 className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
             {t("secIdentity")}
           </h2>
+          {photoEnabled && (
+            <div className="flex items-center gap-4">
+              <div className="h-20 w-20 flex-none overflow-hidden rounded-full bg-sand-200 dark:bg-anthracite-700">
+                {photoUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={photoUrl}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center text-2xl">
+                    🙂
+                  </div>
+                )}
+              </div>
+              <label className="cursor-pointer rounded-btnsm border border-sand-400 px-4 py-2 text-[13px] font-semibold text-night dark:border-anthracite-600 dark:text-[#ECE7DD]">
+                {photoBusy ? tc("loading") : t("photoChange")}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  disabled={photoBusy}
+                  onChange={onPhotoChange}
+                />
+              </label>
+            </div>
+          )}
           {field("displayName", t("displayName"), {
             min: 2,
             max: 40,

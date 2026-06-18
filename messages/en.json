@@ -192,7 +192,9 @@
     "single": "Single",
     "widowed": "Widowed",
     "divorced": "Divorced",
-    "singleParent": "Single parent"
+    "singleParent": "Single parent",
+    "photoChange": "Change photo",
+    "photoError": "Photo upload failed. Try again."
   },
   "visibility": {
     "PUBLIC_CONTROLLED": "Public",

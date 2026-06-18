@@ -192,7 +192,9 @@
     "single": "Célibataire",
     "widowed": "Veuf·ve",
     "divorced": "Divorcé·e",
-    "singleParent": "Parent célibataire"
+    "singleParent": "Parent célibataire",
+    "photoChange": "Changer la photo",
+    "photoError": "Échec de l'envoi de la photo. Réessaie."
   },
   "visibility": {
     "PUBLIC_CONTROLLED": "Public",

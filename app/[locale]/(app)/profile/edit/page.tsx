@@ -9,5 +9,9 @@ export default async function EditProfilePage({
 }) {
   setRequestLocale(params.locale);
   await requirePageUser(params.locale);
-  return <EditProfileForm />;
+  // Upload photo dormant tant que Supabase Storage n'est pas configuré.
+  const photoEnabled = Boolean(
+    process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY,
+  );
+  return <EditProfileForm photoEnabled={photoEnabled} />;
 }
