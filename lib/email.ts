@@ -286,3 +286,94 @@ export async function sendPasswordResetEmail(
   }
   console.info(`\n[email] Lien de réinitialisation pour ${email} :\n${link}\n`);
 }
+
+// --- Demande de bénédiction au Parrain / Marraine (lien magique) ---
+
+const BLESSING_SUBJECTS: Record<Locale, (filleul: string) => string> = {
+  fr: (n) => `${n} demande votre bénédiction`,
+  en: (n) => `${n} is asking for your blessing`,
+  es: (n) => `${n} pide tu bendición`,
+  pt: (n) => `${n} pede a sua bênção`,
+};
+
+const BLESSING_BODIES: Record<
+  Locale,
+  { greeting: (s: string) => string; intro: string; cta: string; ignore: string }
+> = {
+  fr: {
+    greeting: (s) => `Bonjour ${s},`,
+    intro:
+      "Votre filleul·e vous a choisi·e comme Parrain/Marraine sur Chemin d'Alliance et sollicite votre bénédiction avant d'avancer dans une mise en relation. Vous pouvez bénir ce pas ou conseiller la prudence, en quelques mots.",
+    cta: "Donner ma réponse",
+    ignore: "Si vous ne connaissez pas cette personne, ignorez simplement cet email.",
+  },
+  en: {
+    greeting: (s) => `Hello ${s},`,
+    intro:
+      "Your godchild chose you as their Sponsor on Chemin d'Alliance and is asking for your blessing before moving forward with a connection. You can bless this step or advise caution, in a few words.",
+    cta: "Give my answer",
+    ignore: "If you don't know this person, simply ignore this email.",
+  },
+  es: {
+    greeting: (s) => `Hola ${s},`,
+    intro:
+      "Tu ahijado·a te eligió como Padrino/Madrina en Chemin d'Alliance y pide tu bendición antes de avanzar en una relación. Puedes bendecir este paso o aconsejar prudencia, en unas palabras.",
+    cta: "Dar mi respuesta",
+    ignore: "Si no conoces a esta persona, ignora este correo.",
+  },
+  pt: {
+    greeting: (s) => `Olá ${s},`,
+    intro:
+      "O seu afilhado·a escolheu-o·a como Padrinho/Madrinha no Chemin d'Alliance e pede a sua bênção antes de avançar numa ligação. Pode abençoar este passo ou aconselhar prudência, em poucas palavras.",
+    cta: "Dar a minha resposta",
+    ignore: "Se não conhece esta pessoa, ignore este email.",
+  },
+};
+
+function blessingHtml(
+  sponsorName: string,
+  filleulName: string,
+  link: string,
+  locale: Locale,
+): string {
+  const t = BLESSING_BODIES[locale] ?? BLESSING_BODIES.fr;
+  const title = (BLESSING_SUBJECTS[locale] ?? BLESSING_SUBJECTS.fr)(filleulName);
+  return `<!doctype html><html><body style="margin:0;background:#F7F5F0;font-family:Georgia,serif;">
+  <div style="max-width:520px;margin:0 auto;padding:40px 24px;">
+    <div style="font-family:monospace;font-size:11px;letter-spacing:.16em;color:#9A7B2E;text-transform:uppercase;">
+      &mdash;&mdash; Chemin d'Alliance
+    </div>
+    <div style="background:#131D33;border-radius:18px;padding:36px 32px;margin-top:18px;">
+      <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#C9A84C;margin:0 0 10px;">${t.greeting(sponsorName)}</p>
+      <h1 style="font-weight:400;font-size:26px;line-height:1.2;color:#F4F1EA;margin:0;">${title}</h1>
+      <p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#A6AEC0;margin:18px 0 28px;">${t.intro}</p>
+      <a href="${link}" style="display:inline-block;background:#C9A84C;color:#131D33;font-family:Helvetica,Arial,sans-serif;font-weight:600;font-size:15px;padding:14px 28px;border-radius:12px;text-decoration:none;">${t.cta}</a>
+    </div>
+    <p style="font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#8B8579;margin-top:18px;">${t.ignore}</p>
+  </div></body></html>`;
+}
+
+/** Email au Parrain/Marraine : demande de bénédiction avec lien magique. */
+export async function sendBlessingRequestEmail(
+  to: string,
+  sponsorName: string,
+  filleulName: string,
+  link: string,
+  locale: Locale = "fr",
+): Promise<boolean> {
+  if (env.RESEND_API_KEY) {
+    const subject = (BLESSING_SUBJECTS[locale] ?? BLESSING_SUBJECTS.fr)(
+      filleulName,
+    );
+    const ok = await sendViaResend(
+      to,
+      subject,
+      blessingHtml(sponsorName, filleulName, link, locale),
+    );
+    if (ok) return true;
+  }
+  console.info(
+    `\n[email] Demande de bénédiction pour ${to} (filleul·e ${filleulName}) :\n${link}\n`,
+  );
+  return false;
+}

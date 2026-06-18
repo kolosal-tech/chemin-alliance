@@ -156,6 +156,7 @@ model User {
   coupleSpaceA        CoupleSpace?         @relation("CoupleUserA")
   coupleSpaceB        CoupleSpace?         @relation("CoupleUserB")
   pushSubscriptions   PushSubscription[]
+  sponsor             Sponsor?             @relation("UserSponsor")
 
   // Vivier de matching : getSuggestions filtre sur season + isVerified +
   // gender + deletedAt. Sans cet index, full scan dès quelques milliers de profils.
@@ -444,4 +445,44 @@ model PushSubscription {
   createdAt DateTime @default(now())
 
   @@index([userId])
+}
+
+// Parrain / Marraine — proche de confiance (famille, pasteur·e, prêtre, ami·e)
+// désigné par l'utilisateur, PAR EMAIL, sans compte app. Ne lit jamais les
+// conversations : présence (badge de transparence) + bénédiction sur demande.
+// 1 par utilisateur (MVP). Voir docs/superpowers/specs/2026-06-18-parrain-marraine-design.md
+model Sponsor {
+  id        String     @id @default(cuid())
+  userId    String     @unique
+  user      User       @relation("UserSponsor", fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  email     String
+  relation  String // family | pastor | priest | friend
+  createdAt DateTime   @default(now())
+  blessings Blessing[]
+}
+
+enum BlessingStatus {
+  PENDING
+  BLESSED
+  CAUTION
+}
+
+// Demande de bénédiction : l'utilisateur (filleul·e) demande l'avis de son
+// Parrain/Marraine avant d'avancer dans une mise en relation. Le parrain répond
+// via un lien magique tokenisé (page publique). Note chiffrée au repos. Non
+// bloquant (advisory). `matchId` sans FK Match : validé en route (migration légère).
+model Blessing {
+  id            String         @id @default(cuid())
+  sponsorId     String
+  sponsor       Sponsor        @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+  matchId       String
+  userId        String
+  token         String         @unique
+  status        BlessingStatus @default(PENDING)
+  noteEncrypted String?
+  createdAt     DateTime       @default(now())
+  respondedAt   DateTime?
+
+  @@index([userId, matchId])
 }
