@@ -573,7 +573,10 @@
       "testimony": "Testemunho",
       "children": "Filhos",
       "familyVision": "Visão familiar",
-      "localChurch": "Igreja local"
+      "localChurch": "Igreja local",
+      "interests": "Interesses",
+      "personality": "Carácter",
+      "aspirations": "Sonhos e projetos"
     },
     "children_yes": "Sim",
     "children_no": "Não"

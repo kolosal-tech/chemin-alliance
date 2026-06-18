@@ -13,7 +13,10 @@ export type MatchProfileFieldKey =
   | "testimony"
   | "children"
   | "familyVision"
-  | "localChurch";
+  | "localChurch"
+  | "interests"
+  | "personality"
+  | "aspirations";
 
 export type MatchProfileField = {
   key: MatchProfileFieldKey;
@@ -38,6 +41,9 @@ export type RelationshipInput = {
   childrenVisibility: VisibilityLevel;
   familyVisionEncrypted: string | null;
   familyVisionVisibility: VisibilityLevel;
+  interests: string | null;
+  personality: string | null;
+  aspirations: string | null;
 } | null;
 
 export type MatchProfileInput = {
@@ -111,6 +117,15 @@ export function buildMatchProfileView(
       value: familyVisible ? decryptOptional(rel.familyVisionEncrypted) : null,
       unlocksAtStep: unlocksAtStep(rel.familyVisionVisibility),
     });
+
+    // Champs « à propos » : pas de chiffrement, toujours visibles (1 = dès
+    // la découverte). On n'ajoute la carte que si la personne l'a renseignée.
+    for (const k of ["interests", "personality", "aspirations"] as const) {
+      const v = rel[k];
+      if (v) {
+        fields.push({ key: k, visible: true, value: v, unlocksAtStep: 1 });
+      }
+    }
   }
 
   if (faith) {

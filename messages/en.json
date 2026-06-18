@@ -573,7 +573,10 @@
       "testimony": "Testimony",
       "children": "Children",
       "familyVision": "Family vision",
-      "localChurch": "Local church"
+      "localChurch": "Local church",
+      "interests": "Interests",
+      "personality": "Personality",
+      "aspirations": "Dreams & plans"
     },
     "children_yes": "Yes",
     "children_no": "No"
