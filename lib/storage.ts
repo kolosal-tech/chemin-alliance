@@ -63,5 +63,61 @@ export async function uploadProfilePhoto(
     );
     return { ok: false, error: "upload" };
   }
-  return { ok: true, url: `${base}/storage/v1/object/public/${bucket}/${path}` };
+  return {
+    ok: true,
+    url: `${base}/storage/v1/object/public/${bucket}/${path}`,
+  };
+}
+
+/**
+ * Extrait le chemin objet (`<userId>/<uuid>.<ext>`) d'une valeur stockée :
+ * soit une URL publique/signée Supabase, soit déjà un chemin nu. `null` si on
+ * ne sait pas l'interpréter (URL externe inattendue).
+ */
+export function extractPhotoPath(
+  stored: string,
+  bucket: string,
+): string | null {
+  for (const seg of [`/object/public/${bucket}/`, `/object/sign/${bucket}/`]) {
+    const i = stored.indexOf(seg);
+    if (i >= 0) return stored.slice(i + seg.length).split("?")[0];
+  }
+  // Valeur déjà sous forme de chemin nu (pas une URL http).
+  if (!/^https?:\/\//.test(stored)) return stored.replace(/^\/+/, "");
+  return null;
+}
+
+/**
+ * URL de lecture SIGNÉE et à durée limitée pour une photo de profil — permet
+ * un bucket privé (l'URL publique permanente n'est plus exposée). Best-effort :
+ * sans clés, ou en cas d'échec, renvoie la valeur d'entrée telle quelle pour ne
+ * jamais casser l'affichage (la vignette n'est qu'un aperçu du propriétaire).
+ */
+export async function signedPhotoUrl(
+  stored: string | null,
+  expiresInSec = 3600,
+): Promise<string | null> {
+  if (!stored) return null;
+  if (!photoUploadEnabled()) return stored;
+  const bucket = env.SUPABASE_PHOTO_BUCKET;
+  const path = extractPhotoPath(stored, bucket);
+  if (!path) return stored;
+  const base = env.SUPABASE_URL!.replace(/\/$/, "");
+  try {
+    const res = await fetch(`${base}/storage/v1/object/sign/${bucket}/${path}`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ expiresIn: expiresInSec }),
+    });
+    if (!res.ok) return stored;
+    const { signedURL } = (await res.json()) as { signedURL?: string };
+    if (!signedURL) return stored;
+    return `${base}/storage/v1${signedURL.startsWith("/") ? "" : "/"}${signedURL}`;
+  } catch (err) {
+    console.error("[storage] signature URL échouée", err);
+    return stored;
+  }
 }

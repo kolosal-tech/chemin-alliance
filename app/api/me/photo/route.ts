@@ -3,7 +3,11 @@ import { prisma } from "@/lib/db";
 import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
-import { photoUploadEnabled, uploadProfilePhoto } from "@/lib/storage";
+import {
+  photoUploadEnabled,
+  signedPhotoUrl,
+  uploadProfilePhoto,
+} from "@/lib/storage";
 
 // Upload Supabase Storage (fetch + service key) => runtime Node obligatoire.
 export const runtime = "nodejs";
@@ -37,5 +41,8 @@ export const POST = withErrors(async (req: Request) => {
     where: { id: user.id },
     data: { photoUrl: result.url },
   });
-  return NextResponse.json({ ok: true, photoUrl: result.url });
+  return NextResponse.json({
+    ok: true,
+    photoUrl: (await signedPhotoUrl(result.url)) ?? result.url,
+  });
 });

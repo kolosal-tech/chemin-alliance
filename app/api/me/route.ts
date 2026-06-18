@@ -6,15 +6,30 @@ import { withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { hashPassword } from "@/lib/security/password";
 import { decryptOptional } from "@/lib/security/crypto";
+import { signedPhotoUrl } from "@/lib/storage";
 import { SESSION_COOKIE } from "@/lib/security/jwt";
 
 export const GET = withErrors(async () => {
   const user = await requireUser();
-  const { passwordHash: _ph, emailVerifyToken: _evt, ...safe } = user;
+  // DTO curé : on ne renvoie JAMAIS au client les secrets/jetons du compte.
+  const {
+    passwordHash: _ph,
+    emailVerifyToken: _evt,
+    passwordResetToken: _prt,
+    passwordResetExpires: _pre,
+    emailVerifyExpires: _eve,
+    stripeCustomerId: _sci,
+    ...safe
+  } = user;
   void _ph;
   void _evt;
+  void _prt;
+  void _pre;
+  void _eve;
+  void _sci;
   return NextResponse.json({
     ...safe,
+    photoUrl: await signedPhotoUrl(user.photoUrl),
     faithProfile: user.faithProfile && {
       ...user.faithProfile,
       localChurch: decryptOptional(user.faithProfile.localChurchEncrypted),
