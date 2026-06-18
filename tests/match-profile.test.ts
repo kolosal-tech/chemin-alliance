@@ -28,6 +28,9 @@ function relationship(
     childrenVisibility: VisibilityLevel;
     familyVisionEncrypted: string | null;
     familyVisionVisibility: VisibilityLevel;
+    interests: string | null;
+    personality: string | null;
+    aspirations: string | null;
   }> = {},
 ) {
   return {
@@ -37,6 +40,9 @@ function relationship(
     childrenVisibility: "AFTER_MATCH" as VisibilityLevel,
     familyVisionEncrypted: encryptField("Trois enfants, école à la maison."),
     familyVisionVisibility: "AFTER_DIALOGUE" as VisibilityLevel,
+    interests: "Randonnée, lecture, musique",
+    personality: "Posée, attentive, fidèle",
+    aspirations: "Bâtir un foyer stable et ouvert",
     ...over,
   };
 }

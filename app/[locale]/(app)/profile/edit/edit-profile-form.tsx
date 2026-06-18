@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+} from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 
@@ -47,6 +53,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
   const tc = useTranslations("common");
   const router = useRouter();
   const [d, setD] = useState<Data | null>(null);
+  const [loadFailed, setLoadFailed] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -74,9 +81,13 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
     }
   }
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setLoadFailed(false);
     fetch("/api/me")
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error("load");
+        return r.json();
+      })
       .then((u) => {
         const f = u.faithProfile ?? {};
         const rel = u.relationshipProfile ?? {};
@@ -106,8 +117,12 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
         });
         setPhotoUrl(u.photoUrl ?? null);
       })
-      .catch(() => setError(tc("error")));
-  }, [tc]);
+      .catch(() => setLoadFailed(true));
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   function set<K extends keyof Data>(k: K, v: Data[K]) {
     setD((p) => (p ? { ...p, [k]: v } : p));
@@ -181,7 +196,22 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
   if (!d) {
     return (
       <main className="px-5 pt-8 text-center text-sm text-warmgray safe-top">
-        {tc("loading")}
+        {loadFailed ? (
+          <div className="flex flex-col items-center gap-3">
+            <p role="alert" className="text-danger">
+              {tc("error")}
+            </p>
+            <button
+              type="button"
+              onClick={load}
+              className="rounded-btnsm border border-sand-400 px-4 py-2 text-[13px] font-semibold text-night dark:border-anthracite-600 dark:text-[#ECE7DD]"
+            >
+              {tc("retry")}
+            </button>
+          </div>
+        ) : (
+          tc("loading")
+        )}
       </main>
     );
   }
@@ -337,8 +367,14 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
           })}
           {field("familyVision", t("familyVision"), { area: true, max: 2000 })}
           {field("interests", t("interestsLabel"), { area: true, max: 500 })}
-          {field("personality", t("personalityLabel"), { area: true, max: 500 })}
-          {field("aspirations", t("aspirationsLabel"), { area: true, max: 500 })}
+          {field("personality", t("personalityLabel"), {
+            area: true,
+            max: 500,
+          })}
+          {field("aspirations", t("aspirationsLabel"), {
+            area: true,
+            max: 500,
+          })}
           <label className="flex flex-col gap-1.5">
             <span className={lbl}>{t("wantsChildrenLabel")}</span>
             <select
