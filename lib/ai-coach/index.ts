@@ -102,7 +102,9 @@ export async function askCoach(
     system,
     user: question,
     step,
-    maxTokens: 512,
+    // 512 tronquait les réponses structurées (listes de points) en plein
+    // milieu. 1024 laisse de la marge pour un développement complet.
+    maxTokens: 1024,
     tier: opts.tier,
   });
   if (text) return { text, guardrail: false, provider: aiProvider };
