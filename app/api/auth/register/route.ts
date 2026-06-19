@@ -24,7 +24,8 @@ const schema = z.object({
   // "engaged" = déjà fiancé·e -> Espace Fiancés (préparation), hors matching ;
   // "married" = déjà marié·e -> Espace Couple, jamais dans le matching.
   intent: z.enum(["discern", "engaged", "married"]).default("discern"),
-  country: z.string().max(80).optional(),
+  // Pays obligatoire : minimum d'info géographique pour le matching + la locale.
+  country: z.string().trim().min(2).max(80),
   locale: z.enum(["fr", "en", "es", "pt"]).default("fr"),
   consentSensitiveData: z.literal(true),
   consentTerms: z.literal(true),
@@ -72,7 +73,7 @@ export const POST = withErrors(async (req: Request) => {
       displayName: body.displayName,
       age: body.age,
       gender: body.gender,
-      country: body.country || null,
+      country: body.country,
       locale: body.locale,
       rulesetId,
       season,

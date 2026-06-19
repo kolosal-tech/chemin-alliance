@@ -58,6 +58,10 @@ const envSchema = z.object({
   // Cron de rétention (Vercel Cron) — sans secret, les routes /api/cron/* sont
   // dormantes (503) : rien ne se déclenche tant que CRON_SECRET n'est pas posé.
   CRON_SECRET: z.string().optional(),
+  // Phase 2 — gate du profil avant le matching. OFF par défaut. "true" = ON.
+  // Lu côté client via lib/flags (process.env inliné par Next) ; déclaré ici
+  // pour documentation/validation serveur.
+  NEXT_PUBLIC_PHASE2_GATE_PROFILE: z.enum(["true", "false"]).optional(),
 });
 
 function loadEnv() {

@@ -298,14 +298,20 @@ const BLESSING_SUBJECTS: Record<Locale, (filleul: string) => string> = {
 
 const BLESSING_BODIES: Record<
   Locale,
-  { greeting: (s: string) => string; intro: string; cta: string; ignore: string }
+  {
+    greeting: (s: string) => string;
+    intro: string;
+    cta: string;
+    ignore: string;
+  }
 > = {
   fr: {
     greeting: (s) => `Bonjour ${s},`,
     intro:
       "Votre filleul·e vous a choisi·e comme Parrain/Marraine sur Chemin d'Alliance et sollicite votre bénédiction avant d'avancer dans une mise en relation. Vous pouvez bénir ce pas ou conseiller la prudence, en quelques mots.",
     cta: "Donner ma réponse",
-    ignore: "Si vous ne connaissez pas cette personne, ignorez simplement cet email.",
+    ignore:
+      "Si vous ne connaissez pas cette personne, ignorez simplement cet email.",
   },
   en: {
     greeting: (s) => `Hello ${s},`,
@@ -337,7 +343,9 @@ function blessingHtml(
   locale: Locale,
 ): string {
   const t = BLESSING_BODIES[locale] ?? BLESSING_BODIES.fr;
-  const title = (BLESSING_SUBJECTS[locale] ?? BLESSING_SUBJECTS.fr)(filleulName);
+  const title = (BLESSING_SUBJECTS[locale] ?? BLESSING_SUBJECTS.fr)(
+    filleulName,
+  );
   return `<!doctype html><html><body style="margin:0;background:#F7F5F0;font-family:Georgia,serif;">
   <div style="max-width:520px;margin:0 auto;padding:40px 24px;">
     <div style="font-family:monospace;font-size:11px;letter-spacing:.16em;color:#9A7B2E;text-transform:uppercase;">

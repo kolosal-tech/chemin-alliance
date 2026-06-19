@@ -18,7 +18,9 @@ export function withErrors<T extends unknown[]>(
         typeof err === "object" &&
         err &&
         "digest" in err &&
-        String((err as { digest: unknown }).digest).startsWith("DYNAMIC_SERVER_USAGE")
+        String((err as { digest: unknown }).digest).startsWith(
+          "DYNAMIC_SERVER_USAGE",
+        )
       ) {
         throw err;
       }
@@ -40,7 +42,5 @@ export function withErrors<T extends unknown[]>(
 }
 
 export function clientIp(req: Request): string {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local"
-  );
+  return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
 }

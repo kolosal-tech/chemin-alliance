@@ -1,11 +1,19 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { redirect } from "@/i18n/navigation";
-import { getSuggestions } from "@/lib/matching";
+import { getSuggestions, missingMinimumProfile } from "@/lib/matching";
 import { prisma } from "@/lib/db";
 import { Link } from "@/i18n/navigation";
 import { AllianceThread } from "@/components/AllianceThread";
 import { SuggestionCard } from "./suggestion-card";
+import { isProfileGateEnabled } from "@/lib/flags";
+import {
+  profileCompletion,
+  matchingGateBlocked,
+} from "@/lib/profile-completion";
+import { OnboardingProgress } from "@/components/OnboardingProgress";
+import { IncompleteProfileModal } from "@/components/IncompleteProfileModal";
+import { OnboardingIntroCard } from "@/components/OnboardingIntroCard";
 
 export default async function SuggestionsPage({
   params,
@@ -25,6 +33,18 @@ export default async function SuggestionsPage({
     }),
   ]);
   const hasPortrait = portraitCount > 0;
+  // Gate profil minimum : si ville/intention manquent, getSuggestions renvoie []
+  // ET on affiche un appel à compléter plutôt que « pas de suggestion ».
+  const missing = missingMinimumProfile(user);
+  // Phase 2 (flag OFF par défaut) : si activé et profil incomplet, on remplace
+  // la liste par la jauge d'onboarding + modale. Flag OFF ⇒ branche inchangée.
+  const completion = profileCompletion(user);
+  const onboardingDone = user.onboardingDoneAt != null;
+  const gateActive = matchingGateBlocked({
+    gateEnabled: isProfileGateEnabled(),
+    completion,
+    onboardingDone,
+  });
 
   return (
     <main className="px-5 pt-6 safe-top">
@@ -89,35 +109,89 @@ export default async function SuggestionsPage({
         </div>
       </header>
 
-      <div className="mt-4 flex flex-col gap-3.5 lg:grid lg:grid-cols-3 lg:items-start">
-        {suggestions.length === 0 && (
-          <p className="rounded-card border border-sand-200 bg-surface p-5 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
-            {t("suggestions.empty")}
-          </p>
-        )}
-        {suggestions.map((s, i) => (
-          <SuggestionCard
-            key={s.id}
-            featured={i === 1}
-            profile={{
-              id: s.id,
-              displayName: s.displayName,
-              age: s.age,
-              isVerified: s.isVerified,
-              denomination: s.faithProfile?.denomination ?? null,
-              vertical: s.faithProfile?.vertical ?? null,
-              maritalStatus: s.relationshipProfile?.maritalStatus ?? null,
-              hasChildren: s.relationshipProfile?.hasChildren ?? false,
-              intentionStatement:
-                s.relationshipProfile?.intentionVisibility ===
-                "PUBLIC_CONTROLLED"
-                  ? (s.relationshipProfile?.intentionStatement ?? null)
-                  : null,
-              gradient: i % 3,
-            }}
-          />
-        ))}
-      </div>
+      {gateActive ? (
+        <div className="mt-4">
+          {!onboardingDone ? (
+            <OnboardingIntroCard />
+          ) : (
+            <>
+              <OnboardingProgress completion={completion} />
+              <IncompleteProfileModal completion={completion} />
+            </>
+          )}
+        </div>
+      ) : (
+        <div className="mt-4 flex flex-col gap-3.5 lg:grid lg:grid-cols-3 lg:items-start">
+          {missing.length > 0 && (
+            <div className="rounded-card border border-sand-200 bg-surface p-5 dark:border-anthracite-600 dark:bg-anthracite-800 lg:col-span-3">
+              <h2 className="font-display text-lg text-night dark:text-[#ECE7DD]">
+                {t("suggestions.completeTitle")}
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-warmgray dark:text-[#9A958B]">
+                {t("suggestions.completeBody")}
+              </p>
+              <ul className="mt-3 flex flex-col gap-1.5">
+                {missing.includes("city") && (
+                  <li className="flex items-center gap-2 text-[13px] text-night dark:text-[#ECE7DD]">
+                    <span
+                      aria-hidden
+                      className="text-gold-deep dark:text-gold-light"
+                    >
+                      ○
+                    </span>
+                    {t("suggestions.needCity")}
+                  </li>
+                )}
+                {missing.includes("intention") && (
+                  <li className="flex items-center gap-2 text-[13px] text-night dark:text-[#ECE7DD]">
+                    <span
+                      aria-hidden
+                      className="text-gold-deep dark:text-gold-light"
+                    >
+                      ○
+                    </span>
+                    {t("suggestions.needIntention")}
+                  </li>
+                )}
+              </ul>
+              <Link
+                href="/profile/edit"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-btnsm bg-navy px-4 py-2.5 text-[13px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+              >
+                {t("suggestions.completeCta")} <span aria-hidden>→</span>
+              </Link>
+            </div>
+          )}
+          {missing.length === 0 && suggestions.length === 0 && (
+            <p className="rounded-card border border-sand-200 bg-surface p-5 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
+              {t("suggestions.empty")}
+            </p>
+          )}
+          {missing.length === 0 &&
+            suggestions.map((s, i) => (
+              <SuggestionCard
+                key={s.id}
+                featured={i === 1}
+                profile={{
+                  id: s.id,
+                  displayName: s.displayName,
+                  age: s.age,
+                  isVerified: s.isVerified,
+                  denomination: s.faithProfile?.denomination ?? null,
+                  vertical: s.faithProfile?.vertical ?? null,
+                  maritalStatus: s.relationshipProfile?.maritalStatus ?? null,
+                  hasChildren: s.relationshipProfile?.hasChildren ?? false,
+                  intentionStatement:
+                    s.relationshipProfile?.intentionVisibility ===
+                    "PUBLIC_CONTROLLED"
+                      ? (s.relationshipProfile?.intentionStatement ?? null)
+                      : null,
+                  gradient: i % 3,
+                }}
+              />
+            ))}
+        </div>
+      )}
     </main>
   );
 }

@@ -120,6 +120,7 @@
     "country": "Pays",
     "countryHint": "Ex. Côte d'Ivoire, France, Brésil…",
     "vertical": "Tradition chrétienne",
+    "verticalPlaceholder": "À préciser…",
     "verticalEvangelical": "Protestante évangélique",
     "verticalCatholic": "Catholique",
     "consentSensitive": "J'accepte que mes données religieuses et familiales soient traitées pour le fonctionnement du service (données sensibles, RGPD art. 9). Elles ne sont jamais vendues ni utilisées à des fins publicitaires.",
@@ -217,6 +218,11 @@
     "alignedFamily": "Vision familiale très alignée",
     "toDeepen": "Quelques sujets à approfondir",
     "empty": "Pas de nouvelle suggestion aujourd'hui. La qualité avant la quantité.",
+    "completeTitle": "Complète ton profil pour découvrir des profils",
+    "completeBody": "Avant d'entrer dans le discernement, renseigne le minimum ci-dessous. Ces informations rendent les suggestions plus justes — et permettent à d'autres de te voir.",
+    "completeCta": "Compléter mon profil",
+    "needCity": "Ta ville ou région",
+    "needIntention": "Ta phrase d'intention (ce que tu cherches)",
     "requestSent": "Demande d'intérêt envoyée avec douceur."
   },
   "alliance": {
@@ -406,7 +412,8 @@
     "destructive": "Destructif",
     "toastSuccess": "Profil enregistré avec succès.",
     "toastInfo": "Vous êtes passés à l'étape Discernement.",
-    "toastWarn": "Pensez à compléter votre vision familiale."
+    "toastWarn": "Pensez à compléter votre vision familiale.",
+    "gamification": "Gamification — jauge & modale"
   },
   "agents": {
     "prep": {
@@ -598,7 +605,12 @@
     "saved": "Parrain/Marraine enregistré·e.",
     "removed": "Parrain/Marraine retiré·e.",
     "badge": "Accompagné·e par un·e proche",
-    "relations": { "family": "Famille", "pastor": "Pasteur·e", "priest": "Prêtre", "friend": "Ami·e" },
+    "relations": {
+      "family": "Famille",
+      "pastor": "Pasteur·e",
+      "priest": "Prêtre",
+      "friend": "Ami·e"
+    },
     "askBlessing": "Demander la bénédiction de mon parrain/marraine",
     "blessingSent": "Demande envoyée à ton parrain/marraine.",
     "noSponsor": "Désigne d'abord un parrain ou une marraine dans tes Réglages.",
@@ -714,6 +726,258 @@
       "fake_identity": "Identité douteuse",
       "off_platform_push": "Sortie de plateforme",
       "sob_story": "Récit larmoyant"
+    }
+  },
+  "home": {
+    "nav": {
+      "features": "Pourquoi nous",
+      "journey": "Le parcours",
+      "testimonials": "Témoignages",
+      "login": "Connexion",
+      "start": "Commencer",
+      "menu": "Menu",
+      "close": "Fermer"
+    },
+    "hero": {
+      "badge": "Rencontres chrétiennes · confidentialité native",
+      "title": "Rencontrez la personne",
+      "titleAccent": "que Dieu place sur votre chemin",
+      "subtitle": "Un parcours guidé, pudique et bienveillant pour discerner, dialoguer et bâtir une alliance qui dure. Loin du superficiel.",
+      "ctaPrimary": "Commencer le parcours",
+      "ctaSecondary": "J'ai déjà un compte",
+      "trust1": "Profils vérifiés",
+      "trust2": "Coordonnées privées",
+      "trust3": "Accompagnement humain"
+    },
+    "press": {
+      "kicker": "On parle de nous"
+    },
+    "stats": {
+      "kicker": "La communauté grandit",
+      "members": "Membres en chemin",
+      "alliances": "Alliances nouées",
+      "messages": "Messages échangés",
+      "rating": "Note moyenne"
+    },
+    "whyUs": {
+      "kicker": "Pourquoi Chemin d'Alliance",
+      "title": "Pensé pour le sérieux, pas pour le superficiel",
+      "items": {
+        "privacy": {
+          "title": "Confidentialité native",
+          "body": "Vos coordonnées restent privées par défaut. On ne dévoile que ce que vous décidez, étape par étape."
+        },
+        "guidance": {
+          "title": "Accompagnement",
+          "body": "Un coach et des repères à chaque étape pour discerner sereinement, jamais seul·e face aux décisions."
+        },
+        "exit": {
+          "title": "Sortie élégante",
+          "body": "Mettre fin à un échange en douceur, sans drame ni jugement. Le respect prime toujours."
+        },
+        "community": {
+          "title": "Communauté de foi",
+          "body": "Des personnes qui partagent vos valeurs et cherchent une relation sincère et durable."
+        }
+      }
+    },
+    "journey": {
+      "kicker": "Le parcours d'Alliance",
+      "title": "Six étapes, un seul cap : une relation qui tient",
+      "subtitle": "Avancez à votre rythme. Chaque étape débloque la suivante — comme un chemin que l'on gravit ensemble.",
+      "stepLabel": "Étape {n}",
+      "progressLabel": "Votre progression",
+      "steps": {
+        "discovery": {
+          "title": "Découverte",
+          "body": "Affinez ce qui compte vraiment et laissez-vous suggérer des profils alignés sur vos valeurs."
+        },
+        "dialogue": {
+          "title": "Dialogue",
+          "body": "Échangez dans un cadre bienveillant. Apprenez à connaître l'autre, sans pression."
+        },
+        "discernment": {
+          "title": "Discernement",
+          "body": "Posez les questions essentielles. Foi, projet, enfants, finances — au clair, à deux."
+        },
+        "accompaniment": {
+          "title": "Accompagnement",
+          "body": "Un coach et des ressources vous guident dans les moments qui comptent."
+        },
+        "engagement": {
+          "title": "Engagement",
+          "body": "Quand la confiance est là, avancez vers un engagement réfléchi et assumé."
+        },
+        "preparation": {
+          "title": "Préparation",
+          "body": "Préparez votre vie commune avec des modules concrets et un cadre éprouvé."
+        }
+      }
+    },
+    "values": {
+      "kicker": "Nos valeurs",
+      "title": "Quatre repères qui nous tiennent",
+      "charity": {
+        "title": "Charité",
+        "body": "On se parle avec bonté. Chaque personne est accueillie avec dignité."
+      },
+      "respect": {
+        "title": "Respect",
+        "body": "Le rythme et les limites de chacun sont sacrés. Toujours."
+      },
+      "purity": {
+        "title": "Pureté",
+        "body": "Un cadre pudique qui protège les cœurs et honore l'engagement."
+      },
+      "truth": {
+        "title": "Vérité",
+        "body": "Des profils vérifiés et des échanges sincères. Pas de faux-semblants."
+      }
+    },
+    "testimonials": {
+      "kicker": "Ils ont trouvé leur chemin",
+      "title": "Des histoires qui commencent ici",
+      "duration": "Membre depuis {months, plural, one {# mois} other {# mois}}",
+      "items": {
+        "t1": {
+          "quote": "On s'est rencontrés sans masque, en parlant de l'essentiel dès le début. Quelques mois plus tard, on préparait notre mariage.",
+          "role": "Mariés en 2025"
+        },
+        "t2": {
+          "quote": "Enfin une appli où je me sens respectée. Mes coordonnées restent privées tant que je n'ai pas confiance.",
+          "role": "En chemin"
+        },
+        "t3": {
+          "quote": "L'accompagnement à chaque étape a tout changé. On avançait sans jamais se sentir perdus.",
+          "role": "Fiancés"
+        },
+        "t4": {
+          "quote": "Le discernement guidé m'a aidé à savoir ce que je cherchais vraiment. C'est rare et précieux.",
+          "role": "En chemin"
+        }
+      },
+      "prev": "Témoignage précédent",
+      "next": "Témoignage suivant"
+    },
+    "download": {
+      "kicker": "Emportez votre chemin",
+      "title": "Disponible partout, à tout moment",
+      "body": "Installez l'application et poursuivez vos échanges où que vous soyez. Léger, rapide, même hors-ligne.",
+      "appStore": "Télécharger sur l'App Store",
+      "googlePlay": "Disponible sur Google Play",
+      "install": "Installer l'application",
+      "installed": "Application installée",
+      "comingSoon": "Bientôt disponible"
+    },
+    "footer": {
+      "tagline": "Se rencontrer avec foi, discernement et confidentialité.",
+      "sections": {
+        "product": "Produit",
+        "resources": "Ressources",
+        "legal": "Légal"
+      },
+      "links": {
+        "mission": "Notre mission",
+        "journey": "Le parcours",
+        "download": "Télécharger l'appli",
+        "blog": "Blog",
+        "guides": "Guides",
+        "help": "Aide & contact",
+        "terms": "Conditions d'utilisation",
+        "cookies": "Cookies",
+        "privacy": "Confidentialité"
+      },
+      "rights": "Tous droits réservés.",
+      "madeWith": "Fait avec soin pour celles et ceux qui cherchent une alliance durable."
+    }
+  },
+  "pages": {
+    "mission": {
+      "kicker": "Notre mission",
+      "title": "Aider chacun à bâtir une alliance qui dure",
+      "lead": "Nous croyons que la rencontre en vue du mariage mérite mieux que le superficiel : un cadre qui protège, qui élève et qui accompagne.",
+      "p1": "Chemin d'Alliance est né d'un constat simple : trop d'applications réduisent la rencontre à une photo et un swipe. Nous voulions un espace où la foi, le sérieux et le respect passent avant l'apparence.",
+      "p2": "Notre parcours en six étapes guide chaque personne, à son rythme, du premier échange jusqu'à la préparation d'une vie commune. La confidentialité n'est pas une option : elle est native.",
+      "p3": "Nous ne promettons pas l'amour en un clic. Nous offrons un chemin — exigeant, bienveillant et accompagné — vers une relation qui tient.",
+      "ctaTitle": "Prêt·e à commencer ?",
+      "ctaBody": "Créez votre profil en quelques minutes et avancez à votre rythme.",
+      "ctaPrimary": "Commencer le parcours",
+      "ctaSecondary": "Découvrir le parcours",
+      "partnersKicker": "Ils nous soutiennent",
+      "partnersNote": "Partenaires et accompagnateurs (placeholders)."
+    },
+    "guides": {
+      "kicker": "Guides pratiques",
+      "title": "Des repères pour chaque étape du chemin",
+      "subtitle": "Des guides clairs et bienveillants pour avancer avec discernement, de la première rencontre à la vie conjugale.",
+      "badge": "Guide",
+      "readGuide": "Lire le guide",
+      "soon": "Bientôt",
+      "topics": {
+        "meeting": {
+          "title": "La rencontre chrétienne",
+          "desc": "Poser des bases saines : intentions, rythme et premières conversations."
+        },
+        "marriage": {
+          "title": "Vers le mariage",
+          "desc": "Discernement, engagement et préparation d'une union qui dure."
+        },
+        "intimacy": {
+          "title": "Intimité & pureté",
+          "desc": "Vivre l'attente et l'intimité avec respect, vérité et liberté."
+        },
+        "faith": {
+          "title": "Foi & couple",
+          "desc": "Construire une vie spirituelle commune sans s'imposer l'un à l'autre."
+        },
+        "finances": {
+          "title": "Projet & finances",
+          "desc": "Aligner vos visions sur l'argent, le travail et le foyer."
+        },
+        "parenting": {
+          "title": "Famille & enfants",
+          "desc": "Anticiper sereinement la question des enfants et de l'éducation."
+        }
+      }
+    },
+    "blog": {
+      "kicker": "Le blog",
+      "title": "Réflexions sur la rencontre et l'alliance",
+      "subtitle": "Conseils, témoignages et repères pour cheminer avec foi et discernement.",
+      "readMore": "Lire l'article",
+      "back": "Retour au blog",
+      "minRead": "{min} min de lecture",
+      "empty": "Aucun article pour le moment."
+    }
+  },
+  "phase2": {
+    "progress": {
+      "title": "Complète ton profil",
+      "subtitleComplete": "Ton profil est complet ✨",
+      "subtitleRemaining": "{count, plural, one {Plus qu'une étape} other {Encore # étapes}}",
+      "percentLabel": "complété",
+      "cta": "Compléter mon profil",
+      "sections": {
+        "photo": "Photo de profil",
+        "city": "Ta ville",
+        "intention": "Phrase d'intention",
+        "faith": "Ta foi",
+        "family": "Vision familiale",
+        "aboutMe": "À propos de toi",
+        "verified": "Email vérifié"
+      }
+    },
+    "modal": {
+      "title": "Encore un pas",
+      "body": "Pour découvrir des profils alignés sur tes valeurs, complète d'abord ton profil. Chaque étape te rapproche.",
+      "cta": "Compléter maintenant",
+      "later": "Plus tard"
+    },
+    "intro": {
+      "title": "Bienvenue sur ton chemin",
+      "body": "Avant de découvrir des profils, prends un instant pour comprendre le parcours. Six étapes, à ton rythme.",
+      "stepsLabel": "Le parcours en 6 étapes",
+      "cta": "J'ai compris, commencer"
     }
   }
 }

@@ -30,16 +30,30 @@ export type PriceOffer = {
  */
 const XOF_IDENTIFIERS: ReadonlySet<string> = new Set([
   // Codes ISO 3166-1 alpha-2
-  "bf", "ci", "sn", "ml", "ne", "tg", "bj", "gw",
+  "bf",
+  "ci",
+  "sn",
+  "ml",
+  "ne",
+  "tg",
+  "bj",
+  "gw",
   // Noms usuels (fr/en) normalisés en minuscules
-  "burkina faso", "burkina",
-  "côte d'ivoire", "cote d'ivoire", "ivory coast",
-  "sénégal", "senegal",
+  "burkina faso",
+  "burkina",
+  "côte d'ivoire",
+  "cote d'ivoire",
+  "ivory coast",
+  "sénégal",
+  "senegal",
   "mali",
   "niger",
   "togo",
-  "bénin", "benin",
-  "guinée-bissau", "guinee-bissau", "guinea-bissau",
+  "bénin",
+  "benin",
+  "guinée-bissau",
+  "guinee-bissau",
+  "guinea-bissau",
 ]);
 
 /** Vrai si le pays appartient à la zone XOF (UEMOA). Robuste à la casse/espaces. */

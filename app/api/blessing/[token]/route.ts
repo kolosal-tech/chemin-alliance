@@ -35,11 +35,7 @@ const schema = z.object({
 
 export const POST = withErrors(
   async (req: Request, { params }: { params: { token: string } }) => {
-    const rl = await rateLimit(
-      `blessing-respond:${clientIp(req)}`,
-      20,
-      60_000,
-    );
+    const rl = await rateLimit(`blessing-respond:${clientIp(req)}`, 20, 60_000);
     if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
     const { decision, note } = schema.parse(await req.json());

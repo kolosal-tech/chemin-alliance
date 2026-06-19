@@ -104,14 +104,17 @@ export async function signedPhotoUrl(
   if (!path) return stored;
   const base = env.SUPABASE_URL!.replace(/\/$/, "");
   try {
-    const res = await fetch(`${base}/storage/v1/object/sign/${bucket}/${path}`, {
-      method: "POST",
-      headers: {
-        authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
-        "content-type": "application/json",
+    const res = await fetch(
+      `${base}/storage/v1/object/sign/${bucket}/${path}`,
+      {
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ expiresIn: expiresInSec }),
       },
-      body: JSON.stringify({ expiresIn: expiresInSec }),
-    });
+    );
     if (!res.ok) return stored;
     const { signedURL } = (await res.json()) as { signedURL?: string };
     if (!signedURL) return stored;

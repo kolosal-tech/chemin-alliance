@@ -22,7 +22,10 @@ export const POST = withErrors(
           slotStart: new Date(slotStart),
         },
       });
-      return NextResponse.json({ ok: true, bookingId: booking.id }, { status: 201 });
+      return NextResponse.json(
+        { ok: true, bookingId: booking.id },
+        { status: 201 },
+      );
     } catch (err) {
       // 409 UNIQUEMENT pour la violation d'unicité (slot déjà réservé).
       // Toute autre erreur (panne DB, etc.) doit remonter en 500, pas être

@@ -130,6 +130,7 @@ model User {
   lastDevotionDate      DateTime?
   currentStreak         Int       @default(0)
   longestStreak         Int       @default(0)
+  onboardingDoneAt      DateTime?
   deletedAt             DateTime?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt

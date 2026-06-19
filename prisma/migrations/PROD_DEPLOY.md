@@ -64,6 +64,17 @@ npx prisma migrate status   # => up to date
 ```
 Vérif : `SELECT column_name FROM information_schema.columns WHERE table_name='User' AND column_name LIKE 'passwordReset%';` (2 lignes).
 
+## 0013_onboarding_done (Phase 2 — flag onboarding persistant)
+Colonne additive nullable (pas de dialog RLS attendu, `ALTER`). SQL Editor :
+```sql
+ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "onboardingDoneAt" TIMESTAMP(3);
+```
+Puis marquer appliqué (DATABASE_URL = prod, URL directe 5432) :
+```bash
+npx prisma migrate resolve --applied 0013_onboarding_done
+```
+Vérif : `SELECT column_name FROM information_schema.columns WHERE table_name='User' AND column_name='onboardingDoneAt';` (1 ligne).
+
 ## Futures migrations
 Le build Vercel n'exécute pas `migrate deploy`. Tant que ce n'est pas automatisé
 (step release `prisma migrate deploy` sur URL directe), appliquer chaque nouvelle

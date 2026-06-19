@@ -46,7 +46,7 @@ export function RegisterForm() {
         gender: fd.get("gender"),
         vertical: fd.get("vertical"),
         intent: fd.get("intent") || "discern",
-        country: fd.get("country") || undefined,
+        country: fd.get("country"),
         locale,
         consentSensitiveData: true,
         consentTerms: true,
@@ -210,7 +210,15 @@ export function RegisterForm() {
               <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">
                 {t("vertical")}
               </span>
-              <select name="vertical" required className={input}>
+              <select
+                name="vertical"
+                required
+                defaultValue=""
+                className={input}
+              >
+                <option value="" disabled>
+                  {t("verticalPlaceholder")}
+                </option>
                 <option value="CHRISTIAN_EVANGELICAL">
                   {t("verticalEvangelical")}
                 </option>
@@ -226,6 +234,8 @@ export function RegisterForm() {
             </span>
             <input
               name="country"
+              required
+              minLength={2}
               maxLength={80}
               placeholder={t("countryHint")}
               className={input}

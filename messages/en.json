@@ -120,6 +120,7 @@
     "country": "Country",
     "countryHint": "E.g. Ivory Coast, France, Brazil…",
     "vertical": "Christian tradition",
+    "verticalPlaceholder": "Please select…",
     "verticalEvangelical": "Evangelical Protestant",
     "verticalCatholic": "Catholic",
     "consentSensitive": "I agree that my religious and family data may be processed to operate the service (sensitive data, GDPR art. 9). It is never sold or used for advertising.",
@@ -217,6 +218,11 @@
     "alignedFamily": "Very aligned family vision",
     "toDeepen": "A few topics to explore",
     "empty": "No new suggestions today. Quality over quantity.",
+    "completeTitle": "Complete your profile to see matches",
+    "completeBody": "Before discernment begins, fill in the minimum below. It makes suggestions more relevant — and lets others see you.",
+    "completeCta": "Complete my profile",
+    "needCity": "Your city or region",
+    "needIntention": "Your intention (what you're seeking)",
     "requestSent": "Interest request gently sent."
   },
   "alliance": {
@@ -406,7 +412,8 @@
     "destructive": "Destructive",
     "toastSuccess": "Profile saved successfully.",
     "toastInfo": "You have moved to the Discernment stage.",
-    "toastWarn": "Remember to complete your family vision."
+    "toastWarn": "Remember to complete your family vision.",
+    "gamification": "Gamification — gauge & modal"
   },
   "agents": {
     "prep": {
@@ -598,7 +605,12 @@
     "saved": "Godparent saved.",
     "removed": "Godparent removed.",
     "badge": "Accompanied by a loved one",
-    "relations": { "family": "Family", "pastor": "Pastor", "priest": "Priest", "friend": "Friend" },
+    "relations": {
+      "family": "Family",
+      "pastor": "Pastor",
+      "priest": "Priest",
+      "friend": "Friend"
+    },
     "askBlessing": "Ask my godparent for their blessing",
     "blessingSent": "Request sent to your godparent.",
     "noSponsor": "First designate a godparent in your Settings.",
@@ -714,6 +726,258 @@
       "fake_identity": "Doubtful identity",
       "off_platform_push": "Leaving the platform",
       "sob_story": "Sob story"
+    }
+  },
+  "home": {
+    "nav": {
+      "features": "Why us",
+      "journey": "The journey",
+      "testimonials": "Stories",
+      "login": "Log in",
+      "start": "Get started",
+      "menu": "Menu",
+      "close": "Close"
+    },
+    "hero": {
+      "badge": "Christian dating · privacy by design",
+      "title": "Meet the person",
+      "titleAccent": "God places on your path",
+      "subtitle": "A guided, modest and caring journey to discern, talk and build a covenant that lasts. Far from the superficial.",
+      "ctaPrimary": "Begin the journey",
+      "ctaSecondary": "I already have an account",
+      "trust1": "Verified profiles",
+      "trust2": "Private contact details",
+      "trust3": "Human guidance"
+    },
+    "press": {
+      "kicker": "As featured in"
+    },
+    "stats": {
+      "kicker": "A growing community",
+      "members": "Members on the path",
+      "alliances": "Covenants formed",
+      "messages": "Messages exchanged",
+      "rating": "Average rating"
+    },
+    "whyUs": {
+      "kicker": "Why Chemin d'Alliance",
+      "title": "Built for what's serious, not for swiping",
+      "items": {
+        "privacy": {
+          "title": "Privacy by design",
+          "body": "Your contact details stay private by default. Only what you choose is revealed, step by step."
+        },
+        "guidance": {
+          "title": "Guidance",
+          "body": "A coach and milestones at every step to discern calmly — never alone with the big decisions."
+        },
+        "exit": {
+          "title": "Graceful exit",
+          "body": "End a conversation gently, with no drama or judgment. Respect always comes first."
+        },
+        "community": {
+          "title": "Community of faith",
+          "body": "People who share your values and seek a sincere, lasting relationship."
+        }
+      }
+    },
+    "journey": {
+      "kicker": "The covenant journey",
+      "title": "Six steps, one direction: a relationship that holds",
+      "subtitle": "Move at your own pace. Each step unlocks the next — like a path you climb together.",
+      "stepLabel": "Step {n}",
+      "progressLabel": "Your progress",
+      "steps": {
+        "discovery": {
+          "title": "Discovery",
+          "body": "Refine what truly matters and get profile suggestions aligned with your values."
+        },
+        "dialogue": {
+          "title": "Dialogue",
+          "body": "Talk within a caring space. Get to know the other person, with no pressure."
+        },
+        "discernment": {
+          "title": "Discernment",
+          "body": "Ask the essential questions. Faith, plans, children, finances — clear, together."
+        },
+        "accompaniment": {
+          "title": "Guidance",
+          "body": "A coach and resources guide you through the moments that matter."
+        },
+        "engagement": {
+          "title": "Commitment",
+          "body": "When trust is there, move toward a thoughtful, wholehearted commitment."
+        },
+        "preparation": {
+          "title": "Preparation",
+          "body": "Prepare your life together with concrete modules and a proven framework."
+        }
+      }
+    },
+    "values": {
+      "kicker": "Our values",
+      "title": "Four anchors that hold us",
+      "charity": {
+        "title": "Charity",
+        "body": "We speak with kindness. Everyone is welcomed with dignity."
+      },
+      "respect": {
+        "title": "Respect",
+        "body": "Each person's pace and boundaries are sacred. Always."
+      },
+      "purity": {
+        "title": "Purity",
+        "body": "A modest space that protects hearts and honors commitment."
+      },
+      "truth": {
+        "title": "Truth",
+        "body": "Verified profiles and sincere conversations. No pretending."
+      }
+    },
+    "testimonials": {
+      "kicker": "They found their path",
+      "title": "Stories that begin here",
+      "duration": "Member for {months, plural, one {# month} other {# months}}",
+      "items": {
+        "t1": {
+          "quote": "We met with no masks, talking about the essentials from the start. A few months later, we were preparing our wedding.",
+          "role": "Married in 2025"
+        },
+        "t2": {
+          "quote": "Finally an app where I feel respected. My contact details stay private until I trust someone.",
+          "role": "On the path"
+        },
+        "t3": {
+          "quote": "The guidance at every step changed everything. We moved forward without ever feeling lost.",
+          "role": "Engaged"
+        },
+        "t4": {
+          "quote": "Guided discernment helped me know what I was truly looking for. That's rare and precious.",
+          "role": "On the path"
+        }
+      },
+      "prev": "Previous testimonial",
+      "next": "Next testimonial"
+    },
+    "download": {
+      "kicker": "Take your path with you",
+      "title": "Available anywhere, anytime",
+      "body": "Install the app and continue your conversations wherever you are. Light, fast, even offline.",
+      "appStore": "Download on the App Store",
+      "googlePlay": "Get it on Google Play",
+      "install": "Install the app",
+      "installed": "App installed",
+      "comingSoon": "Coming soon"
+    },
+    "footer": {
+      "tagline": "Meeting with faith, discernment and privacy.",
+      "sections": {
+        "product": "Product",
+        "resources": "Resources",
+        "legal": "Legal"
+      },
+      "links": {
+        "mission": "Our mission",
+        "journey": "The journey",
+        "download": "Get the app",
+        "blog": "Blog",
+        "guides": "Guides",
+        "help": "Help & contact",
+        "terms": "Terms of use",
+        "cookies": "Cookies",
+        "privacy": "Privacy"
+      },
+      "rights": "All rights reserved.",
+      "madeWith": "Made with care for those seeking a lasting covenant."
+    }
+  },
+  "pages": {
+    "mission": {
+      "kicker": "Our mission",
+      "title": "Helping everyone build a covenant that lasts",
+      "lead": "We believe dating toward marriage deserves better than the superficial: a space that protects, uplifts and guides.",
+      "p1": "Chemin d'Alliance was born from a simple observation: too many apps reduce meeting to a photo and a swipe. We wanted a space where faith, seriousness and respect come before appearance.",
+      "p2": "Our six-step journey guides each person, at their own pace, from the first exchange to preparing a life together. Privacy isn't an option — it's built in.",
+      "p3": "We don't promise love in one click. We offer a path — demanding, caring and guided — toward a relationship that holds.",
+      "ctaTitle": "Ready to begin?",
+      "ctaBody": "Create your profile in minutes and move at your own pace.",
+      "ctaPrimary": "Begin the journey",
+      "ctaSecondary": "Explore the journey",
+      "partnersKicker": "They support us",
+      "partnersNote": "Partners and guides (placeholders)."
+    },
+    "guides": {
+      "kicker": "Practical guides",
+      "title": "Guidance for every step of the path",
+      "subtitle": "Clear, caring guides to move forward with discernment, from the first meeting to married life.",
+      "badge": "Guide",
+      "readGuide": "Read the guide",
+      "soon": "Soon",
+      "topics": {
+        "meeting": {
+          "title": "Christian dating",
+          "desc": "Setting healthy foundations: intentions, pace and first conversations."
+        },
+        "marriage": {
+          "title": "Toward marriage",
+          "desc": "Discernment, commitment and preparing a lasting union."
+        },
+        "intimacy": {
+          "title": "Intimacy & purity",
+          "desc": "Living the wait and intimacy with respect, truth and freedom."
+        },
+        "faith": {
+          "title": "Faith & couple",
+          "desc": "Building a shared spiritual life without imposing on each other."
+        },
+        "finances": {
+          "title": "Plans & finances",
+          "desc": "Aligning your views on money, work and home."
+        },
+        "parenting": {
+          "title": "Family & children",
+          "desc": "Calmly anticipating the question of children and upbringing."
+        }
+      }
+    },
+    "blog": {
+      "kicker": "The blog",
+      "title": "Reflections on meeting and covenant",
+      "subtitle": "Advice, stories and milestones to journey with faith and discernment.",
+      "readMore": "Read the article",
+      "back": "Back to blog",
+      "minRead": "{min} min read",
+      "empty": "No articles yet."
+    }
+  },
+  "phase2": {
+    "progress": {
+      "title": "Complete your profile",
+      "subtitleComplete": "Your profile is complete ✨",
+      "subtitleRemaining": "{count, plural, one {Just one step left} other {# steps left}}",
+      "percentLabel": "complete",
+      "cta": "Complete my profile",
+      "sections": {
+        "photo": "Profile photo",
+        "city": "Your city",
+        "intention": "Intention statement",
+        "faith": "Your faith",
+        "family": "Family vision",
+        "aboutMe": "About you",
+        "verified": "Verified email"
+      }
+    },
+    "modal": {
+      "title": "One more step",
+      "body": "To discover profiles aligned with your values, complete your profile first. Every step brings you closer.",
+      "cta": "Complete now",
+      "later": "Later"
+    },
+    "intro": {
+      "title": "Welcome to your path",
+      "body": "Before discovering profiles, take a moment to understand the journey. Six steps, at your own pace.",
+      "stepsLabel": "The journey in 6 steps",
+      "cta": "Got it, let's begin"
     }
   }
 }

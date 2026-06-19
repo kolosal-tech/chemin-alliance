@@ -7,6 +7,11 @@ import type {
 import { prisma } from "@/lib/db";
 import { blockedUserIds } from "@/lib/blocks";
 import { passedUserIds } from "@/lib/passes";
+import { isProfileGateEnabled } from "@/lib/flags";
+import {
+  profileCompletion,
+  matchingGateBlocked,
+} from "@/lib/profile-completion";
 
 type Candidate = User & {
   faithProfile: FaithProfile | null;
@@ -20,6 +25,25 @@ type Me = User & {
   relationshipProfile: RelationshipProfile | null;
   privacySettings: PrivacySettings | null;
 };
+
+// Profil minimum exigé pour entrer dans le matching (saison JOURNEY) : une ville
+// approximative + une phrase d'intention. Tant qu'il manque l'un des deux, la
+// personne n'est NI servie (early-return sortant dans getSuggestions) NI proposée
+// aux autres (filtre entrant). Symétrie volontaire : pas de profils fantômes.
+// Les champs vides sont stockés `null` par /profile/edit, mais on .trim() par
+// sécurité. Pur et testable.
+export type MinimumProfileField = "city" | "intention";
+
+export function missingMinimumProfile(user: {
+  cityApprox: string | null;
+  relationshipProfile: { intentionStatement: string | null } | null;
+}): MinimumProfileField[] {
+  const missing: MinimumProfileField[] = [];
+  if (!user.cityApprox?.trim()) missing.push("city");
+  if (!user.relationshipProfile?.intentionStatement?.trim())
+    missing.push("intention");
+  return missing;
+}
 
 /**
  * Suggestions filtrées par le Filtre Anti-Malaise Local et le mode invisible.
@@ -36,6 +60,20 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
   // Email non vérifié : pas d'engagement tant que l'email n'est pas confirmé
   // (le VerifyBanner invite à vérifier). On n'apparaît déjà pas aux autres.
   if (!me.isVerified) return [];
+  // Profil minimum (ville + intention) : tant qu'il manque, on ne sert aucune
+  // suggestion. La page Suggestions affiche un appel à compléter le profil.
+  // Symétrique du filtre entrant ci-dessous (on n'apparaît pas non plus).
+  if (missingMinimumProfile(me).length > 0) return [];
+  // Phase 2 (derrière flag, OFF par défaut) : gate FORT — profil 100 % complet
+  // ET onboarding fait (flag persistant). Flag absent ⇒ inerte, inchangé.
+  if (
+    matchingGateBlocked({
+      gateEnabled: isProfileGateEnabled(),
+      completion: profileCompletion(me),
+      onboardingDone: me.onboardingDoneAt != null,
+    })
+  )
+    return [];
 
   const userId = me.id;
 
@@ -81,6 +119,10 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
       isVerified: true,
       deletedAt: null,
       privacySettings: { isNot: { invisibleMode: true } },
+      // Profil minimum requis pour être proposé (symétrie avec le gate sortant) :
+      // ville approx + phrase d'intention. /profile/edit stocke les vides en null.
+      cityApprox: { not: null },
+      relationshipProfile: { is: { intentionStatement: { not: null } } },
       ...(oppositeGender ? { gender: oppositeGender } : {}),
     },
     include: {

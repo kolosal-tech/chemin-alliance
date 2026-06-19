@@ -54,7 +54,9 @@ export type MomoPaymentPayload = {
 };
 
 /** Corps de requête Flutterwave Standard (lien de paiement) — PUR, testable. */
-export function buildMomoPaymentPayload(a: MomoPaymentArgs): MomoPaymentPayload {
+export function buildMomoPaymentPayload(
+  a: MomoPaymentArgs,
+): MomoPaymentPayload {
   return {
     tx_ref: a.txRef ?? `ca-momo-${a.userId}-${randomUUID()}`,
     amount: a.amountXof,

@@ -110,4 +110,6 @@ export const LIMITS = {
   suggestions: { limit: 40, windowMs: 60_000 },
   // Rejoindre un espace couple : freine le brute-force du code d'invitation.
   coupleJoin: { limit: 10, windowMs: 60 * 60_000 },
+  // Marquer l'onboarding fait (Phase 2) : action idempotente, peu fréquente.
+  onboarding: { limit: 10, windowMs: 60 * 60_000 },
 } as const;
