@@ -413,7 +413,9 @@
     "toastSuccess": "Profile saved successfully.",
     "toastInfo": "You have moved to the Discernment stage.",
     "toastWarn": "Remember to complete your family vision.",
-    "gamification": "Gamification — gauge & modal"
+    "gamification": "Gamification — gauge & modal",
+    "deliverable4": "Product gamification — profile, safety, filters",
+    "reviews": "Rated reviews"
   },
   "agents": {
     "prep": {
@@ -938,7 +940,13 @@
           "title": "Family & children",
           "desc": "Calmly anticipating the question of children and upbringing."
         }
-      }
+      },
+      "back": "Back to guides",
+      "minRead": "{min} min read",
+      "keyPoints": "Key points",
+      "ctaTitle": "Ready to take a step?",
+      "ctaBody": "Create your profile and move at your own pace, step by step, in full privacy.",
+      "ctaCta": "Start for free"
     },
     "blog": {
       "kicker": "The blog",
@@ -947,7 +955,16 @@
       "readMore": "Read the article",
       "back": "Back to blog",
       "minRead": "{min} min read",
-      "empty": "No articles yet."
+      "empty": "No articles yet.",
+      "allLabel": "All",
+      "categories": {
+        "discernement": "Discernment",
+        "securite": "Privacy",
+        "spiritualite": "Faith & couple",
+        "temoignages": "Testimonies"
+      },
+      "prev": "Previous",
+      "next": "Next"
     }
   },
   "phase2": {
@@ -978,6 +995,64 @@
       "body": "Before discovering profiles, take a moment to understand the journey. Six steps, at your own pace.",
       "stepsLabel": "The journey in 6 steps",
       "cta": "Got it, let's begin"
+    }
+  },
+  "product": {
+    "filters": {
+      "trigger": "Filters",
+      "title": "Filter profiles",
+      "close": "Close",
+      "age": "Age",
+      "min": "Min",
+      "max": "Max",
+      "verifiedOnly": "Verified profiles only",
+      "children": "Children",
+      "childrenAny": "Any",
+      "childrenYes": "With",
+      "childrenNo": "Without",
+      "reset": "Reset",
+      "apply": "Apply"
+    },
+    "safety": {
+      "title": "Your safety, always free",
+      "intro": "Blocking, reporting and controlling your visibility never cost anything — and never depend on a subscription.",
+      "points": {
+        "block": "Block in one tap",
+        "report": "Report to a human",
+        "visibility": "Control your visibility"
+      },
+      "learnMore": "How we protect you"
+    },
+    "showcase": {
+      "verified": "Verified profile",
+      "completion": "{pct}% complete",
+      "denomination": "Evangelical",
+      "intention": "Marriage-minded",
+      "stageLabel": "Journey stage",
+      "stage": {
+        "1": "Discovery",
+        "2": "Dialogue",
+        "3": "Discernment",
+        "4": "Accompaniment",
+        "5": "Engagement",
+        "6": "Preparation"
+      }
+    },
+    "reviews": {
+      "kicker": "What they say",
+      "title": "Journeys that inspire",
+      "ratingLabel": "{n} out of 5",
+      "items": {
+        "r1": {
+          "quote": "Moving step by step kept me from rushing. I learned to talk about what matters before anything else."
+        },
+        "r2": {
+          "quote": "Being able to talk without giving my number changed everything: I felt respected from the start."
+        },
+        "r3": {
+          "quote": "The preparation gave us concrete tools to decide together, without pressure."
+        }
+      }
     }
   }
 }

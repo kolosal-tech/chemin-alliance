@@ -175,3 +175,19 @@ export const footerNav: {
     ],
   },
 ];
+
+/* ------------------------------------------------------------------ */
+/* Avis notés (Deliverable 4) — citations dans i18n                    */
+/* (`product.reviews.items.<id>.quote`). `gradient` = avatar placeholder.*/
+/* ------------------------------------------------------------------ */
+export const reviews: {
+  id: string;
+  name: string;
+  /** note entière 1–5 */
+  rating: number;
+  gradient: string;
+}[] = [
+  { id: "r1", name: "Naomi", rating: 5, gradient: "from-gold/70 to-navy" },
+  { id: "r2", name: "David", rating: 5, gradient: "from-sage to-navy" },
+  { id: "r3", name: "Priscille", rating: 4, gradient: "from-amberink to-night" },
+];

@@ -1,9 +1,14 @@
+import { Suspense } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AllianceThread } from "@/components/AllianceThread";
 import { LockBadge } from "@/components/LockBadge";
 import { Radar } from "@/components/Radar";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Phase2Showcase } from "@/components/Phase2Showcase";
+import { ProfileShowcase } from "@/components/product/ProfileShowcase";
+import { ReviewsSection } from "@/components/product/ReviewsSection";
+import { SafetyBlock } from "@/components/product/SafetyBlock";
+import { FiltersDrawer } from "@/components/product/FiltersDrawer";
 
 export default async function DesignSystemPage({
   params,
@@ -213,6 +218,26 @@ export default async function DesignSystemPage({
         <section className={`${card} md:col-span-2`}>
           <span className={label}>{t("gamification")}</span>
           <Phase2Showcase />
+        </section>
+
+        {/* Deliverable 4 — profil gamifié, sécurité, filtres */}
+        <section className={`${card} md:col-span-2`}>
+          <span className={label}>{t("deliverable4")}</span>
+          <div className="flex flex-wrap items-start gap-6">
+            <ProfileShowcase />
+            <div className="flex-1 space-y-5" style={{ minWidth: "260px" }}>
+              <SafetyBlock />
+              <Suspense fallback={null}>
+                <FiltersDrawer activeCount={2} />
+              </Suspense>
+            </div>
+          </div>
+        </section>
+
+        {/* Deliverable 4 — avis notés */}
+        <section className={`${card} md:col-span-2`}>
+          <span className={label}>{t("reviews")}</span>
+          <ReviewsSection />
         </section>
       </div>
     </main>

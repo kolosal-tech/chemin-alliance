@@ -6,7 +6,7 @@ import type { Locale } from "@/lib/core-engine";
  * Document long : contenu dédié plutôt que messages.json.
  */
 export type LegalDoc = { title: string; updated: string; sections: Array<{ h: string; p: string[] }> };
-export type LegalKey = "terms" | "privacy";
+export type LegalKey = "terms" | "privacy" | "cookies";
 
 const fr: Record<LegalKey, LegalDoc> = {
   terms: {
@@ -39,6 +39,19 @@ const fr: Record<LegalKey, LegalDoc> = {
       { h: "8. Vos droits", p: ["Accès et portabilité : export JSON complet en un clic (Réglages → Confidentialité → Exporter mes données). Effacement : suppression de compte en un clic, réelle et définitive. Opposition et retrait du consentement : à tout moment, sans frais, sans justification. Réclamation : CNIL (cnil.fr)."] },
       { h: "9. Sécurité", p: ["Chiffrement TLS en transit, chiffrement applicatif AES-256-GCM des champs sensibles au repos, mots de passe Argon2id, cookies httpOnly/Secure/SameSite, limitation de débit, détection automatique des comportements à risque revue par des humains."] },
       { h: "10. Mineurs", p: ["La plateforme est strictement réservée aux personnes majeures (18 ans et plus)."] },
+    ],
+  },
+  cookies: {
+    title: "Politique de Cookies",
+    updated: "20 juin 2026",
+    sections: [
+      { h: "1. Qu'est-ce qu'un cookie", p: ["Un cookie est un petit fichier déposé sur votre appareil par votre navigateur lorsque vous utilisez Chemin d'Alliance. Il nous permet de vous reconnaître d'une page à l'autre et de faire fonctionner les éléments essentiels du service, comme votre session connectée."] },
+      { h: "2. Cookies strictement nécessaires", p: ["Nous n'utilisons que des cookies indispensables au fonctionnement de la plateforme : un cookie de session sécurisé (httpOnly, Secure, SameSite) qui vous garde connecté·e, un jeton anti-CSRF qui protège vos formulaires, et de petites préférences techniques (langue d'affichage, thème clair ou sombre). Sans eux, l'authentification et la sécurité ne peuvent pas fonctionner."] },
+      { h: "3. Ce que nous n'utilisons pas", p: ["Aucun cookie publicitaire. Aucun traceur tiers à des fins de marketing. Aucun pistage inter-sites, aucune empreinte d'appareil (fingerprinting), aucun profilage commercial. Nous ne revendons pas votre navigation et ne ciblons jamais en fonction de votre religion."] },
+      { h: "4. Pourquoi pas de bannière de consentement", p: ["Parce que nous n'utilisons que des cookies strictement nécessaires, exemptés de consentement au sens de la directive ePrivacy et des recommandations de la CNIL, aucune bannière intrusive ne vous est imposée. Votre confidentialité est le réglage par défaut, pas une option à reconquérir."] },
+      { h: "5. Gérer ou supprimer les cookies", p: ["Vous gardez le contrôle depuis votre navigateur : vous pouvez consulter, bloquer ou supprimer les cookies à tout moment. Supprimer le cookie de session vous déconnecte simplement ; bloquer entièrement les cookies nécessaires empêchera la connexion au service."] },
+      { h: "6. Durée de conservation", p: ["Le cookie de session expire à la fin de votre session ou après une période d'inactivité. Les préférences techniques (langue, thème) sont conservées jusqu'à leur modification ou leur suppression manuelle. Aucun cookie nécessaire n'est conservé au-delà de ce qui est utile à son usage."] },
+      { h: "7. Mises à jour", p: ["Cette politique peut évoluer si le service change. Toute évolution sera publiée sur cette page avec une date de mise à jour. Pour toute question : alliance@kolosaltech.com."] },
     ],
   },
 };
@@ -76,6 +89,19 @@ const en: Record<LegalKey, LegalDoc> = {
       { h: "10. Minors", p: ["The platform is strictly reserved for adults (18+)."] },
     ],
   },
+  cookies: {
+    title: "Cookie Policy",
+    updated: "June 20, 2026",
+    sections: [
+      { h: "1. What is a cookie", p: ["A cookie is a small file your browser stores on your device when you use Chemin d'Alliance. It lets us recognize you from one page to the next and run essential parts of the service, such as your signed-in session."] },
+      { h: "2. Strictly necessary cookies", p: ["We use only cookies essential to running the platform: a secure session cookie (httpOnly, Secure, SameSite) that keeps you signed in, an anti-CSRF token that protects your forms, and small technical preferences (display language, light or dark theme). Without them, authentication and security cannot work."] },
+      { h: "3. What we don't use", p: ["No advertising cookies. No third-party marketing trackers. No cross-site tracking, no device fingerprinting, no commercial profiling. We do not resell your browsing and never target based on your religion."] },
+      { h: "4. Why there's no consent banner", p: ["Because we use only strictly necessary cookies — exempt from consent under the ePrivacy directive and data-protection guidance — no intrusive banner is forced on you. Privacy is the default, not something you have to win back."] },
+      { h: "5. Managing or deleting cookies", p: ["You stay in control from your browser: you can view, block or delete cookies at any time. Deleting the session cookie simply signs you out; fully blocking necessary cookies will prevent signing in to the service."] },
+      { h: "6. Retention", p: ["The session cookie expires at the end of your session or after a period of inactivity. Technical preferences (language, theme) are kept until you change or clear them manually. No necessary cookie is kept beyond what its purpose requires."] },
+      { h: "7. Updates", p: ["This policy may change as the service evolves. Any change will be posted on this page with an updated date. Questions: alliance@kolosaltech.com."] },
+    ],
+  },
 };
 
 const es: Record<LegalKey, LegalDoc> = {
@@ -111,6 +137,19 @@ const es: Record<LegalKey, LegalDoc> = {
       { h: "10. Menores", p: ["Plataforma estrictamente reservada a mayores de 18 años."] },
     ],
   },
+  cookies: {
+    title: "Política de Cookies",
+    updated: "20 de junio de 2026",
+    sections: [
+      { h: "1. Qué es una cookie", p: ["Una cookie es un pequeño archivo que tu navegador guarda en tu dispositivo cuando usas Chemin d'Alliance. Nos permite reconocerte de una página a otra y hacer funcionar los elementos esenciales del servicio, como tu sesión iniciada."] },
+      { h: "2. Cookies estrictamente necesarias", p: ["Solo usamos cookies imprescindibles para el funcionamiento de la plataforma: una cookie de sesión segura (httpOnly, Secure, SameSite) que te mantiene conectado·a, un token anti-CSRF que protege tus formularios y pequeñas preferencias técnicas (idioma, tema claro u oscuro). Sin ellas, la autenticación y la seguridad no pueden funcionar."] },
+      { h: "3. Lo que no usamos", p: ["Ninguna cookie publicitaria. Ningún rastreador de terceros con fines de marketing. Ningún seguimiento entre sitios, ninguna huella de dispositivo (fingerprinting), ningún perfilado comercial. No revendemos tu navegación ni segmentamos según tu religión."] },
+      { h: "4. Por qué no hay banner de consentimiento", p: ["Como solo usamos cookies estrictamente necesarias, exentas de consentimiento según la directiva ePrivacy y las recomendaciones de las autoridades, no te imponemos ningún banner intrusivo. La privacidad es el ajuste por defecto, no una opción que debas recuperar."] },
+      { h: "5. Gestionar o eliminar las cookies", p: ["Mantienes el control desde tu navegador: puedes consultar, bloquear o eliminar las cookies en cualquier momento. Eliminar la cookie de sesión simplemente cierra tu sesión; bloquear por completo las cookies necesarias impedirá conectarte al servicio."] },
+      { h: "6. Conservación", p: ["La cookie de sesión caduca al final de tu sesión o tras un periodo de inactividad. Las preferencias técnicas (idioma, tema) se conservan hasta que las cambies o las borres manualmente. Ninguna cookie necesaria se conserva más allá de lo útil para su finalidad."] },
+      { h: "7. Actualizaciones", p: ["Esta política puede evolucionar si el servicio cambia. Cualquier cambio se publicará en esta página con una fecha de actualización. Para cualquier duda: alliance@kolosaltech.com."] },
+    ],
+  },
 };
 
 const pt: Record<LegalKey, LegalDoc> = {
@@ -144,6 +183,19 @@ const pt: Record<LegalKey, LegalDoc> = {
       { h: "8. Os teus direitos", p: ["Acesso e portabilidade: exportação JSON completa num clique. Apagamento: eliminação de conta real e definitiva num clique. Oposição e retirada do consentimento: a qualquer momento. Reclamação: a tua autoridade de proteção de dados (CNPD/CNIL)."] },
       { h: "9. Segurança", p: ["TLS em trânsito, cifragem AES-256-GCM em repouso dos campos sensíveis, palavras-passe Argon2id, cookies httpOnly/Secure/SameSite, limitação de pedidos, deteção de riscos revista por humanos."] },
       { h: "10. Menores", p: ["Plataforma estritamente reservada a maiores de 18 anos."] },
+    ],
+  },
+  cookies: {
+    title: "Política de Cookies",
+    updated: "20 de junho de 2026",
+    sections: [
+      { h: "1. O que é um cookie", p: ["Um cookie é um pequeno ficheiro que o teu navegador guarda no teu dispositivo quando usas o Chemin d'Alliance. Permite-nos reconhecer-te de uma página para a outra e fazer funcionar os elementos essenciais do serviço, como a tua sessão iniciada."] },
+      { h: "2. Cookies estritamente necessários", p: ["Usamos apenas cookies indispensáveis ao funcionamento da plataforma: um cookie de sessão seguro (httpOnly, Secure, SameSite) que te mantém ligado·a, um token anti-CSRF que protege os teus formulários e pequenas preferências técnicas (idioma, tema claro ou escuro). Sem eles, a autenticação e a segurança não podem funcionar."] },
+      { h: "3. O que não usamos", p: ["Nenhum cookie publicitário. Nenhum rastreador de terceiros para fins de marketing. Nenhum rastreio entre sites, nenhuma impressão digital do dispositivo (fingerprinting), nenhum perfil comercial. Não revendemos a tua navegação nem segmentamos com base na tua religião."] },
+      { h: "4. Porque não há banner de consentimento", p: ["Como usamos apenas cookies estritamente necessários, isentos de consentimento nos termos da diretiva ePrivacy e das orientações das autoridades, não te impomos qualquer banner intrusivo. A privacidade é a definição por omissão, não uma opção a reconquistar."] },
+      { h: "5. Gerir ou eliminar os cookies", p: ["Manténs o controlo a partir do teu navegador: podes consultar, bloquear ou eliminar os cookies a qualquer momento. Eliminar o cookie de sessão apenas termina a tua sessão; bloquear totalmente os cookies necessários impedirá a ligação ao serviço."] },
+      { h: "6. Conservação", p: ["O cookie de sessão expira no fim da tua sessão ou após um período de inatividade. As preferências técnicas (idioma, tema) são conservadas até as alterares ou apagares manualmente. Nenhum cookie necessário é conservado além do necessário à sua finalidade."] },
+      { h: "7. Atualizações", p: ["Esta política pode evoluir se o serviço mudar. Qualquer alteração será publicada nesta página com uma data de atualização. Para qualquer questão: alliance@kolosaltech.com."] },
     ],
   },
 };

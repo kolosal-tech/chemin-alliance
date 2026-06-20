@@ -3,9 +3,19 @@
  * Prisma : choix d'ingénierie pour éviter de toucher next.config / le schéma,
  * tout en restant SSR + SEO-ready). Le contenu éditorial est en FR avec
  * repli i18n : les locales sans traduction retombent sur le FR (cf. brief).
- * Le chrome d'UI (boutons, libellés) vit dans `messages` (namespace `blog`).
+ * Le chrome d'UI (boutons, libellés, libellés de catégorie) vit dans `messages`
+ * (namespace `pages.blog`).
  */
 export type Locale = "fr" | "en" | "es" | "pt";
+
+/** Catégories éditoriales — libellés dans i18n (`pages.blog.categories.<id>`). */
+export const categories = [
+  "discernement",
+  "securite",
+  "spiritualite",
+  "temoignages",
+] as const;
+export type CategoryId = (typeof categories)[number];
 
 export type PostContent = {
   title: string;
@@ -19,6 +29,7 @@ export type Post = {
   /** ISO date (statique, pas de Date.now au build) */
   date: string;
   readingMinutes: number;
+  category: CategoryId;
   /** dégradé du visuel d'en-tête (pas de photo réelle) */
   gradient: string;
   content: { fr: PostContent } & Partial<Record<Locale, PostContent>>;
@@ -29,6 +40,7 @@ export const posts: Post[] = [
     slug: "discerner-sans-se-presser",
     date: "2026-05-28",
     readingMinutes: 5,
+    category: "discernement",
     gradient: "from-navy via-night to-[#0E1626]",
     content: {
       fr: {
@@ -59,6 +71,7 @@ export const posts: Post[] = [
     slug: "la-confidentialite-comme-respect",
     date: "2026-06-10",
     readingMinutes: 4,
+    category: "securite",
     gradient: "from-sage via-navy to-night",
     content: {
       fr: {
@@ -69,6 +82,70 @@ export const posts: Post[] = [
           "Donner son numéro à un inconnu, c'est offrir une porte ouverte sur sa vie. Pouvoir échanger sans dévoiler ses coordonnées change tout : on parle librement, sans la pression d'un canal qu'on ne maîtrise plus.",
           "Chez Chemin d'Alliance, le partage des coordonnées n'est débloqué qu'à l'étape Discernement, lorsque la confiance est mutuellement validée. Ce n'est pas une contrainte arbitraire, c'est une protection pour tous.",
           "Cette pudeur numérique honore l'autre autant qu'elle vous protège. Elle dit : je veux te connaître pour ce que tu es, pas pour la rapidité avec laquelle tu obtiens mon numéro.",
+        ],
+      },
+    },
+  },
+  {
+    slug: "prier-ensemble-sans-se-forcer",
+    date: "2026-06-14",
+    readingMinutes: 4,
+    category: "spiritualite",
+    gradient: "from-gold/60 via-navy to-night",
+    content: {
+      fr: {
+        title: "Prier ensemble sans se forcer",
+        excerpt:
+          "Construire une vie spirituelle commune au rythme de deux libertés, jamais d'une contrainte.",
+        body: [
+          "Partager sa foi à deux ne signifie pas tout vivre à l'identique. Deux histoires spirituelles se rencontrent, avec leurs habitudes, leurs silences et leurs élans propres.",
+          "La tentation est grande d'imposer son rythme : prier comme on a toujours prié, attendre de l'autre qu'il suive. Mais une vie spirituelle partagée se construit, elle ne se décrète pas — exactement comme la confiance.",
+          "Quelques repères simples aident : commencer petit, par un temps court et régulier plutôt qu'un grand programme intenable ; laisser à chacun ses formes de prière personnelle ; et parler de ce qui nourrit vraiment, sans jugement.",
+          "Sur Chemin d'Alliance, rien n'oblige à afficher sa pratique. La foi se partage quand elle est prête à l'être, au fil des étapes, jamais sous la pression d'un profil à remplir.",
+        ],
+      },
+      en: {
+        title: "Praying together without forcing it",
+        excerpt:
+          "Building a shared spiritual life at the pace of two freedoms, never of a constraint.",
+        body: [
+          "Sharing faith as a couple does not mean living everything identically. Two spiritual histories meet, each with its own habits, silences and impulses.",
+          "The temptation is strong to impose your own rhythm: to pray as you always have, expecting the other to follow. But a shared spiritual life is built, not declared — just like trust.",
+          "A few simple markers help: start small, with a short and regular time rather than an unsustainable grand plan; leave each person their own forms of personal prayer; and talk about what truly nourishes, without judgment.",
+          "On Chemin d'Alliance, nothing forces you to display your practice. Faith is shared when it is ready to be, step by step, never under the pressure of a profile to fill in.",
+        ],
+      },
+    },
+  },
+  {
+    slug: "ce-que-nous-avons-appris-en-chemin",
+    date: "2026-06-18",
+    readingMinutes: 6,
+    category: "temoignages",
+    gradient: "from-amberink via-navy to-[#0E1626]",
+    content: {
+      fr: {
+        title: "Ce que nous avons appris en chemin",
+        excerpt:
+          "Un récit, anonymisé, de ce qui change quand on accepte d'avancer une étape à la fois.",
+        body: [
+          "Nous nous écrivions depuis quelques semaines sans avoir échangé le moindre numéro. Au début, cette règle nous a frustrés ; avec le recul, c'est elle qui nous a appris à parler de l'essentiel.",
+          "Sans la facilité d'un message à toute heure, chaque échange comptait davantage. Nous avons parlé de nos familles, de nos blessures, de ce que nous attendions vraiment d'une union — avant de parler logistique.",
+          "Quand l'étape du discernement s'est ouverte, partager nos coordonnées n'était plus un saut dans le vide : c'était une suite naturelle, posée sur une confiance déjà construite.",
+          "Ce que nous retenons : la lenteur n'est pas un obstacle. C'est un cadre qui protège, à condition de l'habiter avec sincérité. Le reste appartient à chaque histoire.",
+          "Ce témoignage est une composition représentative, partagée dans le respect de l'anonymat — pas le récit d'un couple identifiable.",
+        ],
+      },
+      en: {
+        title: "What we learned along the way",
+        excerpt:
+          "An anonymized account of what changes when you agree to move one step at a time.",
+        body: [
+          "We had been writing to each other for a few weeks without ever exchanging a number. At first that rule frustrated us; in hindsight, it is what taught us to talk about what matters.",
+          "Without the ease of a message at any hour, each exchange counted more. We spoke of our families, our wounds, what we truly hoped for in a union — before talking logistics.",
+          "When the discernment stage opened, sharing our contact details was no longer a leap into the void: it was a natural next step, resting on trust already built.",
+          "What we keep: slowness is not an obstacle. It is a frame that protects, provided you inhabit it sincerely. The rest belongs to each story.",
+          "This testimony is a representative composition, shared with respect for anonymity — not the account of an identifiable couple.",
         ],
       },
     },

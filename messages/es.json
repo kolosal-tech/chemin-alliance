@@ -413,7 +413,9 @@
     "toastSuccess": "Perfil guardado con éxito.",
     "toastInfo": "Habéis pasado a la etapa Discernimiento.",
     "toastWarn": "Recuerda completar tu visión familiar.",
-    "gamification": "Gamification — medidor y modal"
+    "gamification": "Gamification — medidor y modal",
+    "deliverable4": "Gamificación de producto — perfil, seguridad, filtros",
+    "reviews": "Reseñas con nota"
   },
   "agents": {
     "prep": {
@@ -938,7 +940,13 @@
           "title": "Familia e hijos",
           "desc": "Anticipar con calma la cuestión de los hijos y la educación."
         }
-      }
+      },
+      "back": "Volver a las guías",
+      "minRead": "{min} min de lectura",
+      "keyPoints": "Para recordar",
+      "ctaTitle": "¿Listo·a para avanzar?",
+      "ctaBody": "Crea tu perfil y avanza a tu ritmo, paso a paso, con total privacidad.",
+      "ctaCta": "Empezar gratis"
     },
     "blog": {
       "kicker": "El blog",
@@ -947,7 +955,16 @@
       "readMore": "Leer el artículo",
       "back": "Volver al blog",
       "minRead": "{min} min de lectura",
-      "empty": "Aún no hay artículos."
+      "empty": "Aún no hay artículos.",
+      "allLabel": "Todos",
+      "categories": {
+        "discernement": "Discernimiento",
+        "securite": "Privacidad",
+        "spiritualite": "Fe y pareja",
+        "temoignages": "Testimonios"
+      },
+      "prev": "Anterior",
+      "next": "Siguiente"
     }
   },
   "phase2": {
@@ -978,6 +995,64 @@
       "body": "Antes de descubrir perfiles, tómate un momento para entender el recorrido. Seis etapas, a tu ritmo.",
       "stepsLabel": "El camino en 6 etapas",
       "cta": "Entendido, empezar"
+    }
+  },
+  "product": {
+    "filters": {
+      "trigger": "Filtros",
+      "title": "Filtrar perfiles",
+      "close": "Cerrar",
+      "age": "Edad",
+      "min": "Mín",
+      "max": "Máx",
+      "verifiedOnly": "Solo perfiles verificados",
+      "children": "Hijos",
+      "childrenAny": "Indiferente",
+      "childrenYes": "Con",
+      "childrenNo": "Sin",
+      "reset": "Restablecer",
+      "apply": "Aplicar"
+    },
+    "safety": {
+      "title": "Tu seguridad, siempre gratis",
+      "intro": "Bloquear, denunciar y controlar tu visibilidad nunca cuestan nada, y no dependen de ninguna suscripción.",
+      "points": {
+        "block": "Bloquear con un gesto",
+        "report": "Denunciar a un humano",
+        "visibility": "Controlar tu visibilidad"
+      },
+      "learnMore": "Cómo te protegemos"
+    },
+    "showcase": {
+      "verified": "Perfil verificado",
+      "completion": "{pct}% completado",
+      "denomination": "Evangélica",
+      "intention": "Con miras al matrimonio",
+      "stageLabel": "Etapa del camino",
+      "stage": {
+        "1": "Descubrimiento",
+        "2": "Diálogo",
+        "3": "Discernimiento",
+        "4": "Acompañamiento",
+        "5": "Compromiso",
+        "6": "Preparación"
+      }
+    },
+    "reviews": {
+      "kicker": "Lo que dicen",
+      "title": "Caminos que inspiran",
+      "ratingLabel": "{n} de 5",
+      "items": {
+        "r1": {
+          "quote": "Avanzar paso a paso me evitó precipitarme. Aprendí a hablar de lo esencial antes que de todo lo demás."
+        },
+        "r2": {
+          "quote": "Poder conversar sin dar mi número lo cambió todo: me sentí respetado desde el principio."
+        },
+        "r3": {
+          "quote": "La preparación nos dio herramientas concretas para decidir juntos, sin presión."
+        }
+      }
     }
   }
 }

@@ -14,11 +14,20 @@ import {
 import { OnboardingProgress } from "@/components/OnboardingProgress";
 import { IncompleteProfileModal } from "@/components/IncompleteProfileModal";
 import { OnboardingIntroCard } from "@/components/OnboardingIntroCard";
+import {
+  parseFilters,
+  matchesFilters,
+  activeFilterCount,
+} from "@/lib/filters";
+import { FiltersDrawer } from "@/components/product/FiltersDrawer";
+import { SafetyBlock } from "@/components/product/SafetyBlock";
 
 export default async function SuggestionsPage({
   params,
+  searchParams,
 }: {
   params: { locale: string };
+  searchParams?: { ageMin?: string; ageMax?: string; verified?: string; children?: string };
 }) {
   setRequestLocale(params.locale);
   const t = await getTranslations();
@@ -45,6 +54,21 @@ export default async function SuggestionsPage({
     completion,
     onboardingDone,
   });
+
+  // Filtres (Deliverable 4) : portés par l'URL, validés Zod, appliqués à la
+  // liste DÉJÀ retournée par getSuggestions (aucune touche au moteur de match).
+  const filters = parseFilters(searchParams);
+  const filterCount = activeFilterCount(filters);
+  const shown = suggestions.filter((s) =>
+    matchesFilters(
+      {
+        age: s.age,
+        isVerified: s.isVerified,
+        hasChildren: s.relationshipProfile?.hasChildren ?? false,
+      },
+      filters,
+    ),
+  );
 
   return (
     <main className="px-5 pt-6 safe-top">
@@ -104,7 +128,7 @@ export default async function SuggestionsPage({
             </div>
           </div>
           <span className="text-xs text-sand-600 dark:text-[#7E7A72]">
-            {t("suggestions.profilesCount", { count: suggestions.length })}
+            {t("suggestions.profilesCount", { count: shown.length })}
           </span>
         </div>
       </header>
@@ -122,6 +146,14 @@ export default async function SuggestionsPage({
         </div>
       ) : (
         <div className="mt-4 flex flex-col gap-3.5 lg:grid lg:grid-cols-3 lg:items-start">
+          {missing.length === 0 && (suggestions.length > 0 || filterCount > 0) && (
+            <div className="flex items-center justify-between gap-3 lg:col-span-3">
+              <p className="text-[13px] text-warmgray dark:text-[#9A958B]">
+                {t("suggestions.profilesCount", { count: shown.length })}
+              </p>
+              <FiltersDrawer activeCount={filterCount} />
+            </div>
+          )}
           {missing.length > 0 && (
             <div className="rounded-card border border-sand-200 bg-surface p-5 dark:border-anthracite-600 dark:bg-anthracite-800 lg:col-span-3">
               <h2 className="font-display text-lg text-night dark:text-[#ECE7DD]">
@@ -162,13 +194,13 @@ export default async function SuggestionsPage({
               </Link>
             </div>
           )}
-          {missing.length === 0 && suggestions.length === 0 && (
-            <p className="rounded-card border border-sand-200 bg-surface p-5 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
+          {missing.length === 0 && shown.length === 0 && (
+            <p className="rounded-card border border-sand-200 bg-surface p-5 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B] lg:col-span-3">
               {t("suggestions.empty")}
             </p>
           )}
           {missing.length === 0 &&
-            suggestions.map((s, i) => (
+            shown.map((s, i) => (
               <SuggestionCard
                 key={s.id}
                 featured={i === 1}
@@ -190,6 +222,11 @@ export default async function SuggestionsPage({
                 }}
               />
             ))}
+          {missing.length === 0 && (
+            <div className="lg:col-span-3">
+              <SafetyBlock />
+            </div>
+          )}
         </div>
       )}
     </main>

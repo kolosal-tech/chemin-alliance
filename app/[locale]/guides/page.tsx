@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import { MarketingHeader } from "@/components/marketing/MarketingHeader";
 import { MarketingFooter } from "@/components/marketing/Sections";
 import { Icon } from "@/components/marketing/icons";
@@ -51,25 +52,51 @@ export default async function GuidesPage({
 
         <section className="mx-auto max-w-6xl px-5 pb-24 sm:px-6">
           <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {guideTopics.map((g) => (
-              <li
-                key={g.id}
-                className="flex flex-col rounded-cardlg border border-sand-300 bg-surface p-7 dark:border-anthracite-600 dark:bg-anthracite-800"
-              >
-                <span className="flex h-12 w-12 items-center justify-center rounded-card bg-navy/8 text-navy dark:bg-gold-light/10 dark:text-gold-light">
-                  <Icon name={g.icon} className="h-6 w-6" strokeWidth={1.6} />
-                </span>
-                <h2 className="mt-5 font-display text-xl text-night dark:text-[#ECE7DD]">
-                  {t(`topics.${g.id}.title`)}
-                </h2>
-                <p className="mt-2 flex-1 text-[14px] leading-relaxed text-warmgray dark:text-[#9A958B]">
-                  {t(`topics.${g.id}.desc`)}
-                </p>
-                <span className="mt-5 inline-flex w-fit items-center gap-1.5 rounded-full bg-gold/12 px-3 py-1.5 text-[11px] font-semibold text-gold-ink dark:bg-gold-light/10 dark:text-gold-light">
-                  {t("soon")}
-                </span>
-              </li>
-            ))}
+            {guideTopics.map((g) => {
+              const card = (
+                <>
+                  <span className="flex h-12 w-12 items-center justify-center rounded-card bg-navy/8 text-navy dark:bg-gold-light/10 dark:text-gold-light">
+                    <Icon name={g.icon} className="h-6 w-6" strokeWidth={1.6} />
+                  </span>
+                  <h2 className="mt-5 font-display text-xl text-night dark:text-[#ECE7DD]">
+                    {t(`topics.${g.id}.title`)}
+                  </h2>
+                  <p className="mt-2 flex-1 text-[14px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+                    {t(`topics.${g.id}.desc`)}
+                  </p>
+                  {g.ready ? (
+                    <span className="mt-5 inline-flex w-fit items-center gap-1.5 text-[14px] font-semibold text-navy group-hover:gap-2.5 dark:text-gold-light">
+                      {t("readGuide")}
+                      <Icon
+                        name="arrowRight"
+                        className="h-4 w-4 transition-all"
+                        strokeWidth={1.9}
+                      />
+                    </span>
+                  ) : (
+                    <span className="mt-5 inline-flex w-fit items-center gap-1.5 rounded-full bg-gold/12 px-3 py-1.5 text-[11px] font-semibold text-gold-ink dark:bg-gold-light/10 dark:text-gold-light">
+                      {t("soon")}
+                    </span>
+                  )}
+                </>
+              );
+              return (
+                <li key={g.id}>
+                  {g.ready ? (
+                    <Link
+                      href={`/guides/${g.id}`}
+                      className="group flex h-full flex-col rounded-cardlg border border-sand-300 bg-surface p-7 transition-shadow hover:shadow-cardfeat dark:border-anthracite-600 dark:bg-anthracite-800"
+                    >
+                      {card}
+                    </Link>
+                  ) : (
+                    <div className="flex h-full flex-col rounded-cardlg border border-sand-300 bg-surface p-7 dark:border-anthracite-600 dark:bg-anthracite-800">
+                      {card}
+                    </div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </section>
       </main>

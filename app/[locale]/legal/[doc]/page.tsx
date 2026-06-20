@@ -7,7 +7,7 @@ import type { Locale } from "@/lib/core-engine";
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
-    (["terms", "privacy"] as const).map((doc) => ({ locale, doc })),
+    (["terms", "privacy", "cookies"] as const).map((doc) => ({ locale, doc })),
   );
 }
 
@@ -17,7 +17,12 @@ export default function LegalPage({
   params: { locale: string; doc: string };
 }) {
   setRequestLocale(params.locale);
-  if (params.doc !== "terms" && params.doc !== "privacy") notFound();
+  if (
+    params.doc !== "terms" &&
+    params.doc !== "privacy" &&
+    params.doc !== "cookies"
+  )
+    notFound();
   const doc = LEGAL[params.locale as Locale]?.[params.doc as LegalKey];
   if (!doc) notFound();
 
