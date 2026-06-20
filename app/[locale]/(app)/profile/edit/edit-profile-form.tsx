@@ -380,10 +380,13 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
               <option value="no">{tc("no")}</option>
             </select>
           </label>
-          {field("intentionStatement", t("intentionStatementLabel"), {
-            area: true,
-            max: 280,
-          })}
+          {/* Déclaration d'intention = pitch orienté matching → hors-sujet pour
+              l'espace couple (fiancés/mariés). Valeur conservée à l'envoi. */}
+          {!isCouple &&
+            field("intentionStatement", t("intentionStatementLabel"), {
+              area: true,
+              max: 280,
+            })}
           {field("familyVision", t("familyVision"), { area: true, max: 2000 })}
           {field("interests", t("interestsLabel"), { area: true, max: 500 })}
           {field("personality", t("personalityLabel"), {

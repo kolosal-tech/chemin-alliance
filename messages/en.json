@@ -295,7 +295,8 @@
     "guardrailTitle": "A question that deserves a human perspective",
     "guardrailBody": "I can help you shape your own criteria, but this decision is yours. A human companion can shed deeper light.",
     "guardrailCta": "Talk to a verified human coach",
-    "quotaReached": "You've used your {limit} questions for today. The AI coach returns tomorrow — or talk to a human coach.",
+    "quotaReached": "You've used your {limit} free questions for today — a deliberate limit, to encourage deeper reflection over quantity. The AI coach returns tomorrow. To go further now, talk to a human coach.",
+    "quotaRemaining": "You have {remaining} free question(s) left today.",
     "fallbackNotice": "Guided mode: prepared answers per stage, no external AI."
   },
   "coaches": {

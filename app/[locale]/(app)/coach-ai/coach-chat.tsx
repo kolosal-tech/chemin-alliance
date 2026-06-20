@@ -24,6 +24,8 @@ export function CoachChat({
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
   const [quota, setQuota] = useState<number | null>(null);
+  // Jetons gratuits restants aujourd'hui (null = premium illimité / pas encore su).
+  const [remaining, setRemaining] = useState<number | null>(null);
   const [mode, setMode] = useState<"individual" | "couple">("individual");
 
   async function ask(e: React.FormEvent) {
@@ -45,8 +47,10 @@ export function CoachChat({
     const data = await res.json();
     if (data.quotaExceeded) {
       setQuota(data.limit);
+      setRemaining(0);
       return;
     }
+    if (typeof data.remaining === "number") setRemaining(data.remaining);
     if (data.text) {
       setEntries((s) => [
         ...s,
@@ -239,13 +243,23 @@ export function CoachChat({
             ),
           )}
 
-        {quota !== null && (
+        {quota !== null ? (
           <p
             role="status"
             className="rounded-[13px] border border-[#EAD9A8] bg-[#FBF6E9] px-4 py-3 text-[12.5px] text-[#6F5C2E] dark:border-[#463A1F] dark:bg-[#272117] dark:text-[#C2B488]"
           >
             {t("aiCoach.quotaReached", { limit: quota })}
           </p>
+        ) : (
+          remaining !== null &&
+          remaining <= 2 && (
+            <p
+              role="status"
+              className="text-center text-[11.5px] text-sand-600 dark:text-[#7E7A72]"
+            >
+              {t("aiCoach.quotaRemaining", { remaining })}
+            </p>
+          )
         )}
       </div>
 

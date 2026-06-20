@@ -295,7 +295,8 @@
     "guardrailTitle": "Una pregunta que merece una mirada humana",
     "guardrailBody": "Puedo ayudarte a formular tus propios criterios, pero esta decisión te pertenece. Un acompañante humano puede iluminarte en profundidad.",
     "guardrailCta": "Hablar con un coach humano verificado",
-    "quotaReached": "Has usado tus {limit} preguntas de hoy. El coach IA vuelve mañana — o habla con un coach humano.",
+    "quotaReached": "Has usado tus {limit} preguntas gratuitas de hoy — un límite intencional, para favorecer una reflexión profunda en vez de la cantidad. El coach IA vuelve mañana. Para seguir ahora, habla con un coach humano.",
+    "quotaRemaining": "Te quedan {remaining} pregunta(s) gratuita(s) hoy.",
     "fallbackNotice": "Modo guiado: respuestas preparadas por etapa, sin IA externa."
   },
   "coaches": {
