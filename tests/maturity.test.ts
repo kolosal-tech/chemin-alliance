@@ -1,8 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { scoreMaturity, MATURITY_AXES } from "@/lib/maturity";
 
-const all = (w: number) =>
-  Object.fromEntries(MATURITY_AXES.map((a) => [a, w]));
+const all = (w: number) => Object.fromEntries(MATURITY_AXES.map((a) => [a, w]));
 
 describe("scoreMaturity — bilan de maturité (logique pure)", () => {
   it("aucune réponse : total 0, niveau growing, tout en croissance", () => {

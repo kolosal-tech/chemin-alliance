@@ -85,7 +85,10 @@ export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
 
   return (
     <section className="relative overflow-hidden rounded-cardlg border border-sand-200 bg-surface p-6 dark:border-anthracite-600 dark:bg-anthracite-800 sm:p-8">
-      <SacredMotif variant="dove" className="-right-12 -top-8 hidden sm:block" />
+      <SacredMotif
+        variant="dove"
+        className="-right-12 -top-8 hidden sm:block"
+      />
 
       {step === "intro" && (
         <>
@@ -120,7 +123,13 @@ export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
               onClick={goBack}
               className="-ml-1 flex items-center gap-1 text-[13px] font-medium text-warmgray dark:text-[#9A958B]"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
                 <path
                   d="M15 5l-7 7 7 7"
                   stroke="currentColor"

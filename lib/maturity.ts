@@ -63,9 +63,7 @@ export function scoreMaturity(answers: MaturityAnswers): MaturityResult {
     perAxis[axis] = w;
     sum += w;
   }
-  const total = Math.round(
-    (sum / (MATURITY_AXES.length * MAX_PER_AXIS)) * 100,
-  );
+  const total = Math.round((sum / (MATURITY_AXES.length * MAX_PER_AXIS)) * 100);
   const level: MaturityLevel =
     total >= 67 ? "ready" : total >= 34 ? "preparing" : "growing";
   const strengths = MATURITY_AXES.filter((a) => perAxis[a] >= 2);
