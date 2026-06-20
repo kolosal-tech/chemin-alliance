@@ -16,7 +16,12 @@ const p = (
 describe("lib/filters — parseFilters (Zod défensif)", () => {
   it("parse des valeurs valides", () => {
     expect(
-      parseFilters({ ageMin: "25", ageMax: "40", verified: "1", children: "no" }),
+      parseFilters({
+        ageMin: "25",
+        ageMax: "40",
+        verified: "1",
+        children: "no",
+      }),
     ).toEqual({ ageMin: 25, ageMax: 40, verified: "1", children: "no" });
   });
 
@@ -30,7 +35,7 @@ describe("lib/filters — parseFilters (Zod défensif)", () => {
     expect(parseFilters({ ageMin: "abc" }).ageMin).toBeUndefined();
   });
 
-  it("verified n'est retenu que pour la valeur \"1\"", () => {
+  it('verified n\'est retenu que pour la valeur "1"', () => {
     expect(parseFilters({ verified: "true" }).verified).toBeUndefined();
     expect(parseFilters({ verified: "1" }).verified).toBe("1");
   });
@@ -85,7 +90,12 @@ describe("lib/filters — applyFilters & activeFilterCount", () => {
   it("activeFilterCount compte les filtres posés", () => {
     expect(activeFilterCount({})).toBe(0);
     expect(
-      activeFilterCount({ ageMin: 25, ageMax: 40, verified: "1", children: "no" }),
+      activeFilterCount({
+        ageMin: 25,
+        ageMax: 40,
+        verified: "1",
+        children: "no",
+      }),
     ).toBe(4);
     expect(activeFilterCount({ ageMin: 25 })).toBe(1);
   });

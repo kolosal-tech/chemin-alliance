@@ -37,13 +37,20 @@ export default function LegalPage({
       <h1 className="mt-7 font-display text-[34px] leading-tight text-night dark:text-[#ECE7DD]">
         {doc.title}
       </h1>
-      <p className="lbl mt-2 text-[9.5px] text-sand-600 dark:text-[#7E7A72]">{doc.updated}</p>
+      <p className="lbl mt-2 text-[9.5px] text-sand-600 dark:text-[#7E7A72]">
+        {doc.updated}
+      </p>
       <div className="mt-8 flex flex-col gap-7">
         {doc.sections.map((s) => (
           <section key={s.h}>
-            <h2 className="font-display text-[19px] text-night dark:text-[#ECE7DD]">{s.h}</h2>
+            <h2 className="font-display text-[19px] text-night dark:text-[#ECE7DD]">
+              {s.h}
+            </h2>
             {s.p.map((para, i) => (
-              <p key={i} className="mt-2 text-[14.5px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+              <p
+                key={i}
+                className="mt-2 text-[14.5px] leading-relaxed text-warmgray dark:text-[#9A958B]"
+              >
                 {para}
               </p>
             ))}

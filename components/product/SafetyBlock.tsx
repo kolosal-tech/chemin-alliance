@@ -56,7 +56,11 @@ export async function SafetyBlock() {
         className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-semibold text-sage hover:gap-2.5 dark:text-[#8FC6A2]"
       >
         {t("learnMore")}
-        <Icon name="arrowRight" className="h-4 w-4 transition-all" strokeWidth={1.9} />
+        <Icon
+          name="arrowRight"
+          className="h-4 w-4 transition-all"
+          strokeWidth={1.9}
+        />
       </Link>
     </section>
   );

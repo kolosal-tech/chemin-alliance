@@ -14,11 +14,7 @@ import {
 import { OnboardingProgress } from "@/components/OnboardingProgress";
 import { IncompleteProfileModal } from "@/components/IncompleteProfileModal";
 import { OnboardingIntroCard } from "@/components/OnboardingIntroCard";
-import {
-  parseFilters,
-  matchesFilters,
-  activeFilterCount,
-} from "@/lib/filters";
+import { parseFilters, matchesFilters, activeFilterCount } from "@/lib/filters";
 import { FiltersDrawer } from "@/components/product/FiltersDrawer";
 import { SafetyBlock } from "@/components/product/SafetyBlock";
 
@@ -27,7 +23,12 @@ export default async function SuggestionsPage({
   searchParams,
 }: {
   params: { locale: string };
-  searchParams?: { ageMin?: string; ageMax?: string; verified?: string; children?: string };
+  searchParams?: {
+    ageMin?: string;
+    ageMax?: string;
+    verified?: string;
+    children?: string;
+  };
 }) {
   setRequestLocale(params.locale);
   const t = await getTranslations();
@@ -146,14 +147,15 @@ export default async function SuggestionsPage({
         </div>
       ) : (
         <div className="mt-4 flex flex-col gap-3.5 lg:grid lg:grid-cols-3 lg:items-start">
-          {missing.length === 0 && (suggestions.length > 0 || filterCount > 0) && (
-            <div className="flex items-center justify-between gap-3 lg:col-span-3">
-              <p className="text-[13px] text-warmgray dark:text-[#9A958B]">
-                {t("suggestions.profilesCount", { count: shown.length })}
-              </p>
-              <FiltersDrawer activeCount={filterCount} />
-            </div>
-          )}
+          {missing.length === 0 &&
+            (suggestions.length > 0 || filterCount > 0) && (
+              <div className="flex items-center justify-between gap-3 lg:col-span-3">
+                <p className="text-[13px] text-warmgray dark:text-[#9A958B]">
+                  {t("suggestions.profilesCount", { count: shown.length })}
+                </p>
+                <FiltersDrawer activeCount={filterCount} />
+              </div>
+            )}
           {missing.length > 0 && (
             <div className="rounded-card border border-sand-200 bg-surface p-5 dark:border-anthracite-600 dark:bg-anthracite-800 lg:col-span-3">
               <h2 className="font-display text-lg text-night dark:text-[#ECE7DD]">

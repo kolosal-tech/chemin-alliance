@@ -51,9 +51,9 @@ export default async function BlogIndexPage({
 
   // Filtre catégorie (validé contre la liste connue) + tri par date décroissante.
   const catParam = searchParams?.cat;
-  const activeCat: CategoryId | null = (categories as readonly string[]).includes(
-    catParam ?? "",
-  )
+  const activeCat: CategoryId | null = (
+    categories as readonly string[]
+  ).includes(catParam ?? "")
     ? (catParam as CategoryId)
     : null;
   const filtered = [...posts]
@@ -64,7 +64,9 @@ export default async function BlogIndexPage({
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const rawPage = Number(searchParams?.page);
   const page =
-    Number.isInteger(rawPage) && rawPage > 0 ? Math.min(rawPage, totalPages) : 1;
+    Number.isInteger(rawPage) && rawPage > 0
+      ? Math.min(rawPage, totalPages)
+      : 1;
   const visible = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const catHref = (c: CategoryId | null) => (c ? `/blog?cat=${c}` : "/blog");
@@ -202,12 +204,20 @@ export default async function BlogIndexPage({
                   className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-300 px-4 py-2.5 text-[13px] font-semibold text-night dark:border-anthracite-600 dark:text-[#ECE7DD]"
                 >
                   {t("next")}
-                  <Icon name="arrowRight" className="h-4 w-4" strokeWidth={1.8} />
+                  <Icon
+                    name="arrowRight"
+                    className="h-4 w-4"
+                    strokeWidth={1.8}
+                  />
                 </Link>
               ) : (
                 <span className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-200 px-4 py-2.5 text-[13px] font-semibold text-sand-400 dark:border-anthracite-700 dark:text-[#56524B]">
                   {t("next")}
-                  <Icon name="arrowRight" className="h-4 w-4" strokeWidth={1.8} />
+                  <Icon
+                    name="arrowRight"
+                    className="h-4 w-4"
+                    strokeWidth={1.8}
+                  />
                 </span>
               )}
             </nav>

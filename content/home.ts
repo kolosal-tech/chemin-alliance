@@ -189,5 +189,10 @@ export const reviews: {
 }[] = [
   { id: "r1", name: "Naomi", rating: 5, gradient: "from-gold/70 to-navy" },
   { id: "r2", name: "David", rating: 5, gradient: "from-sage to-navy" },
-  { id: "r3", name: "Priscille", rating: 4, gradient: "from-amberink to-night" },
+  {
+    id: "r3",
+    name: "Priscille",
+    rating: 4,
+    gradient: "from-amberink to-night",
+  },
 ];

@@ -100,7 +100,13 @@ export function FiltersDrawer({ activeCount }: { activeCount: number }) {
                 aria-label={t("close")}
                 className="text-warmgray hover:text-night dark:text-[#9A958B] dark:hover:text-[#ECE7DD]"
               >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden
+                >
                   <path
                     d="M6 6l12 12M18 6L6 18"
                     stroke="currentColor"

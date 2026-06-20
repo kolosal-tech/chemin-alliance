@@ -73,7 +73,12 @@ export async function ProfileShowcase({
               {name}
             </span>
             {verified && (
-              <svg width="15" height="15" viewBox="0 0 24 24" aria-label={t("verified")}>
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                aria-label={t("verified")}
+              >
                 <path
                   d="M12 2.5l2.4 1.7 2.9-.2 1 2.8 2.4 1.6-.8 2.8.8 2.8-2.4 1.6-1 2.8-2.9-.2L12 21.5l-2.4-1.7-2.9.2-1-2.8L3.3 15.6l.8-2.8-.8-2.8 2.4-1.6 1-2.8 2.9.2L12 2.5Z"
                   className="fill-gold dark:fill-gold-light"

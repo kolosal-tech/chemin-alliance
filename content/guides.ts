@@ -31,12 +31,48 @@ export type GuideTopic = {
 };
 
 export const guideTopics: GuideTopic[] = [
-  { id: "meeting", icon: "people", ready: true, date: "2026-05-20", readingMinutes: 4 },
-  { id: "marriage", icon: "ring", ready: true, date: "2026-05-24", readingMinutes: 5 },
-  { id: "intimacy", icon: "charity", ready: true, date: "2026-05-30", readingMinutes: 4 },
-  { id: "faith", icon: "compass", ready: true, date: "2026-06-04", readingMinutes: 4 },
-  { id: "finances", icon: "scale", ready: true, date: "2026-06-09", readingMinutes: 5 },
-  { id: "parenting", icon: "home", ready: true, date: "2026-06-12", readingMinutes: 4 },
+  {
+    id: "meeting",
+    icon: "people",
+    ready: true,
+    date: "2026-05-20",
+    readingMinutes: 4,
+  },
+  {
+    id: "marriage",
+    icon: "ring",
+    ready: true,
+    date: "2026-05-24",
+    readingMinutes: 5,
+  },
+  {
+    id: "intimacy",
+    icon: "charity",
+    ready: true,
+    date: "2026-05-30",
+    readingMinutes: 4,
+  },
+  {
+    id: "faith",
+    icon: "compass",
+    ready: true,
+    date: "2026-06-04",
+    readingMinutes: 4,
+  },
+  {
+    id: "finances",
+    icon: "scale",
+    ready: true,
+    date: "2026-06-09",
+    readingMinutes: 5,
+  },
+  {
+    id: "parenting",
+    icon: "home",
+    ready: true,
+    date: "2026-06-12",
+    readingMinutes: 4,
+  },
 ];
 
 /** Corps éditorial par topic — FR obligatoire (repli), EN fourni. */
