@@ -66,6 +66,9 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
   const [error, setError] = useState<string | null>(null);
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [photoBusy, setPhotoBusy] = useState(false);
+  // Saison de vie : les fiancés/mariés (espace couple, hors matching) ne voient
+  // pas les questions orientées rencontre (statut matrimonial déjà fixé).
+  const [season, setSeason] = useState<string | null>(null);
 
   async function onPhotoChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -123,6 +126,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
           aspirations: rel.aspirations ?? "",
         });
         setPhotoUrl(u.photoUrl ?? null);
+        setSeason(u.season ?? null);
       })
       .catch(() => setLoadFailed(true));
   }, []);
@@ -222,6 +226,10 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
       </main>
     );
   }
+
+  // Fiancés/mariés : espace couple, hors matching → on masque le statut
+  // matrimonial (déjà déterminé par leur saison). Valeur conservée à l'envoi.
+  const isCouple = season === "ENGAGED" || season === "MARRIED";
 
   const input =
     "rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
@@ -338,24 +346,26 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
           <h2 className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
             {t("secRelation")}
           </h2>
-          <label className="flex flex-col gap-1.5">
-            <span className={lbl}>{t("maritalStatus")}</span>
-            <select
-              value={d.maritalStatus}
-              onChange={(e) =>
-                set("maritalStatus", e.target.value as Data["maritalStatus"])
-              }
-              className={input}
-            >
-              <option value="">{t("unspecified")}</option>
-              <option value="single">{t("single")}</option>
-              <option value="widowed">{t("widowed")}</option>
-              <option value="divorced">{t("divorced")}</option>
-              <option value="single_parent">{t("singleParent")}</option>
-              <option value="engaged">{t("engaged")}</option>
-              <option value="married">{t("married")}</option>
-            </select>
-          </label>
+          {!isCouple && (
+            <label className="flex flex-col gap-1.5">
+              <span className={lbl}>{t("maritalStatus")}</span>
+              <select
+                value={d.maritalStatus}
+                onChange={(e) =>
+                  set("maritalStatus", e.target.value as Data["maritalStatus"])
+                }
+                className={input}
+              >
+                <option value="">{t("unspecified")}</option>
+                <option value="single">{t("single")}</option>
+                <option value="widowed">{t("widowed")}</option>
+                <option value="divorced">{t("divorced")}</option>
+                <option value="single_parent">{t("singleParent")}</option>
+                <option value="engaged">{t("engaged")}</option>
+                <option value="married">{t("married")}</option>
+              </select>
+            </label>
+          )}
           <label className="flex flex-col gap-1.5">
             <span className={lbl}>{t("hasChildrenLabel")}</span>
             <select
