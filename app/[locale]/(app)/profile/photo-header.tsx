@@ -8,14 +8,17 @@ export function PhotoHeader({
   age,
   isVerified,
   blurredByDefault,
+  photoUrl,
 }: {
   displayName: string;
   age: number;
   isVerified: boolean;
   blurredByDefault: boolean;
+  photoUrl?: string | null;
 }) {
   const t = useTranslations();
   const [revealed, setRevealed] = useState(!blurredByDefault);
+  const blur = revealed ? "blur(0) saturate(1)" : "blur(20px) saturate(.9)";
 
   return (
     <div className="relative h-[300px]">
@@ -23,11 +26,23 @@ export function PhotoHeader({
         aria-hidden
         className="absolute inset-0 transition-[filter] duration-500"
         style={{
-          filter: revealed ? "blur(0) saturate(1)" : "blur(20px) saturate(.9)",
+          filter: blur,
           background:
             "radial-gradient(120% 90% at 30% 25%, #5E6B86 0%, #384767 45%, #1A2744 100%)",
         }}
       />
+      {photoUrl && (
+        // Photo réelle par-dessus le dégradé (repli si absente). Le flou suit la
+        // confidentialité « Découverte » exactement comme le fond.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={photoUrl}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover transition-[filter] duration-500"
+          style={{ filter: blur }}
+        />
+      )}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0E1422]/35 via-transparent to-[#0E1422]/85" />
       <span className="lbl absolute left-5 top-5 rounded-[20px] bg-[#0E1422]/40 px-2.5 py-1.5 text-[9px] text-white/70 backdrop-blur-sm safe-top">
         {t("profile.blurredDefault", { level: t("stages.DISCOVERY") })}

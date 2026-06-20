@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { requirePageUser } from "@/lib/security/page-auth";
+import { signedPhotoUrl } from "@/lib/storage";
 import { LockBadge } from "@/components/LockBadge";
 import { PhotoHeader } from "./photo-header";
 import { LogoutButton } from "./logout-button";
@@ -15,6 +16,7 @@ export default async function ProfilePage({
   const user = await requirePageUser(params.locale);
   const faith = user.faithProfile;
   const rel = user.relationshipProfile;
+  const photoUrl = await signedPhotoUrl(user.photoUrl);
 
   // Barre de complétion sobre
   const fields = [
@@ -36,6 +38,7 @@ export default async function ProfilePage({
         age={user.age}
         isVerified={user.isVerified}
         blurredByDefault={user.photoBlurredByDefault}
+        photoUrl={photoUrl}
       />
       <div className="px-5 pt-4">
         <div className="mb-4 flex gap-2">

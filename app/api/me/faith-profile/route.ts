@@ -24,17 +24,22 @@ export const PATCH = withErrors(async (req: Request) => {
   const user = await requireUser();
   const body = schema.parse(await req.json());
   const { localChurch, testimony, ...rest } = body;
-  await prisma.faithProfile.update({
+  const data = {
+    ...rest,
+    ...(localChurch !== undefined && {
+      localChurchEncrypted: localChurch ? encryptField(localChurch) : null,
+    }),
+    ...(testimony !== undefined && {
+      testimonyEncrypted: testimony ? encryptField(testimony) : null,
+    }),
+  };
+  // upsert (et non update) : un compte sans ligne FaithProfile lèverait P2025
+  // (record not found), faisant échouer l'enregistrement du profil. `vertical`
+  // a une valeur par défaut au niveau du schéma Prisma, pas besoin de la fournir.
+  await prisma.faithProfile.upsert({
     where: { userId: user.id },
-    data: {
-      ...rest,
-      ...(localChurch !== undefined && {
-        localChurchEncrypted: localChurch ? encryptField(localChurch) : null,
-      }),
-      ...(testimony !== undefined && {
-        testimonyEncrypted: testimony ? encryptField(testimony) : null,
-      }),
-    },
+    update: data,
+    create: { userId: user.id, ...data },
   });
   return NextResponse.json({ ok: true });
 });

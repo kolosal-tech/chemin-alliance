@@ -36,14 +36,19 @@ export const PATCH = withErrors(async (req: Request) => {
   const user = await requireUser();
   const body = schema.parse(await req.json());
   const { familyVision, ...rest } = body;
-  await prisma.relationshipProfile.update({
+  const data = {
+    ...rest,
+    ...(familyVision !== undefined && {
+      familyVisionEncrypted: familyVision ? encryptField(familyVision) : null,
+    }),
+  };
+  // upsert (et non update) : certains comptes anciens n'ont pas encore de ligne
+  // RelationshipProfile (créée à l'inscription seulement depuis un correctif
+  // ultérieur) — un update lèverait P2025 et l'enregistrement du profil échouait.
+  await prisma.relationshipProfile.upsert({
     where: { userId: user.id },
-    data: {
-      ...rest,
-      ...(familyVision !== undefined && {
-        familyVisionEncrypted: familyVision ? encryptField(familyVision) : null,
-      }),
-    },
+    update: data,
+    create: { userId: user.id, maritalStatus: "single", ...data },
   });
   return NextResponse.json({ ok: true });
 });
