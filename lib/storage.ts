@@ -88,6 +88,20 @@ export function extractPhotoPath(
 }
 
 /**
+ * URL de lecture MÊME-ORIGINE pour la photo de profil du compte courant, servie
+ * par la route proxy `/api/me/photo/view`. Indispensable car le service worker
+ * PWA (Workbox) casse les requêtes image cross-origin (Supabase) → net::ERR_FAILED.
+ * Passer par une URL `'self'` règle aussi la CSP `img-src` et garde l'URL signée
+ * côté serveur. Le suffixe `?v=` (dernier segment du chemin, change à chaque
+ * upload) invalide le cache quand la photo change. `null` si pas de photo.
+ */
+export function photoProxyUrl(stored: string | null | undefined): string | null {
+  if (!stored) return null;
+  const version = stored.split("/").pop()?.split("?")[0] ?? "1";
+  return `/api/me/photo/view?v=${encodeURIComponent(version)}`;
+}
+
+/**
  * URL de lecture SIGNÉE et à durée limitée pour une photo de profil — permet
  * un bucket privé (l'URL publique permanente n'est plus exposée). Best-effort :
  * sans clés, ou en cas d'échec, renvoie la valeur d'entrée telle quelle pour ne

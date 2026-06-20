@@ -6,7 +6,7 @@ import { withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { hashPassword } from "@/lib/security/password";
 import { decryptOptional } from "@/lib/security/crypto";
-import { signedPhotoUrl } from "@/lib/storage";
+import { photoProxyUrl } from "@/lib/storage";
 import { SESSION_COOKIE } from "@/lib/security/jwt";
 
 export const GET = withErrors(async () => {
@@ -29,7 +29,7 @@ export const GET = withErrors(async () => {
   void _sci;
   return NextResponse.json({
     ...safe,
-    photoUrl: await signedPhotoUrl(user.photoUrl),
+    photoUrl: photoProxyUrl(user.photoUrl),
     faithProfile: user.faithProfile && {
       ...user.faithProfile,
       localChurch: decryptOptional(user.faithProfile.localChurchEncrypted),

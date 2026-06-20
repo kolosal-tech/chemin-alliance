@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { requirePageUser } from "@/lib/security/page-auth";
-import { signedPhotoUrl } from "@/lib/storage";
+import { photoProxyUrl } from "@/lib/storage";
 import { LockBadge } from "@/components/LockBadge";
 import { PhotoHeader } from "./photo-header";
 import { LogoutButton } from "./logout-button";
@@ -16,7 +16,7 @@ export default async function ProfilePage({
   const user = await requirePageUser(params.locale);
   const faith = user.faithProfile;
   const rel = user.relationshipProfile;
-  const photoUrl = await signedPhotoUrl(user.photoUrl);
+  const photoUrl = photoProxyUrl(user.photoUrl);
 
   // Barre de complétion sobre
   const fields = [

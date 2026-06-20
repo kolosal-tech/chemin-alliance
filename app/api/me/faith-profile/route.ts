@@ -6,8 +6,13 @@ import { requireUser } from "@/lib/security/session";
 import { encryptField } from "@/lib/security/crypto";
 
 const visibility = z.enum([
-  "PUBLIC_CONTROLLED", "AFTER_MATCH", "AFTER_DIALOGUE",
-  "AFTER_DISCERNMENT", "COACH_ONLY", "PRIVATE", "MANUAL_SHARE",
+  "PUBLIC_CONTROLLED",
+  "AFTER_MATCH",
+  "AFTER_DIALOGUE",
+  "AFTER_DISCERNMENT",
+  "COACH_ONLY",
+  "PRIVATE",
+  "MANUAL_SHARE",
 ]);
 
 const schema = z.object({

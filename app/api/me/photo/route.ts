@@ -4,8 +4,8 @@ import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import {
+  photoProxyUrl,
   photoUploadEnabled,
-  signedPhotoUrl,
   uploadProfilePhoto,
 } from "@/lib/storage";
 
@@ -43,6 +43,6 @@ export const POST = withErrors(async (req: Request) => {
   });
   return NextResponse.json({
     ok: true,
-    photoUrl: (await signedPhotoUrl(result.url)) ?? result.url,
+    photoUrl: photoProxyUrl(result.url),
   });
 });
