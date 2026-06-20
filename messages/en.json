@@ -282,6 +282,10 @@
     "declineCta": "Decline",
     "declineMessage": "Thank you for reaching out. After reflection, I'd rather not continue, and I sincerely wish you the best.",
     "awaitingOther": "Waiting for {name} to respond.",
+    "momentLabel": "An alliance begins",
+    "momentBody": "You are both walking toward marriage. Get to know each other, at your pace and with respect.",
+    "momentCta": "Get to know each other",
+    "momentLater": "Later",
     "actionFailed": "Action failed. Check your connection and try again.",
     "delete": "Delete",
     "deleteConfirm": "Delete this message?"

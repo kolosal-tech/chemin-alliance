@@ -84,7 +84,13 @@ export function SuggestionCard({
         <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E16]/80 via-[#0B0E16]/25 to-transparent" />
 
         <span className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-night/50 px-2.5 py-1 text-[10.5px] font-semibold text-[#E7E2D6] backdrop-blur-[2px]">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <svg
+            width="11"
+            height="11"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden
+          >
             <rect
               x="5"
               y="10.5"
@@ -153,8 +159,20 @@ export function SuggestionCard({
           </p>
         ) : (
           <div className="flex items-center gap-1.5 text-[12.5px] text-sage dark:text-[#7FA98C]">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="9"
+                stroke="currentColor"
+                strokeWidth="1.6"
+              />
               <path
                 d="M8.5 12.5l2.2 2.2 4.8-5"
                 stroke="currentColor"

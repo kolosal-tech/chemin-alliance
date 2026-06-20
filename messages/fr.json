@@ -282,6 +282,10 @@
     "declineCta": "Décliner",
     "declineMessage": "Merci pour ta proposition. Après réflexion, je préfère ne pas donner suite, et je te souhaite sincèrement le meilleur.",
     "awaitingOther": "En attente de la réponse de {name}.",
+    "momentLabel": "Une alliance commence",
+    "momentBody": "Vous cheminez tous les deux vers le mariage. Faites connaissance, à votre rythme et dans le respect.",
+    "momentCta": "Faire connaissance",
+    "momentLater": "Plus tard",
     "actionFailed": "Action impossible. Vérifie ta connexion et réessaie.",
     "delete": "Supprimer",
     "deleteConfirm": "Supprimer ce message ?"

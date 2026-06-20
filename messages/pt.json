@@ -282,6 +282,10 @@
     "declineCta": "Recusar",
     "declineMessage": "Obrigado pela tua proposta. Depois de refletir, prefiro não continuar, e desejo-te sinceramente o melhor.",
     "awaitingOther": "À espera da resposta de {name}.",
+    "momentLabel": "Começa uma aliança",
+    "momentBody": "Ambos caminham para o casamento. Conheçam-se, ao vosso ritmo e com respeito.",
+    "momentCta": "Conhecerem-se",
+    "momentLater": "Mais tarde",
     "actionFailed": "Não foi possível concluir a ação. Verifica a tua ligação e tenta novamente.",
     "delete": "Eliminar",
     "deleteConfirm": "Eliminar esta mensagem?"

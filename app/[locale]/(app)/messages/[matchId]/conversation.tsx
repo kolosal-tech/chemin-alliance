@@ -9,6 +9,7 @@ import { SacredMotif } from "@/components/SacredMotif";
 import { BlockButton } from "@/components/BlockButton";
 import { ReportButton } from "@/components/ReportButton";
 import { SafetyBanner } from "@/components/SafetyBanner";
+import { AllianceMoment } from "@/components/AllianceMoment";
 
 type Msg = {
   id: string;
@@ -44,6 +45,7 @@ export function Conversation({
   const [pending, setPending] = useState(awaitingMyAccept ?? false);
   const [acceptBusy, setAcceptBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [celebrate, setCelebrate] = useState(false);
 
   useEffect(() => {
     // Marque la conversation comme lue à l'ouverture réelle (pas au prefetch
@@ -70,7 +72,7 @@ export function Conversation({
       });
       if (res.ok) {
         setPending(false);
-        router.refresh();
+        setCelebrate(true); // « moment d'alliance » ; refresh à la continuation
       } else {
         setActionError(t("messaging.actionFailed"));
       }
@@ -253,6 +255,16 @@ export function Conversation({
       </header>
 
       <SafetyBanner matchId={matchId} />
+
+      {celebrate && (
+        <AllianceMoment
+          name={other.displayName}
+          onContinue={() => {
+            setCelebrate(false);
+            router.refresh();
+          }}
+        />
+      )}
 
       {pending && (
         <div className="mx-3 mt-3 rounded-card border border-gold/50 bg-[#FBF6E9]/80 p-4 dark:border-gold-light/40 dark:bg-[#272117]/70">
