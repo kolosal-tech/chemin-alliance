@@ -1,8 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { DailyDevotion } from "@/lib/devotional";
+import {
+  MeditationSession,
+  JOURNAL_KEY,
+  type JournalEntry,
+} from "./meditation-session";
 
 export function DevotionalClient({
   devotion,
@@ -19,8 +24,29 @@ export function DevotionalClient({
   const [busy, setBusy] = useState(false);
   const [newRecord, setNewRecord] = useState(false);
   const [error, setError] = useState(false);
+  const [sessionOpen, setSessionOpen] = useState(false);
+  const [lastReflection, setLastReflection] = useState<JournalEntry | null>(null);
+  const pendingRef = useRef(false); // anti double-soumission de markDone
+
+  // Dernière réflexion (journal privé local) — affichée en rappel.
+  useEffect(() => {
+    const load = () => {
+      try {
+        const raw = localStorage.getItem(JOURNAL_KEY);
+        const list: JournalEntry[] = raw ? JSON.parse(raw) : [];
+        setLastReflection(list[0] ?? null);
+      } catch {
+        setLastReflection(null);
+      }
+    };
+    load();
+    window.addEventListener("meditation:journal", load);
+    return () => window.removeEventListener("meditation:journal", load);
+  }, []);
 
   async function markDone() {
+    if (pendingRef.current) return;
+    pendingRef.current = true;
     setBusy(true);
     try {
       const res = await fetch("/api/me/devotional/mark-done", {
@@ -36,8 +62,10 @@ export function DevotionalClient({
       }
     } catch {
       setError(true);
+    } finally {
+      pendingRef.current = false;
+      setBusy(false);
     }
-    setBusy(false);
   }
 
   return (
@@ -80,6 +108,65 @@ export function DevotionalClient({
         </p>
       </article>
 
+      {/* Entrée immersive — chemin principal, clarifie « quoi faire ici ». */}
+      <button
+        type="button"
+        onClick={() => setSessionOpen(true)}
+        className="mt-3 flex w-full items-center gap-3 rounded-cardlg bg-navy px-5 py-4 text-left dark:bg-gold-light"
+      >
+        <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-white/15 dark:bg-anthracite-900/15">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <circle
+              cx="12"
+              cy="12"
+              r="8.5"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              className="text-[#F4F1EA] dark:text-anthracite-900"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              r="3"
+              fill="currentColor"
+              className="text-[#F4F1EA] dark:text-anthracite-900"
+            />
+          </svg>
+        </span>
+        <span className="flex-1">
+          <span className="block text-base font-semibold text-[#F4F1EA] dark:text-anthracite-900">
+            {t("devotional.start")}
+          </span>
+          <span className="block text-[12px] text-[#F4F1EA]/75 dark:text-anthracite-900/75">
+            {t("devotional.startHint")}
+          </span>
+        </span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path
+            d="M9 6l6 6-6 6"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="text-[#F4F1EA] dark:text-anthracite-900"
+          />
+        </svg>
+      </button>
+
+      {lastReflection && (
+        <section className="mt-3 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
+          <div className="lbl mb-1.5 text-[9px] text-gold-deep dark:text-gold-light">
+            {t("devotional.journalTitle")}
+          </div>
+          <p className="text-[13.5px] italic leading-normal text-[#3A372F] dark:text-[#CFCAC0]">
+            « {lastReflection.text} »
+          </p>
+          <p className="mt-1 text-[11px] text-warmgray dark:text-[#9A958B]">
+            {lastReflection.reference}
+          </p>
+        </section>
+      )}
+
       <section className="mt-3 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
         <div className="lbl mb-1.5 text-[9px] text-gold-deep dark:text-gold-light">
           {t("devotional.meditation")}
@@ -118,7 +205,7 @@ export function DevotionalClient({
             type="button"
             onClick={markDone}
             disabled={busy}
-            className="mt-4 w-full rounded-btnlg bg-navy py-4 text-base font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
+            className="mt-4 w-full rounded-btnlg border border-sand-200 py-3.5 text-[14px] font-medium text-warmgray disabled:opacity-50 dark:border-anthracite-600 dark:text-[#9A958B]"
           >
             {t("devotional.markDone")}
           </button>
@@ -128,6 +215,18 @@ export function DevotionalClient({
             </p>
           )}
         </>
+      )}
+
+      {sessionOpen && (
+        <MeditationSession
+          devotion={devotion}
+          onCompleted={(d) => {
+            setStreak({ current: d.current, longest: d.longest });
+            setNewRecord(d.newRecord);
+            setCompleted(true);
+          }}
+          onClose={() => setSessionOpen(false)}
+        />
       )}
     </main>
   );
