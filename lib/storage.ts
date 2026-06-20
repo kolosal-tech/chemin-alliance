@@ -95,7 +95,9 @@ export function extractPhotoPath(
  * côté serveur. Le suffixe `?v=` (dernier segment du chemin, change à chaque
  * upload) invalide le cache quand la photo change. `null` si pas de photo.
  */
-export function photoProxyUrl(stored: string | null | undefined): string | null {
+export function photoProxyUrl(
+  stored: string | null | undefined,
+): string | null {
   if (!stored) return null;
   const version = stored.split("/").pop()?.split("?")[0] ?? "1";
   return `/api/me/photo/view?v=${encodeURIComponent(version)}`;

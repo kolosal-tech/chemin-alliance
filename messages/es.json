@@ -195,6 +195,8 @@
     "widowed": "Viudo/a",
     "divorced": "Divorciado/a",
     "singleParent": "Padre/madre soltero/a",
+    "engaged": "Comprometido/a",
+    "married": "Casado/a",
     "photoChange": "Cambiar foto",
     "photoError": "Error al subir la foto. Inténtalo de nuevo."
   },

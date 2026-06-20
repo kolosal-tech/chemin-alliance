@@ -195,6 +195,8 @@
     "widowed": "Viúvo/a",
     "divorced": "Divorciado/a",
     "singleParent": "Pai/mãe solteiro/a",
+    "engaged": "Noivo/a",
+    "married": "Casado/a",
     "photoChange": "Alterar foto",
     "photoError": "Falha ao enviar a foto. Tenta de novo."
   },

@@ -195,6 +195,8 @@
     "widowed": "Veuf·ve",
     "divorced": "Divorcé·e",
     "singleParent": "Parent célibataire",
+    "engaged": "Fiancé·e",
+    "married": "Marié·e",
     "photoChange": "Changer la photo",
     "photoError": "Échec de l'envoi de la photo. Réessaie."
   },

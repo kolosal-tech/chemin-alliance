@@ -235,5 +235,9 @@ function statusKey(s?: string | null) {
       ? "divorced"
       : s === "single_parent"
         ? "singleParent"
-        : "single";
+        : s === "engaged"
+          ? "engaged"
+          : s === "married"
+            ? "married"
+            : "single";
 }

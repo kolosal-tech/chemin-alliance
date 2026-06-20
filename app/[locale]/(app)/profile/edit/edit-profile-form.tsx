@@ -22,7 +22,14 @@ type Data = {
   intentionStatement: string;
   familyVision: string;
   wantsChildren: "yes" | "no" | "";
-  maritalStatus: "single" | "widowed" | "divorced" | "single_parent" | "";
+  maritalStatus:
+    | "single"
+    | "widowed"
+    | "divorced"
+    | "single_parent"
+    | "engaged"
+    | "married"
+    | "";
   hasChildren: "yes" | "no" | "";
   interests: string;
   personality: string;
@@ -345,6 +352,8 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
               <option value="widowed">{t("widowed")}</option>
               <option value="divorced">{t("divorced")}</option>
               <option value="single_parent">{t("singleParent")}</option>
+              <option value="engaged">{t("engaged")}</option>
+              <option value="married">{t("married")}</option>
             </select>
           </label>
           <label className="flex flex-col gap-1.5">

@@ -16,8 +16,18 @@ const visibility = z.enum([
 ]);
 
 const schema = z.object({
+  // Doit accepter TOUTES les valeurs que le système écrit : l'inscription
+  // (intent fiancé/marié) et l'Espace Couple posent "engaged"/"married". Les
+  // omettre faisait échouer l'enregistrement du profil (400) pour ces comptes.
   maritalStatus: z
-    .enum(["single", "widowed", "divorced", "single_parent"])
+    .enum([
+      "single",
+      "widowed",
+      "divorced",
+      "single_parent",
+      "engaged",
+      "married",
+    ])
     .optional(),
   hasChildren: z.boolean().optional(),
   childrenVisibility: visibility.optional(),
