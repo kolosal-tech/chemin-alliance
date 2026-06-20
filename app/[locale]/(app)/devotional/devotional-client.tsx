@@ -25,7 +25,9 @@ export function DevotionalClient({
   const [newRecord, setNewRecord] = useState(false);
   const [error, setError] = useState(false);
   const [sessionOpen, setSessionOpen] = useState(false);
-  const [lastReflection, setLastReflection] = useState<JournalEntry | null>(null);
+  const [lastReflection, setLastReflection] = useState<JournalEntry | null>(
+    null,
+  );
   const pendingRef = useRef(false); // anti double-soumission de markDone
 
   // Dernière réflexion (journal privé local) — affichée en rappel.
@@ -115,7 +117,13 @@ export function DevotionalClient({
         className="mt-3 flex w-full items-center gap-3 rounded-cardlg bg-navy px-5 py-4 text-left dark:bg-gold-light"
       >
         <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-white/15 dark:bg-anthracite-900/15">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden
+          >
             <circle
               cx="12"
               cy="12"

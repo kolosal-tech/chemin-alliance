@@ -1,86 +1,265 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
 import { Icon } from "@/components/marketing/icons";
-import { journeySteps } from "@/content/home";
+import {
+  MATURITY_AXES,
+  OPTIONS_PER_AXIS,
+  scoreMaturity,
+  type MaturityAnswers,
+} from "@/lib/maturity";
 
 /**
- * Carte d'onboarding (Phase 2) — affichée sur /suggestions quand le gate est ON
- * et que l'onboarding n'est pas encore fait. Le bouton marque le flag persistant
- * via `POST /api/me/onboarding-done`, puis rafraîchit la page (le gate retombe).
- * `onDone` permet une variante sans réseau (vitrine design-system).
+ * Auto-bilan de maturité (« recto-verso ») — affiché une fois sur /suggestions
+ * tant que `onboardingDoneAt` n'est pas posé (indépendant du gate Phase 2 :
+ * posture ORIENTER, jamais bloquer). Flux : intro → 6 affirmations (échelle
+ * partagée) → restitution + orientation douce (Méditer / coach). Le flag
+ * persistant est posé dès l'affichage du résultat (les liens d'orientation ne
+ * rejouent donc pas le questionnaire). `onDone` = variante sans réseau (vitrine
+ * design-system) ; le résultat est aussi gardé device-local pour relecture.
  */
-export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
-  const t = useTranslations("phase2.intro");
-  const tj = useTranslations("home.journey.steps");
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
 
-  async function markDone() {
+const RESULT_KEY = "ca:maturity:result";
+
+type Step = "intro" | "questions" | "result";
+
+export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
+  const t = useTranslations("maturity");
+  const router = useRouter();
+  const [step, setStep] = useState<Step>("intro");
+  const [index, setIndex] = useState(0);
+  const [answers, setAnswers] = useState<MaturityAnswers>({});
+  const [loading, setLoading] = useState(false);
+  const persistedRef = useRef(false);
+
+  const axis = MATURITY_AXES[index];
+  const result = scoreMaturity(answers);
+  const total = MATURITY_AXES.length;
+
+  // Pose le flag persistant + garde le résultat en local. Idempotent (une fois).
+  function persist(r: { total: number; level: string }) {
+    if (persistedRef.current) return;
+    persistedRef.current = true;
+    try {
+      localStorage.setItem(
+        RESULT_KEY,
+        JSON.stringify({ ts: Date.now(), total: r.total, level: r.level }),
+      );
+    } catch {
+      /* mode privé : sans gravité */
+    }
+    if (onDone) return; // vitrine : pas de réseau
+    // fetch ne rejette pas sur 4xx/5xx ; en cas d'échec on laissera le bilan
+    // réapparaître plus tard (idempotent), ce n'est pas bloquant.
+    fetch("/api/me/onboarding-done", { method: "POST" }).catch(() => {});
+  }
+
+  function choose(weight: number) {
+    const next: MaturityAnswers = { ...answers, [axis]: weight };
+    setAnswers(next);
+    if (index + 1 < total) {
+      setIndex(index + 1);
+    } else {
+      persist(scoreMaturity(next));
+      setStep("result");
+    }
+  }
+
+  function goBack() {
+    if (index > 0) setIndex(index - 1);
+    else setStep("intro");
+  }
+
+  function finish() {
     if (onDone) {
       onDone();
       return;
     }
     setLoading(true);
-    try {
-      // fetch ne rejette PAS sur 429/4xx/5xx : il faut tester res.ok, sinon on
-      // rafraîchirait alors que le flag n'a pas été posé (gate persistant + bouton
-      // figé). Sur échec : on réactive le bouton, pas de refresh.
-      const res = await fetch("/api/me/onboarding-done", { method: "POST" });
-      if (!res.ok) throw new Error(String(res.status));
-      // Succès : la page se rafraîchit → le composant se démonte (gate retombe).
-      // On ne reset PAS loading (évite un flash actif avant le démontage).
-      router.refresh();
-    } catch {
-      setLoading(false);
-    }
+    router.refresh(); // le flag est déjà posé → le bilan se démonte
   }
 
   return (
     <section className="relative overflow-hidden rounded-cardlg border border-sand-200 bg-surface p-6 dark:border-anthracite-600 dark:bg-anthracite-800 sm:p-8">
-      <SacredMotif
-        variant="dove"
-        className="-right-12 -top-8 hidden sm:block"
-      />
-      <span className="flex h-12 w-12 items-center justify-center rounded-card bg-gold/15 text-gold-deep dark:text-gold-light">
-        <Icon name="sparkle" className="h-6 w-6" strokeWidth={1.7} />
-      </span>
-      <h2 className="mt-5 font-display text-2xl text-night dark:text-[#ECE7DD]">
-        {t("title")}
-      </h2>
-      <p className="mt-2 max-w-prose text-[15px] leading-relaxed text-warmgray dark:text-[#9A958B]">
-        {t("body")}
-      </p>
+      <SacredMotif variant="dove" className="-right-12 -top-8 hidden sm:block" />
 
-      <p className="lbl mt-6 text-[10px] text-gold-deep dark:text-gold-light">
-        {t("stepsLabel")}
-      </p>
-      <ol className="mt-3 grid gap-x-6 gap-y-2 sm:grid-cols-2">
-        {journeySteps.map((s) => (
-          <li
-            key={s.id}
-            className="flex items-center gap-2.5 text-[14px] text-night dark:text-[#ECE7DD]"
+      {step === "intro" && (
+        <>
+          <span className="flex h-12 w-12 items-center justify-center rounded-card bg-gold/15 text-gold-deep dark:text-gold-light">
+            <Icon name="sparkle" className="h-6 w-6" strokeWidth={1.7} />
+          </span>
+          <span className="lbl mt-5 block text-[10px] text-gold-deep dark:text-gold-light">
+            {t("introLabel")}
+          </span>
+          <h2 className="mt-1 font-display text-2xl text-night dark:text-[#ECE7DD]">
+            {t("introTitle")}
+          </h2>
+          <p className="mt-2 max-w-prose text-[15px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+            {t("introBody")}
+          </p>
+          <button
+            type="button"
+            onClick={() => setStep("questions")}
+            className="mt-7 inline-flex items-center gap-1.5 rounded-btn bg-navy px-6 py-3.5 text-[14px] font-semibold text-[#F4F1EA] transition-colors hover:bg-night dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
           >
-            <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-navy/8 text-[11px] font-bold text-navy dark:bg-gold-light/10 dark:text-gold-light">
-              {s.n}
-            </span>
-            {tj(`${s.id}.title`)}
-          </li>
-        ))}
-      </ol>
+            {t("introCta")}
+            <Icon name="arrowRight" className="h-4 w-4" strokeWidth={1.9} />
+          </button>
+        </>
+      )}
 
-      <button
-        type="button"
-        onClick={markDone}
-        disabled={loading}
-        className="mt-7 inline-flex items-center gap-1.5 rounded-btn bg-navy px-6 py-3.5 text-[14px] font-semibold text-[#F4F1EA] transition-colors hover:bg-night disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
-      >
-        {t("cta")}
-        <Icon name="arrowRight" className="h-4 w-4" strokeWidth={1.9} />
-      </button>
+      {step === "questions" && (
+        <>
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              onClick={goBack}
+              className="-ml-1 flex items-center gap-1 text-[13px] font-medium text-warmgray dark:text-[#9A958B]"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path
+                  d="M15 5l-7 7 7 7"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              {t("back")}
+            </button>
+            <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">
+              {t("progress", { current: index + 1, total })}
+            </span>
+          </div>
+
+          <div
+            className="mt-3 h-1 w-full rounded-full bg-sand-200 dark:bg-anthracite-700"
+            aria-hidden
+          >
+            <div
+              className="h-1 rounded-full bg-gold transition-all"
+              style={{ width: `${(index / total) * 100}%` }}
+            />
+          </div>
+
+          <h2 className="mb-5 mt-6 font-display text-[22px] leading-snug text-night dark:text-[#ECE7DD]">
+            {t(`axis.${axis}.prompt`)}
+          </h2>
+
+          <div className="flex flex-col gap-2.5">
+            {Array.from({ length: OPTIONS_PER_AXIS }).map((_, w) => (
+              <button
+                key={w}
+                type="button"
+                onClick={() => choose(w)}
+                className="flex items-center justify-between rounded-card border border-sand-200 bg-cream/60 px-4 py-3.5 text-left text-[14.5px] text-night transition-colors hover:border-gold hover:bg-gold/5 dark:border-anthracite-600 dark:bg-anthracite-850/60 dark:text-[#ECE7DD] dark:hover:border-gold-light"
+              >
+                {t(`scale${w}`)}
+                <span aria-hidden className="text-warmgray dark:text-[#9A958B]">
+                  ›
+                </span>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+
+      {step === "result" && (
+        <>
+          <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">
+            {t("resultLabel")}
+          </span>
+          <div className="mt-1 flex items-baseline gap-1.5">
+            <span className="font-display text-5xl text-night dark:text-[#ECE7DD]">
+              {result.total}
+            </span>
+            <span className="text-[15px] text-warmgray dark:text-[#9A958B]">
+              / 100
+            </span>
+          </div>
+          <h2 className="mt-3 font-display text-xl text-night dark:text-[#ECE7DD]">
+            {t(`level.${result.level}.title`)}
+          </h2>
+          <p className="mt-2 max-w-prose text-[14.5px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+            {t(`level.${result.level}.body`)}
+          </p>
+
+          {result.strengths.length > 0 && (
+            <div className="mt-5">
+              <p className="lbl text-[9px] text-gold-deep dark:text-gold-light">
+                {t("strengthsLabel")}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {result.strengths.map((a) => (
+                  <span
+                    key={a}
+                    className="rounded-full bg-[#EAF0EB] px-3 py-1 text-[12.5px] font-medium text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]"
+                  >
+                    {t(`axis.${a}.name`)}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {result.growth.length > 0 && (
+            <div className="mt-4">
+              <p className="lbl text-[9px] text-gold-deep dark:text-gold-light">
+                {t("growthLabel")}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {result.growth.map((a) => (
+                  <span
+                    key={a}
+                    className="rounded-full bg-sand-100 px-3 py-1 text-[12.5px] font-medium text-[#6B665C] dark:bg-anthracite-700 dark:text-[#C2BCB0]"
+                  >
+                    {t(`axis.${a}.name`)}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {result.suggestsPreparation && (
+            <div className="mt-5 rounded-card border border-gold/30 bg-[#FBF6E9] p-4 dark:border-[#463A1F] dark:bg-[#272117]">
+              <p className="font-display text-[15px] text-night dark:text-[#ECE7DD]">
+                {t("orientTitle")}
+              </p>
+              <p className="mt-1 text-[13.5px] leading-normal text-[#6F5C2E] dark:text-[#C2B488]">
+                {t("orientBody")}
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Link
+                  href="/devotional"
+                  className="rounded-btnsm bg-navy px-4 py-2.5 text-[13px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+                >
+                  {t("orientMeditate")}
+                </Link>
+                <Link
+                  href="/coaches"
+                  className="rounded-btnsm border border-gold bg-white px-4 py-2.5 text-[13px] font-semibold text-gold-ink dark:border-[#6A5A2E] dark:bg-anthracite-800 dark:text-[#E0C77A]"
+                >
+                  {t("orientCoach")}
+                </Link>
+              </div>
+            </div>
+          )}
+
+          <button
+            type="button"
+            onClick={finish}
+            disabled={loading}
+            className="mt-6 inline-flex items-center gap-1.5 rounded-btn bg-navy px-6 py-3.5 text-[14px] font-semibold text-[#F4F1EA] transition-colors hover:bg-night disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
+          >
+            {t("finish")}
+            <Icon name="arrowRight" className="h-4 w-4" strokeWidth={1.9} />
+          </button>
+        </>
+      )}
     </section>
   );
 }

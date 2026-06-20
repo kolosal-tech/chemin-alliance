@@ -703,6 +703,66 @@
     "sessionDoneCta": "Revenir au dévotionnel",
     "journalTitle": "Ta dernière réflexion"
   },
+  "maturity": {
+    "introLabel": "Recto · Verso",
+    "introTitle": "D'abord, un temps pour toi",
+    "introBody": "Avant d'accueillir l'autre, on prend soin de soi. Réponds franchement à 6 questions : il n'y a pas de bon ou de mauvais score, juste un repère pour avancer à ton rythme.",
+    "introCta": "Commencer mon bilan",
+    "progress": "{current} / {total}",
+    "back": "Retour",
+    "scale0": "Pas encore",
+    "scale1": "J'y travaille",
+    "scale2": "Plutôt oui",
+    "scale3": "Pleinement",
+    "axis": {
+      "motivation": {
+        "name": "Motivation",
+        "prompt": "Je sais pourquoi je souhaite me marier, et c'est le bon moment pour moi."
+      },
+      "past": {
+        "name": "Paix avec le passé",
+        "prompt": "J'ai fait la paix avec mes relations et blessures passées."
+      },
+      "faith": {
+        "name": "Foi",
+        "prompt": "Ma foi est vivante et guide mes décisions au quotidien."
+      },
+      "stability": {
+        "name": "Stabilité",
+        "prompt": "Ma vie est suffisamment stable (autonomie, situation) pour accueillir quelqu'un."
+      },
+      "vision": {
+        "name": "Vision du mariage",
+        "prompt": "J'ai une vision réaliste de ce qu'est la vie de couple et le mariage."
+      },
+      "availability": {
+        "name": "Disponibilité",
+        "prompt": "Je suis prêt·e à donner du temps et de l'attention à une relation."
+      }
+    },
+    "resultLabel": "Ton bilan",
+    "level": {
+      "ready": {
+        "title": "Tu sembles prêt·e à avancer",
+        "body": "Belle nouvelle. Complète ton profil et pars à la rencontre de profils qui partagent ta foi."
+      },
+      "preparing": {
+        "title": "Tu es en chemin",
+        "body": "De belles bases, et quelques points à approfondir avant de te lancer pleinement. Avance à ton rythme."
+      },
+      "growing": {
+        "title": "Prends le temps de te préparer",
+        "body": "C'est une force, pas un retard. Quelques pas sur toi-même rendront la rencontre plus juste."
+      }
+    },
+    "strengthsLabel": "Tes forces",
+    "growthLabel": "Tes axes de croissance",
+    "orientTitle": "Pour cheminer",
+    "orientBody": "Le temps de méditation quotidien et l'accompagnement d'un coach peuvent t'aider à avancer.",
+    "orientMeditate": "Méditer chaque jour",
+    "orientCoach": "Parler à un coach",
+    "finish": "Entrer sur mon chemin"
+  },
   "trust": {
     "title": "Confiance & vérification",
     "intro": "La vérification protège la communauté et montre ton sérieux. Tes coordonnées (email, téléphone) restent privées — seul l'état vérifié est visible.",

@@ -51,7 +51,11 @@ export function MeditationSession({
   onClose,
 }: {
   devotion: DailyDevotion;
-  onCompleted: (data: { current: number; longest: number; newRecord: boolean }) => void;
+  onCompleted: (data: {
+    current: number;
+    longest: number;
+    newRecord: boolean;
+  }) => void;
   onClose: () => void;
 }) {
   const t = useTranslations("devotional");
@@ -86,7 +90,8 @@ export function MeditationSession({
     const nav = navigator as WakeLockNavigator;
     const acquire = async () => {
       try {
-        if (nav.wakeLock) wakeRef.current = await nav.wakeLock.request("screen");
+        if (nav.wakeLock)
+          wakeRef.current = await nav.wakeLock.request("screen");
       } catch {
         /* refusé / non supporté : la séance continue sans */
       }
@@ -122,7 +127,9 @@ export function MeditationSession({
     }
     setSaving(true);
     try {
-      const res = await fetch("/api/me/devotional/mark-done", { method: "POST" });
+      const res = await fetch("/api/me/devotional/mark-done", {
+        method: "POST",
+      });
       if (res.ok) {
         const d = await res.json();
         onCompleted({
@@ -212,7 +219,9 @@ export function MeditationSession({
       {step === "breathing" && (
         <div className="flex flex-1 flex-col px-6 pt-6 safe-top">
           <div className="flex items-center justify-between">
-            <span className="font-display text-lg tabular-nums">{fmt(remaining)}</span>
+            <span className="font-display text-lg tabular-nums">
+              {fmt(remaining)}
+            </span>
             {confirmQuit ? (
               <span className="flex items-center gap-2 text-[12.5px]">
                 {t("quitConfirm")}
@@ -246,11 +255,15 @@ export function MeditationSession({
             <div className="relative flex h-64 w-64 items-center justify-center">
               <span
                 className="ca-breathe absolute inset-0 rounded-full bg-gold/20 dark:bg-gold-light/15"
-                style={{ animation: `caBreathe ${CYCLE_SEC}s ease-in-out infinite` }}
+                style={{
+                  animation: `caBreathe ${CYCLE_SEC}s ease-in-out infinite`,
+                }}
               />
               <span
                 className="ca-breathe absolute inset-6 rounded-full bg-gold/25 dark:bg-gold-light/20"
-                style={{ animation: `caBreathe ${CYCLE_SEC}s ease-in-out infinite` }}
+                style={{
+                  animation: `caBreathe ${CYCLE_SEC}s ease-in-out infinite`,
+                }}
               />
               <span className="relative font-display text-xl text-gold-deep dark:text-gold-light">
                 {inhaling ? t("breatheIn") : t("breatheOut")}
@@ -281,7 +294,9 @@ export function MeditationSession({
             <p className="mt-1 font-display text-[18px] italic leading-snug">
               {devotion.reflection}
             </p>
-            <p className="mt-5 text-[13.5px] font-medium">{t("reflectionPrompt")}</p>
+            <p className="mt-5 text-[13.5px] font-medium">
+              {t("reflectionPrompt")}
+            </p>
             <textarea
               value={reflection}
               onChange={(e) => setReflection(e.target.value)}
@@ -291,7 +306,13 @@ export function MeditationSession({
               className="mt-2 w-full rounded-card border border-sand-200 bg-surface p-3 text-[14px] leading-normal text-ink outline-none focus:border-gold dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#ECE7DD]"
             />
             <p className="mt-2 flex items-center gap-1.5 text-[11.5px] text-warmgray dark:text-[#9A958B]">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
                 <path
                   d="M6 10V8a6 6 0 0 1 12 0v2M5 10h14v9H5z"
                   stroke="currentColor"

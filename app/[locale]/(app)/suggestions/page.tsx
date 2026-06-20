@@ -134,16 +134,16 @@ export default async function SuggestionsPage({
         </div>
       </header>
 
-      {gateActive ? (
+      {!onboardingDone ? (
+        // Bilan de maturité (« recto-verso ») : affiché une fois, quel que soit
+        // le gate Phase 2 — posture ORIENTER, jamais bloquer.
         <div className="mt-4">
-          {!onboardingDone ? (
-            <OnboardingIntroCard />
-          ) : (
-            <>
-              <OnboardingProgress completion={completion} />
-              <IncompleteProfileModal completion={completion} />
-            </>
-          )}
+          <OnboardingIntroCard />
+        </div>
+      ) : gateActive ? (
+        <div className="mt-4">
+          <OnboardingProgress completion={completion} />
+          <IncompleteProfileModal completion={completion} />
         </div>
       ) : (
         <div className="mt-4 flex flex-col gap-3.5 lg:grid lg:grid-cols-3 lg:items-start">

@@ -703,6 +703,66 @@
     "sessionDoneCta": "Voltar ao devocional",
     "journalTitle": "A tua última reflexão"
   },
+  "maturity": {
+    "introLabel": "Frente · Verso",
+    "introTitle": "Primeiro, um tempo para ti",
+    "introBody": "Antes de acolher o outro, cuida de ti. Responde com franqueza a 6 perguntas: não há pontuação boa ou má, apenas uma referência para avançares ao teu ritmo.",
+    "introCta": "Começar o meu balanço",
+    "progress": "{current} / {total}",
+    "back": "Voltar",
+    "scale0": "Ainda não",
+    "scale1": "Estou a trabalhar nisso",
+    "scale2": "Mais ou menos sim",
+    "scale3": "Plenamente",
+    "axis": {
+      "motivation": {
+        "name": "Motivação",
+        "prompt": "Sei porque desejo casar-me, e é o momento certo para mim."
+      },
+      "past": {
+        "name": "Paz com o passado",
+        "prompt": "Fiz as pazes com as minhas relações e feridas passadas."
+      },
+      "faith": {
+        "name": "Fé",
+        "prompt": "A minha fé está viva e guia as minhas decisões diárias."
+      },
+      "stability": {
+        "name": "Estabilidade",
+        "prompt": "A minha vida é suficientemente estável (autonomia, situação) para acolher alguém."
+      },
+      "vision": {
+        "name": "Visão do casamento",
+        "prompt": "Tenho uma visão realista da vida a dois e do casamento."
+      },
+      "availability": {
+        "name": "Disponibilidade",
+        "prompt": "Estou pronto/a para dar tempo e atenção a uma relação."
+      }
+    },
+    "resultLabel": "O teu balanço",
+    "level": {
+      "ready": {
+        "title": "Pareces pronto/a para avançar",
+        "body": "Boa notícia. Completa o teu perfil e começa a conhecer pessoas que partilham a tua fé."
+      },
+      "preparing": {
+        "title": "Estás a caminho",
+        "body": "Boas bases, e alguns pontos a aprofundar antes de te lançares plenamente. Avança ao teu ritmo."
+      },
+      "growing": {
+        "title": "Dá-te tempo para te preparares",
+        "body": "É uma força, não um atraso. Alguns passos sobre ti mesmo tornarão o encontro mais verdadeiro."
+      }
+    },
+    "strengthsLabel": "As tuas forças",
+    "growthLabel": "As tuas áreas de crescimento",
+    "orientTitle": "Para continuar a crescer",
+    "orientBody": "Um tempo diário de meditação e o acompanhamento de um coach podem ajudar-te a avançar.",
+    "orientMeditate": "Meditar todos os dias",
+    "orientCoach": "Falar com um coach",
+    "finish": "Entrar no meu caminho"
+  },
   "trust": {
     "title": "Confiança e verificação",
     "intro": "A verificação protege a comunidade e mostra a tua seriedade. Os teus dados (email, telefone) ficam privados — só o estado verificado é visível.",

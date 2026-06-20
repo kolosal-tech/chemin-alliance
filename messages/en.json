@@ -703,6 +703,66 @@
     "sessionDoneCta": "Back to the devotional",
     "journalTitle": "Your last reflection"
   },
+  "maturity": {
+    "introLabel": "Front · Back",
+    "introTitle": "First, a moment for you",
+    "introBody": "Before welcoming another, take care of yourself. Answer 6 questions honestly: there is no good or bad score, just a marker to move forward at your own pace.",
+    "introCta": "Start my check-in",
+    "progress": "{current} / {total}",
+    "back": "Back",
+    "scale0": "Not yet",
+    "scale1": "Working on it",
+    "scale2": "Mostly yes",
+    "scale3": "Fully",
+    "axis": {
+      "motivation": {
+        "name": "Motivation",
+        "prompt": "I know why I want to marry, and the timing is right for me."
+      },
+      "past": {
+        "name": "Peace with the past",
+        "prompt": "I have made peace with my past relationships and wounds."
+      },
+      "faith": {
+        "name": "Faith",
+        "prompt": "My faith is alive and guides my daily decisions."
+      },
+      "stability": {
+        "name": "Stability",
+        "prompt": "My life is stable enough (independence, situation) to welcome someone."
+      },
+      "vision": {
+        "name": "Vision of marriage",
+        "prompt": "I have a realistic vision of married life."
+      },
+      "availability": {
+        "name": "Availability",
+        "prompt": "I am ready to give time and attention to a relationship."
+      }
+    },
+    "resultLabel": "Your check-in",
+    "level": {
+      "ready": {
+        "title": "You seem ready to move forward",
+        "body": "Wonderful. Complete your profile and start meeting people who share your faith."
+      },
+      "preparing": {
+        "title": "You're on your way",
+        "body": "Solid foundations, with a few areas to deepen before fully diving in. Go at your own pace."
+      },
+      "growing": {
+        "title": "Take time to prepare",
+        "body": "That's a strength, not a delay. A few steps on yourself will make the encounter truer."
+      }
+    },
+    "strengthsLabel": "Your strengths",
+    "growthLabel": "Your growth areas",
+    "orientTitle": "To keep growing",
+    "orientBody": "A daily time of meditation and a coach's support can help you move forward.",
+    "orientMeditate": "Meditate daily",
+    "orientCoach": "Talk to a coach",
+    "finish": "Step onto my path"
+  },
   "trust": {
     "title": "Trust & verification",
     "intro": "Verification protects the community and shows you're serious. Your contact details (email, phone) stay private — only the verified status is visible.",
