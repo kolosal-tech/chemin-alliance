@@ -13,6 +13,7 @@ import { SafetyBanner } from "@/components/SafetyBanner";
 import { AllianceMoment } from "@/components/AllianceMoment";
 import { AsyncButton } from "@/components/AsyncButton";
 import { Spinner } from "@/components/Spinner";
+import { useToast } from "@/components/Toast";
 
 type Msg = {
   id: string;
@@ -23,7 +24,7 @@ type Msg = {
 };
 
 /**
- * Messagerie — bulles en VERRE LIQUIDE translucide (cf. globals.css .glass*).
+ * Messagerie - bulles en VERRE LIQUIDE translucide (cf. globals.css .glass*).
  * Les motifs sacrés transparaissent à travers le verre : c'est l'effet recherché.
  */
 export function Conversation({
@@ -50,6 +51,7 @@ export function Conversation({
 }) {
   const t = useTranslations();
   const router = useRouter();
+  const toast = useToast();
   const [pending, setPending] = useState(awaitingMyAccept ?? false);
   const [acceptBusy, setAcceptBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -123,13 +125,20 @@ export function Conversation({
   // Supprimer SON message (corriger une erreur). Optimiste : on retire la bulle
   // dès l'accusé OK du serveur ; on peut ensuite renvoyer un message corrigé.
   async function deleteMessage(id: string) {
-    const res = await fetch(`/api/matches/${matchId}/messages/${id}`, {
-      method: "DELETE",
-    });
-    if (res.ok) {
-      setMessages((m) => m.filter((x) => x.id !== id));
+    try {
+      const res = await fetch(`/api/matches/${matchId}/messages/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setMessages((m) => m.filter((x) => x.id !== id));
+      } else {
+        toast.error(t("messaging.actionFailed"));
+      }
+    } catch {
+      toast.error(t("messaging.actionFailed"));
+    } finally {
+      setConfirmId(null);
     }
-    setConfirmId(null);
   }
 
   useEffect(() => {
@@ -139,14 +148,28 @@ export function Conversation({
   async function send(text: string) {
     if (!text.trim() || busy) return;
     setBusy(true);
-    const res = await fetch(`/api/matches/${matchId}/messages`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ content: text }),
-    });
+    let res: Response;
+    try {
+      res = await fetch(`/api/matches/${matchId}/messages`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ content: text }),
+      });
+    } catch {
+      setBusy(false);
+      toast.error(t("messaging.sendError"));
+      return;
+    }
     setBusy(false);
-    if (!res.ok && res.status !== 200) return;
-    const data = await res.json();
+    if (!res.ok) {
+      toast.error(t("messaging.sendError"));
+      return;
+    }
+    const data = await res.json().catch(() => null);
+    if (!data) {
+      toast.error(t("messaging.sendError"));
+      return;
+    }
     if (data.blocked) {
       setMessages((m) => [
         ...m,
@@ -305,7 +328,7 @@ export function Conversation({
         </p>
       )}
 
-      {/* Messages — verre liquide. min-h-0 indispensable : sans lui, flex-1
+      {/* Messages - verre liquide. min-h-0 indispensable : sans lui, flex-1
           ne se contraint pas, la colonne déborde et le bloc de saisie collant
           recouvre les derniers messages. */}
       <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-4 py-4 pb-2 [&>*]:shrink-0">
@@ -452,7 +475,7 @@ export function Conversation({
         <div ref={endRef} />
       </div>
 
-      {/* Suggestions IA + saisie — verre. Masqué tant que la rencontre n'est
+      {/* Suggestions IA + saisie - verre. Masqué tant que la rencontre n'est
           pas acceptée par le destinataire (il doit d'abord accepter). */}
       <div
         className={`glass z-30 border-t border-sand-200/50 px-3.5 pb-[calc(env(safe-area-inset-bottom)+88px)] lg:pb-4 pt-2.5 dark:border-anthracite-600/50 ${

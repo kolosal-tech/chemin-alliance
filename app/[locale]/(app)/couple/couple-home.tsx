@@ -6,6 +6,8 @@ import { Link, useRouter } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
 import { AsyncButton } from "@/components/AsyncButton";
 import { Spinner } from "@/components/Spinner";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { useToast } from "@/components/Toast";
 
 type CoupleData = {
   space: {
@@ -29,6 +31,7 @@ export function CoupleHome() {
   const ta = useTranslations("agents");
   const tc = useTranslations("common");
   const router = useRouter();
+  const toast = useToast();
   const [data, setData] = useState<CoupleData | null>(null);
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -53,6 +56,10 @@ export function CoupleHome() {
   >([]);
   const [draft, setDraft] = useState("");
   const [msgBusy, setMsgBusy] = useState(false);
+  // Événement de vie à confirmer (changement de saison du couple).
+  const [seasonConfirm, setSeasonConfirm] = useState<
+    "MARRIED" | "PARENTS" | null
+  >(null);
 
   const load = useCallback(() => {
     fetch("/api/couple")
@@ -91,7 +98,11 @@ export function CoupleHome() {
           { id: m.id, mine: true, content: text },
         ]);
         setDraft("");
+      } else {
+        toast.error(t("messageError"));
       }
+    } catch {
+      toast.error(t("messageError"));
     } finally {
       setMsgBusy(false);
     }
@@ -141,17 +152,24 @@ export function CoupleHome() {
   }
   async function setSeason(season: "MARRIED" | "PARENTS") {
     setError(null);
-    const res = await fetch("/api/couple/season", {
-      method: "PATCH",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ season }),
-    });
-    if (res.ok) {
-      setGuidance(null);
-      setAnswers({});
-      load();
-    } else {
-      setError(t("seasonError"));
+    try {
+      const res = await fetch("/api/couple/season", {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ season }),
+      });
+      if (res.ok) {
+        setGuidance(null);
+        setAnswers({});
+        load();
+        toast.success(
+          season === "PARENTS" ? t("childArrivedDone") : t("marriedDone"),
+        );
+      } else {
+        toast.error(t("seasonError"));
+      }
+    } catch {
+      toast.error(t("seasonError"));
     }
   }
   async function sendCheckin() {
@@ -171,6 +189,7 @@ export function CoupleHome() {
       });
       if (res.ok) {
         setGuidance(await res.json());
+        toast.success(t("checkinSent"));
       } else {
         setCheckinError(
           res.status === 429 ? t("checkinRateLimited") : t("checkinError"),
@@ -452,8 +471,10 @@ export function CoupleHome() {
           <button
             type="submit"
             disabled={msgBusy || !draft.trim()}
-            className="rounded-btnsm bg-navy px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
+            aria-busy={msgBusy}
+            className="flex items-center justify-center gap-2 rounded-btnsm bg-navy px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
           >
+            {msgBusy && <Spinner className="h-4 w-4" />}
             {t("messagesSend")}
           </button>
         </form>
@@ -601,21 +622,24 @@ export function CoupleHome() {
         )}
       </section>
 
-      {/* Bascule saison */}
+      {/* Bascule saison - un changement de saison est un « événement de vie » :
+          on confirme avant (modale), et la bascule retour reste réversible. */}
       {s.season === "ENGAGED" ? (
-        <AsyncButton
-          onClick={() => setSeason("MARRIED")}
+        <button
+          type="button"
+          onClick={() => setSeasonConfirm("MARRIED")}
           className="mt-3.5 w-full rounded-btnsm border border-gold/50 bg-[#FBF6E9] py-3 text-[13px] font-semibold text-gold-ink dark:border-gold-light/40 dark:bg-[#272117] dark:text-gold-light"
         >
           {t("marriedCta")}
-        </AsyncButton>
+        </button>
       ) : s.season === "MARRIED" ? (
-        <AsyncButton
-          onClick={() => setSeason("PARENTS")}
+        <button
+          type="button"
+          onClick={() => setSeasonConfirm("PARENTS")}
           className="mt-3.5 w-full rounded-btnsm border border-sand-400 py-3 text-[13px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
         >
           {t("childArrived")}
-        </AsyncButton>
+        </button>
       ) : (
         <AsyncButton
           onClick={() => setSeason("MARRIED")}
@@ -674,6 +698,26 @@ export function CoupleHome() {
           </Link>
         </div>
       </section>
+
+      <ConfirmDialog
+        open={seasonConfirm !== null}
+        title={
+          seasonConfirm === "PARENTS"
+            ? t("childArrivedConfirmTitle")
+            : t("marriedConfirmTitle")
+        }
+        body={
+          seasonConfirm === "PARENTS"
+            ? t("childArrivedConfirmBody")
+            : t("marriedConfirmBody")
+        }
+        confirmLabel={tc("confirm")}
+        onConfirm={async () => {
+          if (seasonConfirm) await setSeason(seasonConfirm);
+          setSeasonConfirm(null);
+        }}
+        onCancel={() => setSeasonConfirm(null)}
+      />
     </main>
   );
 }

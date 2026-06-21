@@ -15,7 +15,10 @@
     "denied": "Notifications are blocked. Allow them in your browser settings, then come back here.",
     "iosHint": "On iPhone: first add the app to your home screen (Share → Add to Home Screen), then enable notifications from the installed app.",
     "errorEnable": "Could not enable. Please try again.",
-    "errorDisable": "Could not disable. Please try again."
+    "errorDisable": "Could not disable. Please try again.",
+    "disabledDone": "Notifications turned off.",
+    "disableConfirmTitle": "Turn off notifications?",
+    "disableConfirmBody": "You'll no longer receive alerts (messages, stages, reminders). You can re-enable them here."
   },
   "install": {
     "title": "Install Chemin d'Alliance",
@@ -43,7 +46,11 @@
     "verified": "Verified",
     "offline": "You are offline",
     "offlineBody": "Your path awaits. Reconnect to continue your conversations.",
-    "aiTransparency": "You are talking to an AI. I accompany your discernment; I never decide for you."
+    "aiTransparency": "You are talking to an AI. I accompany your discernment; I never decide for you.",
+    "close": "Close",
+    "loggedOut": "You're signed out.",
+    "logoutConfirmTitle": "Sign out?",
+    "logoutConfirmBody": "You'll need to sign in again to continue your journey."
   },
   "nav": {
     "suggestions": "Discover",
@@ -189,7 +196,7 @@
     "unspecified": "Not specified",
     "secEssential": "Essentials to get started",
     "secMore": "More about you",
-    "secMoreHint": "Optional — add whenever you like",
+    "secMoreHint": "Optional - add whenever you like",
     "matchingHint": "These fields help you appear in matches.",
     "optional": "optional",
     "recommended": "recommended",
@@ -228,7 +235,7 @@
     "toDeepen": "A few topics to explore",
     "empty": "No new suggestions today. Quality over quantity.",
     "completeTitle": "Complete your profile to see matches",
-    "completeBody": "Before discernment begins, fill in the minimum below. It makes suggestions more relevant — and lets others see you.",
+    "completeBody": "Before discernment begins, fill in the minimum below. It makes suggestions more relevant - and lets others see you.",
     "completeCta": "Complete my profile",
     "needCity": "Your city or region",
     "needIntention": "Your intention (what you're seeking)",
@@ -297,7 +304,8 @@
     "delete": "Delete",
     "deleteConfirm": "Delete this message?",
     "coupleSpaceBody": "Your messages with your partner are in the Couple space.",
-    "coupleSpaceCta": "Go to the Couple space"
+    "coupleSpaceCta": "Go to the Couple space",
+    "sendError": "Message not sent. Check your connection."
   },
   "aiCoach": {
     "title": "AI Coach",
@@ -309,8 +317,11 @@
     "guardrailTitle": "A question that deserves a human perspective",
     "guardrailBody": "I can help you shape your own criteria, but this decision is yours. A human companion can shed deeper light.",
     "guardrailCta": "Talk to a verified human coach",
-    "quotaReached": "You've used your {limit} free questions for today — a deliberate limit, to encourage deeper reflection over quantity. The AI coach returns tomorrow. To go further now, talk to a human coach.",
+    "quotaReached": "You've used your {limit} free questions for today - a deliberate limit, to encourage deeper reflection over quantity. The AI coach returns tomorrow. To go further now, talk to a human coach.",
     "quotaRemaining": "You have {remaining} free question(s) left today.",
+    "responding": "The AI is replying…",
+    "error": "Couldn't get a response. Check your connection and try again.",
+    "retry": "Try again",
     "fallbackNotice": "Guided mode: prepared answers per stage, no external AI."
   },
   "coaches": {
@@ -367,9 +378,9 @@
     "feature_report": "In-depth discernment report",
     "feature_ai": "Premium AI guidance (finer answers)",
     "feature_calls": "Internal audio/video calls (coming soon)",
-    "cta": "Subscribe — €9.99/month",
+    "cta": "Subscribe - €9.99/month",
     "activeBadge": "You are a Premium subscriber. Thank you for supporting the mission.",
-    "pendingActivation": "Payment received — activating your Premium account. Check back in a moment if the status isn't updated yet.",
+    "pendingActivation": "Payment received - activating your Premium account. Check back in a moment if the status isn't updated yet.",
     "comingSoon": "Subscription will be available soon.",
     "freeNote": "Blocking, reporting, account deletion and basic filters are free, forever.",
     "manage": "Manage my subscription",
@@ -415,7 +426,7 @@
   },
   "designSystem": {
     "title": "Design system",
-    "subtitle": "Living components — light and dark.",
+    "subtitle": "Living components - light and dark.",
     "buttons": "Buttons",
     "inputs": "Fields & controls",
     "badges": "Badges",
@@ -431,14 +442,14 @@
     "toastSuccess": "Profile saved successfully.",
     "toastInfo": "You have moved to the Discernment stage.",
     "toastWarn": "Remember to complete your family vision.",
-    "gamification": "Gamification — gauge & modal",
-    "deliverable4": "Product gamification — profile, safety, filters",
+    "gamification": "Gamification - gauge & modal",
+    "deliverable4": "Product gamification - profile, safety, filters",
     "reviews": "Rated reviews"
   },
   "agents": {
     "prep": {
       "title": "Preparation Companion",
-      "subtitle": "A gentle interview to discern where you are — never an exam.",
+      "subtitle": "A gentle interview to discern where you are - never an exam.",
       "intro": "Five questions, at your pace. At the end: a kind portrait (never a score) and, if helpful, a growth path. You remain free.",
       "consent": "I agree that my answers be analyzed by the AI agent to build my preparation portrait (sensitive data, consent revocable at any time).",
       "start": "Begin the interview",
@@ -455,21 +466,21 @@
       "statusSolid": "solid",
       "statusGrowing": "growing",
       "statusAccompany": "to be accompanied",
-      "overallReady": "Your heart seems available for encounter. Go at your pace — the journey will accompany you at every stage.",
+      "overallReady": "Your heart seems available for encounter. Go at your pace - the journey will accompany you at every stage.",
       "overallGrowth": "Before fully diving in, a season of growth would do you good. This is not a closed door: it is a gift to yourself.",
       "overallHuman": "What you carry deserves more than an app: a human companion can help you through this season. We lead you there gently.",
       "growthTitle": "Your growth path",
-      "growthBody": "Guided modules, a verified human coach, and the time it takes. The encounter will wait until you are ready — and it will be all the more beautiful.",
+      "growthBody": "Guided modules, a verified human coach, and the time it takes. The encounter will wait until you are ready - and it will be all the more beautiful.",
       "growthCta": "See verified coaches",
       "readyCta": "Continue to encounters",
       "modulesCta": "Explore the guided modules",
       "growthSkip": "I'd rather move at my own pace",
       "humanTitle": "Human support first",
-      "humanBody": "What you are going through deserves a real presence, not an algorithm. A verified companion can walk with you — without judgment, at your own pace.",
+      "humanBody": "What you are going through deserves a real presence, not an algorithm. A verified companion can walk with you - without judgment, at your own pace.",
       "humanCta": "Be supported by a human",
       "redo": "Redo the interview",
       "revoke": "Erase my portrait (GDPR)",
-      "banner": "New: take your preparation interview — 5 questions to discern where you are.",
+      "banner": "New: take your preparation interview - 5 questions to discern where you are.",
       "bannerCta": "Take the interview",
       "bannerBadge": "Recommended · 2 min",
       "bannerTitle": "Start with your interview"
@@ -485,7 +496,7 @@
       "aligned": "Themes shared by both",
       "open": "Themes still open",
       "empty": "Answer a few stage questions first.",
-      "private": "This review is private — the other person does not see it."
+      "private": "This review is private - the other person does not see it."
     },
     "exit": {
       "helpTitle": "Help me phrase it",
@@ -500,14 +511,14 @@
     },
     "rebuild": {
       "cardTitle": "Rebuilding path",
-      "cardBody": "A relationship has closed. Care for your heart before setting out again — a 4-step path awaits.",
+      "cardBody": "A relationship has closed. Care for your heart before setting out again - a 4-step path awaits.",
       "cta": "Open the path",
       "title": "Rebuilding",
       "wordTitle": "A word for you"
     },
     "copilot": {
       "title": "Prepare the session with AI",
-      "desc": "With both your consents, a factual summary of the journey (stage, themes, topics to deepen — never your messages) is prepared for the coach.",
+      "desc": "With both your consents, a factual summary of the journey (stage, themes, topics to deepen - never your messages) is prepared for the coach.",
       "consentLabel": "I agree to share this summary with the coach",
       "generate": "Prepare the summary",
       "waitingOther": "Your consent is recorded. The summary will be generated once the other person also consents.",
@@ -533,16 +544,16 @@
   },
   "couple": {
     "title": "Couple Space",
-    "subtitle": "Covenant life — after the wedding, the path continues.",
+    "subtitle": "Covenant life - after the wedding, the path continues.",
     "titleEngaged": "Engagement Space",
     "subtitleEngaged": "The engagement season, accompanied to marriage.",
     "introEngaged": "You are already journeying together toward marriage. Create your private space to exchange, check in each week and move forward in your preparation.",
-    "createEngaged": "We are engaged — create our space",
+    "createEngaged": "We are engaged - create our space",
     "seasonENGAGED": "Engagement",
     "introNone": "Here, the path does not stop at marriage. The first years, a child's arrival, hard seasons: you remain accompanied.",
     "marriedCta": "We got married",
     "marriedHint": "Available once your journey reaches Commitment.",
-    "createExternal": "We are already married — create our space",
+    "createExternal": "We are already married - create our space",
     "joinTitle": "My spouse already has a code",
     "codePlaceholder": "ALLIANCE-XXXXXX",
     "join": "Join our space",
@@ -570,7 +581,7 @@
     "seasonMARRIED": "First years",
     "seasonPARENTS": "Young parents",
     "checkinTitle": "This week's check-in",
-    "checkinPrivacy": "Your answers stay private — your spouse never sees them.",
+    "checkinPrivacy": "Your answers stay private - your spouse never sees them.",
     "yes": "Yes",
     "no": "No",
     "unsure": "Not really",
@@ -578,7 +589,7 @@
     "send": "Send to the Guardian",
     "guardianTitle": "The Couple's Guardian",
     "ritualsTitle": "Suggested rituals this week",
-    "checkinDone": "Check-in saved — everything seems fine this week. Keep it up.",
+    "checkinDone": "Check-in saved - everything seems fine this week. Keep it up.",
     "checkinAgain": "Do another check-in",
     "checkinError": "Couldn't send right now. Please try again in a moment.",
     "checkinRateLimited": "You've already done several check-ins recently. Please try again a bit later.",
@@ -588,15 +599,22 @@
     "messagesPlaceholder": "A message for your spouse…",
     "messagesSend": "Send",
     "childArrived": "A child has arrived",
-    "childArrivedDone": "\"Young parents\" season activated — check-ins adapt.",
+    "childArrivedDone": "\"Young parents\" season activated - check-ins adapt.",
     "backToMarried": "Back to \"First years\"",
     "programsTitle": "Season programs",
     "confideTitle": "Confide",
-    "confideBody": "Need to lay something down, alone or together? The AI coach listens privately — even your spouse has no access — and verified human coaches are there to go deeper.",
+    "confideBody": "Need to lay something down, alone or together? The AI coach listens privately - even your spouse has no access - and verified human coaches are there to go deeper.",
     "confideAi": "Talk to the AI coach (private)",
     "confideHuman": "See human coaches",
     "matchingOff": "Your profile no longer appears in matching.",
-    "checkinSending": "The Guardian is reflecting…"
+    "checkinSending": "The Guardian is reflecting…",
+    "checkinSent": "Check-in sent to the Guardian.",
+    "messageError": "Message not sent. Try again.",
+    "marriedDone": "Married season activated - your journey evolves.",
+    "childArrivedConfirmTitle": "Confirm life event",
+    "childArrivedConfirmBody": "You'll move to the New parents season. Check-ins and the journey will adapt. You can switch back afterwards.",
+    "marriedConfirmTitle": "Confirm life event",
+    "marriedConfirmBody": "You'll move to the Married season. The journey and check-ins will adapt to your new chapter."
   },
   "legal": {
     "terms": "Terms of Service",
@@ -649,7 +667,9 @@
     "statusCaution": "Your godparent advises caution.",
     "noteLabel": "Their words",
     "linkTitle": "Godparent",
-    "error": "Something went wrong. Please try again."
+    "error": "Something went wrong. Please try again.",
+    "removeConfirmTitle": "Remove your sponsor?",
+    "removeConfirmBody": "This person will no longer follow your journey. You can choose another anytime."
   },
   "blessing": {
     "eyebrow": "Blessing request",
@@ -668,7 +688,7 @@
   },
   "account": {
     "title": "Account",
-    "linkTitle": "Credentials — email & password",
+    "linkTitle": "Credentials - email & password",
     "passwordSection": "Change password",
     "currentPassword": "Current password",
     "newPassword": "New password",
@@ -792,7 +812,7 @@
   },
   "trust": {
     "title": "Trust & verification",
-    "intro": "Verification protects the community and shows you're serious. Your contact details (email, phone) stay private — only the verified status is visible.",
+    "intro": "Verification protects the community and shows you're serious. Your contact details (email, phone) stay private - only the verified status is visible.",
     "statusTitle": "Your level",
     "emailLevel": "Email verified",
     "emailDone": "Your email is verified. Thank you!",
@@ -823,9 +843,9 @@
     "step_never": "Never send money, and never share bank details.",
     "step_slow": "Take your time: a healthy relationship is not rushed.",
     "step_video": "Suggest a video call before sharing personal information.",
-    "step_tools": "Use Report and Block — free, anytime.",
+    "step_tools": "Use Report and Block - free, anytime.",
     "step_coach": "When in doubt, talk to a verified coach.",
-    "reminder": "Your safety comes first. When in doubt, report and block — no need to justify yourself.",
+    "reminder": "Your safety comes first. When in doubt, report and block - no need to justify yourself.",
     "bannerTitle": "Stay alert",
     "bannerBody": "This conversation shows patterns we've seen in scams. Take your time, and never share money or sensitive details.",
     "learnMore": "Learn more",
@@ -885,7 +905,7 @@
         },
         "guidance": {
           "title": "Guidance",
-          "body": "A coach and milestones at every step to discern calmly — never alone with the big decisions."
+          "body": "A coach and milestones at every step to discern calmly - never alone with the big decisions."
         },
         "exit": {
           "title": "Graceful exit",
@@ -900,7 +920,7 @@
     "journey": {
       "kicker": "The covenant journey",
       "title": "Six steps, one direction: a relationship that holds",
-      "subtitle": "Move at your own pace. Each step unlocks the next — like a path you climb together.",
+      "subtitle": "Move at your own pace. Each step unlocks the next - like a path you climb together.",
       "stepLabel": "Step {n}",
       "progressLabel": "Your progress",
       "steps": {
@@ -914,7 +934,7 @@
         },
         "discernment": {
           "title": "Discernment",
-          "body": "Ask the essential questions. Faith, plans, children, finances — clear, together."
+          "body": "Ask the essential questions. Faith, plans, children, finances - clear, together."
         },
         "accompaniment": {
           "title": "Guidance",
@@ -1013,8 +1033,8 @@
       "title": "Helping everyone build a covenant that lasts",
       "lead": "We believe dating toward marriage deserves better than the superficial: a space that protects, uplifts and guides.",
       "p1": "Chemin d'Alliance was born from a simple observation: too many apps reduce meeting to a photo and a swipe. We wanted a space where faith, seriousness and respect come before appearance.",
-      "p2": "Our six-step journey guides each person, at their own pace, from the first exchange to preparing a life together. Privacy isn't an option — it's built in.",
-      "p3": "We don't promise love in one click. We offer a path — demanding, caring and guided — toward a relationship that holds.",
+      "p2": "Our six-step journey guides each person, at their own pace, from the first exchange to preparing a life together. Privacy isn't an option - it's built in.",
+      "p3": "We don't promise love in one click. We offer a path - demanding, caring and guided - toward a relationship that holds.",
       "ctaTitle": "Ready to begin?",
       "ctaBody": "Create your profile in minutes and move at your own pace.",
       "ctaPrimary": "Begin the journey",
@@ -1129,7 +1149,7 @@
     },
     "safety": {
       "title": "Your safety, always free",
-      "intro": "Blocking, reporting and controlling your visibility never cost anything — and never depend on a subscription.",
+      "intro": "Blocking, reporting and controlling your visibility never cost anything - and never depend on a subscription.",
       "points": {
         "block": "Block in one tap",
         "report": "Report to a human",

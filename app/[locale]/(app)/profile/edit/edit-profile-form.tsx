@@ -3,6 +3,7 @@
 import {
   useCallback,
   useEffect,
+  useRef,
   useState,
   type ChangeEvent,
   type FormEvent,
@@ -24,6 +25,7 @@ import {
   type Locale,
 } from "@/lib/profile-options";
 import { Spinner } from "@/components/Spinner";
+import { useToast } from "@/components/Toast";
 
 type Data = {
   displayName: string;
@@ -86,6 +88,9 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
   const tc = useTranslations("common");
   const locale = useLocale();
   const router = useRouter();
+  const toast = useToast();
+  // Instantané de l'état chargé : sert à détecter les modifications non sauvées.
+  const initialRef = useRef<Data | null>(null);
   const [d, setD] = useState<Data | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -128,7 +133,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
       .then((u) => {
         const f = u.faithProfile ?? {};
         const rel = u.relationshipProfile ?? {};
-        setD({
+        const loaded: Data = {
           ...EMPTY,
           displayName: u.displayName ?? "",
           cityApprox: u.cityApprox ?? "",
@@ -152,7 +157,9 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
           interests: rel.interests ?? "",
           personality: rel.personality ?? "",
           aspirations: rel.aspirations ?? "",
-        });
+        };
+        setD(loaded);
+        initialRef.current = loaded;
         setPhotoUrl(u.photoUrl ?? null);
         setSeason(u.season ?? null);
       })
@@ -167,6 +174,24 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
     setD((p) => (p ? { ...p, [k]: v } : p));
     setSaved(false);
   }
+
+  // Modifications non enregistrées : on prévient la fermeture/le rafraîchissement
+  // de l'onglet tant que le formulaire diffère de l'état chargé et n'a pas été sauvé.
+  const dirty =
+    !!d &&
+    !!initialRef.current &&
+    !saved &&
+    JSON.stringify(d) !== JSON.stringify(initialRef.current);
+
+  useEffect(() => {
+    if (!dirty) return;
+    function onBeforeUnload(e: BeforeUnloadEvent) {
+      e.preventDefault();
+      e.returnValue = "";
+    }
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [dirty]);
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -221,10 +246,13 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
       ]);
       if (res.every((r) => r.ok)) {
         setSaved(true);
+        initialRef.current = d;
+        toast.success(t("saved"));
         router.refresh();
         setTimeout(() => router.push("/profile"), 700);
       } else {
         setError(tc("error"));
+        toast.error(tc("error"));
       }
     } catch {
       setError(tc("error"));
@@ -278,7 +306,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
     "rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
   const lbl = "lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]";
 
-  // Marqueur visuel obligatoire (*) / recommandé / optionnel — pour que la
+  // Marqueur visuel obligatoire (*) / recommandé / optionnel - pour que la
   // longue liste ne PARAISSE plus tout entière obligatoire.
   const mark = (opts: { required?: boolean; recommended?: boolean }) =>
     opts.required ? (
@@ -347,7 +375,18 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
     labelFor?: (v: string) => string,
   ) => {
     const val = d[key] as string;
-    const all = !val || options.includes(val) ? options : [val, ...options];
+    const merged = !val || options.includes(val) ? options : [val, ...options];
+    // Dédoublonnage par libellé affiché (insensible casse/espaces) : une valeur
+    // héritée variante d'une option curée (ex. « assemblées de dieu » vs
+    // « Assemblées de Dieu ») ne doit pas apparaître deux fois. On garde la 1re
+    // occurrence pour ne pas casser le <select> contrôlé (value={val} injectée).
+    const seenLabels = new Set<string>();
+    const all = merged.filter((o) => {
+      const labelKey = (labelFor ? labelFor(o) : o).trim().toLowerCase();
+      if (seenLabels.has(labelKey)) return false;
+      seenLabels.add(labelKey);
+      return true;
+    });
     return (
       <label className="flex flex-col gap-1.5">
         <span className={lbl}>

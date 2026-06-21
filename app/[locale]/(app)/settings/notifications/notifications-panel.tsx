@@ -5,7 +5,8 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { AsyncButton } from "@/components/AsyncButton";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { useToast } from "@/components/Toast";
 
 type State =
   | "loading"
@@ -37,8 +38,10 @@ export function NotificationsPanel({
   serverEnabled: boolean;
 }) {
   const t = useTranslations();
+  const toast = useToast();
   const [state, setState] = useState<State>("loading");
   const [error, setError] = useState<string | null>(null);
+  const [confirmDisable, setConfirmDisable] = useState(false);
   const [isStandalone, setIsStandalone] = useState(true);
   const [isIOS, setIsIOS] = useState(false);
 
@@ -119,17 +122,23 @@ export function NotificationsPanel({
       const reg = await navigator.serviceWorker.ready;
       const sub = await reg.pushManager.getSubscription();
       if (sub) {
-        await fetch("/api/push/unsubscribe", {
+        const res = await fetch("/api/push/unsubscribe", {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ endpoint: sub.endpoint }),
         });
+        // Sans ce contrôle, un échec serveur (la ligne reste en base) afficherait
+        // quand même « désactivé » alors que le push continue.
+        if (!res.ok) throw new Error("unsubscribe_failed");
         await sub.unsubscribe();
       }
       setState("off");
+      toast.success(t("notifications.disabledDone"));
     } catch {
       setError(t("notifications.errorDisable"));
       setState("on");
+    } finally {
+      setConfirmDisable(false);
     }
   }
 
@@ -214,9 +223,13 @@ export function NotificationsPanel({
         )}
 
         {state === "on" && (
-          <AsyncButton onClick={disable} className={btnGhostCls}>
+          <button
+            type="button"
+            onClick={() => setConfirmDisable(true)}
+            className={btnGhostCls}
+          >
             {t("notifications.disable")}
-          </AsyncButton>
+          </button>
         )}
 
         {error && (
@@ -231,6 +244,15 @@ export function NotificationsPanel({
           </p>
         )}
       </div>
+
+      <ConfirmDialog
+        open={confirmDisable}
+        title={t("notifications.disableConfirmTitle")}
+        body={t("notifications.disableConfirmBody")}
+        confirmLabel={t("notifications.disable")}
+        onConfirm={disable}
+        onCancel={() => setConfirmDisable(false)}
+      />
     </main>
   );
 }

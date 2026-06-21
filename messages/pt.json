@@ -15,7 +15,10 @@
     "denied": "Notificações bloqueadas. Permita-as nas definições do navegador e volte aqui.",
     "iosHint": "No iPhone: adicione primeiro a aplicação ao ecrã principal (Partilhar → Adicionar ao ecrã principal) e depois ative as notificações a partir da app instalada.",
     "errorEnable": "Não foi possível ativar. Tente novamente.",
-    "errorDisable": "Não foi possível desativar. Tente novamente."
+    "errorDisable": "Não foi possível desativar. Tente novamente.",
+    "disabledDone": "Notificações desativadas.",
+    "disableConfirmTitle": "Desativar as notificações?",
+    "disableConfirmBody": "Deixarás de receber alertas (mensagens, etapas, lembretes). Podes reativá-las aqui."
   },
   "install": {
     "title": "Instalar Chemin d'Alliance",
@@ -43,7 +46,11 @@
     "verified": "Verificado/a",
     "offline": "Está offline",
     "offlineBody": "O seu caminho espera por si. Volte a ligar-se para continuar as suas conversas.",
-    "aiTransparency": "Está a falar com uma IA. Acompanho o seu discernimento; nunca decido por si."
+    "aiTransparency": "Está a falar com uma IA. Acompanho o seu discernimento; nunca decido por si.",
+    "close": "Fechar",
+    "loggedOut": "Sessão terminada.",
+    "logoutConfirmTitle": "Terminar sessão?",
+    "logoutConfirmBody": "Terás de iniciar sessão novamente para continuar o teu caminho."
   },
   "nav": {
     "suggestions": "Descobrir",
@@ -189,7 +196,7 @@
     "unspecified": "Não especificado",
     "secEssential": "O essencial para começar",
     "secMore": "Mais informações",
-    "secMoreHint": "Opcional — preenche quando quiseres",
+    "secMoreHint": "Opcional - preenche quando quiseres",
     "matchingHint": "Estes campos ajudam-te a aparecer nos encontros.",
     "optional": "opcional",
     "recommended": "recomendado",
@@ -228,7 +235,7 @@
     "toDeepen": "Alguns temas a aprofundar",
     "empty": "Sem novas sugestões hoje. Qualidade antes de quantidade.",
     "completeTitle": "Complete o seu perfil para ver perfis",
-    "completeBody": "Antes de começar o discernimento, preencha o mínimo abaixo. Torna as sugestões mais certeiras — e permite que outros o vejam.",
+    "completeBody": "Antes de começar o discernimento, preencha o mínimo abaixo. Torna as sugestões mais certeiras - e permite que outros o vejam.",
     "completeCta": "Completar o meu perfil",
     "needCity": "A sua cidade ou região",
     "needIntention": "A sua intenção (o que procura)",
@@ -297,7 +304,8 @@
     "delete": "Eliminar",
     "deleteConfirm": "Eliminar esta mensagem?",
     "coupleSpaceBody": "As vossas mensagens a dois estão no espaço Casal.",
-    "coupleSpaceCta": "Ir para o espaço Casal"
+    "coupleSpaceCta": "Ir para o espaço Casal",
+    "sendError": "Mensagem não enviada. Verifica a tua ligação."
   },
   "aiCoach": {
     "title": "Coach IA",
@@ -309,8 +317,11 @@
     "guardrailTitle": "Uma pergunta que merece um olhar humano",
     "guardrailBody": "Posso ajudá-lo/a a formular os seus próprios critérios, mas esta decisão pertence-lhe. Um acompanhante humano pode esclarecer em profundidade.",
     "guardrailCta": "Falar com um coach humano verificado",
-    "quotaReached": "Usaste as tuas {limit} perguntas gratuitas de hoje — um limite intencional, para favorecer uma reflexão profunda em vez da quantidade. O coach IA volta amanhã. Para ir mais longe agora, fala com um coach humano.",
+    "quotaReached": "Usaste as tuas {limit} perguntas gratuitas de hoje - um limite intencional, para favorecer uma reflexão profunda em vez da quantidade. O coach IA volta amanhã. Para ir mais longe agora, fala com um coach humano.",
     "quotaRemaining": "Resta(m)-te {remaining} pergunta(s) gratuita(s) hoje.",
+    "responding": "A IA está respondendo…",
+    "error": "Não foi possível obter a resposta. Verifica a tua ligação e tenta novamente.",
+    "retry": "Tentar novamente",
     "fallbackNotice": "Modo guiado: respostas preparadas por etapa, sem IA externa."
   },
   "coaches": {
@@ -367,9 +378,9 @@
     "feature_report": "Relatório de discernimento aprofundado",
     "feature_ai": "Acompanhamento IA premium (respostas mais finas)",
     "feature_calls": "Chamadas áudio/vídeo internas (em breve)",
-    "cta": "Subscrever — 9,99 €/mês",
+    "cta": "Subscrever - 9,99 €/mês",
     "activeBadge": "És assinante Premium. Obrigado por apoiar a missão.",
-    "pendingActivation": "Pagamento recebido — a ativar a tua conta Premium. Volta daqui a pouco se o estado ainda não estiver atualizado.",
+    "pendingActivation": "Pagamento recebido - a ativar a tua conta Premium. Volta daqui a pouco se o estado ainda não estiver atualizado.",
     "comingSoon": "A subscrição estará disponível em breve.",
     "freeNote": "Bloqueio, denúncia, eliminação de conta e filtros básicos são grátis, para sempre.",
     "manage": "Gerir a minha subscrição",
@@ -415,7 +426,7 @@
   },
   "designSystem": {
     "title": "Design system",
-    "subtitle": "Componentes vivos — claro e escuro.",
+    "subtitle": "Componentes vivos - claro e escuro.",
     "buttons": "Botões",
     "inputs": "Campos e controlos",
     "badges": "Distintivos",
@@ -431,14 +442,14 @@
     "toastSuccess": "Perfil guardado com sucesso.",
     "toastInfo": "Passaram à etapa Discernimento.",
     "toastWarn": "Lembre-se de completar a sua visão familiar.",
-    "gamification": "Gamification — medidor e modal",
-    "deliverable4": "Gamificação de produto — perfil, segurança, filtros",
+    "gamification": "Gamification - medidor e modal",
+    "deliverable4": "Gamificação de produto - perfil, segurança, filtros",
     "reviews": "Avaliações com nota"
   },
   "agents": {
     "prep": {
       "title": "Companheiro de Preparação",
-      "subtitle": "Uma entrevista suave para discernir onde está — nunca um exame.",
+      "subtitle": "Uma entrevista suave para discernir onde está - nunca um exame.",
       "intro": "Cinco perguntas, ao seu ritmo. No fim: um retrato benevolente (nunca uma pontuação) e, se útil, um caminho de crescimento. Continua livre.",
       "consent": "Aceito que as minhas respostas sejam analisadas pelo agente IA para elaborar o meu retrato de preparação (dados sensíveis, consentimento revogável a qualquer momento).",
       "start": "Começar a entrevista",
@@ -455,21 +466,21 @@
       "statusSolid": "sólido",
       "statusGrowing": "a caminho",
       "statusAccompany": "a acompanhar",
-      "overallReady": "O seu coração parece disponível para o encontro. Avance ao seu ritmo — o percurso acompanhá-lo-á em cada etapa.",
+      "overallReady": "O seu coração parece disponível para o encontro. Avance ao seu ritmo - o percurso acompanhá-lo-á em cada etapa.",
       "overallGrowth": "Antes de se lançar plenamente, um tempo de crescimento far-lhe-ia bem. Não é uma porta fechada: é um presente que dá a si mesmo/a.",
       "overallHuman": "O que carrega merece mais do que uma aplicação: um acompanhante humano pode ajudar a atravessar esta estação. Conduzimo-lo/a com doçura.",
       "growthTitle": "O seu caminho de crescimento",
-      "growthBody": "Módulos guiados, coach humano verificado, e o tempo necessário. O encontro esperará até estar pronto/a — e será ainda mais belo.",
+      "growthBody": "Módulos guiados, coach humano verificado, e o tempo necessário. O encontro esperará até estar pronto/a - e será ainda mais belo.",
       "growthCta": "Ver coaches verificados",
       "readyCta": "Continuar para os encontros",
       "modulesCta": "Descobrir os módulos guiados",
       "growthSkip": "Prefiro avançar ao meu ritmo",
       "humanTitle": "Primeiro, acompanhamento humano",
-      "humanBody": "O que está a atravessar merece uma presença real, não um algoritmo. Um acompanhante verificado pode caminhar consigo — sem julgamento, ao seu ritmo.",
+      "humanBody": "O que está a atravessar merece uma presença real, não um algoritmo. Um acompanhante verificado pode caminhar consigo - sem julgamento, ao seu ritmo.",
       "humanCta": "Ser acompanhado·a por um humano",
       "redo": "Refazer a entrevista",
       "revoke": "Apagar o meu retrato (RGPD)",
-      "banner": "Novo: faça a sua entrevista de preparação — 5 perguntas para discernir onde está.",
+      "banner": "Novo: faça a sua entrevista de preparação - 5 perguntas para discernir onde está.",
       "bannerCta": "Fazer a entrevista",
       "bannerBadge": "Recomendado · 2 min",
       "bannerTitle": "Começa pela tua entrevista"
@@ -485,7 +496,7 @@
       "aligned": "Temas partilhados pelos dois",
       "open": "Temas ainda abertos",
       "empty": "Responda primeiro a algumas perguntas da etapa.",
-      "private": "Este balanço é privado — a outra pessoa não o vê."
+      "private": "Este balanço é privado - a outra pessoa não o vê."
     },
     "exit": {
       "helpTitle": "Ajudar-me a formular",
@@ -500,14 +511,14 @@
     },
     "rebuild": {
       "cardTitle": "Caminho de reconstrução",
-      "cardBody": "Uma relação encerrou-se. Cuide do seu coração antes de recomeçar — um caminho em 4 passos espera por si.",
+      "cardBody": "Uma relação encerrou-se. Cuide do seu coração antes de recomeçar - um caminho em 4 passos espera por si.",
       "cta": "Abrir o caminho",
       "title": "Reconstruir-se",
       "wordTitle": "Uma palavra para si"
     },
     "copilot": {
       "title": "Preparar a sessão com a IA",
-      "desc": "Com o acordo de ambos, é preparado para o coach um resumo factual do percurso (etapa, temas, assuntos a aprofundar — nunca as vossas mensagens).",
+      "desc": "Com o acordo de ambos, é preparado para o coach um resumo factual do percurso (etapa, temas, assuntos a aprofundar - nunca as vossas mensagens).",
       "consentLabel": "Dou o meu acordo para partilhar este resumo com o coach",
       "generate": "Preparar o resumo",
       "waitingOther": "O seu acordo está registado. O resumo será gerado quando a outra pessoa também der o dela.",
@@ -533,16 +544,16 @@
   },
   "couple": {
     "title": "Espaço Casal",
-    "subtitle": "A vida de aliança — depois do casamento, o caminho continua.",
+    "subtitle": "A vida de aliança - depois do casamento, o caminho continua.",
     "titleEngaged": "Espaço de Noivado",
     "subtitleEngaged": "O tempo do noivado, acompanhado até ao casamento.",
     "introEngaged": "Já caminham juntos para o casamento. Criem o vosso espaço privado para dialogar, fazer o ponto cada semana e avançar na vossa preparação.",
-    "createEngaged": "Estamos noivos — criar o nosso espaço",
+    "createEngaged": "Estamos noivos - criar o nosso espaço",
     "seasonENGAGED": "Noivado",
     "introNone": "Aqui o caminho não para no casamento. Os primeiros anos, a chegada de um filho, as estações difíceis: continuam acompanhados.",
     "marriedCta": "Casámo-nos",
     "marriedHint": "Disponível quando o vosso percurso chega ao Compromisso.",
-    "createExternal": "Já somos casados — criar o nosso espaço",
+    "createExternal": "Já somos casados - criar o nosso espaço",
     "joinTitle": "O meu cônjuge já tem um código",
     "codePlaceholder": "ALLIANCE-XXXXXX",
     "join": "Juntar-me ao nosso espaço",
@@ -570,7 +581,7 @@
     "seasonMARRIED": "Primeiros anos",
     "seasonPARENTS": "Pais jovens",
     "checkinTitle": "Check-in da semana",
-    "checkinPrivacy": "As tuas respostas são privadas — o teu cônjuge não as vê.",
+    "checkinPrivacy": "As tuas respostas são privadas - o teu cônjuge não as vê.",
     "yes": "Sim",
     "no": "Não",
     "unsure": "Nem por isso",
@@ -578,7 +589,7 @@
     "send": "Enviar ao Guardião",
     "guardianTitle": "O Guardião do Casal",
     "ritualsTitle": "Rituais propostos esta semana",
-    "checkinDone": "Check-in guardado — esta semana parece correr bem. Continuem assim.",
+    "checkinDone": "Check-in guardado - esta semana parece correr bem. Continuem assim.",
     "checkinAgain": "Fazer outro check-in",
     "checkinError": "Não foi possível enviar agora. Tenta novamente daqui a pouco.",
     "checkinRateLimited": "Já fizeste vários check-ins recentemente. Tenta mais tarde.",
@@ -588,15 +599,22 @@
     "messagesPlaceholder": "Uma mensagem para o teu cônjuge…",
     "messagesSend": "Enviar",
     "childArrived": "Chegou um filho",
-    "childArrivedDone": "Estação «Pais jovens» ativada — os check-ins adaptam-se.",
+    "childArrivedDone": "Estação «Pais jovens» ativada - os check-ins adaptam-se.",
     "backToMarried": "Voltar a «Primeiros anos»",
     "programsTitle": "Percursos da estação",
     "confideTitle": "Confiar-se",
-    "confideBody": "Precisas de pousar algo, sozinho/a ou a dois? O coach IA escuta-te em privado — nem o teu cônjuge tem acesso — e os coaches humanos verificados estão lá para aprofundar.",
+    "confideBody": "Precisas de pousar algo, sozinho/a ou a dois? O coach IA escuta-te em privado - nem o teu cônjuge tem acesso - e os coaches humanos verificados estão lá para aprofundar.",
     "confideAi": "Falar com o coach IA (privado)",
     "confideHuman": "Ver coaches humanos",
     "matchingOff": "O vosso perfil já não aparece nos encontros.",
-    "checkinSending": "O Guardião está a refletir…"
+    "checkinSending": "O Guardião está a refletir…",
+    "checkinSent": "Check-in enviado ao Guardião.",
+    "messageError": "Mensagem não enviada. Tenta novamente.",
+    "marriedDone": "Estação «Casados» ativada - o vosso caminho evolui.",
+    "childArrivedConfirmTitle": "Confirmar evento de vida",
+    "childArrivedConfirmBody": "Vão passar para a estação «Novos pais». Os check-ins e o percurso vão adaptar-se. Poderás voltar atrás depois.",
+    "marriedConfirmTitle": "Confirmar evento de vida",
+    "marriedConfirmBody": "Vão passar para a estação «Casados». O percurso e os check-ins vão adaptar-se à vossa nova etapa."
   },
   "legal": {
     "terms": "Termos de utilização",
@@ -649,7 +667,9 @@
     "statusCaution": "O teu padrinho/madrinha aconselha prudência.",
     "noteLabel": "As suas palavras",
     "linkTitle": "Padrinho / Madrinha",
-    "error": "Ocorreu um erro. Tenta novamente."
+    "error": "Ocorreu um erro. Tenta novamente.",
+    "removeConfirmTitle": "Remover o teu padrinho/madrinha?",
+    "removeConfirmBody": "Esta pessoa deixará de acompanhar o teu caminho. Podes escolher outra a qualquer momento."
   },
   "blessing": {
     "eyebrow": "Pedido de bênção",
@@ -668,7 +688,7 @@
   },
   "account": {
     "title": "Conta",
-    "linkTitle": "Credenciais — email e palavra-passe",
+    "linkTitle": "Credenciais - email e palavra-passe",
     "passwordSection": "Mudar a palavra-passe",
     "currentPassword": "Palavra-passe atual",
     "newPassword": "Nova palavra-passe",
@@ -792,7 +812,7 @@
   },
   "trust": {
     "title": "Confiança e verificação",
-    "intro": "A verificação protege a comunidade e mostra a tua seriedade. Os teus dados (email, telefone) ficam privados — só o estado verificado é visível.",
+    "intro": "A verificação protege a comunidade e mostra a tua seriedade. Os teus dados (email, telefone) ficam privados - só o estado verificado é visível.",
     "statusTitle": "O teu nível",
     "emailLevel": "Email verificado",
     "emailDone": "O teu email está verificado. Obrigado!",
@@ -823,9 +843,9 @@
     "step_never": "Nunca envies dinheiro nem partilhes dados bancários.",
     "step_slow": "Leva o teu tempo: uma relação saudável não se apressa.",
     "step_video": "Propõe uma videochamada antes de partilhar informação pessoal.",
-    "step_tools": "Usa Denunciar e Bloquear — grátis, a qualquer momento.",
+    "step_tools": "Usa Denunciar e Bloquear - grátis, a qualquer momento.",
     "step_coach": "Na dúvida, fala com um coach verificado.",
-    "reminder": "A tua segurança vem primeiro. Na dúvida, denuncia e bloqueia — sem teres de te justificar.",
+    "reminder": "A tua segurança vem primeiro. Na dúvida, denuncia e bloqueia - sem teres de te justificar.",
     "bannerTitle": "Atenção",
     "bannerBody": "Esta conversa mostra padrões já vistos em burlas. Leva o teu tempo e nunca partilhes dinheiro nem dados sensíveis.",
     "learnMore": "Saber mais",
@@ -900,7 +920,7 @@
     "journey": {
       "kicker": "O percurso da Aliança",
       "title": "Seis etapas, um só rumo: uma relação que permanece",
-      "subtitle": "Avance ao seu ritmo. Cada etapa desbloqueia a seguinte — como um caminho que se sobe juntos.",
+      "subtitle": "Avance ao seu ritmo. Cada etapa desbloqueia a seguinte - como um caminho que se sobe juntos.",
       "stepLabel": "Etapa {n}",
       "progressLabel": "O seu progresso",
       "steps": {
@@ -914,7 +934,7 @@
         },
         "discernment": {
           "title": "Discernimento",
-          "body": "Faça as perguntas essenciais. Fé, projeto, filhos, finanças — claro, a dois."
+          "body": "Faça as perguntas essenciais. Fé, projeto, filhos, finanças - claro, a dois."
         },
         "accompaniment": {
           "title": "Acompanhamento",
@@ -1014,7 +1034,7 @@
       "lead": "Acreditamos que conhecer alguém com vista ao casamento merece mais do que o superficial: um espaço que protege, eleva e acompanha.",
       "p1": "Chemin d'Alliance nasceu de uma constatação simples: demasiadas apps reduzem o encontro a uma foto e um swipe. Queríamos um espaço onde a fé, a seriedade e o respeito venham antes da aparência.",
       "p2": "O nosso percurso de seis etapas guia cada pessoa, ao seu ritmo, do primeiro contacto à preparação de uma vida em comum. A privacidade não é uma opção: é nativa.",
-      "p3": "Não prometemos amor num clique. Oferecemos um caminho — exigente, atencioso e acompanhado — rumo a uma relação que permanece.",
+      "p3": "Não prometemos amor num clique. Oferecemos um caminho - exigente, atencioso e acompanhado - rumo a uma relação que permanece.",
       "ctaTitle": "Pronto·a para começar?",
       "ctaBody": "Crie o seu perfil em minutos e avance ao seu ritmo.",
       "ctaPrimary": "Começar o percurso",
@@ -1129,7 +1149,7 @@
     },
     "safety": {
       "title": "A tua segurança, sempre gratuita",
-      "intro": "Bloquear, denunciar e controlar a tua visibilidade nunca custam nada — e não dependem de nenhuma subscrição.",
+      "intro": "Bloquear, denunciar e controlar a tua visibilidade nunca custam nada - e não dependem de nenhuma subscrição.",
       "points": {
         "block": "Bloquear num gesto",
         "report": "Denunciar a um humano",

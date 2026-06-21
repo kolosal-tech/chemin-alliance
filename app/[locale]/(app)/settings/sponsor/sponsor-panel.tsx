@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { AsyncButton } from "@/components/AsyncButton";
 import { Spinner } from "@/components/Spinner";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { useToast } from "@/components/Toast";
 
 type Sponsor = { name: string; email: string; relation: string };
 const RELATIONS = ["family", "pastor", "priest", "friend"] as const;
@@ -15,41 +16,51 @@ export function SponsorPanel({ initial }: { initial: Sponsor | null }) {
   const [name, setName] = useState(initial?.name ?? "");
   const [email, setEmail] = useState(initial?.email ?? "");
   const [relation, setRelation] = useState(initial?.relation ?? "family");
+  const toast = useToast();
   const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
+  const [confirmRemove, setConfirmRemove] = useState(false);
 
   async function save(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setBusy(true);
-    setMsg(null);
-    const res = await fetch("/api/me/sponsor", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ name, email, relation }),
-    });
-    setBusy(false);
-    if (res.ok) {
-      const d = (await res.json()) as { sponsor: Sponsor };
-      setSponsor(d.sponsor);
-      setMsg(t("saved"));
-    } else {
-      setMsg(t("error"));
+    try {
+      const res = await fetch("/api/me/sponsor", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ name, email, relation }),
+      });
+      if (res.ok) {
+        const d = (await res.json()) as { sponsor: Sponsor };
+        setSponsor(d.sponsor);
+        toast.success(t("saved"));
+      } else {
+        toast.error(t("error"));
+      }
+    } catch {
+      toast.error(t("error"));
+    } finally {
+      setBusy(false);
     }
   }
 
   async function remove() {
     setBusy(true);
-    setMsg(null);
-    const res = await fetch("/api/me/sponsor", { method: "DELETE" });
-    setBusy(false);
-    if (res.ok) {
-      setSponsor(null);
-      setName("");
-      setEmail("");
-      setRelation("family");
-      setMsg(t("removed"));
-    } else {
-      setMsg(t("error"));
+    try {
+      const res = await fetch("/api/me/sponsor", { method: "DELETE" });
+      if (res.ok) {
+        setSponsor(null);
+        setName("");
+        setEmail("");
+        setRelation("family");
+        toast.success(t("removed"));
+      } else {
+        toast.error(t("error"));
+      }
+    } catch {
+      toast.error(t("error"));
+    } finally {
+      setBusy(false);
+      setConfirmRemove(false);
     }
   }
 
@@ -133,25 +144,27 @@ export function SponsorPanel({ initial }: { initial: Sponsor | null }) {
             {busy ? tc("loading") : sponsor ? t("update") : t("save")}
           </button>
           {sponsor && (
-            <AsyncButton
-              onClick={remove}
+            <button
+              type="button"
+              onClick={() => setConfirmRemove(true)}
               disabled={busy}
               className="rounded-btnlg border border-sand-400 px-4 py-3.5 text-[15px] font-semibold text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
             >
               {t("remove")}
-            </AsyncButton>
+            </button>
           )}
         </div>
       </form>
 
-      {msg && (
-        <p
-          role="status"
-          className="mt-4 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-3 text-[12.5px] text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]"
-        >
-          {msg}
-        </p>
-      )}
+      <ConfirmDialog
+        open={confirmRemove}
+        title={t("removeConfirmTitle")}
+        body={t("removeConfirmBody")}
+        confirmLabel={t("remove")}
+        tone="danger"
+        onConfirm={remove}
+        onCancel={() => setConfirmRemove(false)}
+      />
     </main>
   );
 }

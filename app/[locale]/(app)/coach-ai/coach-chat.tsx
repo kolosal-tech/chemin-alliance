@@ -28,42 +28,67 @@ export function CoachChat({
   // Jetons gratuits restants aujourd'hui (null = premium illimité / pas encore su).
   const [remaining, setRemaining] = useState<number | null>(null);
   const [mode, setMode] = useState<"individual" | "couple">("individual");
+  const [error, setError] = useState<string | null>(null);
+  // Dernière question dont l'envoi a échoué : permet « Réessayer » sans
+  // ré-ajouter une bulle utilisateur en double.
+  const [lastQ, setLastQ] = useState<string | null>(null);
 
-  async function ask(e: React.FormEvent) {
+  async function send(q: string) {
+    setError(null);
+    setLastQ(q);
+    setBusy(true);
+    try {
+      const res = await fetch("/api/ai-coach/message", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ question: q, mode }),
+        // Borne le temps d'attente : sans timeout, un réseau qui pend laisse
+        // l'utilisateur sur un spinner infini.
+        signal: AbortSignal.timeout(30_000),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data) {
+        setError(t("aiCoach.error"));
+        return;
+      }
+      if (data.quotaExceeded) {
+        setQuota(data.limit);
+        setRemaining(0);
+        return;
+      }
+      if (typeof data.remaining === "number") setRemaining(data.remaining);
+      if (data.text) {
+        setEntries((s) => [
+          ...s,
+          {
+            id: crypto.randomUUID(),
+            role: "coach",
+            text: data.text,
+            guardrail: data.guardrail,
+            mode,
+          },
+        ]);
+      } else {
+        setError(t("aiCoach.error"));
+      }
+    } catch {
+      // Timeout, perte réseau, JSON illisible : on le dit, on n'échoue pas en silence.
+      setError(t("aiCoach.error"));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function ask(e: React.FormEvent) {
     e.preventDefault();
     const q = draft.trim();
     if (!q || busy) return;
-    setBusy(true);
     setEntries((s) => [
       ...s,
       { id: crypto.randomUUID(), role: "user", text: q, mode },
     ]);
     setDraft("");
-    const res = await fetch("/api/ai-coach/message", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ question: q, mode }),
-    });
-    setBusy(false);
-    const data = await res.json();
-    if (data.quotaExceeded) {
-      setQuota(data.limit);
-      setRemaining(0);
-      return;
-    }
-    if (typeof data.remaining === "number") setRemaining(data.remaining);
-    if (data.text) {
-      setEntries((s) => [
-        ...s,
-        {
-          id: crypto.randomUUID(),
-          role: "coach",
-          text: data.text,
-          guardrail: data.guardrail,
-          mode,
-        },
-      ]);
-    }
+    void send(q);
   }
 
   return (
@@ -130,9 +155,15 @@ export function CoachChat({
 
       {/* min-h-0 contraint le scroller ; [&>*]:shrink-0 empêche les bulles de
           se comprimer (sinon, contenu > hauteur => flex-shrink écrase et coupe
-          le texte, ex. le bandeau overflow-hidden) — on veut qu'elles scrollent. */}
-      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-4 py-4 [&>*]:shrink-0">
-        {/* Bandeau de transparence — obligatoire */}
+          le texte, ex. le bandeau overflow-hidden) - on veut qu'elles scrollent. */}
+      {/* role=log + aria-live : les réponses du coach ajoutées au fil sont
+          annoncées aux lecteurs d'écran (pas seulement la bulle « répond… »). */}
+      <div
+        role="log"
+        aria-live="polite"
+        className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-4 py-4 [&>*]:shrink-0"
+      >
+        {/* Bandeau de transparence - obligatoire */}
         <div
           className="glass glass-bubble rounded-[13px] border-[#D4DAE4]/70 bg-[#EAEDF2]/70 px-4 py-3 dark:border-[#2A3A56]/70 dark:bg-[#1A2233]/60"
           role="note"
@@ -243,6 +274,57 @@ export function CoachChat({
               </div>
             ),
           )}
+
+        {/* Indicateur « l'IA répond… » - bulle coach temporaire pendant l'attente. */}
+        {busy && (
+          <div
+            className="flex max-w-[88%] gap-2.5 self-start"
+            aria-live="polite"
+          >
+            <div className="mt-0.5 flex h-[26px] w-[26px] flex-none items-center justify-center rounded-[8px] bg-night dark:bg-gold-light">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
+                  className="fill-gold dark:fill-anthracite-900"
+                />
+              </svg>
+            </div>
+            <div className="glass glass-bubble flex items-center gap-2 rounded-[14px] rounded-tl-[4px] px-3.5 py-2.5">
+              <Spinner className="h-3.5 w-3.5 text-warmgray dark:text-[#9A958B]" />
+              <span className="text-[13px] italic text-warmgray dark:text-[#9A958B]">
+                {t("aiCoach.responding")}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Échec réseau / timeout : message explicite + réessai (jamais silencieux). */}
+        {error && (
+          <div
+            role="alert"
+            className="self-start rounded-[13px] border border-[#E7C3BD] bg-[#FBEEEC] px-4 py-3 dark:border-[#5A2A22] dark:bg-[#2A1714]"
+          >
+            <p className="text-[12.5px] leading-normal text-danger dark:text-[#E59B91]">
+              {error}
+            </p>
+            {lastQ && (
+              <button
+                type="button"
+                onClick={() => void send(lastQ)}
+                disabled={busy}
+                className="mt-2 text-[12.5px] font-semibold text-danger underline underline-offset-2 disabled:opacity-50 dark:text-[#E59B91]"
+              >
+                {t("aiCoach.retry")}
+              </button>
+            )}
+          </div>
+        )}
 
         {quota !== null ? (
           <p

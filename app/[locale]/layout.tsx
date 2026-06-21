@@ -5,6 +5,7 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { ThemeApplier } from "@/components/ThemeApplier";
+import { ToastProvider } from "@/components/Toast";
 import "../globals.css";
 
 const spectral = Spectral({
@@ -92,7 +93,7 @@ export default async function LocaleLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <NextIntlClientProvider>
           <ThemeApplier />
-          {children}
+          <ToastProvider>{children}</ToastProvider>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -17,7 +17,7 @@ type Props = {
 };
 
 /**
- * <AllianceThread> — la signature visuelle "fil continu".
+ * <AllianceThread> - la signature visuelle "fil continu".
  * Un fil doré relie les 6 étapes et s'épaissit avec la progression.
  */
 export function AllianceThread({
@@ -34,9 +34,30 @@ export function AllianceThread({
     const ys = STAGES.map((_, i) => 14 + (i * (H - 28)) / 5);
     return (
       <div className={`flex gap-[18px] ${className ?? ""}`}>
-        <svg width="22" height={H} viewBox={`0 0 22 ${H}`} className="flex-none" aria-hidden>
-          <line x1="11" y1={ys[0]} x2="11" y2={ys[5]} className="stroke-sand-300 dark:stroke-anthracite-600" strokeWidth="2.5" />
-          <line x1="11" y1={ys[0]} x2="11" y2={ys[idx]} className="stroke-gold dark:stroke-gold-light" strokeWidth="3.5" strokeLinecap="round" />
+        <svg
+          width="22"
+          height={H}
+          viewBox={`0 0 22 ${H}`}
+          className="flex-none"
+          aria-hidden
+        >
+          <line
+            x1="11"
+            y1={ys[0]}
+            x2="11"
+            y2={ys[5]}
+            className="stroke-sand-300 dark:stroke-anthracite-600"
+            strokeWidth="2.5"
+          />
+          <line
+            x1="11"
+            y1={ys[0]}
+            x2="11"
+            y2={ys[idx]}
+            className="stroke-gold dark:stroke-gold-light"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+          />
           {ys.map((y, i) => (
             <circle
               key={i}
@@ -83,9 +104,30 @@ export function AllianceThread({
   const xs = STAGES.map((_, i) => 14 + (i * 308) / 5);
   return (
     <div className={className}>
-      <svg width="100%" height="40" viewBox="0 0 336 40" preserveAspectRatio="none" aria-hidden>
-        <line x1={xs[0]} y1="20" x2={xs[5]} y2="20" className="stroke-sand-300 dark:stroke-anthracite-600" strokeWidth="2.5" />
-        <line x1={xs[0]} y1="20" x2={xs[idx]} y2="20" className="stroke-gold dark:stroke-gold-light" strokeWidth="3.5" strokeLinecap="round" />
+      <svg
+        width="100%"
+        height="40"
+        viewBox="0 0 336 40"
+        preserveAspectRatio="none"
+        aria-hidden
+      >
+        <line
+          x1={xs[0]}
+          y1="20"
+          x2={xs[5]}
+          y2="20"
+          className="stroke-sand-300 dark:stroke-anthracite-600"
+          strokeWidth="2.5"
+        />
+        <line
+          x1={xs[0]}
+          y1="20"
+          x2={xs[idx]}
+          y2="20"
+          className="stroke-gold dark:stroke-gold-light"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+        />
         {xs.map((x, i) => (
           <circle
             key={i}
@@ -104,19 +146,20 @@ export function AllianceThread({
         ))}
       </svg>
       {showLabels && (
-        <div className="lbl -mt-1 flex justify-between text-[8px] text-sand-500 dark:text-[#65625B]">
+        <div className="lbl -mt-1 grid grid-cols-6 gap-0.5 text-[8px] text-sand-500 dark:text-[#65625B]">
           {STAGES.map((s, i) => (
             <span
               key={s}
-              className={
+              title={t(s)}
+              className={`truncate text-center ${
                 i === idx
                   ? "font-medium text-night dark:text-[#ECE7DD]"
                   : i < idx
                     ? "text-gold-deep dark:text-gold-light"
-                    : undefined
-              }
+                    : ""
+              }`}
             >
-              {t(s).slice(0, 7)}.
+              {t(s)}
             </span>
           ))}
         </div>

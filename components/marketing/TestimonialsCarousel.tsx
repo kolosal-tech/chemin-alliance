@@ -8,7 +8,7 @@ import { Icon } from "./icons";
 /** Initiales pour l'avatar placeholder (pas de photo réelle). */
 function initials(name: string) {
   return name
-    .split(/[\s&]+/)
+    .split(/[\s&\-–]+/) // espace, &, trait d'union, tiret demi-cadratin
     .filter(Boolean)
     .slice(0, 2)
     .map((w) => w[0])

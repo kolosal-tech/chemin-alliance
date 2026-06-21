@@ -48,7 +48,7 @@ function SectionHeading({
 }
 
 /* --------------------------------------------------------------- */
-/* PressLogos — « On parle de nous » (wordmarks fictifs).           */
+/* PressLogos - « On parle de nous » (wordmarks fictifs).           */
 /* --------------------------------------------------------------- */
 export async function PressLogos() {
   const t = await getTranslations("home.press");
@@ -74,7 +74,7 @@ export async function PressLogos() {
 }
 
 /* --------------------------------------------------------------- */
-/* WhyUs — cartes de forces.                                        */
+/* WhyUs - cartes de forces.                                        */
 /* --------------------------------------------------------------- */
 export async function WhyUs() {
   const t = await getTranslations("home.whyUs");
@@ -106,7 +106,7 @@ export async function WhyUs() {
 }
 
 /* --------------------------------------------------------------- */
-/* JourneySteps — timeline gamifiée des 6 étapes.                   */
+/* JourneySteps - timeline gamifiée des 6 étapes.                   */
 /* --------------------------------------------------------------- */
 const STEP_ICONS: Record<string, MarketingIcon> = {
   discovery: "compass",
@@ -135,7 +135,7 @@ export async function JourneySteps() {
           subtitle={t("subtitle")}
         />
 
-        {/* Jauge de progression — façon Duolingo (décorative ici) */}
+        {/* Jauge de progression - façon Duolingo (décorative ici) */}
         <div className="mx-auto mt-10 max-w-md">
           <div className="mb-2 flex items-center justify-between text-[11px] font-semibold text-warmgray dark:text-[#9A958B]">
             <span className="lbl text-[10px]">{t("progressLabel")}</span>
@@ -187,7 +187,7 @@ export async function JourneySteps() {
 }
 
 /* --------------------------------------------------------------- */
-/* ValuesGrid — 4 valeurs.                                          */
+/* ValuesGrid - 4 valeurs.                                          */
 /* --------------------------------------------------------------- */
 export async function ValuesGrid() {
   const t = await getTranslations("home.values");
@@ -214,7 +214,7 @@ export async function ValuesGrid() {
 }
 
 /* --------------------------------------------------------------- */
-/* AppDownloadSection — stores (placeholders) + PWA.                */
+/* AppDownloadSection - stores (placeholders) + PWA.                */
 /* --------------------------------------------------------------- */
 export async function AppDownloadSection() {
   const t = await getTranslations("home.download");
@@ -239,32 +239,39 @@ export async function AppDownloadSection() {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href={appLinks.appStore}
-              className="inline-flex items-center gap-3 rounded-btnlg border border-white/15 bg-white/5 px-5 py-3.5 transition-colors hover:bg-white/10"
-            >
-              <Icon
-                name="device"
-                className="h-7 w-7 text-cream"
-                strokeWidth={1.5}
-              />
-              <span className="text-left text-sm font-semibold leading-tight">
-                {t("appStore")}
-              </span>
-            </a>
-            <a
-              href={appLinks.googlePlay}
-              className="inline-flex items-center gap-3 rounded-btnlg border border-white/15 bg-white/5 px-5 py-3.5 transition-colors hover:bg-white/10"
-            >
-              <Icon
-                name="play"
-                className="h-6 w-6 text-cream"
-                strokeWidth={1.5}
-              />
-              <span className="text-left text-sm font-semibold leading-tight">
-                {t("googlePlay")}
-              </span>
-            </a>
+            {/* Boutons stores masqués tant qu'aucune URL native réelle n'existe
+                (PWA pour l'instant). Dès que `appLinks.*` ≠ "#", ils réapparaissent
+                automatiquement - évite les liens morts vers "#". */}
+            {appLinks.appStore !== "#" && (
+              <a
+                href={appLinks.appStore}
+                className="inline-flex items-center gap-3 rounded-btnlg border border-white/15 bg-white/5 px-5 py-3.5 transition-colors hover:bg-white/10"
+              >
+                <Icon
+                  name="device"
+                  className="h-7 w-7 text-cream"
+                  strokeWidth={1.5}
+                />
+                <span className="text-left text-sm font-semibold leading-tight">
+                  {t("appStore")}
+                </span>
+              </a>
+            )}
+            {appLinks.googlePlay !== "#" && (
+              <a
+                href={appLinks.googlePlay}
+                className="inline-flex items-center gap-3 rounded-btnlg border border-white/15 bg-white/5 px-5 py-3.5 transition-colors hover:bg-white/10"
+              >
+                <Icon
+                  name="play"
+                  className="h-6 w-6 text-cream"
+                  strokeWidth={1.5}
+                />
+                <span className="text-left text-sm font-semibold leading-tight">
+                  {t("googlePlay")}
+                </span>
+              </a>
+            )}
             <InstallButton />
           </div>
         </div>
@@ -274,7 +281,7 @@ export async function AppDownloadSection() {
 }
 
 /* --------------------------------------------------------------- */
-/* MarketingFooter — style colonnes (mission/ressources/légal).     */
+/* MarketingFooter - style colonnes (mission/ressources/légal).     */
 /* --------------------------------------------------------------- */
 function FooterLink({ href, label }: { href: string; label: string }) {
   const cls =
