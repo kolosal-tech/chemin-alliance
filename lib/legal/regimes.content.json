@@ -1,0 +1,374 @@
+{
+  "us": {
+    "legalBasis": {
+      "fr": {
+        "h": "2. Données sensibles et base du traitement (États-Unis)",
+        "p": [
+          "Vos convictions religieuses, votre dénomination, votre situation familiale, vos témoignages, vos messages privés, vos réponses du parcours et les check-ins du couple constituent des « informations personnelles sensibles » au sens du CCPA tel que modifié par le CPRA en Californie. Aux États-Unis, il n'existe pas de loi fédérale unique sur la vie privée ; nous nous alignons sur le droit californien, et les résidents d'autres États dotés de lois complètes (Virginie VCDPA, Colorado CPA, Connecticut CTDPA, Utah UCPA, Texas TDPSA, etc.) bénéficient de droits substantiellement équivalents.",
+          "Nous ne traitons ces informations sensibles qu'avec votre consentement explicite, recueilli à l'inscription et révocable à tout moment. Vous disposez du droit de limiter l'utilisation et la divulgation de vos informations personnelles sensibles ; en pratique, nous les utilisons uniquement pour faire fonctionner le service que vous avez choisi, jamais à des fins publicitaires. Chaque champ sensible possède un niveau de visibilité (5 niveaux) que vous contrôlez, et témoignage, église locale, vision familiale et messages sont chiffrés au repos (AES-256-GCM)."
+        ]
+      },
+      "en": {
+        "h": "2. Sensitive data and basis for processing (United States)",
+        "p": [
+          "Your religious beliefs, denomination, family situation, testimonies, private messages, journey answers and couple check-ins are \"sensitive personal information\" under California's CCPA as amended by the CPRA. There is no single federal privacy statute in the United States; we follow California law, and residents of other states with comprehensive laws (Virginia's VCDPA, Colorado's CPA, Connecticut's CTDPA, Utah's UCPA, Texas's TDPSA, and others) have materially similar rights.",
+          "We process this sensitive information only with your explicit consent, given at sign-up and revocable at any time. You have the right to limit the use and disclosure of your sensitive personal information; in practice we use it only to operate the service you chose, never for advertising. Each sensitive field has a visibility level (5 levels) you control, and testimony, local church, family vision and messages are encrypted at rest (AES-256-GCM)."
+        ]
+      },
+      "es": {
+        "h": "2. Datos sensibles y base del tratamiento (Estados Unidos)",
+        "p": [
+          "Tus convicciones religiosas, denominación, situación familiar, testimonios, mensajes privados, respuestas del camino y check-ins de pareja son «información personal sensible» según la CCPA de California, modificada por la CPRA. En Estados Unidos no existe una única ley federal de privacidad; seguimos la ley de California, y los residentes de otros estados con leyes integrales (la VCDPA de Virginia, la CPA de Colorado, la CTDPA de Connecticut, la UCPA de Utah, la TDPSA de Texas y otras) tienen derechos sustancialmente equivalentes.",
+          "Solo tratamos esta información sensible con tu consentimiento explícito, recogido en el registro y revocable en cualquier momento. Tienes derecho a limitar el uso y la divulgación de tu información personal sensible; en la práctica solo la usamos para hacer funcionar el servicio que elegiste, nunca con fines publicitarios. Cada campo sensible tiene un nivel de visibilidad (5 niveles) que controlas, y testimonio, iglesia local, visión familiar y mensajes se cifran en reposo (AES-256-GCM)."
+        ]
+      },
+      "pt": {
+        "h": "2. Dados sensíveis e base do tratamento (Estados Unidos)",
+        "p": [
+          "As tuas convicções religiosas, denominação, situação familiar, testemunhos, mensagens privadas, respostas do percurso e check-ins do casal são «informação pessoal sensível» nos termos da CCPA da Califórnia, alterada pela CPRA. Nos Estados Unidos não existe uma lei federal única de privacidade; seguimos a lei da Califórnia, e os residentes de outros estados com leis abrangentes (a VCDPA da Virgínia, a CPA do Colorado, a CTDPA do Connecticut, a UCPA do Utah, a TDPSA do Texas, entre outras) têm direitos substancialmente equivalentes.",
+          "Só tratamos esta informação sensível com o teu consentimento explícito, recolhido no registo e revogável a qualquer momento. Tens o direito de limitar a utilização e a divulgação da tua informação pessoal sensível; na prática usamo-la apenas para fazer funcionar o serviço que escolheste, nunca para fins publicitários. Cada campo sensível tem um nível de visibilidade (5 níveis) que controlas, e testemunho, igreja local, visão familiar e mensagens são cifrados em repouso (AES-256-GCM)."
+        ]
+      }
+    },
+    "recipients": {
+      "fr": {
+        "h": "6. Destinataires et transferts internationaux (États-Unis)",
+        "p": [
+          "Nous faisons appel à un petit nombre de sous-traitants (« service providers » au sens du CCPA/CPRA), liés par contrat pour ne traiter vos données que selon nos instructions et jamais à leurs propres fins : Vercel (hébergement, UE et États-Unis), Supabase (base de données, région de Stockholm, UE), Resend (emails transactionnels) et OpenRouter (modèle de langage, uniquement le texte de vos questions au coach IA). Ces transmissions ne constituent ni une « vente » ni un « partage » de données personnelles.",
+          "Comme notre infrastructure s'étend à l'UE et aux États-Unis, certaines données sont traitées au-delà des frontières. Ces transferts s'effectuent dans le cadre de garanties contractuelles appropriées avec chaque sous-traitant, qui restent responsables de la protection de vos données quel que soit le lieu de traitement."
+        ]
+      },
+      "en": {
+        "h": "6. Recipients and international transfers (United States)",
+        "p": [
+          "We rely on a small number of subprocessors (\"service providers\" under the CCPA/CPRA), bound by contract to process your data only on our instructions and never for their own purposes: Vercel (hosting, EU and US), Supabase (database, Stockholm region, EU), Resend (transactional email) and OpenRouter (language model, only the text of your AI-coach questions). These disclosures are neither a \"sale\" nor a \"share\" of personal information.",
+          "Because our infrastructure spans the EU and the US, some data is processed across borders. These transfers take place under appropriate contractual safeguards with each subprocessor, who remain responsible for protecting your data wherever it is processed."
+        ]
+      },
+      "es": {
+        "h": "6. Destinatarios y transferencias internacionales (Estados Unidos)",
+        "p": [
+          "Recurrimos a un pequeño número de subencargados («service providers» según la CCPA/CPRA), obligados por contrato a tratar tus datos solo según nuestras instrucciones y nunca para fines propios: Vercel (alojamiento, UE y EE. UU.), Supabase (base de datos, región de Estocolmo, UE), Resend (correo transaccional) y OpenRouter (modelo de lenguaje, solo el texto de tus preguntas al coach IA). Estas comunicaciones no constituyen una «venta» ni un «intercambio» de información personal.",
+          "Como nuestra infraestructura abarca la UE y EE. UU., algunos datos se tratan a través de fronteras. Estas transferencias se realizan bajo garantías contractuales apropiadas con cada subencargado, que sigue siendo responsable de proteger tus datos dondequiera que se traten."
+        ]
+      },
+      "pt": {
+        "h": "6. Destinatários e transferências internacionais (Estados Unidos)",
+        "p": [
+          "Recorremos a um pequeno número de subcontratantes («service providers» nos termos da CCPA/CPRA), vinculados por contrato a tratar os teus dados apenas segundo as nossas instruções e nunca para fins próprios: Vercel (alojamento, UE e EUA), Supabase (base de dados, região de Estocolmo, UE), Resend (email transacional) e OpenRouter (modelo de linguagem, apenas o texto das tuas perguntas ao coach IA). Estas comunicações não constituem uma «venda» nem uma «partilha» de informação pessoal.",
+          "Como a nossa infraestrutura abrange a UE e os EUA, alguns dados são tratados além-fronteiras. Estas transferências realizam-se ao abrigo de garantias contratuais adequadas com cada subcontratante, que continua responsável por proteger os teus dados onde quer que sejam tratados."
+        ]
+      }
+    },
+    "rights": {
+      "fr": {
+        "h": "8. Vos droits et réclamations (États-Unis)",
+        "p": [
+          "Selon votre État de résidence, vous disposez du droit de savoir et d'accéder aux informations que nous détenons, de les corriger, de les supprimer, de refuser leur « vente » et leur « partage » (publicité comportementale inter-sites), de limiter l'utilisation de vos informations personnelles sensibles, et de ne subir aucune discrimination ni représailles pour avoir exercé ces droits. Nous ne vendons ni ne « partageons » vos informations personnelles au sens de ces lois : il n'y a donc rien à refuser, mais toute demande en ce sens sera néanmoins honorée. Les résidents de Californie peuvent aussi invoquer la loi « Shine the Light » (Cal. Civ. Code §1798.83).",
+          "Pour exercer vos droits : exportez l'intégralité de vos données en JSON en un clic (Réglages → Confidentialité → Exporter mes données), supprimez votre compte de façon réelle et définitive en un clic, ou écrivez à alliance@kolosaltech.com. Vous pouvez retirer votre consentement à tout moment, gratuitement et sans justification, et un agent autorisé peut soumettre une demande en votre nom.",
+          "Si vous estimez que vos droits n'ont pas été respectés, vous pouvez saisir la California Privacy Protection Agency ou le procureur général (Attorney General) de votre État."
+        ]
+      },
+      "en": {
+        "h": "8. Your rights and complaints (United States)",
+        "p": [
+          "Depending on your state of residence, you have the right to know and access the information we hold, to correct it, to delete it, to opt out of its \"sale\" and \"sharing\" (cross-context behavioral advertising), to limit the use of your sensitive personal information, and to be free from discrimination or retaliation for exercising these rights. We do not sell or \"share\" your personal information as those terms are defined, so there is nothing to opt out of, but any such request will still be honored. California residents may also invoke the \"Shine the Light\" law (Cal. Civ. Code §1798.83).",
+          "To exercise your rights: export all of your data as JSON in one click (Settings → Privacy → Export my data), delete your account really and finally in one click, or email alliance@kolosaltech.com. You may withdraw consent at any time, free and without justification, and an authorized agent may submit a request on your behalf.",
+          "If you believe your rights have not been honored, you may complain to the California Privacy Protection Agency or to your state Attorney General."
+        ]
+      },
+      "es": {
+        "h": "8. Tus derechos y reclamaciones (Estados Unidos)",
+        "p": [
+          "Según tu estado de residencia, tienes derecho a conocer y acceder a la información que conservamos, a corregirla, a eliminarla, a oponerte a su «venta» y a su «intercambio» (publicidad conductual entre sitios), a limitar el uso de tu información personal sensible y a no sufrir discriminación ni represalias por ejercer estos derechos. No vendemos ni «intercambiamos» tu información personal según se definen esos términos: por tanto, no hay nada a lo que oponerse, pero igualmente atenderemos cualquier solicitud en ese sentido. Los residentes de California también pueden invocar la ley «Shine the Light» (Cal. Civ. Code §1798.83).",
+          "Para ejercer tus derechos: exporta todos tus datos en JSON con un clic (Ajustes → Confidencialidad → Exportar mis datos), elimina tu cuenta de forma real y definitiva con un clic, o escribe a alliance@kolosaltech.com. Puedes retirar tu consentimiento en cualquier momento, gratis y sin justificación, y un agente autorizado puede presentar una solicitud en tu nombre.",
+          "Si consideras que tus derechos no se han respetado, puedes reclamar ante la California Privacy Protection Agency o ante el Fiscal General (Attorney General) de tu estado."
+        ]
+      },
+      "pt": {
+        "h": "8. Os teus direitos e reclamações (Estados Unidos)",
+        "p": [
+          "Consoante o teu estado de residência, tens o direito de saber e aceder à informação que detemos, de a corrigir, de a eliminar, de recusar a sua «venda» e «partilha» (publicidade comportamental entre sites), de limitar a utilização da tua informação pessoal sensível e de não sofrer discriminação ou represálias por exerceres estes direitos. Não vendemos nem «partilhamos» a tua informação pessoal na aceção desses termos: por isso, não há nada a recusar, mas qualquer pedido nesse sentido será ainda assim atendido. Os residentes da Califórnia podem também invocar a lei «Shine the Light» (Cal. Civ. Code §1798.83).",
+          "Para exercer os teus direitos: exporta todos os teus dados em JSON num clique (Definições → Confidencialidade → Exportar os meus dados), elimina a tua conta de forma real e definitiva num clique, ou escreve para alliance@kolosaltech.com. Podes retirar o teu consentimento a qualquer momento, gratuitamente e sem justificação, e um agente autorizado pode apresentar um pedido em teu nome.",
+          "Se considerares que os teus direitos não foram respeitados, podes reclamar junto da California Privacy Protection Agency ou do Procurador-Geral (Attorney General) do teu estado."
+        ]
+      }
+    }
+  },
+  "ca": {
+    "legalBasis": {
+      "fr": {
+        "h": "2. Données sensibles et consentement (LPRPDE / Loi 25)",
+        "p": [
+          "Vos convictions religieuses, votre dénomination, votre situation familiale et conjugale, vos témoignages, vos messages privés, vos réponses du parcours et les check-ins du couple sont des renseignements personnels sensibles. La religion étant un renseignement particulièrement sensible, nous ne la traitons que sur la base de votre consentement exprès, recueilli à l'inscription et révocable à tout moment.",
+          "Conformément à la Loi sur la protection des renseignements personnels et les documents électroniques (LPRPDE) et, pour les résidents du Québec, à la Loi 25, notre traitement repose sur un consentement valable, donné à des fins déterminées et clairement présentées. Chaque champ sensible possède un niveau de visibilité (5 niveaux) que vous contrôlez ; témoignage, église locale, vision familiale et messages sont chiffrés au repos (AES-256-GCM) et les mots de passe sont hachés avec Argon2id, jamais conservés en clair."
+        ]
+      },
+      "en": {
+        "h": "2. Sensitive data and consent (PIPEDA / Law 25)",
+        "p": [
+          "Your religious beliefs, denomination, family and marital situation, testimonies, private messages, journey answers and couple check-ins are sensitive personal information. Because religion is especially sensitive, we process it only on the basis of your express consent, given at sign-up and withdrawable at any time.",
+          "Under the Personal Information Protection and Electronic Documents Act (PIPEDA) and, for Quebec residents, Law 25, our processing rests on meaningful consent given for purposes that are identified and clearly explained. Every sensitive field has a visibility level (5 levels) under your control; testimony, local church, family vision and messages are encrypted at rest (AES-256-GCM), and passwords are hashed with Argon2id and never stored in plaintext."
+        ]
+      },
+      "es": {
+        "h": "2. Datos sensibles y consentimiento (PIPEDA / Ley 25)",
+        "p": [
+          "Tus convicciones religiosas, tu denominación, tu situación familiar y conyugal, tus testimonios, tus mensajes privados, tus respuestas del camino y los check-ins de pareja son información personal sensible. Como la religión es especialmente sensible, solo la tratamos sobre la base de tu consentimiento expreso, otorgado al registrarte y revocable en cualquier momento.",
+          "Conforme a la Ley de Protección de la Información Personal y los Documentos Electrónicos (PIPEDA) y, para los residentes de Quebec, a la Ley 25, nuestro tratamiento se basa en un consentimiento válido y significativo, otorgado para fines determinados y claramente explicados. Cada campo sensible tiene un nivel de visibilidad (5 niveles) bajo tu control; testimonio, iglesia local, visión familiar y mensajes se cifran en reposo (AES-256-GCM) y las contraseñas se protegen con hash mediante Argon2id, nunca en texto plano."
+        ]
+      },
+      "pt": {
+        "h": "2. Dados sensíveis e consentimento (PIPEDA / Lei 25)",
+        "p": [
+          "As tuas convicções religiosas, a tua denominação, a tua situação familiar e conjugal, os teus testemunhos, as tuas mensagens privadas, as tuas respostas do percurso e os check-ins do casal são informações pessoais sensíveis. Como a religião é especialmente sensível, só a tratamos com base no teu consentimento expresso, dado no registo e revogável a qualquer momento.",
+          "Nos termos da Lei de Proteção das Informações Pessoais e dos Documentos Eletrónicos (PIPEDA) e, para os residentes do Quebeque, da Lei 25, o nosso tratamento assenta num consentimento válido e significativo, dado para finalidades determinadas e claramente explicadas. Cada campo sensível tem um nível de visibilidade (5 níveis) sob o teu controlo; testemunho, igreja local, visão familiar e mensagens são cifrados em repouso (AES-256-GCM) e as palavras-passe são protegidas com hash através de Argon2id, nunca guardadas em texto simples."
+        ]
+      }
+    },
+    "recipients": {
+      "fr": {
+        "h": "6. Destinataires et traitement transfrontalier",
+        "p": [
+          "Nous faisons appel à un nombre limité de sous-traitants : Vercel (hébergement, UE et États-Unis), Supabase (base de données, région de Stockholm, UE), Resend (emails transactionnels) et OpenRouter (modèles de langage, uniquement le texte de vos questions au coach IA — jamais vos données de profil). Nous ne vendons jamais vos renseignements personnels.",
+          "Conformément à la LPRPDE et à la Loi 25, nous vous informons que vos renseignements peuvent être stockés ou traités à l'extérieur du Canada, dans l'Union européenne et aux États-Unis. Nous demeurons responsables de ces renseignements et exigeons de nos sous-traitants, par contrat, un niveau de protection comparable lorsqu'ils traitent vos données pour notre compte."
+        ]
+      },
+      "en": {
+        "h": "6. Recipients and cross-border processing",
+        "p": [
+          "We rely on a limited number of service providers: Vercel (hosting, EU and United States), Supabase (database, Stockholm region, EU), Resend (transactional email) and OpenRouter (language models, only the text of your AI-coach questions — never your profile data). We never sell your personal information.",
+          "In accordance with PIPEDA and Law 25, we inform you that your information may be stored or processed outside Canada, in the European Union and the United States. We remain accountable for that information and require our service providers, by contract, to apply a comparable level of protection when they handle your data on our behalf."
+        ]
+      },
+      "es": {
+        "h": "6. Destinatarios y tratamiento transfronterizo",
+        "p": [
+          "Recurrimos a un número limitado de proveedores: Vercel (alojamiento, UE y Estados Unidos), Supabase (base de datos, región de Estocolmo, UE), Resend (correos transaccionales) y OpenRouter (modelos de lenguaje, solo el texto de tus preguntas al coach IA — nunca tus datos de perfil). Nunca vendemos tu información personal.",
+          "Conforme a la PIPEDA y a la Ley 25, te informamos de que tu información puede almacenarse o tratarse fuera de Canadá, en la Unión Europea y en Estados Unidos. Seguimos siendo responsables de esa información y exigimos a nuestros proveedores, por contrato, un nivel de protección comparable cuando tratan tus datos por cuenta nuestra."
+        ]
+      },
+      "pt": {
+        "h": "6. Destinatários e tratamento transfronteiriço",
+        "p": [
+          "Recorremos a um número limitado de fornecedores: Vercel (alojamento, UE e Estados Unidos), Supabase (base de dados, região de Estocolmo, UE), Resend (emails transacionais) e OpenRouter (modelos de linguagem, apenas o texto das tuas perguntas ao coach IA — nunca os teus dados de perfil). Nunca vendemos as tuas informações pessoais.",
+          "Nos termos da PIPEDA e da Lei 25, informamos-te de que as tuas informações podem ser armazenadas ou tratadas fora do Canadá, na União Europeia e nos Estados Unidos. Mantemo-nos responsáveis por essas informações e exigimos aos nossos fornecedores, por contrato, um nível de proteção comparável quando tratam os teus dados por nossa conta."
+        ]
+      }
+    },
+    "rights": {
+      "fr": {
+        "h": "8. Vos droits et comment porter plainte",
+        "p": [
+          "Vous avez le droit d'accéder à vos renseignements personnels, d'en demander la correction et de retirer votre consentement à tout moment. Accès et portabilité : export JSON complet en un clic (Réglages → Confidentialité → Exporter mes données). Effacement : suppression de compte en un clic, réelle et définitive, qui efface en cascade profil, messages, parcours, portraits et consentements. Le retrait du consentement est gratuit et sans justification. Pour toute demande : alliance@kolosaltech.com.",
+          "Si une réponse ne vous satisfait pas, vous pouvez porter plainte auprès du Commissariat à la protection de la vie privée du Canada (CPVP). Les résidents du Québec peuvent également s'adresser à la Commission d'accès à l'information du Québec (CAI)."
+        ]
+      },
+      "en": {
+        "h": "8. Your rights and how to complain",
+        "p": [
+          "You have the right to access your personal information, to request its correction and to withdraw your consent at any time. Access and portability: full JSON export in one click (Settings → Privacy → Export my data). Erasure: one-click, real and final account deletion that cascades to your profile, messages, journey, portraits and consents. Withdrawing consent is free and requires no justification. For any request: alliance@kolosaltech.com.",
+          "If you are not satisfied with our response, you may file a complaint with the Office of the Privacy Commissioner of Canada (OPC). Quebec residents may also contact the Commission d'accès à l'information du Québec (CAI)."
+        ]
+      },
+      "es": {
+        "h": "8. Tus derechos y cómo reclamar",
+        "p": [
+          "Tienes derecho a acceder a tu información personal, a solicitar su corrección y a retirar tu consentimiento en cualquier momento. Acceso y portabilidad: exportación JSON completa con un clic (Ajustes → Confidencialidad → Exportar mis datos). Supresión: eliminación de cuenta con un clic, real y definitiva, que borra en cascada perfil, mensajes, camino, retratos y consentimientos. Retirar el consentimiento es gratuito y sin justificación. Para cualquier solicitud: alliance@kolosaltech.com.",
+          "Si nuestra respuesta no te satisface, puedes presentar una reclamación ante la Oficina del Comisionado de Privacidad de Canadá (OPC). Los residentes de Quebec también pueden dirigirse a la Comisión de Acceso a la Información de Quebec (CAI)."
+        ]
+      },
+      "pt": {
+        "h": "8. Os teus direitos e como reclamar",
+        "p": [
+          "Tens o direito de aceder às tuas informações pessoais, de pedir a sua correção e de retirar o teu consentimento a qualquer momento. Acesso e portabilidade: exportação JSON completa num clique (Definições → Confidencialidade → Exportar os meus dados). Apagamento: eliminação de conta num clique, real e definitiva, que apaga em cascata perfil, mensagens, percurso, retratos e consentimentos. Retirar o consentimento é gratuito e sem justificação. Para qualquer pedido: alliance@kolosaltech.com.",
+          "Se a nossa resposta não te satisfizer, podes apresentar uma reclamação junto do Comissariado de Proteção da Privacidade do Canadá (OPC). Os residentes do Quebeque também podem dirigir-se à Comissão de Acesso à Informação do Quebeque (CAI)."
+        ]
+      }
+    }
+  },
+  "br": {
+    "legalBasis": {
+      "fr": {
+        "h": "2. Données sensibles — base légale (LGPD)",
+        "p": [
+          "Vos convictions religieuses, votre dénomination, votre situation familiale et conjugale, vos témoignages, vos messages privés, vos réponses au parcours et les check-ins du couple sont des données personnelles sensibles au sens de l'article 11 de la LGPD (Loi nº 13.709/2018). Elles ne sont traitées que sur la base de votre consentement explicite, recueilli à l'inscription et révocable à tout moment.",
+          "Chaque champ sensible dispose d'un niveau de visibilité (5 niveaux) que vous contrôlez vous-même. Témoignage, église locale, vision familiale et messages sont chiffrés au repos (AES-256-GCM) ; les mots de passe sont hachés avec Argon2id et ne sont jamais conservés en clair."
+        ]
+      },
+      "en": {
+        "h": "2. Sensitive data — legal basis (LGPD)",
+        "p": [
+          "Your religious beliefs, denomination, family and marital situation, testimonies, private messages, journey answers and couple check-ins are sensitive personal data under article 11 of the LGPD (Law No. 13,709/2018). They are processed only on the basis of your explicit consent, given at sign-up and revocable at any time.",
+          "Every sensitive field has a visibility level (5 levels) that you control yourself. Testimony, local church, family vision and messages are encrypted at rest (AES-256-GCM); passwords are hashed with Argon2id and never stored in plaintext."
+        ]
+      },
+      "es": {
+        "h": "2. Datos sensibles — base legal (LGPD)",
+        "p": [
+          "Tus convicciones religiosas, denominación, situación familiar y conyugal, testimonios, mensajes privados, respuestas del camino y check-ins de pareja son datos personales sensibles según el artículo 11 de la LGPD (Ley n.º 13.709/2018). Solo se tratan sobre la base de tu consentimiento explícito, recabado al registrarte y revocable en cualquier momento.",
+          "Cada campo sensible tiene un nivel de visibilidad (5 niveles) que tú mismo controlas. Testimonio, iglesia local, visión familiar y mensajes se cifran en reposo (AES-256-GCM); las contraseñas se protegen con Argon2id y nunca se guardan en texto plano."
+        ]
+      },
+      "pt": {
+        "h": "2. Dados sensíveis — base legal (LGPD)",
+        "p": [
+          "As tuas convicções religiosas, denominação, situação familiar e conjugal, testemunhos, mensagens privadas, respostas do percurso e check-ins do casal são dados pessoais sensíveis nos termos do artigo 11 da LGPD (Lei n.º 13.709/2018). Só são tratados com base no teu consentimento específico e destacado, recolhido no registo e revogável a qualquer momento.",
+          "Cada campo sensível tem um nível de visibilidade (5 níveis) que tu próprio controlas. Testemunho, igreja local, visão familiar e mensagens são cifrados em repouso (AES-256-GCM); as palavras-passe são protegidas com Argon2id e nunca são guardadas em texto simples."
+        ]
+      }
+    },
+    "recipients": {
+      "fr": {
+        "h": "6. Destinataires et transfert international",
+        "p": [
+          "Nous nous appuyons sur un nombre limité de sous-traitants (operadores) : Vercel pour l'hébergement (UE et États-Unis), Supabase pour la base de données (région de Stockholm, UE), Resend pour les emails transactionnels et OpenRouter pour le modèle de langage du coach IA — auquel seul le texte de votre question, l'étape en cours et votre langue sont transmis, jamais vos données de profil.",
+          "Certaines opérations ont lieu hors du Brésil, dans l'Union européenne et aux États-Unis. Ces transferts internationaux sont encadrés par des garanties contractuelles appropriées, conformément à la LGPD. Nous ne vendons jamais vos données et ne faisons ni publicité ciblée sur la religion, ni profilage commercial."
+        ]
+      },
+      "en": {
+        "h": "6. Recipients and international transfer",
+        "p": [
+          "We rely on a small number of processors (operadores): Vercel for hosting (EU and United States), Supabase for the database (Stockholm region, EU), Resend for transactional email, and OpenRouter for the AI-coach language model — which receives only your question text, current stage and language, never your profile data.",
+          "Some processing takes place outside Brazil, in the European Union and the United States. These international transfers are covered by appropriate contractual safeguards, in line with the LGPD. We never sell your data and do no religion-targeted advertising or commercial profiling."
+        ]
+      },
+      "es": {
+        "h": "6. Destinatarios y transferencia internacional",
+        "p": [
+          "Nos apoyamos en un número reducido de operadores: Vercel para el alojamiento (UE y Estados Unidos), Supabase para la base de datos (región de Estocolmo, UE), Resend para los correos transaccionales y OpenRouter para el modelo de lenguaje del coach IA, al que solo se envían el texto de tu pregunta, la etapa actual y tu idioma, nunca tus datos de perfil.",
+          "Algunas operaciones se realizan fuera de Brasil, en la Unión Europea y en Estados Unidos. Estas transferencias internacionales se amparan en garantías contractuales adecuadas, conforme a la LGPD. Nunca vendemos tus datos ni hacemos publicidad segmentada por religión ni perfilado comercial."
+        ]
+      },
+      "pt": {
+        "h": "6. Destinatários e transferência internacional",
+        "p": [
+          "Apoiamo-nos num número reduzido de operadores: a Vercel para o alojamento (UE e Estados Unidos), a Supabase para a base de dados (região de Estocolmo, UE), a Resend para os emails transacionais e a OpenRouter para o modelo de linguagem do coach de IA, ao qual são enviados apenas o texto da tua pergunta, a etapa atual e o teu idioma, nunca os teus dados de perfil.",
+          "Algumas operações ocorrem fora do Brasil, na União Europeia e nos Estados Unidos. Estas transferências internacionais são abrangidas por garantias contratuais adequadas, em conformidade com a LGPD. Nunca vendemos os teus dados nem fazemos publicidade dirigida por religião ou definição de perfis comerciais."
+        ]
+      }
+    },
+    "rights": {
+      "fr": {
+        "h": "8. Vos droits et réclamation (LGPD)",
+        "p": [
+          "En tant que titulaire des données, l'article 18 de la LGPD vous garantit : la confirmation de l'existence du traitement, l'accès, la correction, l'anonymisation, le blocage ou l'effacement des données inutiles ou excessives, la portabilité, l'effacement des données traitées sur consentement, l'information sur les partages, l'information sur les conséquences d'un refus, et le retrait du consentement.",
+          "Vous exercez ces droits directement dans l'application : export JSON complet en un clic (Réglages → Confidentialité → Exporter mes données) et suppression de compte réelle et définitive en un clic, qui efface vos données en cascade. Le retrait du consentement est gratuit, sans justification, à tout moment. Pour toute demande, contactez notre encarregado (DPO) : alliance@kolosaltech.com. Vous pouvez aussi adresser une réclamation à l'ANPD (Autoridade Nacional de Proteção de Dados)."
+        ]
+      },
+      "en": {
+        "h": "8. Your rights and complaints (LGPD)",
+        "p": [
+          "As the data subject (titular), article 18 of the LGPD guarantees you: confirmation that processing exists, access, correction, anonymization, blocking or deletion of unnecessary or excessive data, portability, deletion of data processed on consent, information about sharing, information about the consequences of refusing consent, and withdrawal of consent.",
+          "You exercise these rights directly in the app: full JSON export in one click (Settings → Privacy → Export my data) and real, final one-click account deletion that erases your data in cascade. Withdrawing consent is free, needs no justification and is available at any time. For any request, contact our encarregado (DPO): alliance@kolosaltech.com. You may also file a complaint with the ANPD (Autoridade Nacional de Proteção de Dados)."
+        ]
+      },
+      "es": {
+        "h": "8. Tus derechos y reclamación (LGPD)",
+        "p": [
+          "Como titular de los datos, el artículo 18 de la LGPD te garantiza: la confirmación de la existencia del tratamiento, el acceso, la corrección, la anonimización, el bloqueo o la eliminación de datos innecesarios o excesivos, la portabilidad, la eliminación de los datos tratados con consentimiento, la información sobre con quién se comparten, la información sobre las consecuencias de negar el consentimiento, y la retirada del consentimiento.",
+          "Ejerces estos derechos directamente en la aplicación: exportación JSON completa con un clic (Ajustes → Confidencialidad → Exportar mis datos) y eliminación de cuenta real y definitiva con un clic, que borra tus datos en cascada. Retirar el consentimiento es gratuito, sin justificación y en cualquier momento. Para cualquier solicitud, contacta con nuestro encarregado (DPO): alliance@kolosaltech.com. También puedes presentar una reclamación ante la ANPD (Autoridade Nacional de Proteção de Dados)."
+        ]
+      },
+      "pt": {
+        "h": "8. Os teus direitos e reclamação (LGPD)",
+        "p": [
+          "Enquanto titular dos dados, o artigo 18 da LGPD garante-te: a confirmação da existência do tratamento, o acesso, a correção, a anonimização, o bloqueio ou a eliminação de dados desnecessários ou excessivos, a portabilidade, a eliminação dos dados tratados com consentimento, a informação sobre as partilhas, a informação sobre as consequências de recusar o consentimento, e a revogação do consentimento.",
+          "Exerces estes direitos diretamente na aplicação: exportação JSON completa num clique (Definições → Confidencialidade → Exportar os meus dados) e eliminação de conta real e definitiva num clique, que apaga os teus dados em cascata. Revogar o consentimento é gratuito, sem justificação e a qualquer momento. Para qualquer pedido, contacta o nosso encarregado (DPO): alliance@kolosaltech.com. Podes também apresentar uma reclamação à ANPD (Autoridade Nacional de Proteção de Dados)."
+        ]
+      }
+    }
+  },
+  "intl": {
+    "legalBasis": {
+      "fr": {
+        "h": "2. Données sensibles et base légale",
+        "p": [
+          "Vos convictions religieuses, votre dénomination, votre situation familiale et conjugale, vos témoignages, vos messages privés, vos réponses du parcours et les check-ins du couple sont des données sensibles. Quel que soit votre pays, nous les traitons selon un standard équivalent au RGPD : elles ne sont collectées qu'avec votre consentement explicite, recueilli à l'inscription et révocable à tout moment, sans frais ni justification.",
+          "Chaque champ sensible possède un niveau de visibilité (5 niveaux) que vous contrôlez. Témoignage, église locale, vision familiale et messages sont chiffrés au repos (AES-256-GCM) ; les mots de passe sont hachés avec Argon2id, jamais conservés en clair. Le retrait de votre consentement arrête le traitement futur de ces données."
+        ]
+      },
+      "en": {
+        "h": "2. Sensitive data and legal basis",
+        "p": [
+          "Your religious beliefs, denomination, family and marital situation, testimonies, private messages, journey answers and couple check-ins are sensitive data. Wherever you live, we process them to a GDPR-equivalent standard: they are collected only with your explicit consent, given at sign-up and revocable at any time, free of charge and without justification.",
+          "Every sensitive field has a visibility level (5 levels) under your control. Testimony, local church, family vision and messages are encrypted at rest (AES-256-GCM); passwords are hashed with Argon2id and never stored in plaintext. Withdrawing your consent stops future processing of this data."
+        ]
+      },
+      "es": {
+        "h": "2. Datos sensibles y base legal",
+        "p": [
+          "Tus convicciones religiosas, denominación, situación familiar y conyugal, testimonios, mensajes privados, respuestas del camino y check-ins de pareja son datos sensibles. Vivas donde vivas, los tratamos con un estándar equivalente al RGPD: solo se recogen con tu consentimiento explícito, otorgado al registrarte y revocable en cualquier momento, sin coste ni justificación.",
+          "Cada campo sensible tiene un nivel de visibilidad (5 niveles) bajo tu control. Testimonio, iglesia local, visión familiar y mensajes se cifran en reposo (AES-256-GCM); las contraseñas se procesan con un hash Argon2id y nunca se guardan en texto plano. Retirar tu consentimiento detiene el tratamiento futuro de estos datos."
+        ]
+      },
+      "pt": {
+        "h": "2. Dados sensíveis e base legal",
+        "p": [
+          "As tuas convicções religiosas, denominação, situação familiar e conjugal, testemunhos, mensagens privadas, respostas do percurso e check-ins do casal são dados sensíveis. Onde quer que vivas, tratamo-los com um padrão equivalente ao RGPD: só são recolhidos com o teu consentimento explícito, dado no registo e revogável a qualquer momento, sem custos nem justificação.",
+          "Cada campo sensível tem um nível de visibilidade (5 níveis) sob o teu controlo. Testemunho, igreja local, visão familiar e mensagens são cifrados em repouso (AES-256-GCM); as palavras-passe são transformadas com um hash Argon2id e nunca guardadas em texto simples. Retirar o teu consentimento interrompe o tratamento futuro destes dados."
+        ]
+      }
+    },
+    "recipients": {
+      "fr": {
+        "h": "6. Destinataires et transferts internationaux",
+        "p": [
+          "Nous faisons appel à un nombre limité de sous-traitants : Vercel (hébergement, UE et États-Unis), Supabase (base de données, région Stockholm, UE), Resend (emails transactionnels) et OpenRouter (modèle de langage, uniquement le texte de vos questions au coach IA). Nous ne vendons jamais vos données et ne les partageons avec aucune autre partie à des fins commerciales.",
+          "Votre service implique un traitement transfrontalier dans l'Union européenne et aux États-Unis. Ces transferts sont encadrés par des garanties appropriées (clauses contractuelles types et engagements de confidentialité), de sorte que la protection de vos données vous suit au-delà de votre pays de résidence."
+        ]
+      },
+      "en": {
+        "h": "6. Recipients and international transfers",
+        "p": [
+          "We rely on a small set of subprocessors: Vercel (hosting, EU and US), Supabase (database, Stockholm region, EU), Resend (transactional email) and OpenRouter (language model, only the text of your AI-coach questions). We never sell your data and never share it with any other party for commercial purposes.",
+          "Your service involves cross-border processing in the European Union and the United States. These transfers are governed by appropriate safeguards (standard contractual clauses and confidentiality commitments), so the protection of your data follows it beyond your country of residence."
+        ]
+      },
+      "es": {
+        "h": "6. Destinatarios y transferencias internacionales",
+        "p": [
+          "Recurrimos a un número reducido de encargados: Vercel (alojamiento, UE y EE. UU.), Supabase (base de datos, región de Estocolmo, UE), Resend (correo transaccional) y OpenRouter (modelo de lenguaje, solo el texto de tus preguntas al coach IA). Nunca vendemos tus datos ni los compartimos con ningún tercero con fines comerciales.",
+          "Tu servicio implica un tratamiento transfronterizo en la Unión Europea y en los Estados Unidos. Estas transferencias se rigen por garantías adecuadas (cláusulas contractuales tipo y compromisos de confidencialidad), de modo que la protección de tus datos te acompaña más allá de tu país de residencia."
+        ]
+      },
+      "pt": {
+        "h": "6. Destinatários e transferências internacionais",
+        "p": [
+          "Recorremos a um número reduzido de subcontratantes: Vercel (alojamento, UE e EUA), Supabase (base de dados, região de Estocolmo, UE), Resend (email transacional) e OpenRouter (modelo de linguagem, apenas o texto das tuas perguntas ao coach IA). Nunca vendemos os teus dados nem os partilhamos com qualquer terceiro para fins comerciais.",
+          "O teu serviço implica um tratamento transfronteiriço na União Europeia e nos Estados Unidos. Estas transferências regem-se por garantias adequadas (cláusulas contratuais-tipo e compromissos de confidencialidade), de modo que a proteção dos teus dados te acompanha para além do teu país de residência."
+        ]
+      }
+    },
+    "rights": {
+      "fr": {
+        "h": "8. Vos droits et comment vous plaindre",
+        "p": [
+          "Partout, nous honorons vos droits d'accès, de rectification, d'effacement, de retrait du consentement, d'opposition et de portabilité. Vous les exercez directement dans l'application : export JSON complet en un clic (Réglages → Confidentialité → Exporter mes données) et suppression de compte réelle et définitive en un clic. Pour toute autre demande, écrivez à alliance@kolosaltech.com.",
+          "Vous pouvez aussi saisir l'autorité de protection des données de votre pays — par exemple l'ARTCI en Côte d'Ivoire, la CDP au Sénégal, la NDPC au Nigeria (NDPA 2023), l'AAIP en Argentine ou, au Mexique, l'autorité désignée par la LFPDPPP (Secrétariat à l'anticorruption et à la bonne gouvernance). Les droits précis dépendent de votre loi locale, mais nous appliquons à chacun le même niveau de protection."
+        ]
+      },
+      "en": {
+        "h": "8. Your rights and how to complain",
+        "p": [
+          "Everywhere, we honor your rights of access, correction, erasure, withdrawal of consent, objection and portability. You exercise them directly in the app: full JSON export in one click (Settings → Privacy → Export my data) and real, final account deletion in one click. For any other request, write to alliance@kolosaltech.com.",
+          "You may also lodge a complaint with the data-protection authority in your country — for example ARTCI in Côte d'Ivoire, CDP in Senegal, NDPC in Nigeria (NDPA 2023), AAIP in Argentina or, in Mexico, the authority designated under the LFPDPPP (the Ministry of Anti-Corruption and Good Governance). The exact statutory rights depend on your local law, but we apply the same level of protection to everyone."
+        ]
+      },
+      "es": {
+        "h": "8. Tus derechos y cómo reclamar",
+        "p": [
+          "En todas partes respetamos tus derechos de acceso, rectificación, supresión, retirada del consentimiento, oposición y portabilidad. Los ejerces directamente en la aplicación: exportación JSON completa con un clic (Ajustes → Confidencialidad → Exportar mis datos) y eliminación de cuenta real y definitiva con un clic. Para cualquier otra solicitud, escribe a alliance@kolosaltech.com.",
+          "También puedes reclamar ante la autoridad de protección de datos de tu país —por ejemplo la ARTCI en Costa de Marfil, la CDP en Senegal, la NDPC en Nigeria (NDPA 2023), la AAIP en Argentina o, en México, la autoridad designada por la LFPDPPP (la Secretaría Anticorrupción y Buen Gobierno). Los derechos concretos dependen de tu ley local, pero aplicamos a todos el mismo nivel de protección."
+        ]
+      },
+      "pt": {
+        "h": "8. Os teus direitos e como reclamar",
+        "p": [
+          "Em qualquer lugar, honramos os teus direitos de acesso, retificação, apagamento, retirada do consentimento, oposição e portabilidade. Exerce-los diretamente na aplicação: exportação JSON completa num clique (Definições → Confidencialidade → Exportar os meus dados) e eliminação de conta real e definitiva num clique. Para qualquer outro pedido, escreve para alliance@kolosaltech.com.",
+          "Podes também reclamar junto da autoridade de proteção de dados do teu país — por exemplo a ARTCI na Costa do Marfim, a CDP no Senegal, a NDPC na Nigéria (NDPA 2023), a AAIP na Argentina ou, no México, a autoridade designada pela LFPDPPP (a Secretaria Anticorrupção e Bom Governo). Os direitos concretos dependem da tua lei local, mas aplicamos a todos o mesmo nível de proteção."
+        ]
+      }
+    }
+  }
+}
