@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import {
   generateInviteCode,
@@ -93,7 +93,9 @@ const createSchema = z.object({ matchId: z.string().optional() });
 export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
   if (await mySpace(user.id)) return jsonError(409, "SPACE_EXISTS");
-  const { matchId } = createSchema.parse(await req.json().catch(() => ({})));
+  const { matchId } = createSchema.parse(
+    await readJsonLimited(req).catch(() => ({})),
+  );
 
   if (matchId) {
     const match = await prisma.match.findUnique({ where: { id: matchId } });

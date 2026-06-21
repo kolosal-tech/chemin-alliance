@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { withErrors } from "@/lib/api-helpers";
+import { withErrors, readJsonLimited } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { requireMatchMember } from "@/lib/alliance";
 import { encryptField } from "@/lib/security/crypto";
@@ -17,7 +17,7 @@ export const POST = withErrors(
     if (match.status === "CLOSED") {
       return NextResponse.json({ ok: true, closed: true });
     }
-    const { message } = schema.parse(await req.json());
+    const { message } = schema.parse(await readJsonLimited(req));
 
     await prisma.$transaction([
       prisma.message.create({

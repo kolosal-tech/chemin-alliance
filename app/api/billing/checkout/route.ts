@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit } from "@/lib/security/rate-limit";
 import { env } from "@/lib/env";
@@ -16,7 +16,7 @@ export const POST = withErrors(async (req: Request) => {
 
   // Locale transmise par le client → on garde l'utilisateur dans sa langue au
   // retour de Stripe (sinon next-intl ajoute une redirection /<locale>/).
-  const body = (await req.json().catch(() => null)) as {
+  const body = (await readJsonLimited(req).catch(() => null)) as {
     locale?: string;
   } | null;
   const requested = body?.locale ?? "";

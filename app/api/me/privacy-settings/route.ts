@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { withErrors } from "@/lib/api-helpers";
+import { withErrors, readJsonLimited } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 
 const schema = z.object({
@@ -13,7 +13,7 @@ const schema = z.object({
 
 export const PATCH = withErrors(async (req: Request) => {
   const user = await requireUser();
-  const body = schema.parse(await req.json());
+  const body = schema.parse(await readJsonLimited(req));
   await prisma.privacySettings.update({
     where: { userId: user.id },
     data: body,

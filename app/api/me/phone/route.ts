@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit } from "@/lib/security/rate-limit";
 import {
@@ -50,7 +50,7 @@ export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
   const rl = await rateLimit(`phone-start:${user.id}`, 5, 60 * 60_000);
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
-  const { phone } = startSchema.parse(await req.json());
+  const { phone } = startSchema.parse(await readJsonLimited(req));
 
   await prisma.user.update({
     where: { id: user.id },
@@ -84,7 +84,7 @@ export const PATCH = withErrors(async (req: Request) => {
   const user = await requireUser();
   const rl = await rateLimit(`phone-verify:${user.id}`, 10, 60 * 60_000);
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
-  const { code } = verifySchema.parse(await req.json());
+  const { code } = verifySchema.parse(await readJsonLimited(req));
 
   if (smsEnabled()) {
     // Vérification déléguée à Twilio Verify.

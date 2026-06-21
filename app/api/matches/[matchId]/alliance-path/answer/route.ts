@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { requireMatchMember } from "@/lib/alliance";
 import { getStageQuestions } from "@/lib/core-engine";
@@ -16,7 +16,7 @@ export const POST = withErrors(
     const user = await requireUser();
     const match = await requireMatchMember(params.matchId, user.id);
     if (match.stage === "CLOSED") return jsonError(409, "MATCH_CLOSED");
-    const body = schema.parse(await req.json());
+    const body = schema.parse(await readJsonLimited(req));
 
     const questions = getStageQuestions(user.rulesetId, match.stage);
     if (!questions.some((q) => q.id === body.questionId)) {

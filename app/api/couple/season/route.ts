@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 
 const schema = z.object({ season: z.enum(["MARRIED", "PARENTS"]) });
@@ -9,7 +9,7 @@ const schema = z.object({ season: z.enum(["MARRIED", "PARENTS"]) });
 /** Bascule de saison (ex. « un enfant est arrivé ») — pour les deux membres. */
 export const PATCH = withErrors(async (req: Request) => {
   const user = await requireUser();
-  const { season } = schema.parse(await req.json());
+  const { season } = schema.parse(await readJsonLimited(req));
   const space = await prisma.coupleSpace.findFirst({
     where: {
       OR: [{ userAId: user.id }, { userBId: user.id }],

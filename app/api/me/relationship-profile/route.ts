@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { withErrors } from "@/lib/api-helpers";
+import { withErrors, readJsonLimited } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { encryptField } from "@/lib/security/crypto";
+import { sensitiveText } from "@/lib/security/sensitive-text";
 
 const visibility = z.enum([
   "PUBLIC_CONTROLLED",
@@ -16,9 +17,8 @@ const visibility = z.enum([
 ]);
 
 const schema = z.object({
-  // Doit accepter TOUTES les valeurs que le système écrit : l'inscription
-  // (intent fiancé/marié) et l'Espace Couple posent "engaged"/"married". Les
-  // omettre faisait échouer l'enregistrement du profil (400) pour ces comptes.
+  // Doit accepter TOUTES les valeurs que le systeme ecrit : l'inscription
+  // (intent fiance/marie) et l'Espace Couple posent "engaged"/"married".
   maritalStatus: z
     .enum([
       "single",
@@ -33,18 +33,19 @@ const schema = z.object({
   childrenVisibility: visibility.optional(),
   wantsChildren: z.boolean().nullable().optional(),
   acceptsChildren: z.boolean().nullable().optional(),
-  familyVision: z.string().max(2000).nullable().optional(),
+  // Champs libres passes par sensitiveText (NFC + anti-controle/bidi + bornage).
+  familyVision: sensitiveText(2000),
   familyVisionVisibility: visibility.optional(),
-  intentionStatement: z.string().max(280).nullable().optional(),
+  intentionStatement: sensitiveText(280),
   intentionVisibility: visibility.optional(),
-  interests: z.string().max(500).nullable().optional(),
-  personality: z.string().max(500).nullable().optional(),
-  aspirations: z.string().max(500).nullable().optional(),
+  interests: sensitiveText(500),
+  personality: sensitiveText(500),
+  aspirations: sensitiveText(500),
 });
 
 export const PATCH = withErrors(async (req: Request) => {
   const user = await requireUser();
-  const body = schema.parse(await req.json());
+  const body = schema.parse(await readJsonLimited(req));
   const { familyVision, ...rest } = body;
   const data = {
     ...rest,
@@ -53,8 +54,8 @@ export const PATCH = withErrors(async (req: Request) => {
     }),
   };
   // upsert (et non update) : certains comptes anciens n'ont pas encore de ligne
-  // RelationshipProfile (créée à l'inscription seulement depuis un correctif
-  // ultérieur) — un update lèverait P2025 et l'enregistrement du profil échouait.
+  // RelationshipProfile (creee a l'inscription seulement depuis un correctif
+  // ulterieur) — un update leverait P2025 et l'enregistrement du profil echouait.
   await prisma.relationshipProfile.upsert({
     where: { userId: user.id },
     update: data,

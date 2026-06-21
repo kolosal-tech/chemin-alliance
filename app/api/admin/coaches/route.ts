@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { withErrors } from "@/lib/api-helpers";
+import { withErrors, readJsonLimited } from "@/lib/api-helpers";
 import { requireAdmin } from "@/lib/security/session";
 
 // Gestion des accompagnateurs humains (pasteur, prêtre, mentor de couple,
@@ -9,7 +9,9 @@ import { requireAdmin } from "@/lib/security/session";
 // du modèle Coach (aucune migration). L'affiliation porte le rôle clérical.
 export const GET = withErrors(async () => {
   await requireAdmin();
-  const coaches = await prisma.coach.findMany({ orderBy: { displayName: "asc" } });
+  const coaches = await prisma.coach.findMany({
+    orderBy: { displayName: "asc" },
+  });
   return NextResponse.json(coaches);
 });
 
@@ -25,7 +27,7 @@ const createSchema = z.object({
 
 export const POST = withErrors(async (req: Request) => {
   await requireAdmin();
-  const body = createSchema.parse(await req.json());
+  const body = createSchema.parse(await readJsonLimited(req));
   const coach = await prisma.coach.create({
     data: {
       displayName: body.displayName,

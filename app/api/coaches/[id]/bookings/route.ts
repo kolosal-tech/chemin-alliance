@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 
 const schema = z.object({ slotStart: z.string().datetime() });
@@ -10,7 +10,7 @@ const schema = z.object({ slotStart: z.string().datetime() });
 export const POST = withErrors(
   async (req: Request, { params }: { params: { id: string } }) => {
     const user = await requireUser();
-    const { slotStart } = schema.parse(await req.json());
+    const { slotStart } = schema.parse(await readJsonLimited(req));
     const coach = await prisma.coach.findUnique({ where: { id: params.id } });
     if (!coach) return jsonError(404, "NOT_FOUND");
 

@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { withErrors } from "@/lib/api-helpers";
+import { withErrors, readJsonLimited } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { encryptField } from "@/lib/security/crypto";
+import { sensitiveText } from "@/lib/security/sensitive-text";
 
 const visibility = z.enum([
   "PUBLIC_CONTROLLED",
@@ -15,19 +16,21 @@ const visibility = z.enum([
   "MANUAL_SHARE",
 ]);
 
+// Champs libres passes par sensitiveText : normalisation NFC, suppression des
+// caracteres de controle/bidi/zero-width, bornage avant+apres nettoyage.
 const schema = z.object({
-  denomination: z.string().max(80).nullable().optional(),
-  ministry: z.string().max(120).nullable().optional(),
-  engagementFrequency: z.string().max(60).nullable().optional(),
-  localChurch: z.string().max(160).nullable().optional(),
+  denomination: sensitiveText(80),
+  ministry: sensitiveText(120),
+  engagementFrequency: sensitiveText(60),
+  localChurch: sensitiveText(160),
   localChurchVisibility: visibility.optional(),
-  testimony: z.string().max(4000).nullable().optional(),
+  testimony: sensitiveText(4000),
   testimonyVisibility: visibility.optional(),
 });
 
 export const PATCH = withErrors(async (req: Request) => {
   const user = await requireUser();
-  const body = schema.parse(await req.json());
+  const body = schema.parse(await readJsonLimited(req));
   const { localChurch, testimony, ...rest } = body;
   const data = {
     ...rest,
@@ -38,9 +41,9 @@ export const PATCH = withErrors(async (req: Request) => {
       testimonyEncrypted: testimony ? encryptField(testimony) : null,
     }),
   };
-  // upsert (et non update) : un compte sans ligne FaithProfile lèverait P2025
-  // (record not found), faisant échouer l'enregistrement du profil. `vertical`
-  // a une valeur par défaut au niveau du schéma Prisma, pas besoin de la fournir.
+  // upsert (et non update) : un compte sans ligne FaithProfile leverait P2025
+  // (record not found), faisant echouer l'enregistrement du profil. `vertical`
+  // a une valeur par defaut au niveau du schema Prisma, pas besoin de la fournir.
   await prisma.faithProfile.upsert({
     where: { userId: user.id },
     update: data,

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { sealInsight } from "@/lib/agent-insight";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit } from "@/lib/security/rate-limit";
 import {
@@ -22,7 +22,7 @@ export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
   const rl = await rateLimit(`guardian:${user.id}`, 6, 60 * 60_000);
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
-  const body = checkinSchema.parse(await req.json());
+  const body = checkinSchema.parse(await readJsonLimited(req));
 
   const space = await prisma.coupleSpace.findFirst({
     where: {
@@ -66,7 +66,10 @@ export const POST = withErrors(async (req: Request) => {
       coupleSpaceId: space.id,
       agentId: "guardian",
       kind: "CHECKIN",
-      dataJson: sealInsight({ answers: body.answers, rituals: evaluated.rituals }),
+      dataJson: sealInsight({
+        answers: body.answers,
+        rituals: evaluated.rituals,
+      }),
       visibility: "PRIVATE",
     },
   });

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { requireMatchMember, buildActionContext } from "@/lib/alliance";
 import { validateAction, type Locale } from "@/lib/core-engine";
@@ -51,7 +51,7 @@ export const PATCH = withErrors(
     if (match.contactExchange !== "REQUESTED") {
       return jsonError(409, "NO_PENDING_REQUEST");
     }
-    const { accept } = respondSchema.parse(await req.json());
+    const { accept } = respondSchema.parse(await readJsonLimited(req));
     const updated = await prisma.match.update({
       where: { id: match.id },
       data: { contactExchange: accept ? "ACCEPTED" : "DECLINED" },

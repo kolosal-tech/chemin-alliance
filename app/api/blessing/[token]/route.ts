@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { clientIp, jsonError, withErrors } from "@/lib/api-helpers";
+import {
+  clientIp,
+  jsonError,
+  readJsonLimited,
+  withErrors,
+} from "@/lib/api-helpers";
 import { rateLimit } from "@/lib/security/rate-limit";
 import { statusForDecision } from "@/lib/sponsor";
 import { encryptField } from "@/lib/security/crypto";
@@ -38,7 +43,7 @@ export const POST = withErrors(
     const rl = await rateLimit(`blessing-respond:${clientIp(req)}`, 20, 60_000);
     if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
-    const { decision, note } = schema.parse(await req.json());
+    const { decision, note } = schema.parse(await readJsonLimited(req));
     const b = await prisma.blessing.findUnique({
       where: { token: params.token },
     });

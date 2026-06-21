@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { hashPassword, verifyPassword } from "@/lib/security/password";
 import { passwordField } from "@/lib/security/password-validation";
@@ -23,7 +23,9 @@ export const POST = withErrors(async (req: Request) => {
   );
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
-  const { currentPassword, newPassword } = schema.parse(await req.json());
+  const { currentPassword, newPassword } = schema.parse(
+    await readJsonLimited(req),
+  );
   if (!(await verifyPassword(user.passwordHash, currentPassword))) {
     return jsonError(400, "INVALID_CREDENTIALS");
   }

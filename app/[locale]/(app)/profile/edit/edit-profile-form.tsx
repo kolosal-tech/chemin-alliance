@@ -312,6 +312,8 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
       </span>
       {opts.area ? (
         <textarea
+          name={key}
+          data-testid={`field-${key}`}
           value={d[key] as string}
           onChange={(e) => set(key, e.target.value as Data[typeof key])}
           maxLength={opts.max}
@@ -320,6 +322,8 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
         />
       ) : (
         <input
+          name={key}
+          data-testid={`field-${key}`}
           value={d[key] as string}
           onChange={(e) => set(key, e.target.value as Data[typeof key])}
           maxLength={opts.max}

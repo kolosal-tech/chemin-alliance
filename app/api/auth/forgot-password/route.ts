@@ -2,7 +2,12 @@ import { NextResponse } from "next/server";
 import { randomBytes } from "node:crypto";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { clientIp, jsonError, withErrors } from "@/lib/api-helpers";
+import {
+  clientIp,
+  jsonError,
+  readJsonLimited,
+  withErrors,
+} from "@/lib/api-helpers";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import { sendPasswordResetEmail } from "@/lib/email";
 import type { Locale } from "@/lib/core-engine";
@@ -21,7 +26,7 @@ export const POST = withErrors(async (req: Request) => {
   );
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
-  const { email } = schema.parse(await req.json());
+  const { email } = schema.parse(await readJsonLimited(req));
   const user = await prisma.user.findUnique({ where: { email } });
   if (user) {
     const token = randomBytes(32).toString("hex");

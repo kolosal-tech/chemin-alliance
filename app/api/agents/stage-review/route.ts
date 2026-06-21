@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { sealInsight } from "@/lib/agent-insight";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { requireMatchMember } from "@/lib/alliance";
 import { rateLimit } from "@/lib/security/rate-limit";
@@ -15,7 +15,7 @@ export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
   const rl = await rateLimit(`review:${user.id}`, 6, 60 * 60_000);
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
-  const { matchId } = schema.parse(await req.json());
+  const { matchId } = schema.parse(await readJsonLimited(req));
   const match = await requireMatchMember(matchId, user.id);
 
   const answers = await prisma.allianceAnswer.findMany({

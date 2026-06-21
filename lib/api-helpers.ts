@@ -34,6 +34,7 @@ export function withErrors<T extends unknown[]>(
       if (status === 401) return jsonError(401, "UNAUTHORIZED");
       if (status === 403) return jsonError(403, "FORBIDDEN");
       if (status === 404) return jsonError(404, "NOT_FOUND");
+      if (status === 413) return jsonError(413, "PAYLOAD_TOO_LARGE");
       if (status === 503) return jsonError(503, "SERVICE_UNAVAILABLE");
       console.error("[api]", err);
       return jsonError(500, "INTERNAL_ERROR");
@@ -43,4 +44,61 @@ export function withErrors<T extends unknown[]>(
 
 export function clientIp(req: Request): string {
   return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
+}
+
+/** Plafond par defaut des bodies JSON (64 Kio) — large devant tous les caps metier. */
+export const MAX_JSON_BYTES = 64 * 1024;
+
+/** Erreur taggee 413 — mappee en PAYLOAD_TOO_LARGE par withErrors. */
+export class PayloadTooLargeError extends Error {
+  readonly status = 413;
+  constructor(maxBytes: number) {
+    super(`Body too large (max ${maxBytes} bytes)`);
+    this.name = "PayloadTooLargeError";
+  }
+}
+
+/**
+ * Lit et parse un body JSON en bornant la taille AVANT le parse.
+ *
+ * Defense en profondeur cote handler : complete la garde Content-Length du
+ * middleware en couvrant le cas d'un Content-Length absent ou forge. Le flux
+ * est lu par morceaux et INTERROMPU des que le cumul depasse `maxBytes`, donc
+ * un body geant n'est jamais entierement bufferise. Rejette en 413 au-dela.
+ *
+ * Remplace `await req.json()` : `const body = schema.parse(await readJsonLimited(req));`
+ */
+export async function readJsonLimited<T = unknown>(
+  req: Request,
+  maxBytes: number = MAX_JSON_BYTES,
+): Promise<T> {
+  // Fast-path : Content-Length annonce > plafond -> rejet immediat.
+  const declared = Number(req.headers.get("content-length") ?? "");
+  if (Number.isFinite(declared) && declared > maxBytes) {
+    throw new PayloadTooLargeError(maxBytes);
+  }
+
+  const reader = req.body?.getReader();
+  if (!reader) {
+    // Pas de corps (ex. body vide) : laisse JSON.parse lever comme req.json().
+    return JSON.parse("") as T;
+  }
+
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    if (value) {
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel();
+        throw new PayloadTooLargeError(maxBytes);
+      }
+      chunks.push(value);
+    }
+  }
+
+  const text = Buffer.concat(chunks).toString("utf8");
+  return JSON.parse(text) as T;
 }

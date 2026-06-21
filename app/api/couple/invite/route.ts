@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import { sendCoupleInviteEmail } from "@/lib/email";
@@ -19,7 +19,7 @@ export const POST = withErrors(async (req: Request) => {
   );
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
-  const { email } = schema.parse(await req.json());
+  const { email } = schema.parse(await readJsonLimited(req));
   if (email === user.email.toLowerCase()) {
     return jsonError(400, "INVALID_TARGET");
   }

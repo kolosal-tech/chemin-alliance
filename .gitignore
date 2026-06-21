@@ -40,3 +40,7 @@ next-env.d.ts
 
 # Scratch du client playwright-cli (captures, snapshots)
 .playwright-cli/
+
+# Artefacts e2e Playwright (rapports JSON/HTML, captures, traces, videos)
+test-results/
+playwright-report/

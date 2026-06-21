@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { clientIp, jsonError, withErrors } from "@/lib/api-helpers";
+import {
+  clientIp,
+  jsonError,
+  readJsonLimited,
+  withErrors,
+} from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import { askCoach, DAILY_FREE_LIMIT } from "@/lib/ai-coach";
@@ -24,7 +29,7 @@ export const POST = withErrors(async (req: Request) => {
   );
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
-  const body = schema.parse(await req.json());
+  const body = schema.parse(await readJsonLimited(req));
 
   // Quota quotidien : l'entitlement premium "unlimited_discovery" lève le
   // plafond pour un abonné actif (un payant ne doit pas être bridé comme un

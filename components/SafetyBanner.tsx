@@ -41,7 +41,10 @@ export function SafetyBanner({ matchId }: { matchId: string }) {
   if (!signals || dismissed) return null;
 
   return (
-    <div className="mx-3 mt-3 rounded-card border border-[#D8B6B0] bg-[#FBF0EE] p-4 dark:border-[#5A3A34] dark:bg-[#2A1B18]">
+    <div
+      data-testid="safety-banner"
+      className="mx-3 mt-3 rounded-card border border-[#D8B6B0] bg-[#FBF0EE] p-4 dark:border-[#5A3A34] dark:bg-[#2A1B18]"
+    >
       <div className="flex items-start gap-2.5">
         <span aria-hidden className="text-lg">
           ⚠️

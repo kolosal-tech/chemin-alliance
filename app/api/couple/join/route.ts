@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 
@@ -23,7 +23,7 @@ export const POST = withErrors(async (req: Request) => {
     where: { OR: [{ userAId: user.id }, { userBId: user.id }] },
   });
   if (existing) return jsonError(409, "SPACE_EXISTS");
-  const { code } = schema.parse(await req.json());
+  const { code } = schema.parse(await readJsonLimited(req));
   const space = await prisma.coupleSpace.findUnique({
     where: { inviteCode: code.trim().toUpperCase() },
   });

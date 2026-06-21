@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { sealInsight } from "@/lib/agent-insight";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { requireMatchMember, buildActionContext } from "@/lib/alliance";
 import { decryptOptional, encryptField } from "@/lib/security/crypto";
@@ -84,7 +84,7 @@ export const POST = withErrors(
     ) {
       return jsonError(403, "MATCH_PENDING_ACCEPT");
     }
-    const { content } = schema.parse(await req.json());
+    const { content } = schema.parse(await readJsonLimited(req));
     const locale = (user.locale ?? "fr") as Locale;
     const ctx = await buildActionContext(
       match,

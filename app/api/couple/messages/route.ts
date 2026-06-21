@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit } from "@/lib/security/rate-limit";
 import { encryptField, decryptField } from "@/lib/security/crypto";
@@ -52,7 +52,7 @@ export const POST = withErrors(async (req: Request) => {
   if (!space) return jsonError(404, "NO_SPACE");
   const rl = await rateLimit(`couplemsg:${user.id}`, 120, 60 * 60_000);
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
-  const { content } = sendSchema.parse(await req.json());
+  const { content } = sendSchema.parse(await readJsonLimited(req));
   const msg = await prisma.coupleMessage.create({
     data: {
       spaceId: space.id,

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { randomBytes } from "node:crypto";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { withErrors } from "@/lib/api-helpers";
+import { withErrors, readJsonLimited } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { hashPassword } from "@/lib/security/password";
 import { decryptOptional } from "@/lib/security/crypto";
@@ -57,7 +57,7 @@ const patchSchema = z.object({
 
 export const PATCH = withErrors(async (req: Request) => {
   const user = await requireUser();
-  const body = patchSchema.parse(await req.json());
+  const body = patchSchema.parse(await readJsonLimited(req));
   await prisma.user.update({ where: { id: user.id }, data: body });
   return NextResponse.json({ ok: true });
 });

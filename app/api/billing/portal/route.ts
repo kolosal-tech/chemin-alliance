@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import { env } from "@/lib/env";
@@ -19,7 +19,7 @@ export const POST = withErrors(async (req: Request) => {
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
   if (!user.stripeCustomerId) return jsonError(400, "NO_STRIPE_CUSTOMER");
 
-  const body = (await req.json().catch(() => null)) as {
+  const body = (await readJsonLimited(req).catch(() => null)) as {
     locale?: string;
   } | null;
   const requested = body?.locale ?? "";

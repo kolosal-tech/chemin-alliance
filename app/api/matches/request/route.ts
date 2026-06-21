@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { sendPushToUser } from "@/lib/push";
 import { newRequestNotification } from "@/lib/push-messages";
@@ -13,7 +13,7 @@ const schema = z.object({ targetUserId: z.string().min(1) });
 
 export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
-  const { targetUserId } = schema.parse(await req.json());
+  const { targetUserId } = schema.parse(await readJsonLimited(req));
   if (targetUserId === user.id) return jsonError(400, "INVALID_TARGET");
   // Hors matching : seuls les profils JOURNEY ouvrent une rencontre.
   if (user.season !== "JOURNEY") return jsonError(403, "NOT_IN_MATCHING");

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { withErrors } from "@/lib/api-helpers";
+import { withErrors, readJsonLimited } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 
 export const runtime = "nodejs";
@@ -25,7 +25,7 @@ export const GET = withErrors(async () => {
 
 export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
-  const body = schema.parse(await req.json());
+  const body = schema.parse(await readJsonLimited(req));
   const s = await prisma.sponsor.upsert({
     where: { userId: user.id },
     create: { userId: user.id, ...body },

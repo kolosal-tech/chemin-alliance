@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { withErrors } from "@/lib/api-helpers";
+import { withErrors, readJsonLimited } from "@/lib/api-helpers";
 import { requireAdmin } from "@/lib/security/session";
 
 const schema = z.object({
@@ -11,7 +11,7 @@ const schema = z.object({
 export const PATCH = withErrors(
   async (req: Request, { params }: { params: { id: string } }) => {
     await requireAdmin();
-    const body = schema.parse(await req.json());
+    const body = schema.parse(await readJsonLimited(req));
     await prisma.report.update({
       where: { id: params.id },
       data: {

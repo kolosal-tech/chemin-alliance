@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { clientIp, jsonError, withErrors } from "@/lib/api-helpers";
+import {
+  clientIp,
+  jsonError,
+  readJsonLimited,
+  withErrors,
+} from "@/lib/api-helpers";
 import { hashPassword } from "@/lib/security/password";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 
@@ -23,7 +28,7 @@ export const POST = withErrors(async (req: Request) => {
   );
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
-  const body = schema.parse(await req.json());
+  const body = schema.parse(await readJsonLimited(req));
   const user = await prisma.user.findUnique({
     where: { passwordResetToken: body.token },
   });

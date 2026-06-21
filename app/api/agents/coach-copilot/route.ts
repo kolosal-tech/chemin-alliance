@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { sealInsight } from "@/lib/agent-insight";
-import { jsonError, withErrors } from "@/lib/api-helpers";
+import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { requireMatchMember } from "@/lib/alliance";
 import { rateLimit } from "@/lib/security/rate-limit";
@@ -26,7 +26,7 @@ export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
   const rl = await rateLimit(`copilot:${user.id}`, 6, 60 * 60_000);
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
-  const { matchId } = schema.parse(await req.json());
+  const { matchId } = schema.parse(await readJsonLimited(req));
   const match = await requireMatchMember(matchId, user.id);
   const otherId = match.userAId === user.id ? match.userBId : match.userAId;
 
@@ -54,13 +54,15 @@ export const POST = withErrors(async (req: Request) => {
     for (const q of st.questions) themes[q.id] = q.theme;
   }
   const byUser = (id: string) =>
-    new Set(answers.filter((a) => a.userId === id).map((a) => themes[a.questionId]));
+    new Set(
+      answers.filter((a) => a.userId === id).map((a) => themes[a.questionId]),
+    );
   const mineThemes = byUser(user.id);
   const otherThemes = byUser(otherId);
   const covered = [...mineThemes].filter((t) => otherThemes.has(t));
-  const open = [
-    ...new Set([...mineThemes, ...otherThemes]),
-  ].filter((t) => !covered.includes(t));
+  const open = [...new Set([...mineThemes, ...otherThemes])].filter(
+    (t) => !covered.includes(t),
+  );
 
   const [a, b] = await Promise.all([
     prisma.user.findUniqueOrThrow({
