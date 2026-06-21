@@ -711,6 +711,7 @@
     "breatheIn": "Inhala",
     "breatheOut": "Exhala",
     "breatheDone": "Pasar a la reflexión",
+    "skipConfirm": "¿Continuar sin terminar el ejercicio?",
     "quit": "Salir",
     "quitConfirm": "¿Detener?",
     "quitYes": "Sí",

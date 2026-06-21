@@ -4,6 +4,11 @@ import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/db";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { buildMatchProfileView } from "@/lib/match-profile";
+import {
+  localizeList,
+  INTEREST_LABELS,
+  PERSONALITY_LABELS,
+} from "@/lib/profile-options";
 import { decryptOptional } from "@/lib/security/crypto";
 import { TrustBadge } from "@/components/TrustBadge";
 import { MemberAvatar } from "@/components/MemberAvatar";
@@ -142,7 +147,15 @@ export default async function MatchProfilePage({
                     ? t("matchProfile.notProvided")
                     : f.key === "children"
                       ? t(`matchProfile.children_${f.value}`)
-                      : f.value}
+                      : f.key === "interests"
+                        ? localizeList(f.value, INTEREST_LABELS, params.locale)
+                        : f.key === "personality"
+                          ? localizeList(
+                              f.value,
+                              PERSONALITY_LABELS,
+                              params.locale,
+                            )
+                          : f.value}
                 </p>
               ) : (
                 <p className="flex items-center gap-1.5 text-[12.5px] text-sand-500 dark:text-[#7E7A72]">

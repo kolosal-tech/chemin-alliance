@@ -711,6 +711,7 @@
     "breatheIn": "Breathe in",
     "breatheOut": "Breathe out",
     "breatheDone": "Go to reflection",
+    "skipConfirm": "Continue without finishing the exercise?",
     "quit": "Leave",
     "quitConfirm": "Stop?",
     "quitYes": "Yes",

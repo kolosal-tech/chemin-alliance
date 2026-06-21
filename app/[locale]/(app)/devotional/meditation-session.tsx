@@ -63,6 +63,7 @@ export function MeditationSession({
   const [minutes, setMinutes] = useState<number>(1);
   const [elapsed, setElapsed] = useState(0);
   const [confirmQuit, setConfirmQuit] = useState(false);
+  const [confirmSkip, setConfirmSkip] = useState(false);
   const [reflection, setReflection] = useState("");
   const [saving, setSaving] = useState(false);
   const wakeRef = useRef<WakeLockSentinelLike | null>(null);
@@ -274,13 +275,39 @@ export function MeditationSession({
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setStep("reflection")}
-            className="mb-8 w-full rounded-btn border border-sand-200 py-3 text-[13.5px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
-          >
-            {t("breatheDone")}
-          </button>
+          {confirmSkip && remaining > 0 ? (
+            <div className="mb-8 flex flex-col items-center gap-3 rounded-btn border border-sand-200 py-4 dark:border-anthracite-600">
+              <span className="px-4 text-center text-[13.5px] text-warmgray dark:text-[#9A958B]">
+                {t("skipConfirm")}
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setStep("reflection")}
+                  className="rounded-full bg-navy px-4 py-1.5 text-[13px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+                >
+                  {t("quitYes")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmSkip(false)}
+                  className="rounded-full px-3 py-1.5 text-[13px] text-warmgray dark:text-[#9A958B]"
+                >
+                  {t("quitNo")}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() =>
+                remaining > 0 ? setConfirmSkip(true) : setStep("reflection")
+              }
+              className="mb-8 w-full rounded-btn border border-sand-200 py-3 text-[13.5px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
+            >
+              {t("breatheDone")}
+            </button>
+          )}
         </div>
       )}
 

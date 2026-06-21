@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { BlurhashImage } from "@/components/BlurhashImage";
+import { optionLabel, DENOMINATION_LABELS } from "@/lib/profile-options";
 
 const GRADIENTS = [
   "radial-gradient(110% 90% at 35% 25%, #6E7790 0%, #41506E 50%, #222F4C 100%)",
@@ -32,6 +33,7 @@ export function SuggestionCard({
   featured?: boolean;
 }) {
   const t = useTranslations();
+  const locale = useLocale();
   const [state, setState] = useState<"idle" | "sent" | "passing" | "passed">(
     "idle",
   );
@@ -146,7 +148,7 @@ export function SuggestionCard({
           <div className="mt-2 flex flex-wrap gap-1.5">
             {profile.denomination && (
               <span className="rounded-full border border-[#F7F5F0]/20 bg-[#F7F5F0]/15 px-2.5 py-0.5 text-[10.5px] font-semibold backdrop-blur-[3px]">
-                {profile.denomination}
+                {optionLabel(profile.denomination, DENOMINATION_LABELS, locale)}
               </span>
             )}
             <span className="rounded-full border border-gold/45 bg-gold/20 px-2.5 py-0.5 text-[10.5px] font-semibold text-[#F4E7C2] backdrop-blur-[3px]">

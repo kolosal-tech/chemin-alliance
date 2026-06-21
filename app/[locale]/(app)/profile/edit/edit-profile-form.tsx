@@ -7,7 +7,7 @@ import {
   type ChangeEvent,
   type FormEvent,
 } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import {
   COUNTRIES,
@@ -15,6 +15,13 @@ import {
   ENGAGEMENT_FREQUENCIES,
   INTERESTS,
   PERSONALITY_TRAITS,
+  DENOMINATION_LABELS,
+  ENGAGEMENT_LABELS,
+  INTEREST_LABELS,
+  PERSONALITY_LABELS,
+  optionLabel,
+  countryLabel,
+  type Locale,
 } from "@/lib/profile-options";
 
 type Data = {
@@ -76,6 +83,7 @@ const csvToList = (v: string): string[] =>
 export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
   const t = useTranslations("profile");
   const tc = useTranslations("common");
+  const locale = useLocale();
   const router = useRouter();
   const [d, setD] = useState<Data | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
@@ -324,12 +332,14 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
   );
 
   // Menu déroulant : la valeur héritée (saisie libre) reste sélectionnable même
-  // si absente de la liste curée.
+  // si absente de la liste curée. `labelFor` traduit l'affichage (la valeur
+  // stockée reste canonique).
   const select = (
     key: keyof Data,
     label: string,
     options: readonly string[],
     opts: { required?: boolean; recommended?: boolean } = {},
+    labelFor?: (v: string) => string,
   ) => {
     const val = d[key] as string;
     const all = !val || options.includes(val) ? options : [val, ...options];
@@ -347,7 +357,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
           <option value="">{t("unspecified")}</option>
           {all.map((o) => (
             <option key={o} value={o}>
-              {o}
+              {labelFor ? labelFor(o) : o}
             </option>
           ))}
         </select>
@@ -355,11 +365,21 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
     );
   };
 
+  // Pays triés par libellé localisé (« Autre » épinglé en dernier).
+  const countryOptions = [...COUNTRIES]
+    .filter((c) => c !== "Autre")
+    .sort((a, b) =>
+      countryLabel(a, locale).localeCompare(countryLabel(b, locale), locale),
+    )
+    .concat("Autre");
+
   // Sélecteur à puces (multi) → stocké en CSV dans le champ texte existant.
+  // `labels` traduit l'affichage ; la valeur stockée reste canonique (français).
   const chips = (
     key: "interests" | "personality",
     label: string,
     options: readonly string[],
+    labels: Record<string, Record<Locale, string>>,
   ) => {
     const selected = csvToList(d[key]);
     const all = Array.from(new Set([...options, ...selected]));
@@ -390,7 +410,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
                     : "border-sand-400 text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
                 }`}
               >
-                {opt}
+                {optionLabel(opt, labels, locale)}
                 {on && <span aria-hidden> ✕</span>}
               </button>
             );
@@ -457,7 +477,9 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
             required: true,
           })}
           {field("cityApprox", t("cityLabel"), { max: 80, recommended: true })}
-          {select("country", t("countryLabel"), COUNTRIES)}
+          {select("country", t("countryLabel"), countryOptions, {}, (v) =>
+            countryLabel(v, locale),
+          )}
           {!isCouple &&
             field("intentionStatement", t("intentionStatementLabel"), {
               area: true,
@@ -504,17 +526,30 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
           </summary>
 
           <div className="flex flex-col gap-3 p-4 pt-1">
-            {select("denomination", t("denominationLabel"), DENOMINATIONS)}
+            {select(
+              "denomination",
+              t("denominationLabel"),
+              DENOMINATIONS,
+              {},
+              (v) => optionLabel(v, DENOMINATION_LABELS, locale),
+            )}
             {select(
               "engagementFrequency",
               t("engagementLabel"),
               ENGAGEMENT_FREQUENCIES,
+              {},
+              (v) => optionLabel(v, ENGAGEMENT_LABELS, locale),
             )}
             {field("ministry", t("ministry"), { max: 120 })}
             {field("localChurch", t("localChurch"), { max: 160 })}
             {field("testimony", t("testimonyLabel"), { area: true, max: 1500 })}
-            {chips("interests", t("interestsLabel"), INTERESTS)}
-            {chips("personality", t("personalityLabel"), PERSONALITY_TRAITS)}
+            {chips("interests", t("interestsLabel"), INTERESTS, INTEREST_LABELS)}
+            {chips(
+              "personality",
+              t("personalityLabel"),
+              PERSONALITY_TRAITS,
+              PERSONALITY_LABELS,
+            )}
             {field("familyVision", t("familyVision"), {
               area: true,
               max: 1000,

@@ -711,6 +711,7 @@
     "breatheIn": "Inspire",
     "breatheOut": "Expire",
     "breatheDone": "Passer à la réflexion",
+    "skipConfirm": "Continuer sans terminer l’exercice ?",
     "quit": "Quitter",
     "quitConfirm": "Arrêter ?",
     "quitYes": "Oui",

@@ -3,6 +3,14 @@ import { Link } from "@/i18n/navigation";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { photoProxyUrl } from "@/lib/storage";
 import { LockBadge } from "@/components/LockBadge";
+import {
+  optionLabel,
+  localizeList,
+  DENOMINATION_LABELS,
+  ENGAGEMENT_LABELS,
+  INTEREST_LABELS,
+  PERSONALITY_LABELS,
+} from "@/lib/profile-options";
 import { PhotoHeader } from "./photo-header";
 import { LogoutButton } from "./logout-button";
 
@@ -44,7 +52,7 @@ export default async function ProfilePage({
         <div className="mb-4 flex gap-2">
           {faith?.denomination && (
             <span className="rounded-[9px] bg-navy px-2.5 py-1.5 text-xs font-semibold text-[#E8D9A8] dark:bg-[#222C42] dark:text-[#B9C6E0]">
-              {faith.denomination}
+              {optionLabel(faith.denomination, DENOMINATION_LABELS, params.locale)}
             </span>
           )}
           {user.isVerified && (
@@ -112,7 +120,13 @@ export default async function ProfilePage({
                 <div className="text-xs text-sand-600 dark:text-[#7E7A72]">
                   {t("profile.ministry")} ·{" "}
                   {t("profile.engagement", {
-                    frequency: faith.engagementFrequency ?? "—",
+                    frequency: faith.engagementFrequency
+                      ? optionLabel(
+                          faith.engagementFrequency,
+                          ENGAGEMENT_LABELS,
+                          params.locale,
+                        )
+                      : "—",
                   })}
                 </div>
               </div>
@@ -194,7 +208,7 @@ export default async function ProfilePage({
                     {t("profile.interestsLabel")}
                   </div>
                   <p className="mt-0.5 leading-normal text-ink dark:text-[#ECE7DD]">
-                    {rel.interests}
+                    {localizeList(rel.interests, INTEREST_LABELS, params.locale)}
                   </p>
                 </div>
               )}
@@ -204,7 +218,7 @@ export default async function ProfilePage({
                     {t("profile.personalityLabel")}
                   </div>
                   <p className="mt-0.5 leading-normal text-ink dark:text-[#ECE7DD]">
-                    {rel.personality}
+                    {localizeList(rel.personality, PERSONALITY_LABELS, params.locale)}
                   </p>
                 </div>
               )}
