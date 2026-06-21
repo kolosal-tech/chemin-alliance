@@ -158,6 +158,7 @@ model User {
   agentInsights       AgentInsight[]
   coupleSpaceA        CoupleSpace?         @relation("CoupleUserA")
   coupleSpaceB        CoupleSpace?         @relation("CoupleUserB")
+  coupleMessages      CoupleMessage[]      @relation("CoupleMessageSender")
   pushSubscriptions   PushSubscription[]
   sponsor             Sponsor?             @relation("UserSponsor")
 
@@ -231,6 +232,22 @@ model CoupleSpace {
   updatedAt  DateTime          @updatedAt
 
   agentInsights AgentInsight[]
+  messages      CoupleMessage[]
+}
+
+// Messagerie privée entre les deux conjoints d'un Espace Couple. Indépendante du
+// matching (modèle Message, lui, est lié à Match) : ici pas de modération — c'est
+// une conversation privée entre époux. Contenu chiffré au repos (encryptField).
+model CoupleMessage {
+  id               String      @id @default(cuid())
+  spaceId          String
+  space            CoupleSpace @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  senderId         String
+  sender           User        @relation("CoupleMessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  contentEncrypted String
+  createdAt        DateTime    @default(now())
+
+  @@index([spaceId, createdAt])
 }
 
 model FaithProfile {

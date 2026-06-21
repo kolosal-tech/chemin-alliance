@@ -39,11 +39,18 @@ export function CoupleHome() {
     word: string | null;
   } | null>(null);
   const [busy, setBusy] = useState(false);
+  const [checkinError, setCheckinError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
   const [sendState, setSendState] = useState<
     "idle" | "sending" | "sent" | "error"
   >("idle");
+  // Messagerie privée entre conjoints (espace actif uniquement).
+  const [messages, setMessages] = useState<
+    Array<{ id: string; mine: boolean; content: string }>
+  >([]);
+  const [draft, setDraft] = useState("");
+  const [msgBusy, setMsgBusy] = useState(false);
 
   const load = useCallback(() => {
     fetch("/api/couple")
@@ -52,6 +59,41 @@ export function CoupleHome() {
       .catch(() => {});
   }, []);
   useEffect(load, [load]);
+
+  // Messagerie : charge l'historique quand l'espace couple est actif et lié.
+  const spaceActive =
+    data?.space?.status === "ACTIVE" && Boolean(data.space.partner);
+  useEffect(() => {
+    if (!spaceActive) return;
+    fetch("/api/couple/messages")
+      .then((r) => r.json())
+      .then((j) => setMessages(j.messages ?? []))
+      .catch(() => {});
+  }, [spaceActive]);
+
+  async function sendMessage(e: FormEvent) {
+    e.preventDefault();
+    const text = draft.trim();
+    if (!text || msgBusy) return;
+    setMsgBusy(true);
+    try {
+      const res = await fetch("/api/couple/messages", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ content: text }),
+      });
+      if (res.ok) {
+        const m = (await res.json()) as { id: string };
+        setMessages((prev) => [
+          ...prev,
+          { id: m.id, mine: true, content: text },
+        ]);
+        setDraft("");
+      }
+    } finally {
+      setMsgBusy(false);
+    }
+  }
 
   async function createExternal() {
     const res = await fetch("/api/couple", {
@@ -112,19 +154,31 @@ export function CoupleHome() {
   }
   async function sendCheckin() {
     setBusy(true);
-    const res = await fetch("/api/agents/guardian/checkin", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        answers: (data?.questions ?? []).map((q) => ({
-          id: q.id,
-          value: answers[q.id]?.value ?? "unsure",
-          note: answers[q.id]?.note ?? "",
-        })),
-      }),
-    });
-    setBusy(false);
-    if (res.ok) setGuidance(await res.json());
+    setCheckinError(null);
+    try {
+      const res = await fetch("/api/agents/guardian/checkin", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          answers: (data?.questions ?? []).map((q) => ({
+            id: q.id,
+            value: answers[q.id]?.value ?? "unsure",
+            note: answers[q.id]?.note ?? "",
+          })),
+        }),
+      });
+      if (res.ok) {
+        setGuidance(await res.json());
+      } else {
+        setCheckinError(
+          res.status === 429 ? t("checkinRateLimited") : t("checkinError"),
+        );
+      }
+    } catch {
+      setCheckinError(t("checkinError"));
+    } finally {
+      setBusy(false);
+    }
   }
   async function copyCode(value: string) {
     try {
@@ -359,6 +413,54 @@ export function CoupleHome() {
         </span>
       </div>
 
+      {/* Messagerie privée entre conjoints */}
+      <section className="mt-5 rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
+        <div className="flex items-baseline justify-between">
+          <h2 className="font-display text-[18px] text-night dark:text-[#ECE7DD]">
+            {t("messagesTitle")}
+          </h2>
+          <span className="text-[10px] text-sand-500 dark:text-[#65625B]">
+            {t("messagesPrivacy")}
+          </span>
+        </div>
+        <div className="mt-3 flex max-h-72 flex-col gap-2 overflow-y-auto">
+          {messages.length === 0 ? (
+            <p className="py-4 text-center text-[13px] text-sand-500 dark:text-[#7E7A72]">
+              {t("messagesEmpty")}
+            </p>
+          ) : (
+            messages.map((m) => (
+              <div
+                key={m.id}
+                className={`max-w-[80%] rounded-[16px] px-3.5 py-2.5 text-sm leading-snug ${
+                  m.mine
+                    ? "self-end bg-navy text-[#EDEFF3] dark:bg-gold-light dark:text-anthracite-900"
+                    : "self-start bg-sand-100 text-[#2A2823] dark:bg-anthracite-700 dark:text-[#CFCAC0]"
+                }`}
+              >
+                {m.content}
+              </div>
+            ))
+          )}
+        </div>
+        <form onSubmit={sendMessage} className="mt-3 flex items-center gap-2">
+          <input
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            placeholder={t("messagesPlaceholder")}
+            aria-label={t("messagesPlaceholder")}
+            className="flex-1 rounded-btnsm border border-sand-300 bg-white px-3 py-2.5 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+          />
+          <button
+            type="submit"
+            disabled={msgBusy || !draft.trim()}
+            className="rounded-btnsm bg-navy px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
+          >
+            {t("messagesSend")}
+          </button>
+        </form>
+      </section>
+
       {/* Check-in du Gardien */}
       <section className="mt-5 rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
         <div className="flex items-baseline justify-between">
@@ -432,6 +534,11 @@ export function CoupleHome() {
             >
               {t("send")}
             </button>
+            {checkinError && (
+              <p role="alert" className="mt-2 text-[12.5px] text-danger">
+                {checkinError}
+              </p>
+            )}
           </>
         ) : guidance.danger ? (
           <div className="mt-3 rounded-card border border-[#D8B6B0] bg-[#FBEFED] p-4 dark:border-[#5A3A34] dark:bg-[#2A1D1A]">
@@ -474,6 +581,22 @@ export function CoupleHome() {
                 </div>
               </>
             )}
+            {!guidance.word && guidance.rituals.length === 0 && (
+              <div className="rounded-card border border-sand-200 bg-surface p-4 text-[13px] leading-normal text-sand-700 dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#B6B1A7]">
+                {t("checkinDone")}
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => {
+                setGuidance(null);
+                setAnswers({});
+                setCheckinError(null);
+              }}
+              className="mt-3 w-full rounded-btnsm border border-sand-400 py-2.5 text-[13px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
+            >
+              {t("checkinAgain")}
+            </button>
           </div>
         )}
       </section>

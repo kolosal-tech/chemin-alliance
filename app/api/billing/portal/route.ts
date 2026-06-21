@@ -4,10 +4,11 @@ import { requireUser } from "@/lib/security/session";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import { env } from "@/lib/env";
 import { paymentProvider, stripeEnabled } from "@/lib/payments/provider";
+import { routing } from "@/i18n/routing";
 
 // Ouvre le Stripe Billing Portal (gérer / annuler l'abonnement).
 // Nécessite un customer Stripe existant (créé au premier checkout).
-export const POST = withErrors(async () => {
+export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
   if (!stripeEnabled) return jsonError(503, "BILLING_DISABLED");
   const rl = await rateLimit(
@@ -18,10 +19,18 @@ export const POST = withErrors(async () => {
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
   if (!user.stripeCustomerId) return jsonError(400, "NO_STRIPE_CUSTOMER");
 
+  const body = (await req.json().catch(() => null)) as {
+    locale?: string;
+  } | null;
+  const requested = body?.locale ?? "";
+  const locale = (routing.locales as readonly string[]).includes(requested)
+    ? requested
+    : routing.defaultLocale;
+
   try {
     const session = await paymentProvider.createBillingPortalSession(
       user.id,
-      `${env.APP_URL}/settings/premium?status=portal_return`,
+      `${env.APP_URL}/${locale}/settings/premium?status=portal_return`,
     );
     return NextResponse.json({ url: session.url });
   } catch (err) {

@@ -9,10 +9,18 @@ import {
 } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
+import {
+  COUNTRIES,
+  DENOMINATIONS,
+  ENGAGEMENT_FREQUENCIES,
+  INTERESTS,
+  PERSONALITY_TRAITS,
+} from "@/lib/profile-options";
 
 type Data = {
   displayName: string;
   cityApprox: string;
+  country: string;
   photoBlurredByDefault: boolean;
   denomination: string;
   ministry: string;
@@ -39,6 +47,7 @@ type Data = {
 const EMPTY: Data = {
   displayName: "",
   cityApprox: "",
+  country: "",
   photoBlurredByDefault: true,
   denomination: "",
   ministry: "",
@@ -54,6 +63,15 @@ const EMPTY: Data = {
   personality: "",
   aspirations: "",
 };
+
+// Champs « simples » servis par un menu déroulant ou des puces (cf.
+// lib/profile-options). Stockés comme chaînes ; les valeurs libres héritées sont
+// préservées (ajoutées à la liste au chargement).
+const csvToList = (v: string): string[] =>
+  v
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
 
 export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
   const t = useTranslations("profile");
@@ -105,6 +123,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
           ...EMPTY,
           displayName: u.displayName ?? "",
           cityApprox: u.cityApprox ?? "",
+          country: u.country ?? "",
           photoBlurredByDefault: u.photoBlurredByDefault ?? true,
           denomination: f.denomination ?? "",
           ministry: f.ministry ?? "",
@@ -163,6 +182,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
           json({
             displayName: d.displayName.trim(),
             cityApprox: d.cityApprox.trim() || null,
+            country: d.country.trim() || null,
             photoBlurredByDefault: d.photoBlurredByDefault,
           }),
         ),
@@ -231,9 +251,41 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
   // matrimonial (déjà déterminé par leur saison). Valeur conservée à l'envoi.
   const isCouple = season === "ENGAGED" || season === "MARRIED";
 
+  // Ouvre la section « optionnelle » d'emblée si l'utilisateur a déjà rempli
+  // l'un de ces champs (profil existant) ; repliée pour un profil neuf (court).
+  const hasMore = Boolean(
+    d.denomination ||
+    d.ministry ||
+    d.engagementFrequency ||
+    d.localChurch ||
+    d.testimony ||
+    d.familyVision ||
+    d.interests ||
+    d.personality ||
+    d.aspirations,
+  );
+
   const input =
     "rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
   const lbl = "lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]";
+
+  // Marqueur visuel obligatoire (*) / recommandé / optionnel — pour que la
+  // longue liste ne PARAISSE plus tout entière obligatoire.
+  const mark = (opts: { required?: boolean; recommended?: boolean }) =>
+    opts.required ? (
+      <span className="text-gold"> *</span>
+    ) : opts.recommended ? (
+      <span className="font-normal normal-case text-gold-deep dark:text-gold-light">
+        {" "}
+        · {t("recommended")}
+      </span>
+    ) : (
+      <span className="font-normal normal-case opacity-60">
+        {" "}
+        · {t("optional")}
+      </span>
+    );
+
   const field = (
     key: keyof Data,
     label: string,
@@ -242,10 +294,14 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
       max?: number;
       min?: number;
       required?: boolean;
+      recommended?: boolean;
     } = {},
   ) => (
     <label className="flex flex-col gap-1.5">
-      <span className={lbl}>{label}</span>
+      <span className={lbl}>
+        {label}
+        {mark(opts)}
+      </span>
       {opts.area ? (
         <textarea
           value={d[key] as string}
@@ -267,6 +323,83 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
     </label>
   );
 
+  // Menu déroulant : la valeur héritée (saisie libre) reste sélectionnable même
+  // si absente de la liste curée.
+  const select = (
+    key: keyof Data,
+    label: string,
+    options: readonly string[],
+    opts: { required?: boolean; recommended?: boolean } = {},
+  ) => {
+    const val = d[key] as string;
+    const all = !val || options.includes(val) ? options : [val, ...options];
+    return (
+      <label className="flex flex-col gap-1.5">
+        <span className={lbl}>
+          {label}
+          {mark(opts)}
+        </span>
+        <select
+          value={val}
+          onChange={(e) => set(key, e.target.value as Data[typeof key])}
+          className={input}
+        >
+          <option value="">{t("unspecified")}</option>
+          {all.map((o) => (
+            <option key={o} value={o}>
+              {o}
+            </option>
+          ))}
+        </select>
+      </label>
+    );
+  };
+
+  // Sélecteur à puces (multi) → stocké en CSV dans le champ texte existant.
+  const chips = (
+    key: "interests" | "personality",
+    label: string,
+    options: readonly string[],
+  ) => {
+    const selected = csvToList(d[key]);
+    const all = Array.from(new Set([...options, ...selected]));
+    const toggle = (opt: string) => {
+      const next = selected.includes(opt)
+        ? selected.filter((x) => x !== opt)
+        : [...selected, opt];
+      set(key, next.join(", ") as Data[typeof key]);
+    };
+    return (
+      <div className="flex flex-col gap-1.5">
+        <span className={lbl}>
+          {label}
+          {mark({})}
+        </span>
+        <div className="flex flex-wrap gap-2">
+          {all.map((opt) => {
+            const on = selected.includes(opt);
+            return (
+              <button
+                key={opt}
+                type="button"
+                onClick={() => toggle(opt)}
+                aria-pressed={on}
+                className={`rounded-full border px-3 py-1.5 text-[12.5px] transition-colors ${
+                  on
+                    ? "border-gold bg-gold/15 text-gold-ink dark:border-gold-light/50 dark:text-gold-light"
+                    : "border-sand-400 text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
+                }`}
+              >
+                {opt}
+                {on && <span aria-hidden> ✕</span>}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <main className="safe-top px-5 pb-28 pt-6 lg:mx-auto lg:max-w-2xl">
       <div className="mb-5 flex items-center justify-between">
@@ -282,10 +415,14 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
       </div>
 
       <form onSubmit={submit} className="flex flex-col gap-5">
+        {/* ---- Essentiel pour commencer ---- */}
         <section className="flex flex-col gap-3">
           <h2 className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
-            {t("secIdentity")}
+            {t("secEssential")}
           </h2>
+          <p className="-mt-1 text-[12px] leading-snug text-sand-600 dark:text-[#9A958B]">
+            {t("matchingHint")}
+          </p>
           {photoEnabled && (
             <div className="flex items-center gap-4">
               <div className="h-20 w-20 flex-none overflow-hidden rounded-full bg-sand-200 dark:bg-anthracite-700">
@@ -319,36 +456,20 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
             max: 40,
             required: true,
           })}
-          {field("cityApprox", t("cityLabel"), { max: 80 })}
-          <label className="flex items-center gap-3 text-[13px] text-ink dark:text-[#ECE7DD]">
-            <input
-              type="checkbox"
-              checked={d.photoBlurredByDefault}
-              onChange={(e) => set("photoBlurredByDefault", e.target.checked)}
-              className="h-4 w-4 accent-[#9A7B2E]"
-            />
-            {t("photoBlurLabel")}
-          </label>
-        </section>
-
-        <section className="flex flex-col gap-3">
-          <h2 className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
-            {t("spiritualIdentity")}
-          </h2>
-          {field("denomination", t("denominationLabel"), { max: 80 })}
-          {field("ministry", t("ministry"), { max: 120 })}
-          {field("engagementFrequency", t("engagementLabel"), { max: 60 })}
-          {field("localChurch", t("localChurch"), { max: 160 })}
-          {field("testimony", t("testimonyLabel"), { area: true, max: 4000 })}
-        </section>
-
-        <section className="flex flex-col gap-3">
-          <h2 className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
-            {t("secRelation")}
-          </h2>
+          {field("cityApprox", t("cityLabel"), { max: 80, recommended: true })}
+          {select("country", t("countryLabel"), COUNTRIES)}
+          {!isCouple &&
+            field("intentionStatement", t("intentionStatementLabel"), {
+              area: true,
+              max: 280,
+              recommended: true,
+            })}
           {!isCouple && (
             <label className="flex flex-col gap-1.5">
-              <span className={lbl}>{t("maritalStatus")}</span>
+              <span className={lbl}>
+                {t("maritalStatus")}
+                {mark({ recommended: true })}
+              </span>
               <select
                 value={d.maritalStatus}
                 onChange={(e) =>
@@ -366,52 +487,87 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
               </select>
             </label>
           )}
-          <label className="flex flex-col gap-1.5">
-            <span className={lbl}>{t("hasChildrenLabel")}</span>
-            <select
-              value={d.hasChildren}
-              onChange={(e) =>
-                set("hasChildren", e.target.value as Data["hasChildren"])
-              }
-              className={input}
-            >
-              <option value="">{t("unspecified")}</option>
-              <option value="yes">{tc("yes")}</option>
-              <option value="no">{tc("no")}</option>
-            </select>
-          </label>
-          {/* Déclaration d'intention = pitch orienté matching → hors-sujet pour
-              l'espace couple (fiancés/mariés). Valeur conservée à l'envoi. */}
-          {!isCouple &&
-            field("intentionStatement", t("intentionStatementLabel"), {
-              area: true,
-              max: 280,
-            })}
-          {field("familyVision", t("familyVision"), { area: true, max: 2000 })}
-          {field("interests", t("interestsLabel"), { area: true, max: 500 })}
-          {field("personality", t("personalityLabel"), {
-            area: true,
-            max: 500,
-          })}
-          {field("aspirations", t("aspirationsLabel"), {
-            area: true,
-            max: 500,
-          })}
-          <label className="flex flex-col gap-1.5">
-            <span className={lbl}>{t("wantsChildrenLabel")}</span>
-            <select
-              value={d.wantsChildren}
-              onChange={(e) =>
-                set("wantsChildren", e.target.value as Data["wantsChildren"])
-              }
-              className={input}
-            >
-              <option value="">{t("unspecified")}</option>
-              <option value="yes">{tc("yes")}</option>
-              <option value="no">{tc("no")}</option>
-            </select>
-          </label>
         </section>
+
+        {/* ---- Plus d'informations (optionnel, repliable) ---- */}
+        <details
+          open={hasMore}
+          className="rounded-cardlg border border-sand-200 dark:border-anthracite-600"
+        >
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-2 p-4">
+            <span className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
+              {t("secMore")}
+            </span>
+            <span className="text-[11.5px] font-normal text-sand-500 dark:text-[#7E7A72]">
+              {t("secMoreHint")}
+            </span>
+          </summary>
+
+          <div className="flex flex-col gap-3 p-4 pt-1">
+            {select("denomination", t("denominationLabel"), DENOMINATIONS)}
+            {select(
+              "engagementFrequency",
+              t("engagementLabel"),
+              ENGAGEMENT_FREQUENCIES,
+            )}
+            {field("ministry", t("ministry"), { max: 120 })}
+            {field("localChurch", t("localChurch"), { max: 160 })}
+            {field("testimony", t("testimonyLabel"), { area: true, max: 1500 })}
+            {chips("interests", t("interestsLabel"), INTERESTS)}
+            {chips("personality", t("personalityLabel"), PERSONALITY_TRAITS)}
+            {field("familyVision", t("familyVision"), {
+              area: true,
+              max: 1000,
+            })}
+            {field("aspirations", t("aspirationsLabel"), {
+              area: true,
+              max: 500,
+            })}
+            <label className="flex flex-col gap-1.5">
+              <span className={lbl}>
+                {t("hasChildrenLabel")}
+                {mark({})}
+              </span>
+              <select
+                value={d.hasChildren}
+                onChange={(e) =>
+                  set("hasChildren", e.target.value as Data["hasChildren"])
+                }
+                className={input}
+              >
+                <option value="">{t("unspecified")}</option>
+                <option value="yes">{tc("yes")}</option>
+                <option value="no">{tc("no")}</option>
+              </select>
+            </label>
+            <label className="flex flex-col gap-1.5">
+              <span className={lbl}>
+                {t("wantsChildrenLabel")}
+                {mark({})}
+              </span>
+              <select
+                value={d.wantsChildren}
+                onChange={(e) =>
+                  set("wantsChildren", e.target.value as Data["wantsChildren"])
+                }
+                className={input}
+              >
+                <option value="">{t("unspecified")}</option>
+                <option value="yes">{tc("yes")}</option>
+                <option value="no">{tc("no")}</option>
+              </select>
+            </label>
+            <label className="flex items-center gap-3 text-[13px] text-ink dark:text-[#ECE7DD]">
+              <input
+                type="checkbox"
+                checked={d.photoBlurredByDefault}
+                onChange={(e) => set("photoBlurredByDefault", e.target.checked)}
+                className="h-4 w-4 accent-[#9A7B2E]"
+              />
+              {t("photoBlurLabel")}
+            </label>
+          </div>
+        </details>
 
         {error && (
           <p role="alert" className="text-[13px] text-danger">

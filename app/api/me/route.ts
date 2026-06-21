@@ -50,6 +50,7 @@ export const GET = withErrors(async () => {
 const patchSchema = z.object({
   displayName: z.string().min(2).max(40).optional(),
   cityApprox: z.string().max(80).nullable().optional(),
+  country: z.string().max(80).nullable().optional(),
   photoBlurredByDefault: z.boolean().optional(),
   locale: z.enum(["fr", "en", "es", "pt"]).optional(),
 });

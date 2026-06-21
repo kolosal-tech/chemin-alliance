@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 /** Ouvre le Stripe Billing Portal pour gérer / annuler l'abonnement. */
 export function PortalButton({ label }: { label: string }) {
   const t = useTranslations();
+  const locale = useLocale();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
 
@@ -13,7 +14,11 @@ export function PortalButton({ label }: { label: string }) {
     setBusy(true);
     setError(false);
     try {
-      const res = await fetch("/api/billing/portal", { method: "POST" });
+      const res = await fetch("/api/billing/portal", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ locale }),
+      });
       const data = await res.json().catch(() => null);
       if (res.ok && data?.url) {
         window.location.href = data.url;

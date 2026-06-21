@@ -20,6 +20,9 @@ async function setStatusByCustomer(customerId: string, status: string) {
 
 export async function POST(req: Request) {
   if (!stripe || !webhookSecret) {
+    console.error(
+      "[webhooks/stripe] événement reçu mais billing non configuré — STRIPE_SECRET_KEY ou STRIPE_WEBHOOK_SECRET manquant en prod",
+    );
     return NextResponse.json({ error: "BILLING_DISABLED" }, { status: 503 });
   }
   const sig = req.headers.get("stripe-signature");
@@ -27,7 +30,11 @@ export async function POST(req: Request) {
   let event: Stripe.Event;
   try {
     event = stripe.webhooks.constructEvent(body, sig ?? "", webhookSecret);
-  } catch {
+  } catch (err) {
+    console.error(
+      "[webhooks/stripe] signature invalide — STRIPE_WEBHOOK_SECRET ne correspond pas au secret de l'endpoint (ou mauvais mode test/live)",
+      err,
+    );
     return NextResponse.json({ error: "BAD_SIGNATURE" }, { status: 400 });
   }
 

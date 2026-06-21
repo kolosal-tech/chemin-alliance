@@ -11,8 +11,10 @@ const FEATURES = ["discovery", "report", "ai", "calls"] as const;
 
 export default async function PremiumPage({
   params,
+  searchParams,
 }: {
   params: { locale: string };
+  searchParams: { status?: string };
 }) {
   setRequestLocale(params.locale);
   const user = await requirePageUser(params.locale);
@@ -22,6 +24,10 @@ export default async function PremiumPage({
     select: { subscriptionStatus: true },
   });
   const active = me?.subscriptionStatus === "active";
+  // Retour de Stripe : le webhook peut tarder quelques secondes à basculer le
+  // statut. On accuse réception du paiement plutôt que de réafficher l'état
+  // « non abonné » (qui se lirait « rien ne s'est passé »).
+  const justPaid = !active && searchParams?.status === "success";
 
   return (
     <main className="px-5 pt-6 safe-top lg:mx-auto lg:max-w-xl">
@@ -65,6 +71,10 @@ export default async function PremiumPage({
             </p>
             {stripeEnabled && <PortalButton label={t("manage")} />}
           </>
+        ) : justPaid ? (
+          <p className="mt-4 rounded-btn bg-[#FBF6E9] px-3.5 py-3 text-center text-[13.5px] font-semibold text-gold-ink dark:bg-[#272117] dark:text-[#E0C77A]">
+            {t("pendingActivation")}
+          </p>
         ) : stripeEnabled ? (
           <SubscribeButton label={t("cta")} />
         ) : (
