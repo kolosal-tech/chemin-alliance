@@ -16,8 +16,22 @@ export default async function ConversationPage({
   const match = await prisma.match.findUnique({
     where: { id: params.matchId },
     include: {
-      userA: { select: { id: true, displayName: true, isVerified: true } },
-      userB: { select: { id: true, displayName: true, isVerified: true } },
+      userA: {
+        select: {
+          id: true,
+          displayName: true,
+          isVerified: true,
+          photoBlurhash: true,
+        },
+      },
+      userB: {
+        select: {
+          id: true,
+          displayName: true,
+          isVerified: true,
+          photoBlurhash: true,
+        },
+      },
       messages: { orderBy: { createdAt: "asc" }, take: 200 },
     },
   });

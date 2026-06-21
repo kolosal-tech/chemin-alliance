@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/db";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { StageBadge } from "@/components/StageBadge";
+import { MemberAvatar } from "@/components/MemberAvatar";
 import { silenceDetected } from "@/lib/agents/exit-helper";
 import { unreadByMatch } from "@/lib/unread";
 
@@ -20,8 +21,8 @@ export default async function MessagesListPage({
       status: { not: "CLOSED" },
     },
     include: {
-      userA: { select: { id: true, displayName: true } },
-      userB: { select: { id: true, displayName: true } },
+      userA: { select: { id: true, displayName: true, photoBlurhash: true } },
+      userB: { select: { id: true, displayName: true, photoBlurhash: true } },
       messages: {
         where: { kind: "USER" },
         orderBy: { createdAt: "desc" },
@@ -63,13 +64,10 @@ export default async function MessagesListPage({
               href={`/messages/${m.id}`}
               className="flex items-center gap-3 rounded-card border border-sand-200 bg-surface p-3.5 dark:border-anthracite-600 dark:bg-anthracite-800"
             >
-              <span
-                aria-hidden
-                className="h-10 w-10 flex-none rounded-full blur-[3px]"
-                style={{
-                  background:
-                    "radial-gradient(110% 90% at 40% 30%, #8A7A6A 0%, #5C4D44 60%, #352A28 100%)",
-                }}
+              <MemberAvatar
+                userId={other.id}
+                photoBlurhash={other.photoBlurhash}
+                className="h-10 w-10 flex-none rounded-full"
               />
               <div className="flex-1">
                 <div className="font-display text-[16px] text-night dark:text-[#ECE7DD]">

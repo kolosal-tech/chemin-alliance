@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import type { AllianceStage, MessageKind } from "@prisma/client";
 import { StageBadge } from "@/components/StageBadge";
+import { MemberAvatar } from "@/components/MemberAvatar";
 import { SacredMotif } from "@/components/SacredMotif";
 import { BlockButton } from "@/components/BlockButton";
 import { ReportButton } from "@/components/ReportButton";
@@ -34,7 +35,12 @@ export function Conversation({
 }: {
   matchId: string;
   stage: AllianceStage;
-  other: { id: string; displayName: string; isVerified: boolean };
+  other: {
+    id: string;
+    displayName: string;
+    isVerified: boolean;
+    photoBlurhash: string | null;
+  };
   awaitingMyAccept?: boolean;
   awaitingOther?: boolean;
   suggestions: string[];
@@ -197,13 +203,10 @@ export function Conversation({
             />
           </svg>
         </Link>
-        <span
-          aria-hidden
-          className="h-9 w-9 flex-none rounded-full blur-[3px]"
-          style={{
-            background:
-              "radial-gradient(110% 90% at 40% 30%, #8A7A6A 0%, #5C4D44 60%, #352A28 100%)",
-          }}
+        <MemberAvatar
+          userId={other.id}
+          photoBlurhash={other.photoBlurhash}
+          className="h-9 w-9 flex-none rounded-full"
         />
         <div className="flex-1">
           <div className="flex items-center gap-1.5">

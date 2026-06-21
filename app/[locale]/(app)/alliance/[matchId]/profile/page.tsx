@@ -6,6 +6,7 @@ import { requirePageUser } from "@/lib/security/page-auth";
 import { buildMatchProfileView } from "@/lib/match-profile";
 import { decryptOptional } from "@/lib/security/crypto";
 import { TrustBadge } from "@/components/TrustBadge";
+import { MemberAvatar } from "@/components/MemberAvatar";
 import { BlessingRequest } from "./blessing-request";
 
 // Étape d'alliance (1..3) → clé de stage, pour le libellé « se révèle à… ».
@@ -84,6 +85,11 @@ export default async function MatchProfilePage({
             />
           </svg>
         </Link>
+        <MemberAvatar
+          userId={other.id}
+          photoBlurhash={other.photoBlurhash}
+          className="h-16 w-16 flex-none rounded-2xl"
+        />
         <div>
           <div className="lbl text-[9px] text-gold-deep dark:text-gold-light">
             {t("matchProfile.eyebrow")}
