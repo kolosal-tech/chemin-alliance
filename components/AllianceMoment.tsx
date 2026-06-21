@@ -61,7 +61,13 @@ export function AllianceMoment({
                 "radial-gradient(110% 90% at 35% 25%, #6E7790 0%, #41506E 50%, #222F4C 100%)",
             }}
           >
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <svg
+              width="30"
+              height="30"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden
+            >
               <path
                 d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
                 className="fill-gold-light"

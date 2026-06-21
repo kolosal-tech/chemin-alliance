@@ -121,6 +121,8 @@ model User {
   passwordResetExpires  DateTime?
   photoUrl              String?
   photoBlurredByDefault Boolean   @default(true)
+  photoBlurhash         String?
+
   cityApprox            String?
   country               String?
   phone                 String?

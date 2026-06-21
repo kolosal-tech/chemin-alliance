@@ -140,3 +140,62 @@ export async function signedPhotoUrl(
     return stored;
   }
 }
+
+/**
+ * Chemin de la variante MOYENNEMENT floutée, sœur de l'original :
+ * `<userId>/<uuid>.<ext>` → `<userId>/<uuid>.blur.jpg`. Déduit du chemin, donc
+ * pas de colonne dédiée. `null` si on ne sait pas interpréter la valeur stockée.
+ */
+export function blurredVariantPath(stored: string): string | null {
+  const path = extractPhotoPath(stored, env.SUPABASE_PHOTO_BUCKET);
+  if (!path) return null;
+  return path.replace(/\.[^./]+$/, "") + ".blur.jpg";
+}
+
+/**
+ * Upload générique d'un buffer à un chemin précis du bucket photos (service
+ * key, jamais côté client). `x-upsert` : réécrit si l'objet existe déjà
+ * (re-upload de variante / backfill). Best-effort.
+ */
+export async function putPhotoObject(
+  path: string,
+  contentType: string,
+  bytes: ArrayBuffer | Buffer,
+): Promise<boolean> {
+  if (!photoUploadEnabled()) return false;
+  const bucket = env.SUPABASE_PHOTO_BUCKET;
+  const base = env.SUPABASE_URL!.replace(/\/$/, "");
+  // fetch n'accepte qu'un ArrayBuffer comme body (Buffer/Uint8Array refusés par
+  // les types DOM depuis TS 5.7) → copie vers un ArrayBuffer propre.
+  let body: ArrayBuffer;
+  if (Buffer.isBuffer(bytes)) {
+    body = new ArrayBuffer(bytes.byteLength);
+    new Uint8Array(body).set(bytes);
+  } else {
+    body = bytes;
+  }
+  try {
+    const res = await fetch(`${base}/storage/v1/object/${bucket}/${path}`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+        "content-type": contentType,
+        "cache-control": "public, max-age=31536000",
+        "x-upsert": "true",
+      },
+      body,
+    });
+    if (!res.ok) {
+      console.error(
+        "[storage] putPhotoObject refusé",
+        res.status,
+        await res.text().catch(() => ""),
+      );
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("[storage] putPhotoObject réseau échoué", err);
+    return false;
+  }
+}

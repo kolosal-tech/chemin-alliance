@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { BlurhashImage } from "@/components/BlurhashImage";
 
 const GRADIENTS = [
   "radial-gradient(110% 90% at 35% 25%, #6E7790 0%, #41506E 50%, #222F4C 100%)",
@@ -20,6 +21,7 @@ type Profile = {
   hasChildren: boolean;
   intentionStatement: string | null;
   gradient: number;
+  photoBlurhash?: string | null;
 };
 
 export function SuggestionCard({
@@ -72,13 +74,20 @@ export function SuggestionCard({
           : "border-sand-200 dark:border-anthracite-600"
       }`}
     >
-      {/* Portrait — grand format. Photo réelle (floutée, révélée en avançant)
-          à venir via un pipeline sécurisé ; en attendant, dégradé de marque. */}
+      {/* Portrait — grand format. Pré-match : empreinte BlurHash (silhouette
+          floue, aucun octet de la vraie photo) ; dégradé de marque en fallback.
+          La photo réelle se révèle en avançant, via le proxy autorisé. */}
       <div
         className="relative aspect-[4/5] overflow-hidden"
         style={{ background: GRADIENTS[profile.gradient] }}
         aria-hidden
       >
+        {profile.photoBlurhash && (
+          <BlurhashImage
+            hash={profile.photoBlurhash}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-night/10" />
         {/* Voile bas pour la lisibilité du texte superposé. */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E16]/80 via-[#0B0E16]/25 to-transparent" />

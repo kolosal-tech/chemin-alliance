@@ -221,6 +221,7 @@ export default async function SuggestionsPage({
                       ? (s.relationshipProfile?.intentionStatement ?? null)
                       : null,
                   gradient: i % 3,
+                  photoBlurhash: s.photoBlurhash ?? null,
                 }}
               />
             ))}
