@@ -22,10 +22,7 @@ type RegimeSections = {
   rights: Record<Locale, Section>;
 };
 
-const CONTENT = regimeContent as Record<
-  Exclude<Regime, "eu">,
-  RegimeSections
->;
+const CONTENT = regimeContent as Record<Exclude<Regime, "eu">, RegimeSections>;
 
 /** Codes ISO 3166-1 alpha-2 → bloc. Tout le reste retombe sur "intl". */
 const REGIME_BY_ISO: Record<string, Regime> = {
@@ -33,11 +30,39 @@ const REGIME_BY_ISO: Record<string, Regime> = {
   CA: "ca",
   BR: "br",
   // UE / EEE / Royaume-Uni / Suisse / Monaco → RGPD ou équivalent strict
-  AT: "eu", BE: "eu", BG: "eu", HR: "eu", CY: "eu", CZ: "eu", DK: "eu",
-  EE: "eu", FI: "eu", FR: "eu", DE: "eu", GR: "eu", HU: "eu", IE: "eu",
-  IT: "eu", LV: "eu", LT: "eu", LU: "eu", MT: "eu", NL: "eu", PL: "eu",
-  PT: "eu", RO: "eu", SK: "eu", SI: "eu", ES: "eu", SE: "eu",
-  IS: "eu", LI: "eu", NO: "eu", GB: "eu", CH: "eu", MC: "eu",
+  AT: "eu",
+  BE: "eu",
+  BG: "eu",
+  HR: "eu",
+  CY: "eu",
+  CZ: "eu",
+  DK: "eu",
+  EE: "eu",
+  FI: "eu",
+  FR: "eu",
+  DE: "eu",
+  GR: "eu",
+  HU: "eu",
+  IE: "eu",
+  IT: "eu",
+  LV: "eu",
+  LT: "eu",
+  LU: "eu",
+  MT: "eu",
+  NL: "eu",
+  PL: "eu",
+  PT: "eu",
+  RO: "eu",
+  SK: "eu",
+  SI: "eu",
+  ES: "eu",
+  SE: "eu",
+  IS: "eu",
+  LI: "eu",
+  NO: "eu",
+  GB: "eu",
+  CH: "eu",
+  MC: "eu",
 };
 
 /** Ordre d'affichage du sélecteur de région. */
