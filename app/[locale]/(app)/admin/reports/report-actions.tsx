@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
+import { AsyncButton } from "@/components/AsyncButton";
 
 export function ReportActions({ reportId }: { reportId: string }) {
   const t = useTranslations("admin");
@@ -21,22 +22,20 @@ export function ReportActions({ reportId }: { reportId: string }) {
 
   return (
     <div className="flex gap-2">
-      <button
-        type="button"
+      <AsyncButton
         disabled={busy}
         onClick={() => update("RESOLVED")}
         className="flex-1 rounded-btnsm bg-navy py-2.5 text-xs font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
       >
         {t("resolve")}
-      </button>
-      <button
-        type="button"
+      </AsyncButton>
+      <AsyncButton
         disabled={busy}
         onClick={() => update("DISMISSED")}
         className="flex-1 rounded-btnsm border border-sand-400 py-2.5 text-xs font-medium text-warmgray disabled:opacity-50 dark:border-anthracite-600 dark:text-[#9A958B]"
       >
         {t("dismiss")}
-      </button>
+      </AsyncButton>
     </div>
   );
 }

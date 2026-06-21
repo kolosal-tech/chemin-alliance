@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
 import { AllianceThread } from "@/components/AllianceThread";
+import { Spinner } from "@/components/Spinner";
 
 export function LoginForm() {
   const t = useTranslations("auth");
@@ -111,8 +112,9 @@ export function LoginForm() {
           <button
             type="submit"
             disabled={busy}
-            className="mt-2 rounded-btnlg bg-navy px-4 py-4 text-base font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
+            className="mt-2 flex items-center justify-center gap-2 rounded-btnlg bg-navy px-4 py-4 text-base font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
           >
+            {busy && <Spinner className="h-4 w-4" />}
             {busy ? tc("loading") : t("login")}
           </button>
         </form>

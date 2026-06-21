@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { AsyncButton } from "@/components/AsyncButton";
 
 /**
  * Agent 7 — Copilote du Coach. Double consentement strict :
@@ -18,16 +19,13 @@ export function CopilotPanel({
   const [consent, setConsent] = useState(false);
   const [state, setState] = useState<"idle" | "waiting" | "done">("idle");
   const [summary, setSummary] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
 
   async function generate() {
-    setBusy(true);
     const res = await fetch("/api/agents/coach-copilot", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ matchId, consent: true }),
     });
-    setBusy(false);
     if (!res.ok) return;
     const d = await res.json();
     if (d.bothConsented) {
@@ -51,14 +49,13 @@ export function CopilotPanel({
             <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 h-4 w-4 accent-[#1A2744]" />
             <span>{t("consentLabel")}</span>
           </label>
-          <button
-            type="button"
-            disabled={!consent || busy}
+          <AsyncButton
+            disabled={!consent}
             onClick={generate}
             className="mt-3 w-full rounded-btnsm border border-navy py-3 text-sm font-semibold text-navy disabled:opacity-50 dark:border-gold-light dark:text-gold-light"
           >
             {t("generate")}
-          </button>
+          </AsyncButton>
         </>
       )}
       {state === "waiting" && (

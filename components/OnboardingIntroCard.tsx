@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
 import { Icon } from "@/components/marketing/icons";
+import { Spinner } from "@/components/Spinner";
 import {
   MATURITY_AXES,
   OPTIONS_PER_AXIS,
@@ -262,10 +263,14 @@ export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
             type="button"
             onClick={finish}
             disabled={loading}
-            className="mt-6 inline-flex items-center gap-1.5 rounded-btn bg-navy px-6 py-3.5 text-[14px] font-semibold text-[#F4F1EA] transition-colors hover:bg-night disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
+            className="mt-6 inline-flex items-center justify-center gap-1.5 rounded-btn bg-navy px-6 py-3.5 text-[14px] font-semibold text-[#F4F1EA] transition-colors hover:bg-night disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
           >
             {t("finish")}
-            <Icon name="arrowRight" className="h-4 w-4" strokeWidth={1.9} />
+            {loading ? (
+              <Spinner className="h-4 w-4" />
+            ) : (
+              <Icon name="arrowRight" className="h-4 w-4" strokeWidth={1.9} />
+            )}
           </button>
         </>
       )}

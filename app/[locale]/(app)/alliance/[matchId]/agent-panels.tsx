@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { AsyncButton } from "@/components/AsyncButton";
 
 type Suggestion = { id: string; theme: string; text: string };
 type Review = {
@@ -67,14 +68,13 @@ export function ReviewPanel({ matchId }: { matchId: string }) {
   return (
     <section className="mt-5">
       {!review ? (
-        <button
-          type="button"
+        <AsyncButton
           onClick={generate}
           disabled={busy}
           className="w-full rounded-btnsm border border-navy py-3 text-sm font-semibold text-navy disabled:opacity-60 dark:border-gold-light dark:text-gold-light"
         >
           {t("button")}
-        </button>
+        </AsyncButton>
       ) : (
         <div className="rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
           <div className="mb-1 flex items-baseline justify-between">

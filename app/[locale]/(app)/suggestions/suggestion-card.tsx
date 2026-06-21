@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
+import { AsyncButton } from "@/components/AsyncButton";
+import { Spinner } from "@/components/Spinner";
 import { BlurhashImage } from "@/components/BlurhashImage";
 import { optionLabel, DENOMINATION_LABELS } from "@/lib/profile-options";
 
@@ -202,21 +204,21 @@ export function SuggestionCard({
           </p>
         ) : (
           <div className="mt-3.5 flex gap-2.5">
-            <button
-              type="button"
+            <AsyncButton
               onClick={discover}
               className="flex flex-1 items-center justify-center gap-1.5 rounded-btn bg-navy py-3 text-sm font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
             >
               {t("suggestions.discover")}
               <span aria-hidden>→</span>
-            </button>
+            </AsyncButton>
             <button
               type="button"
               onClick={pass}
               disabled={state === "passing"}
               aria-label={t("suggestions.pass")}
-              className="rounded-btn border border-sand-400 px-4 py-3 text-sm font-medium text-[#6B665C] disabled:opacity-50 dark:border-anthracite-600 dark:text-[#9A958B]"
+              className="flex items-center justify-center gap-2 rounded-btn border border-sand-400 px-4 py-3 text-sm font-medium text-[#6B665C] disabled:opacity-50 dark:border-anthracite-600 dark:text-[#9A958B]"
             >
+              {state === "passing" && <Spinner className="h-4 w-4" />}
               {t("suggestions.pass")}
             </button>
           </div>

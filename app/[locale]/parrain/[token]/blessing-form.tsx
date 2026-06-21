@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { SacredMotif } from "@/components/SacredMotif";
+import { AsyncButton } from "@/components/AsyncButton";
 
 type View = "loading" | "ready" | "done" | "answered" | "invalid";
 
@@ -104,22 +105,21 @@ export function BlessingForm({ token }: { token: string }) {
           </label>
 
           <div className="mt-6 flex flex-col gap-3">
-            <button
-              type="button"
+            <AsyncButton
               onClick={() => respond("bless")}
               disabled={busy}
+              pendingLabel={t("sending")}
               className="rounded-btnlg bg-gold px-4 py-4 text-base font-semibold text-[#131D33] disabled:opacity-60"
             >
-              {busy ? t("sending") : t("bless")}
-            </button>
-            <button
-              type="button"
+              {t("bless")}
+            </AsyncButton>
+            <AsyncButton
               onClick={() => respond("caution")}
               disabled={busy}
               className="rounded-btnlg border border-sand-400 px-4 py-3.5 text-[15px] font-semibold text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
             >
               {t("caution")}
-            </button>
+            </AsyncButton>
           </div>
         </>
       )}

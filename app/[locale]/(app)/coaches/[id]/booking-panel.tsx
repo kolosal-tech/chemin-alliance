@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useFormatter, useTranslations } from "next-intl";
+import { AsyncButton } from "@/components/AsyncButton";
 
 export function BookingPanel({
   coachId,
@@ -94,8 +95,7 @@ export function BookingPanel({
               {t("perSession")}
             </div>
           </div>
-          <button
-            type="button"
+          <AsyncButton
             onClick={book}
             disabled={!selected}
             className="flex flex-1 items-center justify-center gap-2 rounded-[13px] bg-navy py-3.5 text-[15px] font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
@@ -105,7 +105,7 @@ export function BookingPanel({
               <path d="M4 9h16M8 3v4M16 3v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
             </svg>
             {t("book")}
-          </button>
+          </AsyncButton>
         </div>
       )}
     </div>

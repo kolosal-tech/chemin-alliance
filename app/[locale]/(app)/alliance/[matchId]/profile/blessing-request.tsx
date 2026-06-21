@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { AsyncButton } from "@/components/AsyncButton";
 
 type Status = "PENDING" | "BLESSED" | "CAUTION" | null;
 
@@ -72,14 +73,13 @@ export function BlessingRequest({
 
   return (
     <div className="mt-4">
-      <button
-        type="button"
+      <AsyncButton
         onClick={ask}
         disabled={busy}
         className="w-full rounded-btnlg border border-gold bg-gold/10 px-4 py-3.5 text-[14px] font-semibold text-gold-ink disabled:opacity-60 dark:border-[#6A5A2E] dark:bg-[#272117] dark:text-[#E0C77A]"
       >
         {t("askBlessing")}
-      </button>
+      </AsyncButton>
       {noSponsor && (
         <p className="mt-2 text-[12.5px] text-warmgray dark:text-[#9A958B]">
           {t("noSponsor")}{" "}

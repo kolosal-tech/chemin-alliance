@@ -7,6 +7,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { BlockedUsers } from "@/components/BlockedUsers";
 import { PhoneVerify } from "@/components/PhoneVerify";
+import { AsyncButton } from "@/components/AsyncButton";
 import type { VisibilityLevel } from "@prisma/client";
 
 const LEVEL_SEGMENTS: Record<string, { filled: number; cls: string }> = {
@@ -357,13 +358,12 @@ export function PrivacyPanel({
               >
                 {t("common.cancel")}
               </button>
-              <button
-                type="button"
+              <AsyncButton
                 onClick={deleteAccount}
                 className="flex-1 rounded-btnsm bg-danger py-3 text-sm font-semibold text-white"
               >
                 {t("privacy.deleteConfirmCta")}
-              </button>
+              </AsyncButton>
             </div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
+import { AsyncButton } from "@/components/AsyncButton";
 
 type Portrait = {
   dimensions: Record<
@@ -167,14 +168,13 @@ export function PreparationFlow({
                   {t("next")}
                 </button>
               ) : (
-                <button
-                  type="button"
+                <AsyncButton
                   disabled={!(answers[questions[step].id] ?? "").trim()}
                   onClick={submit}
                   className="rounded-btnsm bg-gold px-5 py-2.5 text-sm font-semibold text-night disabled:opacity-50"
                 >
                   {t("submit")}
-                </button>
+                </AsyncButton>
               )}
             </div>
           </div>
@@ -320,13 +320,12 @@ export function PreparationFlow({
             >
               {t("redo")}
             </button>
-            <button
-              type="button"
+            <AsyncButton
               onClick={revoke}
               className="flex-1 rounded-btnsm border border-[#D8B6B0] py-3 text-[13px] font-medium text-danger dark:border-[#5A3A34]"
             >
               {t("revoke")}
-            </button>
+            </AsyncButton>
           </div>
         </section>
       )}

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Icon } from "./icons";
+import { AsyncButton } from "@/components/AsyncButton";
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -60,14 +61,13 @@ export function InstallButton() {
   }
 
   return (
-    <button
-      type="button"
+    <AsyncButton
       onClick={install}
       disabled={!deferred}
       className="inline-flex items-center justify-center gap-2 rounded-btnlg bg-gold px-6 py-4 text-[15px] font-semibold text-night transition-colors hover:bg-gold-deep hover:text-cream disabled:cursor-default disabled:opacity-60 dark:bg-gold-light dark:hover:bg-gold"
     >
       <Icon name="download" className="h-[18px] w-[18px]" strokeWidth={1.9} />
       {deferred ? t("install") : t("comingSoon")}
-    </button>
+    </AsyncButton>
   );
 }

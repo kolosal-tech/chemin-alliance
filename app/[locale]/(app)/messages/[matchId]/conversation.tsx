@@ -11,6 +11,8 @@ import { BlockButton } from "@/components/BlockButton";
 import { ReportButton } from "@/components/ReportButton";
 import { SafetyBanner } from "@/components/SafetyBanner";
 import { AllianceMoment } from "@/components/AllianceMoment";
+import { AsyncButton } from "@/components/AsyncButton";
+import { Spinner } from "@/components/Spinner";
 
 type Msg = {
   id: string;
@@ -275,22 +277,20 @@ export function Conversation({
             {t("messaging.acceptPrompt", { name: other.displayName })}
           </p>
           <div className="mt-3 flex gap-2">
-            <button
-              type="button"
+            <AsyncButton
               onClick={acceptMatch}
               disabled={acceptBusy}
               className="flex-1 rounded-btnsm bg-navy py-2.5 text-[13px] font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
             >
               {t("messaging.acceptCta")}
-            </button>
-            <button
-              type="button"
+            </AsyncButton>
+            <AsyncButton
               onClick={declineMatch}
               disabled={acceptBusy}
               className="rounded-btnsm border border-sand-300 px-4 py-2.5 text-[13px] font-medium text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
             >
               {t("messaging.declineCta")}
-            </button>
+            </AsyncButton>
           </div>
           {actionError && (
             <p role="alert" className="mt-2 text-[12.5px] text-danger">
@@ -431,13 +431,12 @@ export function Conversation({
                   <span className="text-warmgray dark:text-[#9A958B]">
                     {t("messaging.deleteConfirm")}
                   </span>
-                  <button
-                    type="button"
+                  <AsyncButton
                     onClick={() => deleteMessage(m.id)}
                     className="font-semibold text-danger"
                   >
                     {t("messaging.delete")}
-                  </button>
+                  </AsyncButton>
                   <button
                     type="button"
                     onClick={() => setConfirmId(null)}
@@ -481,14 +480,13 @@ export function Conversation({
             </div>
             <div className="mb-2.5 flex gap-2 overflow-x-auto pb-0.5">
               {suggestions.map((s) => (
-                <button
+                <AsyncButton
                   key={s}
-                  type="button"
                   onClick={() => send(s)}
                   className="glass whitespace-nowrap rounded-[18px] px-3 py-2 text-xs text-[#3A372F] dark:text-[#CFCAC0]"
                 >
                   {s}
-                </button>
+                </AsyncButton>
               ))}
             </div>
           </>
@@ -513,22 +511,26 @@ export function Conversation({
             aria-label={t("messaging.send")}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-navy disabled:opacity-50 dark:bg-gold-light"
           >
-            <svg
-              width="17"
-              height="17"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden
-            >
-              <path
-                d="M5 12h13M12 6l6 6-6 6"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-[#F4F1EA] dark:text-anthracite-900"
-              />
-            </svg>
+            {busy ? (
+              <Spinner className="h-4 w-4 text-[#F4F1EA] dark:text-anthracite-900" />
+            ) : (
+              <svg
+                width="17"
+                height="17"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  d="M5 12h13M12 6l6 6-6 6"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-[#F4F1EA] dark:text-anthracite-900"
+                />
+              </svg>
+            )}
           </button>
         </form>
       </div>

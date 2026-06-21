@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
+import { AsyncButton } from "@/components/AsyncButton";
 
 /**
  * Signaler une personne — GRATUIT À VIE, jamais derrière un paywall (invariant
@@ -92,14 +93,13 @@ export function ReportButton({ targetUserId }: { targetUserId: string }) {
                     >
                       {tc("cancel")}
                     </button>
-                    <button
-                      type="button"
+                    <AsyncButton
                       onClick={submit}
                       disabled={busy || reason.trim().length < 10}
                       className="flex-1 rounded-btnsm bg-danger py-3 text-[13px] font-semibold text-white disabled:opacity-50"
                     >
                       {t("submit")}
-                    </button>
+                    </AsyncButton>
                   </div>
                 </>
               )}

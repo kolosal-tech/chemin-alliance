@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import type { AllianceStage, ContactExchangeStatus } from "@prisma/client";
+import { AsyncButton } from "@/components/AsyncButton";
 
 type Question = { id: string; text: string; answered: boolean };
 
@@ -148,14 +149,13 @@ export function StageActions({
                   <button type="button" onClick={() => setOpenQ(null)} className="px-3 py-2 text-xs font-medium text-warmgray dark:text-[#9A958B]">
                     {tc("cancel")}
                   </button>
-                  <button
-                    type="button"
+                  <AsyncButton
                     onClick={() => saveAnswer(q.id)}
                     disabled={!answer.trim()}
                     className="rounded-btnsm bg-navy px-4 py-2 text-xs font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
                   >
                     {tc("save")}
-                  </button>
+                  </AsyncButton>
                 </div>
               </div>
             )}
@@ -171,13 +171,12 @@ export function StageActions({
 
       <div className="mt-4 flex flex-col gap-2.5">
         {stage === "DISCERNMENT" && ce === "NOT_ALLOWED" && (
-          <button
-            type="button"
+          <AsyncButton
             onClick={requestContact}
             className="rounded-btnsm border border-gold bg-surface py-3 text-sm font-semibold text-gold-ink dark:border-gold-light/60 dark:bg-anthracite-800 dark:text-gold-light"
           >
             {t("contactRequest")}
-          </button>
+          </AsyncButton>
         )}
         {ce === "ACCEPTED" && (
           <p className="rounded-btn bg-[#EAF0EB] px-3.5 py-2.5 text-[13px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
@@ -185,8 +184,7 @@ export function StageActions({
           </p>
         )}
         {(stage === "COMMITMENT" || stage === "MARRIAGE_PREPARATION") && (
-          <button
-            type="button"
+          <AsyncButton
             onClick={async () => {
               const res = await fetch("/api/couple", {
                 method: "POST",
@@ -198,15 +196,14 @@ export function StageActions({
             className="rounded-btnsm bg-gold py-3 text-sm font-semibold text-night"
           >
             {tcp("marriedCta")}
-          </button>
+          </AsyncButton>
         )}
-        <button
-          type="button"
+        <AsyncButton
           onClick={requestAdvance}
           className="rounded-btnsm bg-navy py-3 text-sm font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
         >
           {t("requestAdvance")}
-        </button>
+        </AsyncButton>
       </div>
 
       {/* Sortie élégante — discrète mais présente */}
@@ -254,14 +251,13 @@ export function StageActions({
                 <option value="need_pause">{ta("exit.reasonPause")}</option>
                 <option value="other">{ta("exit.reasonOther")}</option>
               </select>
-              <button
-                type="button"
+              <AsyncButton
                 onClick={aiDraft}
                 disabled={draftBusy}
                 className="rounded-btnsm border border-gold px-3 py-2.5 text-[12.5px] font-semibold text-gold-ink disabled:opacity-60 dark:border-gold-light/60 dark:text-gold-light"
               >
                 {ta("exit.generate")}
-              </button>
+              </AsyncButton>
             </div>
             <textarea
               value={exitText}
@@ -273,14 +269,13 @@ export function StageActions({
               <button type="button" onClick={() => setExitOpen(false)} className="px-3 py-2 text-xs font-medium text-warmgray dark:text-[#9A958B]">
                 {tc("cancel")}
               </button>
-              <button
-                type="button"
+              <AsyncButton
                 onClick={closeElegantly}
                 disabled={!exitText.trim()}
                 className="rounded-btnsm border border-[#D8B6B0] px-4 py-2 text-xs font-semibold text-danger disabled:opacity-50 dark:border-[#5A3A34]"
               >
                 {t("exitConfirm")}
-              </button>
+              </AsyncButton>
             </div>
           </div>
         )}

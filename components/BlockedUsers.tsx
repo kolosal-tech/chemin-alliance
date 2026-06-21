@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { AsyncButton } from "@/components/AsyncButton";
 
 type Blocked = { id: string; displayName: string };
 
@@ -48,13 +49,12 @@ export function BlockedUsers() {
             <span className="text-sm text-ink dark:text-[#ECE7DD]">
               {b.displayName}
             </span>
-            <button
-              type="button"
+            <AsyncButton
               onClick={() => unblock(b.id)}
               className="rounded-btnsm border border-sand-400 px-3 py-1.5 text-[12px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
             >
               {t("unblock")}
-            </button>
+            </AsyncButton>
           </div>
         ))}
       </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { AsyncButton } from "@/components/AsyncButton";
 
 type State = {
   phone: string | null;
@@ -90,14 +91,13 @@ export function PhoneVerify() {
               placeholder="+225 07 00 00 00 00"
               className="rounded-btn border border-sand-300 bg-white p-3 text-sm text-ink outline-none dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
             />
-            <button
-              type="button"
+            <AsyncButton
               disabled={busy || phone.trim().length < 8}
               onClick={send}
               className="rounded-btnsm bg-navy py-3 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
             >
               {t("sendCode")}
-            </button>
+            </AsyncButton>
           </div>
         ) : (
           <div className="flex flex-col gap-2.5">
@@ -113,14 +113,13 @@ export function PhoneVerify() {
               placeholder="000000"
               className="rounded-btn border border-sand-300 bg-white p-3 text-center font-mono text-lg tracking-[0.4em] text-ink outline-none dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
             />
-            <button
-              type="button"
+            <AsyncButton
               disabled={busy || code.length !== 6}
               onClick={verify}
               className="rounded-btnsm bg-gold py-3 text-sm font-semibold text-night disabled:opacity-50"
             >
               {t("verify")}
-            </button>
+            </AsyncButton>
             <button
               type="button"
               onClick={() => setStep("idle")}

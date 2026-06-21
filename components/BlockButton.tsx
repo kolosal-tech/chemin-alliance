@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
+import { AsyncButton } from "@/components/AsyncButton";
 
 /**
  * Bloquer une personne — GRATUIT À VIE, jamais derrière un paywall.
@@ -25,16 +26,13 @@ export function BlockButton({
   const t = useTranslations("block");
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [busy, setBusy] = useState(false);
 
   async function block() {
-    setBusy(true);
     await fetch("/api/blocks", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ targetUserId }),
     });
-    setBusy(false);
     setOpen(false);
     router.push("/messages");
     router.refresh();
@@ -98,14 +96,12 @@ export function BlockButton({
                 >
                   {t("cancel")}
                 </button>
-                <button
-                  type="button"
+                <AsyncButton
                   onClick={block}
-                  disabled={busy}
                   className="flex-1 rounded-btnsm bg-danger py-3 text-[13px] font-semibold text-white disabled:opacity-50"
                 >
                   {t("confirm")}
-                </button>
+                </AsyncButton>
               </div>
             </div>
           </div>,

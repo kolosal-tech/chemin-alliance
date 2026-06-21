@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
 import { RichText } from "@/components/RichText";
+import { Spinner } from "@/components/Spinner";
 
 type Entry = {
   id: string;
@@ -281,22 +282,26 @@ export function CoachChat({
             aria-label={t("messaging.send")}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-navy disabled:opacity-50 dark:bg-gold-light"
           >
-            <svg
-              width="17"
-              height="17"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden
-            >
-              <path
-                d="M5 12h13M12 6l6 6-6 6"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-[#F4F1EA] dark:text-anthracite-900"
-              />
-            </svg>
+            {busy ? (
+              <Spinner className="h-4 w-4 text-[#F4F1EA] dark:text-anthracite-900" />
+            ) : (
+              <svg
+                width="17"
+                height="17"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  d="M5 12h13M12 6l6 6-6 6"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-[#F4F1EA] dark:text-anthracite-900"
+                />
+              </svg>
+            )}
           </button>
         </form>
       </div>

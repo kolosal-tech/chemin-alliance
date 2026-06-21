@@ -23,6 +23,7 @@ import {
   countryLabel,
   type Locale,
 } from "@/lib/profile-options";
+import { Spinner } from "@/components/Spinner";
 
 type Data = {
   displayName: string;
@@ -630,8 +631,9 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
         <button
           type="submit"
           disabled={saving}
-          className="rounded-btnlg bg-navy py-4 text-base font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
+          className="flex items-center justify-center gap-2 rounded-btnlg bg-navy py-4 text-base font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
         >
+          {saving && <Spinner className="h-4 w-4" />}
           {saving ? t("saving") : t("save")}
         </button>
       </form>

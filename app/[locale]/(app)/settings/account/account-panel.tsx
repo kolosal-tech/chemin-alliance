@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
+import { Spinner } from "@/components/Spinner";
 
 const inputCls =
   "rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
@@ -160,7 +161,12 @@ export function AccountPanel({
           <p className="text-[11.5px] text-sand-500 dark:text-[#7E7A72]">
             {t("account.passwordRules")}
           </p>
-          <button type="submit" disabled={pwdBusy} className={btnCls}>
+          <button
+            type="submit"
+            disabled={pwdBusy}
+            className={`${btnCls} flex items-center justify-center gap-2`}
+          >
+            {pwdBusy && <Spinner className="h-4 w-4" />}
             {t("account.passwordSection")}
           </button>
           <Notice msg={pwdMsg} />
@@ -199,7 +205,12 @@ export function AccountPanel({
               className={inputCls}
             />
           </label>
-          <button type="submit" disabled={emlBusy} className={btnCls}>
+          <button
+            type="submit"
+            disabled={emlBusy}
+            className={`${btnCls} flex items-center justify-center gap-2`}
+          >
+            {emlBusy && <Spinner className="h-4 w-4" />}
             {t("account.emailSection")}
           </button>
           <Notice msg={emlMsg} />

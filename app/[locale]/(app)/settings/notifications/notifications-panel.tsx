@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { AsyncButton } from "@/components/AsyncButton";
 
 type State =
   | "loading"
@@ -213,9 +214,9 @@ export function NotificationsPanel({
         )}
 
         {state === "on" && (
-          <button type="button" onClick={disable} className={btnGhostCls}>
+          <AsyncButton onClick={disable} className={btnGhostCls}>
             {t("notifications.disable")}
-          </button>
+          </AsyncButton>
         )}
 
         {error && (

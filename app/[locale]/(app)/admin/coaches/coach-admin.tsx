@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { AsyncButton } from "@/components/AsyncButton";
+import { Spinner } from "@/components/Spinner";
 
 type Coach = {
   id: string;
@@ -153,8 +155,9 @@ export function CoachAdmin({ coaches }: { coaches: Coach[] }) {
           <button
             type="submit"
             disabled={busy || displayName.trim().length < 2}
-            className="mt-1 rounded-btnlg bg-navy px-4 py-3 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
+            className="mt-1 flex items-center justify-center gap-2 rounded-btnlg bg-navy px-4 py-3 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
           >
+            {busy && <Spinner className="h-4 w-4" />}
             {busy ? "Ajout…" : "Ajouter l'accompagnateur"}
           </button>
           {msg && (
@@ -198,12 +201,12 @@ export function CoachAdmin({ coaches }: { coaches: Coach[] }) {
                   </div>
                 )}
               </div>
-              <button
+              <AsyncButton
                 onClick={() => remove(c.id)}
                 className="flex-none rounded-btnsm border border-sand-300 px-3 py-1.5 text-[12px] text-warmgray hover:border-red-400 hover:text-red-500 dark:border-anthracite-600 dark:text-[#9A958B]"
               >
                 Retirer
-              </button>
+              </AsyncButton>
             </article>
           ))}
         </div>

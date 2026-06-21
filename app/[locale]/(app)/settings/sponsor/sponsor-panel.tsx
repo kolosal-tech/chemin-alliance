@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { AsyncButton } from "@/components/AsyncButton";
+import { Spinner } from "@/components/Spinner";
 
 type Sponsor = { name: string; email: string; relation: string };
 const RELATIONS = ["family", "pastor", "priest", "friend"] as const;
@@ -125,19 +127,19 @@ export function SponsorPanel({ initial }: { initial: Sponsor | null }) {
           <button
             type="submit"
             disabled={busy}
-            className="flex-1 rounded-btnlg bg-navy px-4 py-3.5 text-[15px] font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
+            className="flex flex-1 items-center justify-center gap-2 rounded-btnlg bg-navy px-4 py-3.5 text-[15px] font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
           >
+            {busy && <Spinner className="h-4 w-4" />}
             {busy ? tc("loading") : sponsor ? t("update") : t("save")}
           </button>
           {sponsor && (
-            <button
-              type="button"
+            <AsyncButton
               onClick={remove}
               disabled={busy}
               className="rounded-btnlg border border-sand-400 px-4 py-3.5 text-[15px] font-semibold text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
             >
               {t("remove")}
-            </button>
+            </AsyncButton>
           )}
         </div>
       </form>
