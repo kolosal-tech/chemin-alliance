@@ -46,11 +46,27 @@ export default async function MessagesListPage({
         {t("messaging.title")}
       </h1>
       <div className="flex flex-col gap-2.5">
-        {matches.length === 0 && (
-          <p className="rounded-card border border-sand-200 bg-surface p-5 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
-            {t("messaging.noConversations")}
-          </p>
-        )}
+        {matches.length === 0 &&
+          (user.season !== "JOURNEY" ? (
+            // Espace couple (fiancés/mariés/parents) : la messagerie à deux vit
+            // dans l'onglet Couple, pas ici (qui ne liste que les rencontres).
+            // On évite la fausse impression de bug en orientant vers le bon endroit.
+            <div className="rounded-card border border-sand-200 bg-surface p-5 dark:border-anthracite-600 dark:bg-anthracite-800">
+              <p className="text-sm text-warmgray dark:text-[#9A958B]">
+                {t("messaging.coupleSpaceBody")}
+              </p>
+              <Link
+                href="/couple"
+                className="mt-3 inline-block rounded-btnsm bg-navy px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+              >
+                {t("messaging.coupleSpaceCta")}
+              </Link>
+            </div>
+          ) : (
+            <p className="rounded-card border border-sand-200 bg-surface p-5 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
+              {t("messaging.noConversations")}
+            </p>
+          ))}
         {matches.map((m) => {
           const other = m.userAId === user.id ? m.userB : m.userA;
           const lastOther =

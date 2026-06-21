@@ -295,7 +295,9 @@
     "momentLater": "Later",
     "actionFailed": "Action failed. Check your connection and try again.",
     "delete": "Delete",
-    "deleteConfirm": "Delete this message?"
+    "deleteConfirm": "Delete this message?",
+    "coupleSpaceBody": "Your messages with your partner are in the Couple space.",
+    "coupleSpaceCta": "Go to the Couple space"
   },
   "aiCoach": {
     "title": "AI Coach",
@@ -593,7 +595,8 @@
     "confideBody": "Need to lay something down, alone or together? The AI coach listens privately — even your spouse has no access — and verified human coaches are there to go deeper.",
     "confideAi": "Talk to the AI coach (private)",
     "confideHuman": "See human coaches",
-    "matchingOff": "Your profile no longer appears in matching."
+    "matchingOff": "Your profile no longer appears in matching.",
+    "checkinSending": "The Guardian is reflecting…"
   },
   "legal": {
     "terms": "Terms of Service",
@@ -724,7 +727,8 @@
     "sessionDoneTitle": "Time taken",
     "sessionDoneBody": "May this verse stay with you throughout your day.",
     "sessionDoneCta": "Back to the devotional",
-    "journalTitle": "Your last reflection"
+    "journalTitle": "Your last reflection",
+    "showVerse": "Show the verse"
   },
   "maturity": {
     "introLabel": "Front · Back",

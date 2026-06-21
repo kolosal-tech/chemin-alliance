@@ -295,7 +295,9 @@
     "momentLater": "Más tarde",
     "actionFailed": "No se pudo completar la acción. Revisa tu conexión e inténtalo de nuevo.",
     "delete": "Eliminar",
-    "deleteConfirm": "¿Eliminar este mensaje?"
+    "deleteConfirm": "¿Eliminar este mensaje?",
+    "coupleSpaceBody": "Tus mensajes con tu pareja están en el espacio Pareja.",
+    "coupleSpaceCta": "Ir al espacio Pareja"
   },
   "aiCoach": {
     "title": "Coach IA",
@@ -593,7 +595,8 @@
     "confideBody": "¿Necesitas depositar algo, solo/a o en pareja? El coach IA te escucha en privado — ni tu cónyuge tiene acceso — y los coaches humanos verificados están para profundizar.",
     "confideAi": "Hablar con el coach IA (privado)",
     "confideHuman": "Ver coaches humanos",
-    "matchingOff": "Vuestro perfil ya no aparece en los encuentros."
+    "matchingOff": "Vuestro perfil ya no aparece en los encuentros.",
+    "checkinSending": "El Guardián está reflexionando…"
   },
   "legal": {
     "terms": "Condiciones de uso",
@@ -724,7 +727,8 @@
     "sessionDoneTitle": "Tiempo tomado",
     "sessionDoneBody": "Que este versículo te acompañe durante todo el día.",
     "sessionDoneCta": "Volver al devocional",
-    "journalTitle": "Tu última reflexión"
+    "journalTitle": "Tu última reflexión",
+    "showVerse": "Ver el versículo"
   },
   "maturity": {
     "introLabel": "Anverso · Reverso",

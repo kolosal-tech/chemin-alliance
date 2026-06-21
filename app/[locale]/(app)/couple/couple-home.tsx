@@ -4,6 +4,8 @@ import { type FormEvent, useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
+import { AsyncButton } from "@/components/AsyncButton";
+import { Spinner } from "@/components/Spinner";
 
 type CoupleData = {
   space: {
@@ -242,13 +244,12 @@ export function CoupleHome() {
 
         {!engagedCtx &&
           (data.eligibleMatch ? (
-            <button
-              type="button"
+            <AsyncButton
               onClick={() => createFromMatch(data.eligibleMatch!.id)}
               className="mt-5 w-full rounded-btnlg bg-gold py-4 text-base font-semibold text-night"
             >
               {t("marriedCta")} · {data.eligibleMatch.other}
-            </button>
+            </AsyncButton>
           ) : (
             <p className="mt-5 rounded-btn bg-sand-100 px-3.5 py-2.5 text-[12.5px] text-sand-600 dark:bg-anthracite-700 dark:text-[#7E7A72]">
               {t("marriedHint")}
@@ -256,13 +257,12 @@ export function CoupleHome() {
           ))}
 
         {data.season !== "JOURNEY" && (
-          <button
-            type="button"
+          <AsyncButton
             onClick={createExternal}
             className="mt-3 w-full rounded-btnlg bg-navy py-4 text-base font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
           >
             {t(engagedCtx ? "createEngaged" : "createExternal")}
-          </button>
+          </AsyncButton>
         )}
 
         <div className="mt-6 rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
@@ -276,14 +276,13 @@ export function CoupleHome() {
               placeholder={t("codePlaceholder")}
               className="flex-1 rounded-btnsm border border-sand-300 bg-white px-3 py-2.5 font-mono text-sm uppercase tracking-wider text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
             />
-            <button
-              type="button"
+            <AsyncButton
               onClick={join}
               disabled={code.length < 8}
               className="rounded-btnsm bg-navy px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
             >
               {t("join")}
-            </button>
+            </AsyncButton>
           </div>
           {error && (
             <p role="alert" className="mt-2 text-[12.5px] text-danger">
@@ -306,13 +305,12 @@ export function CoupleHome() {
           <p className="font-display text-[18px] italic text-gold-ink dark:text-[#E0C77A]">
             {t("pendingConfirm", { name: s.partner ?? "?" })}
           </p>
-          <button
-            type="button"
+          <AsyncButton
             onClick={confirm}
             className="mt-4 w-full rounded-btnlg bg-gold py-4 text-base font-semibold text-night"
           >
             {t("confirmYes")}
-          </button>
+          </AsyncButton>
         </div>
       </main>
     );
@@ -530,9 +528,11 @@ export function CoupleHome() {
                 busy ||
                 (data.questions ?? []).some((q) => !answers[q.id]?.value)
               }
-              className="mt-4 w-full rounded-btnsm bg-navy py-3 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
+              aria-busy={busy}
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-btnsm bg-navy py-3 text-sm font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
             >
-              {t("send")}
+              {busy && <Spinner className="h-4 w-4" />}
+              {busy ? t("checkinSending") : t("send")}
             </button>
             {checkinError && (
               <p role="alert" className="mt-2 text-[12.5px] text-danger">
@@ -603,29 +603,26 @@ export function CoupleHome() {
 
       {/* Bascule saison */}
       {s.season === "ENGAGED" ? (
-        <button
-          type="button"
+        <AsyncButton
           onClick={() => setSeason("MARRIED")}
           className="mt-3.5 w-full rounded-btnsm border border-gold/50 bg-[#FBF6E9] py-3 text-[13px] font-semibold text-gold-ink dark:border-gold-light/40 dark:bg-[#272117] dark:text-gold-light"
         >
           {t("marriedCta")}
-        </button>
+        </AsyncButton>
       ) : s.season === "MARRIED" ? (
-        <button
-          type="button"
+        <AsyncButton
           onClick={() => setSeason("PARENTS")}
           className="mt-3.5 w-full rounded-btnsm border border-sand-400 py-3 text-[13px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
         >
           {t("childArrived")}
-        </button>
+        </AsyncButton>
       ) : (
-        <button
-          type="button"
+        <AsyncButton
           onClick={() => setSeason("MARRIED")}
           className="mt-3.5 w-full rounded-btnsm border border-sand-400 py-3 text-[13px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
         >
           {t("backToMarried")}
-        </button>
+        </AsyncButton>
       )}
 
       {error && (

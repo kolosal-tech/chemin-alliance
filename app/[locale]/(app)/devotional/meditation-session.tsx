@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { DailyDevotion } from "@/lib/devotional";
+import { Spinner } from "@/components/Spinner";
 
 // Session de méditation immersive : préparation → respiration guidée (cercle
 // animé + verset comme ancre, écran maintenu allumé via Wake Lock, sortie
@@ -19,6 +20,8 @@ export type JournalEntry = {
   devotionId: string;
   reference: string;
   text: string;
+  /** Texte complet du verset, mémorisé pour pouvoir le réafficher plus tard. */
+  verse?: string;
 };
 
 type Step = "intro" | "breathing" | "reflection" | "done";
@@ -123,6 +126,7 @@ export function MeditationSession({
         devotionId: devotion.id,
         reference: devotion.reference,
         text,
+        verse: devotion.verse,
       });
       window.dispatchEvent(new Event("meditation:journal"));
     }
@@ -354,8 +358,10 @@ export function MeditationSession({
             type="button"
             onClick={finish}
             disabled={saving}
-            className="mb-3 w-full rounded-btnlg bg-navy py-4 text-base font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
+            aria-busy={saving}
+            className="mb-3 flex w-full items-center justify-center gap-2 rounded-btnlg bg-navy py-4 text-base font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
           >
+            {saving && <Spinner className="h-4 w-4" />}
             {reflection.trim() ? t("reflectionSave") : t("reflectionSkip")}
           </button>
         </div>

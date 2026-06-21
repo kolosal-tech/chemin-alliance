@@ -295,7 +295,9 @@
     "momentLater": "Plus tard",
     "actionFailed": "Action impossible. Vérifie ta connexion et réessaie.",
     "delete": "Supprimer",
-    "deleteConfirm": "Supprimer ce message ?"
+    "deleteConfirm": "Supprimer ce message ?",
+    "coupleSpaceBody": "Vos échanges à deux se trouvent dans l'espace Couple.",
+    "coupleSpaceCta": "Aller à l'espace Couple"
   },
   "aiCoach": {
     "title": "Coach IA",
@@ -593,7 +595,8 @@
     "confideBody": "Besoin de déposer quelque chose, seul·e ou à deux ? Le coach IA t'écoute en privé — même ton conjoint n'y a pas accès — et les coachs humains vérifiés sont là pour aller en profondeur.",
     "confideAi": "Parler au coach IA (privé)",
     "confideHuman": "Voir les coachs humains",
-    "matchingOff": "Votre profil n'apparaît plus dans les rencontres."
+    "matchingOff": "Votre profil n'apparaît plus dans les rencontres.",
+    "checkinSending": "Le Gardien réfléchit…"
   },
   "legal": {
     "terms": "Conditions d'utilisation",
@@ -724,7 +727,8 @@
     "sessionDoneTitle": "Temps pris",
     "sessionDoneBody": "Que ce verset t'accompagne tout au long de ta journée.",
     "sessionDoneCta": "Revenir au dévotionnel",
-    "journalTitle": "Ta dernière réflexion"
+    "journalTitle": "Ta dernière réflexion",
+    "showVerse": "Voir le verset"
   },
   "maturity": {
     "introLabel": "Recto · Verso",
