@@ -9,7 +9,7 @@ type Axes = {
 };
 
 /**
- * Radar SOBRE — "sujets à approfondir", jamais un score chiffré.
+ * Radar SOBRE - "sujets à approfondir", jamais un score chiffré.
  * Pentagone, remplissage doré translucide.
  */
 export function Radar({ axes }: { axes: Axes }) {

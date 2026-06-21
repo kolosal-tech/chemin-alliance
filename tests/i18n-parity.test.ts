@@ -27,7 +27,7 @@ function flatten(obj: Json, prefix = "", out: Record<string, string> = {}) {
 const ref = flatten(fr as Json);
 const refKeys = Object.keys(ref);
 
-describe("i18n — parite des catalogues (fr = reference)", () => {
+describe("i18n - parite des catalogues (fr = reference)", () => {
   it("fr.json contient au moins 900 cles (garde anti-regression)", () => {
     expect(refKeys.length).toBeGreaterThanOrEqual(900);
   });

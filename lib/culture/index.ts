@@ -1,6 +1,6 @@
 // Base de connaissance culturelle et coutumière du mariage, par région.
 // Objectif : permettre aux agents d'accompagner les us et coutumes du pays
-// de la personne TOUJOURS dans le cadre biblique et théologique — en
+// de la personne TOUJOURS dans le cadre biblique et théologique - en
 // honorant la culture sans la placer au-dessus de l'Écriture.
 //
 // Principe : un même pays abrite plusieurs ethnies. La base donne le cadre
@@ -146,7 +146,7 @@ export function culturalReference(): string {
  */
 export function culturalGuidance(country?: string | null): string {
   const intro = `DIMENSION CULTURELLE & COUTUMIÈRE (toujours dans le cadre biblique et théologique) :
-Tu connais les trajectoires coutumières du mariage selon les régions. Dans un même pays cohabitent plusieurs ethnies : ne présume jamais — DEMANDE à la personne son pays ET son ethnie / sa communauté, puis aide-la à discerner quelles étapes coutumières sont compatibles avec l'Écriture et lesquelles n'en relèvent pas (syncrétisme, rites occultes ou ancestraux, mariage forcé, dot marchandée, polygamie). Tu honores la culture sans jamais la placer au-dessus de la Parole de Dieu.`;
+Tu connais les trajectoires coutumières du mariage selon les régions. Dans un même pays cohabitent plusieurs ethnies : ne présume jamais - DEMANDE à la personne son pays ET son ethnie / sa communauté, puis aide-la à discerner quelles étapes coutumières sont compatibles avec l'Écriture et lesquelles n'en relèvent pas (syncrétisme, rites occultes ou ancestraux, mariage forcé, dot marchandée, polygamie). Tu honores la culture sans jamais la placer au-dessus de la Parole de Dieu.`;
   const region = resolveRegion(country);
   if (region) {
     return `${intro}

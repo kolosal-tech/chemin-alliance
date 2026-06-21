@@ -46,7 +46,7 @@ export type Ruleset = z.infer<typeof rulesetSchema>["ruleset"];
 export type Question = z.infer<typeof questionSchema>;
 export type StageRules = z.infer<typeof stageSchema>;
 
-/** Contexte factuel fourni par l'appelant — le moteur ne lit jamais la DB. */
+/** Contexte factuel fourni par l'appelant - le moteur ne lit jamais la DB. */
 export type ActionContext = {
   locale?: Locale;
   hasActiveReport?: boolean;

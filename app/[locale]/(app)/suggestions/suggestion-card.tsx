@@ -78,7 +78,7 @@ export function SuggestionCard({
           : "border-sand-200 dark:border-anthracite-600"
       }`}
     >
-      {/* Portrait — grand format. Pré-match : empreinte BlurHash (silhouette
+      {/* Portrait - grand format. Pré-match : empreinte BlurHash (silhouette
           floue, aucun octet de la vraie photo) ; dégradé de marque en fallback.
           La photo réelle se révèle en avançant, via le proxy autorisé. */}
       <div

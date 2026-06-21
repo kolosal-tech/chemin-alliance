@@ -3,8 +3,8 @@ import type { Locale } from "@/lib/core-engine";
 import { completeText } from "./llm";
 
 /**
- * Agent 7 — Copilote du Coach Humain.
- * Résumé de parcours pour préparer une séance — UNIQUEMENT si les DEUX
+ * Agent 7 - Copilote du Coach Humain.
+ * Résumé de parcours pour préparer une séance - UNIQUEMENT si les DEUX
  * membres ont donné le consentement COUPLE_COACH_SHARING (vérifié en amont).
  * N'inclut JAMAIS le contenu des messages privés : étape, thèmes couverts,
  * sujets à approfondir, durée. Visibilité COACH_ONLY, révocable.
@@ -30,8 +30,8 @@ export function deterministicSummary(
   const [stageL, sinceL, daysL, coveredL, openL] = L[locale];
   return [
     `${stageL}: ${input.stage} (${sinceL} ${input.sinceDays} ${daysL})`,
-    `${coveredL}: ${input.coveredThemes.join(", ") || "—"}`,
-    `${openL}: ${input.openThemes.join(", ") || "—"}`,
+    `${coveredL}: ${input.coveredThemes.join(", ") || "-"}`,
+    `${openL}: ${input.openThemes.join(", ") || "-"}`,
     input.compatibility
       .map((c) => `• ${c.key}: ${c.status}`)
       .join("\n"),

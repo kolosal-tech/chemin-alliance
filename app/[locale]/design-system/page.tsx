@@ -214,13 +214,13 @@ export default async function DesignSystemPage({
           </div>
         </section>
 
-        {/* Phase 2 — gamification (jauge + modale) */}
+        {/* Phase 2 - gamification (jauge + modale) */}
         <section className={`${card} md:col-span-2`}>
           <span className={label}>{t("gamification")}</span>
           <Phase2Showcase />
         </section>
 
-        {/* Deliverable 4 — profil gamifié, sécurité, filtres */}
+        {/* Deliverable 4 - profil gamifié, sécurité, filtres */}
         <section className={`${card} md:col-span-2`}>
           <span className={label}>{t("deliverable4")}</span>
           <div className="flex flex-wrap items-start gap-6">
@@ -234,7 +234,7 @@ export default async function DesignSystemPage({
           </div>
         </section>
 
-        {/* Deliverable 4 — avis notés */}
+        {/* Deliverable 4 - avis notés */}
         <section className={`${card} md:col-span-2`}>
           <span className={label}>{t("reviews")}</span>
           <ReviewsSection />

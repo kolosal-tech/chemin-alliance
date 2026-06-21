@@ -21,7 +21,7 @@ const LEVEL_COLOR: Record<VisibilityLevel, string> = {
   MANUAL_SHARE: "text-warmgray dark:text-[#9A958B]",
 };
 
-/** Cadenas 5 niveaux — indicateur de visibilité par champ. */
+/** Cadenas 5 niveaux - indicateur de visibilité par champ. */
 export function LockBadge({ level }: { level: VisibilityLevel }) {
   const t = useTranslations("visibility");
   const dots = LEVEL_DOTS[level];

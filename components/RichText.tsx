@@ -1,7 +1,7 @@
 import React from "react";
 
 /**
- * Rendu markdown léger et sûr — sans dépendance externe ni dangerouslySetInnerHTML.
+ * Rendu markdown léger et sûr - sans dépendance externe ni dangerouslySetInnerHTML.
  * Gère ce que produit le Coach IA : titres (#, ##, ###), gras **texte**,
  * listes à puces (* ou -), et paragraphes. Tout le reste est rendu en texte.
  */

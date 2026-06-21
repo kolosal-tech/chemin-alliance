@@ -1,14 +1,14 @@
 /**
- * Guides pratiques — hub + pages de détail.
+ * Guides pratiques - hub + pages de détail.
  *
  * Les TITRES et DESCRIPTIONS courtes vivent dans i18n
  * (`pages.guides.topics.<id>`). Le CORPS éditorial (intro, sections, points à
  * retenir) vit ici, typé, en FR avec repli i18n : les locales sans traduction
- * retombent sur le FR — même choix d'ingénierie que le blog (pas de pipeline
+ * retombent sur le FR - même choix d'ingénierie que le blog (pas de pipeline
  * MDX ni de table Prisma, tout en restant SSR + SEO-ready).
  *
  * `ready: true` → carte cliquable vers `/guides/<id>`.
- * Aucun visuel/logo réel — uniquement line-art + dégradés de placeholder.
+ * Aucun visuel/logo réel - uniquement line-art + dégradés de placeholder.
  */
 import type { MarketingIcon } from "@/components/marketing/icons";
 
@@ -75,7 +75,7 @@ export const guideTopics: GuideTopic[] = [
   },
 ];
 
-/** Corps éditorial par topic — FR obligatoire (repli), EN fourni. */
+/** Corps éditorial par topic - FR obligatoire (repli), EN fourni. */
 export const guideContent: Record<
   string,
   { fr: GuideBody } & Partial<Record<Locale, GuideBody>>
@@ -110,7 +110,7 @@ export const guideContent: Record<
       sections: [
         {
           h: "Clarify your intentions",
-          p: "Before writing to someone, put your intention into words. Are you seeking marriage, discernment, or simply conversation? Saying it honestly — to yourself, then to the other — spares painful misunderstandings.",
+          p: "Before writing to someone, put your intention into words. Are you seeking marriage, discernment, or simply conversation? Saying it honestly - to yourself, then to the other - spares painful misunderstandings.",
         },
         {
           h: "Respect the pace",
@@ -143,7 +143,7 @@ export const guideContent: Record<
         },
         {
           h: "Se préparer vraiment",
-          p: "La préparation au mariage n'est pas une formalité. Elle donne des outils concrets — communiquer, gérer un conflit, décider ensemble — qui servent bien au-delà du jour J.",
+          p: "La préparation au mariage n'est pas une formalité. Elle donne des outils concrets - communiquer, gérer un conflit, décider ensemble - qui servent bien au-delà du jour J.",
         },
       ],
       takeaways: [
@@ -166,7 +166,7 @@ export const guideContent: Record<
         },
         {
           h: "Prepare in earnest",
-          p: "Marriage preparation is not a formality. It gives concrete tools — communicating, handling conflict, deciding together — that serve far beyond the wedding day.",
+          p: "Marriage preparation is not a formality. It gives concrete tools - communicating, handling conflict, deciding together - that serve far beyond the wedding day.",
         },
       ],
       takeaways: [

@@ -7,7 +7,7 @@ import { stats, type StatId } from "@/content/home";
  * c'est possible ; retombe sur les placeholders de `content/home.ts` si la
  * base est injoignable (build/dev) OU si le réel est encore sous le seuil
  * (on ne montre jamais un chiffre marketing en deçà du placeholder).
- * Aucune donnée nominative n'est lue — seulement des `count()`.
+ * Aucune donnée nominative n'est lue - seulement des `count()`.
  */
 async function liveCounts(): Promise<Partial<Record<StatId, number>>> {
   try {

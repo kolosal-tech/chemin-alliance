@@ -5,7 +5,7 @@ function signalsOf(text: string): RiskSignal[] {
   return analyzeRisk(text).signals;
 }
 
-describe("Veilleur 2.0 — détection d'arnaque sentimentale", () => {
+describe("Veilleur 2.0 - détection d'arnaque sentimentale", () => {
   it("détecte les nouveaux tropes d'arnaque", () => {
     expect(
       signalsOf("J'ai gagné un gros lot, on partage l'héritage"),

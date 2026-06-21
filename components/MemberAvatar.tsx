@@ -4,11 +4,11 @@ import { useState } from "react";
 import { BlurhashImage } from "@/components/BlurhashImage";
 
 /**
- * Avatar d'un AUTRE membre — révélation progressive pilotée par le SERVEUR.
+ * Avatar d'un AUTRE membre - révélation progressive pilotée par le SERVEUR.
  *
  * Trois couches empilées, du fond vers l'avant :
  *  1. dégradé de marque (toujours, repli ultime) ;
- *  2. silhouette BlurHash (si empreinte connue) — aucun octet de la vraie photo ;
+ *  2. silhouette BlurHash (si empreinte connue) - aucun octet de la vraie photo ;
  *  3. photo servie par le proxy autorisé `/api/photos/{userId}/view`.
  *
  * Le proxy décide SEUL ce qu'il renvoie selon `Match.stage` (403 pré-match →

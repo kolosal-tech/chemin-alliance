@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { generateCode, hashCode } from "@/lib/sms";
 
-describe("sms — code de vérification", () => {
+describe("sms - code de vérification", () => {
   it("generateCode renvoie 6 chiffres", () => {
     for (let i = 0; i < 50; i++) {
       expect(generateCode()).toMatch(/^\d{6}$/);

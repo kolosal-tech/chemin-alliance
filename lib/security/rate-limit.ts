@@ -6,7 +6,7 @@ import { Redis } from "@upstash/redis";
  * - Si UPSTASH_REDIS_REST_URL + _TOKEN sont configurés : limite PARTAGÉE entre
  *   toutes les instances serverless (Vercel) via Upstash Redis (sorted set).
  * - Sinon (ou en cas d'erreur réseau) : repli sur une limite EN MÉMOIRE par
- *   instance — jamais bloquant, jamais d'erreur exposée à l'utilisateur.
+ *   instance - jamais bloquant, jamais d'erreur exposée à l'utilisateur.
  *
  * La fonction est asynchrone : les appelants doivent `await rateLimit(...)`.
  */
@@ -81,7 +81,7 @@ export async function rateLimit(
       if (!redisFallbackWarned) {
         redisFallbackWarned = true;
         console.warn(
-          "[rate-limit] Upstash Redis injoignable — repli sur la limite EN MÉMOIRE (par instance, non partagée). " +
+          "[rate-limit] Upstash Redis injoignable - repli sur la limite EN MÉMOIRE (par instance, non partagée). " +
             "Vérifier UPSTASH_REDIS_REST_URL (doit être l'URL REST https://…upstash.io, pas redis://…:6379) et UPSTASH_REDIS_REST_TOKEN.",
           err instanceof Error ? err.message : String(err),
         );

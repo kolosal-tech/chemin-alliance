@@ -1,5 +1,5 @@
 /**
- * Motifs sacrés discrets — SVG line-art en dégradé doré→bleu,
+ * Motifs sacrés discrets - SVG line-art en dégradé doré→bleu,
  * opacité .05–.10, arrière-plan (z négatif), flottement léger
  * (désactivé via prefers-reduced-motion en CSS).
  */

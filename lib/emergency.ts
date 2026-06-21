@@ -65,5 +65,5 @@ export function emergencyLine(
   const entry = code ? data.countries?.[code] : undefined;
   if (!entry) return fallback;
   const parts = [entry.general, entry.violence, entry.child].filter(Boolean);
-  return parts.length ? `${parts.join(" · ")} — ${fallback}` : fallback;
+  return parts.length ? `${parts.join(" · ")} - ${fallback}` : fallback;
 }

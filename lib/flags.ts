@@ -7,7 +7,7 @@
  */
 
 /**
- * Phase 2 — gate du profil avant le matching. OFF par défaut.
+ * Phase 2 - gate du profil avant le matching. OFF par défaut.
  * Quand ON : `getSuggestions` exige un profil 100 % complet
  * (cf. `lib/profile-completion`) ; la page Suggestions affiche la jauge
  * d'onboarding + la modale « profil incomplet ».

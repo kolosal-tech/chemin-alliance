@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 /**
  * Ré-applique la classe `dark` après chaque navigation.
  * Le changement de locale re-rend le layout racine et React peut
- * réinitialiser la className de <html> — ce composant la restaure.
+ * réinitialiser la className de <html> - ce composant la restaure.
  */
 export function ThemeApplier() {
   const pathname = usePathname();

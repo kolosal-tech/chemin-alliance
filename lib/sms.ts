@@ -6,7 +6,7 @@ import { env } from "@/lib/env";
  *
  * Twilio Verify gère lui-même la génération du code, l'envoi SMS, la livraison
  * MONDIALE (essentiel pour Afrique de l'Ouest / Brésil) et la protection contre
- * la fraude — pas de numéro à provisionner ni d'enregistrement A2P.
+ * la fraude - pas de numéro à provisionner ni d'enregistrement A2P.
  *
  * DORMANT par défaut : sans les 3 variables Twilio, on retombe sur un code
  * auto-géré, seulement loggé côté serveur (mode dev). GRATUIT côté utilisateur.
@@ -26,7 +26,7 @@ export function generateCode(): string {
   return String(crypto.randomInt(0, 1_000_000)).padStart(6, "0");
 }
 
-/** Empreinte HMAC du code (repli dev — jamais stocké en clair). */
+/** Empreinte HMAC du code (repli dev - jamais stocké en clair). */
 export function hashCode(code: string): string {
   return crypto.createHmac("sha256", env.JWT_SECRET).update(code).digest("hex");
 }

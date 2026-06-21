@@ -7,7 +7,7 @@ import {
 
 const cp = (n: number) => String.fromCodePoint(n);
 
-describe("sanitizeText — strip controle/format (par propriete Unicode)", () => {
+describe("sanitizeText - strip controle/format (par propriete Unicode)", () => {
   // Code points invisibles/format cites par la revue adversariale.
   const hostile = [
     0x0007, // BEL (C0)
@@ -48,7 +48,7 @@ describe("sanitizeText — strip controle/format (par propriete Unicode)", () =>
   });
 });
 
-describe("sensitiveText — semantique PATCH 3-etats", () => {
+describe("sensitiveText - semantique PATCH 3-etats", () => {
   const s = sensitiveText(100);
 
   it("undefined -> undefined (champ absent : ne pas modifier)", () => {

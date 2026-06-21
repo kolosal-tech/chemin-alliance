@@ -2,9 +2,9 @@ import { z } from "zod";
 import { callLLM } from "@/lib/llm/gateway";
 
 /**
- * Appel LLM mutualisé pour tous les agents — délègue à la passerelle unique
+ * Appel LLM mutualisé pour tous les agents - délègue à la passerelle unique
  * (matrice de modèles, purge PII, opt-out collecte, fallback en chaîne).
- * Règle de la maison : chaque agent DOIT fournir un fallback déterministe —
+ * Règle de la maison : chaque agent DOIT fournir un fallback déterministe -
  * l'application complète fonctionne sans clé API et sans réseau.
  * Les agents relèvent de l'étape "accompagnement" (synthèse, vigilance).
  */

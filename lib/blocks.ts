@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
 
-// Blocage user-à-user — GRATUIT À VIE (doctrine, lib/payments/entitlements).
+// Blocage user-à-user - GRATUIT À VIE (doctrine, lib/payments/entitlements).
 // Un blocage est SYMÉTRIQUE dans ses effets : les deux personnes deviennent
 // mutuellement invisibles et ne peuvent plus échanger, quel que soit l'auteur.
 

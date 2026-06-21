@@ -5,7 +5,7 @@ import { canSeeField } from "@/lib/visibility";
 import { blurredVariantPath, signedPhotoUrl } from "@/lib/storage";
 
 /**
- * Proxy AUTORISÉ de la photo d'un AUTRE membre — cœur du pipeline sécurisé.
+ * Proxy AUTORISÉ de la photo d'un AUTRE membre - cœur du pipeline sécurisé.
  *
  * La photo d'autrui ne transite JAMAIS en clair vers un viewer non autorisé :
  * - pas de match actif → 403 (le client n'affiche que la silhouette BlurHash) ;

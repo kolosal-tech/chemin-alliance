@@ -74,7 +74,7 @@ function systemPrompt(
  * 1. Garde-fou sujets sensibles -> redirection coach humain (AVANT tout LLM).
  * 2. Sinon passerelle LLM unique (matrice par étape, purge PII, opt-out de
  *    collecte, fallback en chaîne) ; toute panne retombe sur le fallback
- *    déterministe — jamais d'erreur technique exposée à l'utilisateur.
+ *    déterministe - jamais d'erreur technique exposée à l'utilisateur.
  */
 export async function askCoach(
   question: string,

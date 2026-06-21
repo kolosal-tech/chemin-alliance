@@ -1,7 +1,7 @@
 import { test, expect, type Page, type Locator } from "@playwright/test";
 
 /**
- * AUDIT CHEMIN D'ALLIANCE — Matrice des 4 profils.
+ * AUDIT CHEMIN D'ALLIANCE - Matrice des 4 profils.
  *
  * Selecteurs cales sur le code reel (verifie le 2026-06-21) :
  *  - login : /[locale]/login, input[name="email"] / input[name="password"]
@@ -47,13 +47,13 @@ type Scenario = {
 const SCENARIOS: Scenario[] = [
   {
     key: "single-male-evangelical",
-    label: "Célibataire A — Homme évangélique",
+    label: "Célibataire A - Homme évangélique",
     email: env("PROFILE_A_EMAIL", "jonathan@demo.chemin-alliance.app"),
     kind: "single",
   },
   {
     key: "single-female-catholic",
-    label: "Célibataire B — Femme catholique",
+    label: "Célibataire B - Femme catholique",
     email: env("PROFILE_B_EMAIL", "marie-claire@demo.chemin-alliance.app"),
     kind: "single",
   },
@@ -105,7 +105,7 @@ async function login(page: Page, email: string): Promise<void> {
   });
 }
 
-test.describe("Audit Chemin d'Alliance — Matrice des 4 profils (mobile 390x844)", () => {
+test.describe("Audit Chemin d'Alliance - Matrice des 4 profils (mobile 390x844)", () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize(MOBILE);
   });
@@ -118,7 +118,7 @@ test.describe("Audit Chemin d'Alliance — Matrice des 4 profils (mobile 390x844
         await page.goto(`/${LOCALE}/suggestions`);
         await expect(page).toHaveURL(/\/suggestions/);
       } else {
-        // Espace couple (fiances/maries) — hors matching.
+        // Espace couple (fiances/maries) - hors matching.
         const res = await page.goto(`/${LOCALE}/couple`);
         expect(res?.status() ?? 200).toBeLessThan(400);
       }
@@ -146,7 +146,7 @@ test.describe("Audit Chemin d'Alliance — Matrice des 4 profils (mobile 390x844
     const count = await silhouettes.count();
     test.skip(
       count === 0,
-      "Aucune suggestion pour ce compte (seed/match requis) — rien a auditer.",
+      "Aucune suggestion pour ce compte (seed/match requis) - rien a auditer.",
     );
 
     // 1) Silhouette BlurHash visible (le portrait n'est jamais brut).
@@ -164,7 +164,7 @@ test.describe("Audit Chemin d'Alliance — Matrice des 4 profils (mobile 390x844
     await page.screenshot({ path: "test-results/shots/blur-default.png" });
   });
 
-  test("Watchman — message d'arnaque -> banniere de vigilance", async ({
+  test("Watchman - message d'arnaque -> banniere de vigilance", async ({
     page,
   }) => {
     const matchId = process.env.MATCH_ID;

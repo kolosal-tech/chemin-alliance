@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 /**
- * Filtres de suggestions — schéma Zod + logique pure (testable, sans I/O).
+ * Filtres de suggestions - schéma Zod + logique pure (testable, sans I/O).
  *
  * Les filtres transitent par l'URL (searchParams, GET) : aucune Server Action
  * ni endpoint mutant n'est créé, donc pas de surface de rate-limit nouvelle.
@@ -53,7 +53,7 @@ export function applyFilters<T extends FilterableProfile>(
   return list.filter((p) => matchesFilters(p, f));
 }
 
-/** Nombre de filtres actifs — alimente le badge du tiroir. */
+/** Nombre de filtres actifs - alimente le badge du tiroir. */
 export function activeFilterCount(f: Filters): number {
   let n = 0;
   if (f.ageMin != null) n++;

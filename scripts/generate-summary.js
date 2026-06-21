@@ -208,8 +208,8 @@ function render(data) {
   const generatedAt = new Date().toLocaleString("fr-FR");
 
   const PROFILE_LABELS = [
-    "Célibataire A — Homme évangélique",
-    "Célibataire B — Femme catholique",
+    "Célibataire A - Homme évangélique",
+    "Célibataire B - Femme catholique",
     "Fiancés (Couple C&D)",
     "Mariés (Couple E&F)",
   ];
@@ -252,7 +252,7 @@ function render(data) {
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Rapport QA — Chemin d'Alliance</title>
+<title>Rapport QA - Chemin d'Alliance</title>
 <style>
   :root { --brand:${BRAND}; --ink:#1c1a17; --muted:#6b6259; --line:#ece6dc; --bg:#faf7f1; }
   * { box-sizing:border-box; }
@@ -299,7 +299,7 @@ function render(data) {
 <body>
   <div class="wrap">
     <header class="hero">
-      <h1>Rapport d'audit QA — Chemin d'Alliance</h1>
+      <h1>Rapport d'audit QA - Chemin d'Alliance</h1>
       <p>Genere le ${escapeHtml(generatedAt)} &middot; source : ${escapeHtml(path.basename(RESULTS_PATH))}</p>
       <div class="verdict">${overallMeta.icon}&nbsp; Verdict global : ${overallMeta.label} &middot; ${rate}% de reussite</div>
     </header>

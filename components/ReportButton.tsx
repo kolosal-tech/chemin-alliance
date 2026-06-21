@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { AsyncButton } from "@/components/AsyncButton";
 
 /**
- * Signaler une personne — GRATUIT À VIE, jamais derrière un paywall (invariant
+ * Signaler une personne - GRATUIT À VIE, jamais derrière un paywall (invariant
  * doctrinal). Demande une courte description, confidentielle. Modal via portail
  * vers document.body (l'en-tête de conversation porte `.glass` = bloc de
  * confinement pour position:fixed).

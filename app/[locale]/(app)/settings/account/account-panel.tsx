@@ -6,8 +6,7 @@ import { Spinner } from "@/components/Spinner";
 
 const inputCls =
   "rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
-const labelCls =
-  "lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]";
+const labelCls = "lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]";
 const btnCls =
   "rounded-btnsm bg-navy py-3 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900";
 
@@ -132,7 +131,9 @@ export function AccountPanel({
               autoComplete="current-password"
               required
               value={pwd.current}
-              onChange={(e) => setPwd((s) => ({ ...s, current: e.target.value }))}
+              onChange={(e) =>
+                setPwd((s) => ({ ...s, current: e.target.value }))
+              }
               className={inputCls}
             />
           </label>
@@ -154,7 +155,9 @@ export function AccountPanel({
               autoComplete="new-password"
               required
               value={pwd.confirm}
-              onChange={(e) => setPwd((s) => ({ ...s, confirm: e.target.value }))}
+              onChange={(e) =>
+                setPwd((s) => ({ ...s, confirm: e.target.value }))
+              }
               className={inputCls}
             />
           </label>
@@ -190,7 +193,9 @@ export function AccountPanel({
               autoComplete="email"
               required
               value={eml.newEmail}
-              onChange={(e) => setEml((s) => ({ ...s, newEmail: e.target.value }))}
+              onChange={(e) =>
+                setEml((s) => ({ ...s, newEmail: e.target.value }))
+              }
               className={inputCls}
             />
           </label>
@@ -201,7 +206,9 @@ export function AccountPanel({
               autoComplete="current-password"
               required
               value={eml.password}
-              onChange={(e) => setEml((s) => ({ ...s, password: e.target.value }))}
+              onChange={(e) =>
+                setEml((s) => ({ ...s, password: e.target.value }))
+              }
               className={inputCls}
             />
           </label>

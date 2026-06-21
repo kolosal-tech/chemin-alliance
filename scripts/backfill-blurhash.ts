@@ -5,7 +5,7 @@
  * l'original (URL signée), calcule l'empreinte BlurHash (→ `User.photoBlurhash`)
  * et génère + upload la variante moyennement floutée (`<uuid>.blur.jpg`).
  *
- * Script autonome (pas d'alias `@`, pas de `server-only`) — lancer avec l'ENV de
+ * Script autonome (pas d'alias `@`, pas de `server-only`) - lancer avec l'ENV de
  * PROD (DATABASE_URL + SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY +
  * SUPABASE_PHOTO_BUCKET) après avoir appliqué la migration `photoBlurhash` :
  *
@@ -13,7 +13,7 @@
  *
  * Idempotent (ne retraite pas un user déjà pourvu) et best-effort par user (une
  * photo illisible n'arrête pas le lot). Les photos non traitées restent en
- * fallback dégradé côté UI — aucune régression.
+ * fallback dégradé côté UI - aucune régression.
  */
 import { PrismaClient } from "@prisma/client";
 import { encode } from "blurhash";

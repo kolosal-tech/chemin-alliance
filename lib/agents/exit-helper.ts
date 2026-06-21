@@ -2,7 +2,7 @@ import type { Locale } from "@/lib/core-engine";
 import { completeText } from "./llm";
 
 /**
- * Agent 5 — Sortie Digne. Deux rôles :
+ * Agent 5 - Sortie Digne. Deux rôles :
  * 1. détecter un silence asymétrique qui s'installe (anti-ghosting actif) ;
  * 2. aider à formuler une clôture respectueuse personnalisée.
  */

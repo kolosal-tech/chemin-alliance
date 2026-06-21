@@ -12,10 +12,13 @@ type Review = {
   narrative: string | null;
 };
 
-/** Agent 3 — sujets jamais abordés (déterministe, doctrine YAML). */
+/** Agent 3 - sujets jamais abordés (déterministe, doctrine YAML). */
 export function FacilitatorPanel({ matchId }: { matchId: string }) {
   const t = useTranslations("agents.facil");
-  const [data, setData] = useState<{ themes: string[]; suggestions: Suggestion[] } | null>(null);
+  const [data, setData] = useState<{
+    themes: string[];
+    suggestions: Suggestion[];
+  } | null>(null);
 
   useEffect(() => {
     fetch(`/api/agents/facilitator?matchId=${matchId}`)
@@ -27,7 +30,9 @@ export function FacilitatorPanel({ matchId }: { matchId: string }) {
   if (!data) return null;
   return (
     <section className="mt-5">
-      <h2 className="lbl mb-2.5 text-[9.5px] text-gold-deep dark:text-gold-light">{t("title")}</h2>
+      <h2 className="lbl mb-2.5 text-[9.5px] text-gold-deep dark:text-gold-light">
+        {t("title")}
+      </h2>
       {data.suggestions.length === 0 ? (
         <p className="rounded-btn bg-[#EAF0EB] px-3.5 py-2.5 text-[13px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
           {t("none")}
@@ -35,8 +40,13 @@ export function FacilitatorPanel({ matchId }: { matchId: string }) {
       ) : (
         <div className="flex flex-col gap-2">
           {data.suggestions.map((s) => (
-            <div key={s.id} className="flex items-center gap-2.5 rounded-btn border border-dashed border-gold/50 bg-surface px-3.5 py-3 dark:border-gold-light/40 dark:bg-anthracite-800">
-              <span className="lbl flex-none text-[8px] text-gold-deep dark:text-gold-light">{s.theme}</span>
+            <div
+              key={s.id}
+              className="flex items-center gap-2.5 rounded-btn border border-dashed border-gold/50 bg-surface px-3.5 py-3 dark:border-gold-light/40 dark:bg-anthracite-800"
+            >
+              <span className="lbl flex-none text-[8px] text-gold-deep dark:text-gold-light">
+                {s.theme}
+              </span>
               <span className="flex-1 font-display text-[13.5px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
                 {s.text}
               </span>
@@ -48,7 +58,7 @@ export function FacilitatorPanel({ matchId }: { matchId: string }) {
   );
 }
 
-/** Agent 4 — bilan d'étape privé. */
+/** Agent 4 - bilan d'étape privé. */
 export function ReviewPanel({ matchId }: { matchId: string }) {
   const t = useTranslations("agents.review");
   const [review, setReview] = useState<Review | null>(null);
@@ -78,21 +88,35 @@ export function ReviewPanel({ matchId }: { matchId: string }) {
       ) : (
         <div className="rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
           <div className="mb-1 flex items-baseline justify-between">
-            <h3 className="font-display text-[18px] text-night dark:text-[#ECE7DD]">{t("title")}</h3>
-            <span className="text-[10px] text-sand-500 dark:text-[#65625B]">{t("private")}</span>
+            <h3 className="font-display text-[18px] text-night dark:text-[#ECE7DD]">
+              {t("title")}
+            </h3>
+            <span className="text-[10px] text-sand-500 dark:text-[#65625B]">
+              {t("private")}
+            </span>
           </div>
           {review.myHighlights.length === 0 ? (
-            <p className="text-[13px] text-warmgray dark:text-[#9A958B]">{t("empty")}</p>
+            <p className="text-[13px] text-warmgray dark:text-[#9A958B]">
+              {t("empty")}
+            </p>
           ) : (
             <>
               <div className="mt-2 flex flex-col gap-2 text-[13px]">
                 <div>
-                  <span className="lbl text-[8.5px] text-sage">{t("aligned")}</span>
-                  <p className="text-ink dark:text-[#CFCAC0]">{review.alignedThemes.join(" · ") || "—"}</p>
+                  <span className="lbl text-[8.5px] text-sage">
+                    {t("aligned")}
+                  </span>
+                  <p className="text-ink dark:text-[#CFCAC0]">
+                    {review.alignedThemes.join(" · ") || "-"}
+                  </p>
                 </div>
                 <div>
-                  <span className="lbl text-[8.5px] text-amberink">{t("open")}</span>
-                  <p className="text-ink dark:text-[#CFCAC0]">{review.openThemes.join(" · ") || "—"}</p>
+                  <span className="lbl text-[8.5px] text-amberink">
+                    {t("open")}
+                  </span>
+                  <p className="text-ink dark:text-[#CFCAC0]">
+                    {review.openThemes.join(" · ") || "-"}
+                  </p>
                 </div>
               </div>
               {review.narrative && (

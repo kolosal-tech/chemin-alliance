@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "@/lib/db";
 
-// Webhook Stripe — met à jour User.subscriptionStatus. Signature vérifiée
+// Webhook Stripe - met à jour User.subscriptionStatus. Signature vérifiée
 // (STRIPE_WEBHOOK_SECRET). Corps BRUT requis -> req.text(), pas de parsing.
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -21,7 +21,7 @@ async function setStatusByCustomer(customerId: string, status: string) {
 export async function POST(req: Request) {
   if (!stripe || !webhookSecret) {
     console.error(
-      "[webhooks/stripe] événement reçu mais billing non configuré — STRIPE_SECRET_KEY ou STRIPE_WEBHOOK_SECRET manquant en prod",
+      "[webhooks/stripe] événement reçu mais billing non configuré - STRIPE_SECRET_KEY ou STRIPE_WEBHOOK_SECRET manquant en prod",
     );
     return NextResponse.json({ error: "BILLING_DISABLED" }, { status: 503 });
   }
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     event = stripe.webhooks.constructEvent(body, sig ?? "", webhookSecret);
   } catch (err) {
     console.error(
-      "[webhooks/stripe] signature invalide — STRIPE_WEBHOOK_SECRET ne correspond pas au secret de l'endpoint (ou mauvais mode test/live)",
+      "[webhooks/stripe] signature invalide - STRIPE_WEBHOOK_SECRET ne correspond pas au secret de l'endpoint (ou mauvais mode test/live)",
       err,
     );
     return NextResponse.json({ error: "BAD_SIGNATURE" }, { status: 400 });

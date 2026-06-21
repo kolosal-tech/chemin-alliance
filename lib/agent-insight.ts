@@ -2,9 +2,9 @@ import { encryptField, decryptField } from "./security/crypto";
 
 /**
  * Chiffrement applicatif du champ AgentInsight.dataJson (signaux de vigilance,
- * résumés coach, portraits…) — données potentiellement sensibles stockées en
+ * résumés coach, portraits…) - données potentiellement sensibles stockées en
  * clair jusqu'ici (RGPD). On sérialise puis chiffre ; le ciphertext (une chaîne)
- * tient dans la colonne Json existante — aucune migration de schéma requise.
+ * tient dans la colonne Json existante - aucune migration de schéma requise.
  *
  * Compat rétro : les lignes legacy sont des OBJETS JSON en clair. Toute valeur
  * de type string est donc un payload chiffré ; tout objet est du legacy renvoyé

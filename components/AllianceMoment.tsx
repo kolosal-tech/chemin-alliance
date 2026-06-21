@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 
 /**
- * « Moment d'alliance » — temps fort, sobre et lumineux, affiché quand une
+ * « Moment d'alliance » - temps fort, sobre et lumineux, affiché quand une
  * alliance devient mutuelle (acceptation d'une demande). Notre équivalent du
  * « match » des concurrents, à notre façon : nuit + halo doré + monogramme.
  * Sans état serveur : monté ponctuellement par l'appelant.

@@ -6,7 +6,7 @@ import {
   CULTURE_REGIONS,
 } from "@/lib/culture";
 
-describe("culture — résolution pays → région", () => {
+describe("culture - résolution pays → région", () => {
   it("Afrique de l'Ouest", () => {
     expect(resolveRegion("Côte d'Ivoire")?.key).toBe("afrique_ouest");
     expect(resolveRegion("Sénégal")?.key).toBe("afrique_ouest");
@@ -55,7 +55,7 @@ describe("culture — résolution pays → région", () => {
   });
 });
 
-describe("culture — guidance pour le prompt", () => {
+describe("culture - guidance pour le prompt", () => {
   it("sans pays : demande le pays/ethnie et liste toutes les régions", () => {
     const g = culturalGuidance();
     expect(g).toMatch(/DEMANDE/);

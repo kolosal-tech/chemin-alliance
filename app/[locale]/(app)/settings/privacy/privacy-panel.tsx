@@ -198,7 +198,7 @@ export function PrivacyPanel({
         </span>
       </Link>
 
-      {/* Anti-malaise — gratuit, jamais premium */}
+      {/* Anti-malaise - gratuit, jamais premium */}
       <section className="mb-4 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
         <div className="flex items-start gap-3">
           <div className="flex-1">
@@ -305,7 +305,7 @@ export function PrivacyPanel({
         </p>
       )}
 
-      {/* RGPD — export et suppression, jamais cachés */}
+      {/* RGPD - export et suppression, jamais cachés */}
       <PhoneVerify />
 
       <BlockedUsers />

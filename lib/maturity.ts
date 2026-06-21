@@ -1,5 +1,5 @@
 /**
- * Auto-bilan de maturité — « recto » : travail sur soi avant d'accueillir
+ * Auto-bilan de maturité - « recto » : travail sur soi avant d'accueillir
  * l'autre (demande bêta : questionnaire franc au départ qui ORIENTE, jamais ne
  * bloque). Logique PURE et testée. Aucune écriture, aucune date.
  *

@@ -7,7 +7,7 @@ import { AsyncButton } from "@/components/AsyncButton";
 type Blocked = { id: string; displayName: string };
 
 /**
- * Gestion des personnes bloquées — confidentialité GRATUITE à vie.
+ * Gestion des personnes bloquées - confidentialité GRATUITE à vie.
  * Liste + déblocage. Affiché dans les réglages de confidentialité.
  */
 export function BlockedUsers() {

@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { rateLimit } from "@/lib/security/rate-limit";
 
 // Sans UPSTASH_* en environnement de test, rateLimit utilise le repli mémoire.
-describe("rate-limit — repli mémoire", () => {
+describe("rate-limit - repli mémoire", () => {
   it("autorise jusqu'à la limite puis bloque", async () => {
     const key = `test:${Date.now()}:${Math.random()}`;
     const allowed: boolean[] = [];

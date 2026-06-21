@@ -4,7 +4,7 @@ import { parse } from "yaml";
 import { z } from "zod";
 import type { Locale } from "@/lib/core-engine";
 
-// Dévotionnel quotidien — verset + méditation + question + prière, chargé depuis
+// Dévotionnel quotidien - verset + méditation + question + prière, chargé depuis
 // rulesets/daily-devotionals.yaml (tronc commun, doctrine-agnostique). Le
 // dévotionnel du jour est déterministe (jour de l'année). Le streak (jours
 // consécutifs) est porté par User (lastDevotionDate / currentStreak / longest).

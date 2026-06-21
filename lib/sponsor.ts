@@ -1,7 +1,7 @@
 import { randomBytes } from "node:crypto";
 
 /**
- * Parrain / Marraine — helpers purs (testables).
+ * Parrain / Marraine - helpers purs (testables).
  * Voir docs/superpowers/specs/2026-06-18-parrain-marraine-design.md
  */
 

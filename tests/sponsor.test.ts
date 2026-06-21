@@ -6,7 +6,7 @@ import {
   statusForDecision,
 } from "@/lib/sponsor";
 
-describe("sponsor — helpers parrain/marraine", () => {
+describe("sponsor - helpers parrain/marraine", () => {
   it("relations valides reconnues, invalides rejetées", () => {
     for (const r of SPONSOR_RELATIONS) expect(isSponsorRelation(r)).toBe(true);
     for (const r of ["spouse", "", "FAMILY", "boss"]) {

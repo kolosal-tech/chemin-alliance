@@ -22,7 +22,7 @@ function keyPaths(obj: unknown, prefix = ""): string[] {
   );
 }
 
-describe("content/home — intégrité de la config", () => {
+describe("content/home - intégrité de la config", () => {
   it("stats : 4 entrées, ids uniques", () => {
     expect(stats).toHaveLength(4);
     expect(new Set(stats.map((s) => s.id)).size).toBe(4);
@@ -54,7 +54,7 @@ describe("content/home — intégrité de la config", () => {
   });
 });
 
-describe("i18n — parité des clés sur les 4 langues", () => {
+describe("i18n - parité des clés sur les 4 langues", () => {
   const refHome = keyPaths(fr.home).sort();
   const refPages = keyPaths(fr.pages).sort();
 
@@ -75,7 +75,7 @@ describe("i18n — parité des clés sur les 4 langues", () => {
   });
 });
 
-describe("i18n — chaque id de config a sa traduction FR", () => {
+describe("i18n - chaque id de config a sa traduction FR", () => {
   it("journeySteps → home.journey.steps.<id>", () => {
     for (const s of journeySteps) {
       expect(
@@ -104,7 +104,7 @@ describe("i18n — chaque id de config a sa traduction FR", () => {
   });
 });
 
-describe("content/blog — lookup & repli i18n", () => {
+describe("content/blog - lookup & repli i18n", () => {
   it("getPost trouve un slug connu, undefined sinon", () => {
     expect(getPost(posts[0].slug)).toBeDefined();
     expect(getPost("slug-inexistant")).toBeUndefined();

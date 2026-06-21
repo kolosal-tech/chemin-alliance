@@ -91,7 +91,7 @@ const fr: Record<LegalKey, LegalDoc> = {
         ],
       },
       {
-        h: "2. Données sensibles — article 9 RGPD",
+        h: "2. Données sensibles - article 9 RGPD",
         p: [
           "Vos convictions religieuses, votre situation familiale, vos témoignages et vos messages sont des données sensibles au sens de l'article 9 du RGPD. Elles ne sont traitées qu'avec votre consentement explicite, recueilli à l'inscription et révocable à tout moment.",
           "Chaque champ sensible possède un niveau de visibilité (5 niveaux) que vous contrôlez. Témoignage, église locale, vision familiale et messages sont chiffrés au repos (AES-256-GCM).",
@@ -100,7 +100,7 @@ const fr: Record<LegalKey, LegalDoc> = {
       {
         h: "3. Ce que nous collectons",
         p: [
-          "Compte : email, prénom affiché, âge, mot de passe (haché Argon2id — jamais en clair). Profil : tradition chrétienne, dénomination, ministère, situation familiale, intention. Usage : réponses du parcours, messages (chiffrés), check-ins du couple (privés, jamais visibles du conjoint), productions des agents IA vous concernant.",
+          "Compte : email, prénom affiché, âge, mot de passe (haché Argon2id - jamais en clair). Profil : tradition chrétienne, dénomination, ministère, situation familiale, intention. Usage : réponses du parcours, messages (chiffrés), check-ins du couple (privés, jamais visibles du conjoint), productions des agents IA vous concernant.",
         ],
       },
       {
@@ -277,7 +277,7 @@ const en: Record<LegalKey, LegalDoc> = {
         ],
       },
       {
-        h: "2. Sensitive data — GDPR article 9",
+        h: "2. Sensitive data - GDPR article 9",
         p: [
           "Your religious beliefs, family situation, testimonies and messages are sensitive data under GDPR article 9. They are processed only with your explicit consent, given at sign-up and revocable at any time.",
           "Every sensitive field has a visibility level (5 levels) under your control. Testimony, local church, family vision and messages are encrypted at rest (AES-256-GCM).",
@@ -286,7 +286,7 @@ const en: Record<LegalKey, LegalDoc> = {
       {
         h: "3. What we collect",
         p: [
-          "Account: email, display name, age, password (Argon2id hash — never plaintext). Profile: Christian tradition, denomination, ministry, family situation, intention. Usage: journey answers, messages (encrypted), couple check-ins (private, never visible to your spouse), AI agent outputs about you.",
+          "Account: email, display name, age, password (Argon2id hash - never plaintext). Profile: Christian tradition, denomination, ministry, family situation, intention. Usage: journey answers, messages (encrypted), couple check-ins (private, never visible to your spouse), AI agent outputs about you.",
         ],
       },
       {
@@ -357,7 +357,7 @@ const en: Record<LegalKey, LegalDoc> = {
       {
         h: "4. Why there's no consent banner",
         p: [
-          "Because we use only strictly necessary cookies — exempt from consent under the ePrivacy directive and data-protection guidance — no intrusive banner is forced on you. Privacy is the default, not something you have to win back.",
+          "Because we use only strictly necessary cookies - exempt from consent under the ePrivacy directive and data-protection guidance - no intrusive banner is forced on you. Privacy is the default, not something you have to win back.",
         ],
       },
       {
@@ -461,7 +461,7 @@ const es: Record<LegalKey, LegalDoc> = {
         ],
       },
       {
-        h: "2. Datos sensibles — artículo 9 RGPD",
+        h: "2. Datos sensibles - artículo 9 RGPD",
         p: [
           "Tus convicciones religiosas, situación familiar, testimonios y mensajes son datos sensibles (art. 9 RGPD). Solo se tratan con tu consentimiento explícito, revocable en todo momento.",
           "Cada campo sensible tiene un nivel de visibilidad (5 niveles) bajo tu control. Testimonio, iglesia local, visión familiar y mensajes se cifran en reposo (AES-256-GCM).",
@@ -645,7 +645,7 @@ const pt: Record<LegalKey, LegalDoc> = {
         ],
       },
       {
-        h: "2. Dados sensíveis — artigo 9.º RGPD",
+        h: "2. Dados sensíveis - artigo 9.º RGPD",
         p: [
           "As tuas convicções religiosas, situação familiar, testemunhos e mensagens são dados sensíveis (art. 9.º RGPD). Só são tratados com o teu consentimento explícito, revogável a qualquer momento.",
           "Cada campo sensível tem um nível de visibilidade (5 níveis) sob o teu controlo. Testemunho, igreja local, visão familiar e mensagens são cifrados em repouso (AES-256-GCM).",

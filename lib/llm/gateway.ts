@@ -10,10 +10,16 @@ import { recordLlmCall } from "./telemetry";
 //  - purge des PII (coordonnées) AVANT envoi à un modèle tiers,
 //  - fallback EN CHAÎNE : on essaie les modèles dans l'ordre, puis l'appelant
 //    bascule sur son fallback déterministe (null) si tout échoue,
-//  - timeout par appel (AbortController) — aucune erreur exposée à l'utilisateur,
+//  - timeout par appel (AbortController) - aucune erreur exposée à l'utilisateur,
 //  - télémétrie par appel (coût/latence/fallback) sans aucune donnée perso.
 
 const TIMEOUT_MS = 20000;
+
+// Garde-fou typographique : aucun module IA (agents + Coach IA) ne doit produire
+// de tiret cadratin (U+2014). On l'injecte dans CHAQUE prompt système ici, au
+// point de passage unique. Cette consigne ne contient elle-même aucun U+2014.
+const EMDASH_BAN =
+  "\n\n[STRICT BAN] Interdiction formelle d'utiliser le tiret cadratin (caractere Unicode U+2014, dit em dash) dans le document genere. Utilise uniquement le tiret standard \"-\", la virgule, les parentheses ou les deux-points selon la grammaire.";
 
 export type LlmRequest = {
   system: string;
@@ -145,7 +151,7 @@ export async function callLLM(req: LlmRequest): Promise<string | null> {
   const redact = req.redact ?? true;
   const rs = redact ? redactPII(req.system) : { text: req.system, count: 0 };
   const ru = redact ? redactPII(req.user) : { text: req.user, count: 0 };
-  const system = rs.text;
+  const system = rs.text + EMDASH_BAN;
   const user = ru.text;
   const redactedPii = rs.count + ru.count;
 

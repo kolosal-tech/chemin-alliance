@@ -1,5 +1,5 @@
 /**
- * Listes de choix pour les champs de profil — alimentent les menus déroulants et
+ * Listes de choix pour les champs de profil - alimentent les menus déroulants et
  * sélecteurs à puces du formulaire (au lieu de la saisie libre, plus longue et
  * source d'incohérences). Le matching compare ces valeurs par égalité de chaîne
  * (lib/matching.ts) : un vocabulaire fermé AMÉLIORE donc le scoring.

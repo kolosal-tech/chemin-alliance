@@ -55,7 +55,7 @@ export const PATCH = withErrors(async (req: Request) => {
   };
   // upsert (et non update) : certains comptes anciens n'ont pas encore de ligne
   // RelationshipProfile (creee a l'inscription seulement depuis un correctif
-  // ulterieur) — un update leverait P2025 et l'enregistrement du profil echouait.
+  // ulterieur) - un update leverait P2025 et l'enregistrement du profil echouait.
   await prisma.relationshipProfile.upsert({
     where: { userId: user.id },
     update: data,

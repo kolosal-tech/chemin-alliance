@@ -7,7 +7,7 @@ import { Icon } from "@/components/marketing/icons";
 import type { ProfileCompletion } from "@/lib/profile-completion";
 
 /**
- * Modale « profil incomplet » — nudge bref façon Duolingo. S'affiche au montage
+ * Modale « profil incomplet » - nudge bref façon Duolingo. S'affiche au montage
  * (la page Suggestions ne la rend que si le gate Phase 2 est ON et le profil
  * incomplet), refermable (« Plus tard »). Esc + clic backdrop = fermer.
  */

@@ -12,7 +12,7 @@ import {
   checkVerification,
 } from "@/lib/sms";
 
-// Vérification du numéro de téléphone — GRATUITE (anti-bot).
+// Vérification du numéro de téléphone - GRATUITE (anti-bot).
 // Prod : Twilio Verify (code + envoi + livraison mondiale gérés par Twilio).
 // Repli dev (Twilio non configuré) : code auto-géré à 6 chiffres, haché,
 // expirant en 10 min, 5 tentatives max, loggé côté serveur.
@@ -73,7 +73,7 @@ export const POST = withErrors(async (req: Request) => {
         },
       }),
     ]);
-    console.info(`\n[sms dev — non envoyé] ${phone} code: ${code}\n`);
+    console.info(`\n[sms dev - non envoyé] ${phone} code: ${code}\n`);
   }
 
   return NextResponse.json({ sent: true, smsConfigured: smsEnabled() });

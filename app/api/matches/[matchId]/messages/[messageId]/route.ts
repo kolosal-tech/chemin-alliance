@@ -8,7 +8,7 @@ import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 /**
  * Supprimer SON propre message (corriger une erreur de saisie).
  * Garde-fous : on doit être membre de la conversation ET être l'expéditeur
- * du message. Suppression réelle — le modèle Message n'a aucune FK entrante,
+ * du message. Suppression réelle - le modèle Message n'a aucune FK entrante,
  * donc rien à orpheliner.
  */
 export const DELETE = withErrors(

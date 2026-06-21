@@ -9,7 +9,7 @@ function reqWith(auth?: string): Request {
 
 const SECRET = "s3cret-cron-value-au-moins-32-caracteres";
 
-describe("requireCronAuth — garde cron dormant + Bearer", () => {
+describe("requireCronAuth - garde cron dormant + Bearer", () => {
   let saved: string | undefined;
   beforeEach(() => {
     saved = process.env.CRON_SECRET;
@@ -19,7 +19,7 @@ describe("requireCronAuth — garde cron dormant + Bearer", () => {
     else process.env.CRON_SECRET = saved;
   });
 
-  it("dormant (503) sans CRON_SECRET — même avec un Bearer", () => {
+  it("dormant (503) sans CRON_SECRET - même avec un Bearer", () => {
     delete process.env.CRON_SECRET;
     expect.assertions(1);
     try {

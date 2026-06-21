@@ -5,7 +5,7 @@ import { withErrors, readJsonLimited } from "@/lib/api-helpers";
 import { requireAdmin } from "@/lib/security/session";
 
 // Gestion des accompagnateurs humains (pasteur, prêtre, mentor de couple,
-// conseiller) — réservée à l'administration. Utilise les champs existants
+// conseiller) - réservée à l'administration. Utilise les champs existants
 // du modèle Coach (aucune migration). L'affiliation porte le rôle clérical.
 export const GET = withErrors(async () => {
   await requireAdmin();

@@ -8,7 +8,7 @@ import { prisma } from "@/lib/db";
  * (User.subscriptionStatus), mis à jour par le webhook Stripe.
  *
  * RAPPEL doctrine : sécurité/dignité (blocage, signalement, suppression, filtres
- * de base) ne se monétisent JAMAIS — voir lib/payments/entitlements.
+ * de base) ne se monétisent JAMAIS - voir lib/payments/entitlements.
  */
 export type CheckoutRequest = {
   userId: string;
@@ -51,7 +51,7 @@ export class FakePaymentProvider implements PaymentProvider {
   }
 }
 
-/** Implémentation Stripe — abonnement Premium mensuel. */
+/** Implémentation Stripe - abonnement Premium mensuel. */
 export class StripePaymentProvider implements PaymentProvider {
   private stripe: Stripe;
   private price: string;

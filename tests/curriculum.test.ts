@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { getCurriculum, getModule } from "@/lib/curriculum";
 
-describe("curriculum — modules de préparation au mariage", () => {
+describe("curriculum - modules de préparation au mariage", () => {
   it("6 modules, un par étape, dans l'ordre du parcours", () => {
     const mods = getCurriculum("fr");
     expect(mods).toHaveLength(6);

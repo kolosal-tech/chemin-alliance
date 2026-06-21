@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 
-// Blocage user-à-user — GRATUIT À VIE, jamais derrière un paywall, aucune
+// Blocage user-à-user - GRATUIT À VIE, jamais derrière un paywall, aucune
 // raison demandée (doctrine, lib/payments/entitlements -> "block_user").
 
 const schema = z.object({ targetUserId: z.string().min(1).max(64) });

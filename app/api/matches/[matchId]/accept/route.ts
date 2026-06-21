@@ -16,7 +16,7 @@ export const POST = withErrors(
     if (match.status === "PENDING") {
       // Consentement mutuel : le demandeur connu ne peut pas s'auto-accepter.
       // Un ancien match sans demandeur (legacy, requestedById null) reste
-      // acceptable par l'un ou l'autre membre — sinon il resterait figé.
+      // acceptable par l'un ou l'autre membre - sinon il resterait figé.
       if (match.requestedById && match.requestedById === user.id) {
         return jsonError(403, "CANNOT_ACCEPT");
       }

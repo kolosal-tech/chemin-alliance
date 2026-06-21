@@ -8,7 +8,7 @@ import {
   canAccess,
 } from "@/lib/payments/entitlements";
 
-describe("entitlements — garde anti-dark-pattern", () => {
+describe("entitlements - garde anti-dark-pattern", () => {
   it("FREE_FOREVER et PREMIUM sont disjoints", () => {
     const free = new Set<string>(FREE_FOREVER);
     for (const f of PREMIUM_FEATURES) expect(free.has(f)).toBe(false);

@@ -14,7 +14,7 @@ import { emergencyLine } from "@/lib/emergency";
 import type { Locale } from "@/lib/core-engine";
 
 /**
- * Check-in du Gardien — INDIVIDUEL et PRIVÉ : le conjoint ne voit jamais
+ * Check-in du Gardien - INDIVIDUEL et PRIVÉ : le conjoint ne voit jamais
  * les réponses de l'autre. Danger détecté -> orientation pro immédiate,
  * AVANT tout appel LLM.
  */

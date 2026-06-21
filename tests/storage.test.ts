@@ -32,7 +32,7 @@ describe("extractPhotoPath", () => {
   });
 });
 
-describe("signedPhotoUrl — repli sûr sans clés", () => {
+describe("signedPhotoUrl - repli sûr sans clés", () => {
   it("renvoie null pour une valeur nulle", async () => {
     expect(await signedPhotoUrl(null)).toBeNull();
   });

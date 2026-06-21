@@ -1,5 +1,5 @@
 /**
- * Rail Mobile Money (Afrique francophone, XOF) via Flutterwave — palier local.
+ * Rail Mobile Money (Afrique francophone, XOF) via Flutterwave - palier local.
  *
  * Doctrine "dormant sans clés" (comme storage/push/Stripe) : sans
  * FLUTTERWAVE_SECRET_KEY, `flutterwaveEnabled()` est faux et toute tentative de
@@ -53,7 +53,7 @@ export type MomoPaymentPayload = {
   customizations: { title: string };
 };
 
-/** Corps de requête Flutterwave Standard (lien de paiement) — PUR, testable. */
+/** Corps de requête Flutterwave Standard (lien de paiement) - PUR, testable. */
 export function buildMomoPaymentPayload(
   a: MomoPaymentArgs,
 ): MomoPaymentPayload {
@@ -66,7 +66,7 @@ export function buildMomoPaymentPayload(
     // Mobile Money Afrique francophone (Orange/Moov Money, zone UEMOA).
     payment_options: "mobilemoneyfranco",
     meta: { userId: a.userId },
-    customizations: { title: "Chemin d'Alliance — Premium" },
+    customizations: { title: "Chemin d'Alliance - Premium" },
   };
 }
 

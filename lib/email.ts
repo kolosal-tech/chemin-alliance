@@ -6,10 +6,10 @@ import type { Locale } from "@/lib/core-engine";
  * Sans RESEND_API_KEY : le lien est loggé côté serveur (mode dev).
  */
 const SUBJECTS: Record<Locale, string> = {
-  fr: "Vérifie ton adresse — Chemin d'Alliance",
-  en: "Verify your address — Chemin d'Alliance",
-  es: "Verifica tu dirección — Chemin d'Alliance",
-  pt: "Verifica o teu endereço — Chemin d'Alliance",
+  fr: "Vérifie ton adresse - Chemin d'Alliance",
+  en: "Verify your address - Chemin d'Alliance",
+  es: "Verifica tu dirección - Chemin d'Alliance",
+  pt: "Verifica o teu endereço - Chemin d'Alliance",
 };
 
 const BODIES: Record<
@@ -209,10 +209,10 @@ export async function sendCoupleInviteEmail(
 // --- Réinitialisation de mot de passe (jeton à usage unique, expiration 1 h) ---
 
 const RESET_SUBJECTS: Record<Locale, string> = {
-  fr: "Réinitialise ton mot de passe — Chemin d'Alliance",
-  en: "Reset your password — Chemin d'Alliance",
-  es: "Restablece tu contraseña — Chemin d'Alliance",
-  pt: "Redefine a tua palavra-passe — Chemin d'Alliance",
+  fr: "Réinitialise ton mot de passe - Chemin d'Alliance",
+  en: "Reset your password - Chemin d'Alliance",
+  es: "Restablece tu contraseña - Chemin d'Alliance",
+  pt: "Redefine a tua palavra-passe - Chemin d'Alliance",
 };
 
 const RESET_BODIES: Record<

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { isStrongPassword } from "@/lib/security/password-validation";
 
-describe("isStrongPassword — règles MDP (12+, minuscule, majuscule, chiffre)", () => {
+describe("isStrongPassword - règles MDP (12+, minuscule, majuscule, chiffre)", () => {
   it("accepte un MDP conforme", () => {
     expect(isStrongPassword("TeStMdp123456")).toBe(true);
   });

@@ -53,7 +53,7 @@ function get(fields: ReturnType<typeof buildMatchProfileView>, key: string) {
   return f;
 }
 
-describe("buildMatchProfileView — exposition progressive", () => {
+describe("buildMatchProfileView - exposition progressive", () => {
   it("PUBLIC_CONTROLLED (intention) est visible même sans match", () => {
     const fields = buildMatchProfileView(
       { faith: null, relationship: relationship() },

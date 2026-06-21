@@ -15,7 +15,7 @@ import {
 } from "@/lib/maturity";
 
 /**
- * Auto-bilan de maturité (« recto-verso ») — affiché une fois sur /suggestions
+ * Auto-bilan de maturité (« recto-verso ») - affiché une fois sur /suggestions
  * tant que `onboardingDoneAt` n'est pas posé (indépendant du gate Phase 2 :
  * posture ORIENTER, jamais bloquer). Flux : intro → 6 affirmations (échelle
  * partagée) → restitution + orientation douce (Méditer / coach). Le flag

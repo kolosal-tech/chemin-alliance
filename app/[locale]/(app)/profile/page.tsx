@@ -130,7 +130,7 @@ export default async function ProfilePage({
                           ENGAGEMENT_LABELS,
                           params.locale,
                         )
-                      : "—",
+                      : "-",
                   })}
                 </div>
               </div>
@@ -144,7 +144,7 @@ export default async function ProfilePage({
               </div>
               <div className="text-xs text-sand-600 dark:text-[#7E7A72]">
                 {t("profile.localChurchMasked", {
-                  region: user.cityApprox ?? "—",
+                  region: user.cityApprox ?? "-",
                 })}
               </div>
             </div>
@@ -159,7 +159,7 @@ export default async function ProfilePage({
         </h2>
         <div className="mb-5 rounded-r-btn border border-l-2 border-sand-200 border-l-gold bg-surface px-4 py-3.5 dark:border-anthracite-600 dark:border-l-gold-light dark:bg-anthracite-800">
           <p className="font-display text-[15px] italic leading-normal text-[#3A372F] dark:text-[#CFCAC0]">
-            « {rel?.intentionStatement ?? "—"} »
+            « {rel?.intentionStatement ?? "-"} »
           </p>
           <div className="mt-2.5 flex items-center gap-1.5">
             <svg

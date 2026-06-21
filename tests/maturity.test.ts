@@ -3,7 +3,7 @@ import { scoreMaturity, MATURITY_AXES } from "@/lib/maturity";
 
 const all = (w: number) => Object.fromEntries(MATURITY_AXES.map((a) => [a, w]));
 
-describe("scoreMaturity — bilan de maturité (logique pure)", () => {
+describe("scoreMaturity - bilan de maturité (logique pure)", () => {
   it("aucune réponse : total 0, niveau growing, tout en croissance", () => {
     const r = scoreMaturity({});
     expect(r.total).toBe(0);

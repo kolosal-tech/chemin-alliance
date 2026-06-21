@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 
-// Badge de confiance unifié — surface le niveau de vérification (email,
+// Badge de confiance unifié - surface le niveau de vérification (email,
 // téléphone) comme signal de sérieux. N'expose JAMAIS la donnée (email/tél
 // restent privés), seulement l'état vérifié. Le téléphone est dormant (Twilio
 // non configuré) : on n'affiche le niveau "tél" que s'il est réellement vérifié.

@@ -7,13 +7,13 @@ import { useRouter } from "@/i18n/navigation";
 import { AsyncButton } from "@/components/AsyncButton";
 
 /**
- * Bloquer une personne — GRATUIT À VIE, jamais derrière un paywall.
+ * Bloquer une personne - GRATUIT À VIE, jamais derrière un paywall.
  * Confirmation douce, aucune raison demandée. Après blocage, retour à la liste
  * des messages (la conversation disparaît des deux côtés).
  *
  * Le modal est rendu via un PORTAIL vers document.body : l'en-tête de la
  * conversation porte `.glass` (backdrop-filter), qui crée un bloc de
- * confinement pour `position: fixed` — sans portail, le modal se rognerait
+ * confinement pour `position: fixed` - sans portail, le modal se rognerait
  * dans l'en-tête au lieu de couvrir l'écran.
  */
 export function BlockButton({

@@ -3,7 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { Icon } from "@/components/marketing/icons";
 
 /**
- * Bloc « sécurité » réutilisable (Deliverable 4) — purement informationnel.
+ * Bloc « sécurité » réutilisable (Deliverable 4) - purement informationnel.
  * Rappelle que les outils de sécurité (bloquer, signaler, contrôler sa
  * visibilité) sont toujours gratuits. N'ouvre aucun endpoint : il renvoie vers
  * les pages existantes (politique de confidentialité). Composant serveur.

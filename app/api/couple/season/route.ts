@@ -6,7 +6,7 @@ import { requireUser } from "@/lib/security/session";
 
 const schema = z.object({ season: z.enum(["MARRIED", "PARENTS"]) });
 
-/** Bascule de saison (ex. « un enfant est arrivé ») — pour les deux membres. */
+/** Bascule de saison (ex. « un enfant est arrivé ») - pour les deux membres. */
 export const PATCH = withErrors(async (req: Request) => {
   const user = await requireUser();
   const { season } = schema.parse(await readJsonLimited(req));

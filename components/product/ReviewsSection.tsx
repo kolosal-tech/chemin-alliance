@@ -25,7 +25,7 @@ function Stars({ rating, label }: { rating: number; label: string }) {
 }
 
 /**
- * Section « avis » (Deliverable 4) — preuve sociale notée.
+ * Section « avis » (Deliverable 4) - preuve sociale notée.
  * Les notes/prénoms (données) vivent dans `content/home.reviews` ; les citations
  * (texte) dans i18n (`product.reviews.items.<id>.quote`). Aucune photo réelle.
  */

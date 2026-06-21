@@ -12,7 +12,7 @@ type BeforeInstallPromptEvent = Event & {
 const DISMISS_KEY = "ca-install-dismissed";
 
 /**
- * Incitation à installer la PWA — auto-masquée si déjà installée (standalone)
+ * Incitation à installer la PWA - auto-masquée si déjà installée (standalone)
  * ou rejetée. Android/Chromium : bouton natif via beforeinstallprompt.
  * iOS Safari : pas d'événement -> instructions « Partager → écran d'accueil ».
  */

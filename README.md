@@ -1,6 +1,6 @@
 # Chemin d'Alliance
 
-Plateforme web de rencontre chrétienne premium (protestante évangélique + catholique) —
+Plateforme web de rencontre chrétienne premium (protestante évangélique + catholique) -
 **une infrastructure de discernement et d'accompagnement vers le mariage**, pas une app de dating.
 
 Monolithe **Next.js 14** (App Router, TypeScript strict) · **PostgreSQL + Prisma** ·
@@ -11,11 +11,11 @@ Monolithe **Next.js 14** (App Router, TypeScript strict) · **PostgreSQL + Prism
 ## Prérequis
 
 - Node.js ≥ 20, pnpm ≥ 9
-- Une base PostgreSQL — au choix :
+- Une base PostgreSQL - au choix :
   - **local sans Docker** : `pnpm prisma dev` (Prisma Postgres local, fourni)
   - Neon / Supabase (prod et dev distant)
 
-## Lancer en local — 5 commandes
+## Lancer en local - 5 commandes
 
 ```bash
 pnpm install
@@ -48,13 +48,13 @@ Mot de passe commun : **`Alliance2026!`**
 
 | Email | Profil |
 |---|---|
-| `elodie@demo.chemin-alliance.app` | Évangélique, 32 ans — match en **Discernement** avec Jonathan (conversation avec blocage de coordonnées de démo) |
+| `elodie@demo.chemin-alliance.app` | Évangélique, 32 ans - match en **Discernement** avec Jonathan (conversation avec blocage de coordonnées de démo) |
 | `jonathan@demo.chemin-alliance.app` | Évangélique, 34 ans |
 | `marie-claire@demo.chemin-alliance.app` | Catholique, veuve, 1 enfant |
 | `david@demo.chemin-alliance.app` | Évangélique, divorcé |
-| `sarah@demo.chemin-alliance.app` | Pentecôtiste, parent célibataire — match en **Dialogue** avec David |
+| `sarah@demo.chemin-alliance.app` | Pentecôtiste, parent célibataire - match en **Dialogue** avec David |
 | `emmanuel@demo.chemin-alliance.app` | Catholique, veuf |
-| `admin@chemin-alliance.app` | **Admin** — accès `/fr/admin/reports` |
+| `admin@chemin-alliance.app` | **Admin** - accès `/fr/admin/reports` |
 
 Vérification email : en développement, le lien de vérification est **loggé dans la
 console du serveur** (`[email] Lien de vérification…`). Les comptes seed sont déjà vérifiés.
@@ -68,14 +68,14 @@ Pages utiles : `/fr` (onboarding) · `/fr/design-system` (design system vivant, 
 |---|---|
 | `pnpm dev` | Développement (PWA désactivée en dev) |
 | `pnpm build && pnpm start` | Production locale |
-| `pnpm test` | Vitest — moteur doctrinal + blocage coordonnées (26 tests) |
+| `pnpm test` | Vitest - moteur doctrinal + blocage coordonnées (26 tests) |
 | `pnpm lint` / `pnpm tsc --noEmit` | Lint / typecheck strict |
 | `pnpm seed` | Peuple la démo |
 | `pnpm prisma migrate deploy` | Applique les migrations |
 
 ---
 
-## Déployer en prod (Vercel + Neon) — ~10 minutes
+## Déployer en prod (Vercel + Neon) - ~10 minutes
 
 1. **Créer la base** sur [neon.tech](https://neon.tech) → copier la `DATABASE_URL`
    (avec `?sslmode=require`).
@@ -98,7 +98,7 @@ port 5432 pour les migrations ; si vous utilisez le pooler 6543, ajoutez `?pgbou
 
 - [ ] `JWT_SECRET` et `ENCRYPTION_KEY` régénérés (jamais ceux du dev), stockés uniquement dans Vercel
 - [ ] `DATABASE_URL` avec SSL (`sslmode=require`)
-- [ ] `APP_URL` en https — les cookies passent en `Secure`
+- [ ] `APP_URL` en https - les cookies passent en `Secure`
 - [ ] Brancher un fournisseur d'email réel dans `lib/email.ts` (Resend/Postmark/SES)
 - [ ] Rate-limiting : brancher Upstash/Redis dans `lib/security/rate-limit.ts` si multi-régions
 - [ ] Vérifier les en-têtes (CSP, HSTS, X-Frame-Options) sur le déploiement : `curl -I https://…`
@@ -125,7 +125,7 @@ pnpm cap open android                      # Android Studio : générer l'AAB si
 ```
 
 La soumission App Store / Play Store demande des comptes développeurs payants et
-une review — hors « déploiement en un clic ». Évolution possible : app React
+une review - hors « déploiement en un clic ». Évolution possible : app React
 Native/Expo partageant `/lib`.
 
 ---
@@ -134,7 +134,7 @@ Native/Expo partageant `/lib`.
 
 ```
 app/
-  [locale]/            # fr · en · es · pt — routing next-intl
+  [locale]/            # fr · en · es · pt - routing next-intl
     page.tsx           # Onboarding 3 slides
     login/ register/ offline/ design-system/
     (app)/             # Authentifié (garde par page + layout)
@@ -146,7 +146,7 @@ lib/
   moderation/          # Détection coordonnées (regex multilingues)
   ai-coach/            # Guardrails + fallback scripté + branchement LLM
   security/            # AES-256-GCM, Argon2id, JWT (jose), rate-limit, sessions
-  payments/            # Interface PaymentProvider (stub — voir ci-dessous)
+  payments/            # Interface PaymentProvider (stub - voir ci-dessous)
 rulesets/              # christian_evangelical_default.yaml · christian_catholic_default.yaml
 messages/              # fr.json · en.json · es.json · pt.json
 prisma/                # schema + migrations + seed
@@ -154,14 +154,14 @@ prisma/                # schema + migrations + seed
 
 **Règle d'or** : la messagerie, l'échange de coordonnées et les transitions
 d'étape passent par `validateAction()` du moteur doctrinal. La doctrine vit dans
-les YAML — jamais dans le code UI. Le message éducatif de blocage (4 langues)
+les YAML - jamais dans le code UI. Le message éducatif de blocage (4 langues)
 vient du ruleset.
 
 ### Les 7 agents intelligents (`lib/agents/`)
 
 Tous gouvernés par les mêmes lois : ne jamais décider à la place de la personne,
 ne jamais affirmer une volonté divine, escalader vers l'humain sur le sensible.
-Chaque agent a un **fallback déterministe** — l'app complète tourne sans LLM.
+Chaque agent a un **fallback déterministe** - l'app complète tourne sans LLM.
 
 | Agent | Rôle | Où |
 |---|---|---|
@@ -171,7 +171,7 @@ Chaque agent a un **fallback déterministe** — l'app complète tourne sans LLM
 | Bilan d'Étape | Relecture privée (ses propres réponses uniquement) | vue Alliance |
 | Sortie Digne | Détection de silence asymétrique (7 j) + brouillon de clôture respectueux | messages + sortie élégante |
 | Reconstruction | Chemin en 4 pas + mot de consolation après clôture | `/rebuilding` |
-| Copilote du Coach | Note de séance factuelle — uniquement si les DEUX consentent (COUPLE_COACH_SHARING), jamais le contenu des messages, COACH_ONLY | page coach |
+| Copilote du Coach | Note de séance factuelle - uniquement si les DEUX consentent (COUPLE_COACH_SHARING), jamais le contenu des messages, COACH_ONLY | page coach |
 
 Stockage : table `AgentInsight` (visibilité, révocation `revokedAt`). Le portrait
 est effaçable à tout moment (`DELETE /api/agents/preparation`).
@@ -184,14 +184,14 @@ totalement désactivé** (invisible dans les deux sens), premier onglet remplac�
 par « Couple ».
 
 - **Entrées** : depuis un match en Engagement/Préparation (« Nous nous sommes
-  mariés », confirmé par le conjoint — le match se clôt) ou par **code
+  mariés », confirmé par le conjoint - le match se clôt) ou par **code
   d'invitation** `ALLIANCE-XXXXXX` pour les couples déjà mariés hors plateforme.
-- **Agent 8 — Gardien du Couple** : check-ins hebdomadaires par saison
+- **Agent 8 - Gardien du Couple** : check-ins hebdomadaires par saison
   (réponses **privées**, jamais visibles du conjoint), rituels concrets
   déterministes (temps à deux, charge partagée, tendresse, sujet évité),
   mot personnalisé LLM. **Guardrail absolu** : violence/abus détecté dans une
   note → orientation professionnelle immédiate (3919 en France), aucun rituel,
-  escalade COACH_ONLY — prime sur tout appel LLM.
+  escalade COACH_ONLY - prime sur tout appel LLM.
 - **Parcours de saison** (4 langues) : 6 premiers mois, finances, belle-famille ;
   arrivée d'un enfant, rester un couple, transmettre la foi.
 - **Espace Confidence** : coach IA privé (même le conjoint n'y accède pas)
@@ -199,9 +199,9 @@ par « Couple ».
 
 ### Coach IA
 
-- Sans clé API : **mode fallback déterministe** (réponses guidées par étape, 4 langues) — la prod tourne sans dépendance payante.
+- Sans clé API : **mode fallback déterministe** (réponses guidées par étape, 4 langues) - la prod tourne sans dépendance payante.
 - Avec une clé : `ANTHROPIC_API_KEY` (Claude direct), **`OPENROUTER_API_KEY`**
-  (n'importe quel modèle via OpenRouter — choisir avec `OPENROUTER_MODEL`,
+  (n'importe quel modèle via OpenRouter - choisir avec `OPENROUTER_MODEL`,
   défaut `anthropic/claude-haiku-4.5`) ou `OPENAI_API_KEY` (gpt-4o-mini).
   Même system prompt à garde-fous spirituels dans les trois cas ; toute panne
   LLM retombe silencieusement sur le fallback scripté.
@@ -226,17 +226,17 @@ confidentialité ne passent **jamais** derrière un paywall.
 - **Anti-Malaise Local v1** : exclusion même ville approximative + même dénomination (proxy raisonnable sans géolocalisation fine). Le rayon est stocké et l'algorithme est isolé dans `lib/matching.ts` pour brancher une vraie géo plus tard. La raison d'exclusion n'est jamais exposée.
 - **Messages chiffrés au repos** (AES-256-GCM applicatif), comme témoignage, église locale et vision familiale. Pas de E2EE en v1 (la modération des coordonnées doit lire le contenu côté serveur).
 - **Avancement d'étape à double consentement** : le premier demande, le second confirme ; les `required_checks` du ruleset sont évalués à la confirmation. Un signalement actif bloque.
-- **Messages bloqués** : stockés `BLOCKED`, visibles uniquement par l'expéditeur (barrés), accompagnés d'un message SYSTÈME éducatif issu du moteur — jamais une erreur technique.
+- **Messages bloqués** : stockés `BLOCKED`, visibles uniquement par l'expéditeur (barrés), accompagnés d'un message SYSTÈME éducatif issu du moteur - jamais une erreur technique.
 - **Rate-limit en mémoire** (fenêtre glissante) : suffisant en v1 single-region ; interface prête pour Redis.
 - **Email transactionnel** : lien de vérification loggé en dev ; interface `lib/email.ts` stable pour brancher Resend/SES en prod.
 - **Capacitor** en mode « remote wrapper » (charge la PWA déployée) : l'app Next.js est SSR full-stack, pas exportable en statique.
-- **Stubs propres documentés** : Stripe réel, stores iOS/Android (publication), appels audio/vidéo internes, vertical multi-religions supplémentaires, espace église — hors périmètre v1, aucune erreur à l'exécution.
+- **Stubs propres documentés** : Stripe réel, stores iOS/Android (publication), appels audio/vidéo internes, vertical multi-religions supplémentaires, espace église - hors périmètre v1, aucune erreur à l'exécution.
 - **Husky non installé** (chaîne CI conseillée : `pnpm lint && pnpm tsc --noEmit && pnpm test`).
 
 ## Tests
 
-`pnpm test` — 26 tests Vitest, dont les tests d'intégration exigés :
+`pnpm test` - 26 tests Vitest, dont les tests d'intégration exigés :
 moteur doctrinal (blocage téléphone en Découverte, message éducatif localisé,
 checks d'avancement, ruleset invalide/path traversal) et détection de
 coordonnées (`+33…`, `06 12 34 56 78`, emails, `@handle`, « zéro six »,
-WhatsApp/Insta, liens — et **Jean 3:16 n'est pas bloqué**).
+WhatsApp/Insta, liens - et **Jean 3:16 n'est pas bloqué**).

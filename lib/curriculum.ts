@@ -4,7 +4,7 @@ import { parse } from "yaml";
 import { z } from "zod";
 import type { Locale } from "@/lib/core-engine";
 
-// Curriculum de préparation au mariage — modules guidés par étape du parcours.
+// Curriculum de préparation au mariage - modules guidés par étape du parcours.
 // Chargé depuis rulesets/marriage-prep-curriculum.yaml. Cadre biblique, tronc
 // commun doctrine-agnostique + notes par verticale (jamais en dur ici).
 

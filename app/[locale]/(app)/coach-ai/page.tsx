@@ -11,7 +11,7 @@ export default async function CoachAiPage({
 }) {
   setRequestLocale(params.locale);
   const user = await requirePageUser(params.locale);
-  // Historique persistant (déchiffré) — restitué au rechargement de la page.
+  // Historique persistant (déchiffré) - restitué au rechargement de la page.
   const rows = await prisma.coachMessage.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: "asc" },

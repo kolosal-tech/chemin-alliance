@@ -1,8 +1,8 @@
-// Télémétrie LLM — observabilité coût / latence / fiabilité de la passerelle.
+// Télémétrie LLM - observabilité coût / latence / fiabilité de la passerelle.
 //
 // Émet UNE ligne JSON structurée par appel (captée par les logs Vercel / un
 // drain). PRIVACY : aucune donnée personnelle, aucun contenu de prompt, aucun
-// userId — uniquement des MÉTADONNÉES (étape, palier, modèle, latence, nombre
+// userId - uniquement des MÉTADONNÉES (étape, palier, modèle, latence, nombre
 // de tokens, fallback). Le pilotage du coût des modèles payants se fait sur ces
 // agrégats sans jamais exposer qui a parlé à l'IA ni de quoi.
 //

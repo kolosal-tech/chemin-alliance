@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { env } from "@/lib/env";
 
 /**
- * Photos de profil — Supabase Storage via l'API REST (pas de SDK).
+ * Photos de profil - Supabase Storage via l'API REST (pas de SDK).
  * Doctrine "dormant sans clés" : sans SUPABASE_URL + SERVICE_ROLE_KEY,
  * `photoUploadEnabled()` est faux et l'upload est refusé proprement.
  * Le SERVICE_ROLE_KEY ne quitte jamais le serveur (route runtime=nodejs).
@@ -104,7 +104,7 @@ export function photoProxyUrl(
 }
 
 /**
- * URL de lecture SIGNÉE et à durée limitée pour une photo de profil — permet
+ * URL de lecture SIGNÉE et à durée limitée pour une photo de profil - permet
  * un bucket privé (l'URL publique permanente n'est plus exposée). Best-effort :
  * sans clés, ou en cas d'échec, renvoie la valeur d'entrée telle quelle pour ne
  * jamais casser l'affichage (la vignette n'est qu'un aperçu du propriétaire).

@@ -1,6 +1,6 @@
 import { hash, verify } from "@node-rs/argon2";
 
-// Argon2id — paramètres OWASP (m=19 MiB, t=2, p=1).
+// Argon2id - paramètres OWASP (m=19 MiB, t=2, p=1).
 const ARGON2_OPTIONS = {
   memoryCost: 19456,
   timeCost: 2,

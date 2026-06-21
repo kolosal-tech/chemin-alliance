@@ -1,5 +1,5 @@
 /**
- * Garde d'accès anti-dark-pattern — INVARIANT DOCTRINAL de Chemin d'Alliance.
+ * Garde d'accès anti-dark-pattern - INVARIANT DOCTRINAL de Chemin d'Alliance.
  *
  * « Pas un swipe de plus » : la protection, le signalement, la sortie et la
  * confidentialité de base ne se monétisent JAMAIS. Ce module rend ce principe
@@ -18,7 +18,7 @@
 import { paymentProvider } from "./provider";
 
 /**
- * Gratuit à vie — dignité, sécurité, RGPD. Jamais derrière un paywall.
+ * Gratuit à vie - dignité, sécurité, RGPD. Jamais derrière un paywall.
  * Reflète la contrainte fondatrice : « blocage, signalement, suppression de
  * compte et filtres de base ne sont jamais derrière un paywall ».
  */
@@ -30,7 +30,7 @@ export const FREE_FOREVER = [
   "export_data", // portabilité RGPD
   "consent_management", // gestion / révocation des consentements
   "contact_privacy", // contrôle du partage des coordonnées
-  "basic_filters", // foi, âge, intention — filtres de base
+  "basic_filters", // foi, âge, intention - filtres de base
   "guardian_checkin", // agent de sécurité (check-in privé)
   "emergency_resources", // numéros d'urgence
   "exit_helper", // aide à la sortie / reconstruction
@@ -75,7 +75,7 @@ export function isPremium(feature: string): feature is PremiumFeature {
 
 /**
  * Garde structurelle. À appeler sur TOUT point de paywall. Lève si l'on tente
- * de restreindre une fonctionnalité gratuite à vie — l'anti-dark-pattern n'est
+ * de restreindre une fonctionnalité gratuite à vie - l'anti-dark-pattern n'est
  * alors pas qu'une consigne mais une impossibilité du code.
  */
 export function assertGatable(

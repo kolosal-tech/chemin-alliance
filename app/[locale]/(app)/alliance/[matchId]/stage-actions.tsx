@@ -103,7 +103,11 @@ export function StageActions({
     const res = await fetch("/api/agents/exit-helper", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ matchId, reason: exitReason, note: exitText.slice(0, 500) }),
+      body: JSON.stringify({
+        matchId,
+        reason: exitReason,
+        note: exitText.slice(0, 500),
+      }),
     });
     setDraftBusy(false);
     if (res.ok) {
@@ -126,13 +130,42 @@ export function StageActions({
                 {q.text}
               </span>
               {answered.has(q.id) ? (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                  <circle cx="12" cy="12" r="9" stroke="#3F6B50" strokeWidth="1.6" />
-                  <path d="M8.5 12.5l2.2 2.2 4.8-5" stroke="#3F6B50" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="9"
+                    stroke="#3F6B50"
+                    strokeWidth="1.6"
+                  />
+                  <path
+                    d="M8.5 12.5l2.2 2.2 4.8-5"
+                    stroke="#3F6B50"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               ) : (
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                  <path d="M9 6l6 6-6 6" stroke="#C9A84C" strokeWidth="1.8" strokeLinecap="round" />
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden
+                >
+                  <path
+                    d="M9 6l6 6-6 6"
+                    stroke="#C9A84C"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  />
                 </svg>
               )}
             </button>
@@ -146,7 +179,11 @@ export function StageActions({
                   className="w-full resize-none bg-transparent text-sm text-ink outline-none dark:text-[#ECE7DD]"
                 />
                 <div className="flex justify-end gap-2">
-                  <button type="button" onClick={() => setOpenQ(null)} className="px-3 py-2 text-xs font-medium text-warmgray dark:text-[#9A958B]">
+                  <button
+                    type="button"
+                    onClick={() => setOpenQ(null)}
+                    className="px-3 py-2 text-xs font-medium text-warmgray dark:text-[#9A958B]"
+                  >
                     {tc("cancel")}
                   </button>
                   <AsyncButton
@@ -164,7 +201,10 @@ export function StageActions({
       </div>
 
       {notice && (
-        <p role="status" className="mt-3 rounded-btn border border-[#D4DAE4] bg-[#EAEDF2] px-3.5 py-2.5 text-[13px] text-[#2A3550] dark:border-[#2A3A56] dark:bg-[#1A2233] dark:text-[#B9C6E0]">
+        <p
+          role="status"
+          className="mt-3 rounded-btn border border-[#D4DAE4] bg-[#EAEDF2] px-3.5 py-2.5 text-[13px] text-[#2A3550] dark:border-[#2A3A56] dark:bg-[#1A2233] dark:text-[#B9C6E0]"
+        >
           {notice}
         </p>
       )}
@@ -206,7 +246,7 @@ export function StageActions({
         </AsyncButton>
       </div>
 
-      {/* Sortie élégante — discrète mais présente */}
+      {/* Sortie élégante - discrète mais présente */}
       <div className="mt-5 flex justify-center border-t border-sand-200 pt-4 dark:border-anthracite-600">
         {!exitOpen ? (
           <button
@@ -214,15 +254,31 @@ export function StageActions({
             onClick={() => setExitOpen(true)}
             className="flex items-center gap-1.5 text-[13px] text-sand-500 dark:text-[#7E7A72]"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M9 16l-4-4 4-4M5 12h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden
+            >
+              <path
+                d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M9 16l-4-4 4-4M5 12h10"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
             {t("exitElegant")}
           </button>
         ) : (
           <div className="w-full rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
-            <h3 className="font-display text-[18px] text-night dark:text-[#ECE7DD]">{t("exitTitle")}</h3>
-            <p className="mt-1 text-[12.5px] text-warmgray dark:text-[#9A958B]">{t("exitBody")}</p>
+            <h3 className="font-display text-[18px] text-night dark:text-[#ECE7DD]">
+              {t("exitTitle")}
+            </h3>
+            <p className="mt-1 text-[12.5px] text-warmgray dark:text-[#9A958B]">
+              {t("exitBody")}
+            </p>
             <div className="mt-3 flex flex-col gap-1.5">
               {templates.map((tpl) => (
                 <button
@@ -246,8 +302,12 @@ export function StageActions({
                 aria-label={ta("exit.reasonLabel")}
                 className="flex-1 rounded-btnsm border border-sand-300 bg-white px-2.5 py-2.5 text-[12.5px] text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
               >
-                <option value="no_alignment">{ta("exit.reasonNoAlignment")}</option>
-                <option value="different_visions">{ta("exit.reasonVisions")}</option>
+                <option value="no_alignment">
+                  {ta("exit.reasonNoAlignment")}
+                </option>
+                <option value="different_visions">
+                  {ta("exit.reasonVisions")}
+                </option>
                 <option value="need_pause">{ta("exit.reasonPause")}</option>
                 <option value="other">{ta("exit.reasonOther")}</option>
               </select>
@@ -266,7 +326,11 @@ export function StageActions({
               className="mt-2.5 w-full resize-none rounded-btn border border-sand-200 bg-white p-3 text-sm text-ink outline-none dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
             />
             <div className="mt-2 flex justify-end gap-2">
-              <button type="button" onClick={() => setExitOpen(false)} className="px-3 py-2 text-xs font-medium text-warmgray dark:text-[#9A958B]">
+              <button
+                type="button"
+                onClick={() => setExitOpen(false)}
+                className="px-3 py-2 text-xs font-medium text-warmgray dark:text-[#9A958B]"
+              >
                 {tc("cancel")}
               </button>
               <AsyncButton

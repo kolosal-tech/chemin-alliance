@@ -2,7 +2,7 @@ import type { AllianceStage } from "@prisma/client";
 import { loadRuleset, type Locale, type Question } from "@/lib/core-engine";
 
 /**
- * Agent 3 — Facilitateur de Dialogue. Repère les thèmes jamais abordés
+ * Agent 3 - Facilitateur de Dialogue. Repère les thèmes jamais abordés
  * par le couple et propose les questions du ruleset correspondantes.
  * Déterministe : la doctrine (thèmes/questions) vit dans les YAML.
  */

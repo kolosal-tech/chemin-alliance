@@ -1,5 +1,5 @@
 /**
- * Seed démo — comptes documentés dans le README.
+ * Seed démo - comptes documentés dans le README.
  * Mot de passe commun : Alliance2026!
  */
 import { PrismaClient } from "@prisma/client";
@@ -333,7 +333,7 @@ async function main() {
       matchId: match2.id,
       senderId: created["David"],
       contentEncrypted: enc(
-        "Merci Sarah. Tes enfants ont une maman courageuse — j'aimerais en savoir plus sur votre quotidien, à ton rythme.",
+        "Merci Sarah. Tes enfants ont une maman courageuse - j'aimerais en savoir plus sur votre quotidien, à ton rythme.",
       ),
     },
   });

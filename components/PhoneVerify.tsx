@@ -11,7 +11,7 @@ type State = {
 };
 
 /**
- * Vérification du numéro de téléphone (anti-bot) — GRATUITE.
+ * Vérification du numéro de téléphone (anti-bot) - GRATUITE.
  * Tant qu'aucun prestataire SMS n'est configuré (smsConfigured=false), le flux
  * est masqué (mention « bientôt ») pour ne pas afficher une UX non fonctionnelle.
  */

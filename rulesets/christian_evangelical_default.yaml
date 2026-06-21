@@ -189,10 +189,10 @@ ruleset:
         - id: disc2_purity
           theme: intimacy
           text:
-            fr: "Comment souhaitez-vous honorer Dieu dans vos corps pendant ce chemin — quelles limites posez-vous ensemble jusqu'au mariage, avec douceur et sans honte ?"
-            en: "How do you wish to honor God with your bodies during this journey — what boundaries do you set together until marriage, gently and without shame?"
-            es: "¿Cómo desean honrar a Dios en sus cuerpos durante este camino — qué límites ponen juntos hasta el matrimonio, con dulzura y sin vergüenza?"
-            pt: "Como desejam honrar Deus nos vossos corpos durante este caminho — que limites colocam juntos até ao casamento, com doçura e sem vergonha?"
+            fr: "Comment souhaitez-vous honorer Dieu dans vos corps pendant ce chemin - quelles limites posez-vous ensemble jusqu'au mariage, avec douceur et sans honte ?"
+            en: "How do you wish to honor God with your bodies during this journey - what boundaries do you set together until marriage, gently and without shame?"
+            es: "¿Cómo desean honrar a Dios en sus cuerpos durante este camino - qué límites ponen juntos hasta el matrimonio, con dulzura y sin vergüenza?"
+            pt: "Como desejam honrar Deus nos vossos corpos durante este caminho - que limites colocam juntos até ao casamento, com doçura e sem vergonha?"
     accompaniment:
       next: commitment
       allowed_actions:
@@ -240,10 +240,10 @@ ruleset:
         - id: com_intimacy
           theme: intimacy
           text:
-            fr: "Pouvez-vous parler avec vérité et pudeur de l'intimité conjugale espérée — la sexualité comme don reçu dans le mariage (Hé 13.4), sans honte ni pression, et accueillir les blessures de l'un et de l'autre ?"
-            en: "Can you speak with truth and modesty about the marital intimacy you hope for — sexuality as a gift received in marriage (Heb 13:4), without shame or pressure, welcoming each other's wounds?"
-            es: "¿Pueden hablar con verdad y pudor de la intimidad conyugal esperada — la sexualidad como don recibido en el matrimonio (Heb 13:4), sin vergüenza ni presión, acogiendo las heridas del uno y del otro?"
-            pt: "Conseguem falar com verdade e pudor da intimidade conjugal esperada — a sexualidade como dom recebido no casamento (Hb 13:4), sem vergonha nem pressão, acolhendo as feridas um do outro?"
+            fr: "Pouvez-vous parler avec vérité et pudeur de l'intimité conjugale espérée - la sexualité comme don reçu dans le mariage (Hé 13.4), sans honte ni pression, et accueillir les blessures de l'un et de l'autre ?"
+            en: "Can you speak with truth and modesty about the marital intimacy you hope for - sexuality as a gift received in marriage (Heb 13:4), without shame or pressure, welcoming each other's wounds?"
+            es: "¿Pueden hablar con verdad y pudor de la intimidad conyugal esperada - la sexualidad como don recibido en el matrimonio (Heb 13:4), sin vergüenza ni presión, acogiendo las heridas del uno y del otro?"
+            pt: "Conseguem falar com verdade e pudor da intimidade conjugal esperada - a sexualidade como dom recebido no casamento (Hb 13:4), sem vergonha nem pressão, acolhendo as feridas um do outro?"
     marriage_preparation:
       next: null
       allowed_actions:

@@ -124,7 +124,7 @@ export const POST = withErrors(async (req: Request) => {
 
   // Garde : seuls les fiancés ou les déjà-mariés créent un espace externe.
   // Un user en discernement (JOURNEY) ne peut pas s'auto-promouvoir MARRIED
-  // par cette voie — il passe par le chemin match (matchId ci-dessus).
+  // par cette voie - il passe par le chemin match (matchId ci-dessus).
   if (user.season !== "ENGAGED" && user.season !== "MARRIED") {
     return jsonError(409, "NOT_ELIGIBLE");
   }

@@ -11,7 +11,7 @@ const schema = z.object({ code: z.string().min(6).max(20) });
 export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
   // Anti-brute-force du code ALLIANCE-XXXXXX : plafond ferme PAR UTILISATEUR.
-  // On ne mêle PAS l'IP à la clé — sinon chaque IP relance un budget neuf et
+  // On ne mêle PAS l'IP à la clé - sinon chaque IP relance un budget neuf et
   // un attaquant qui tourne ses IP contourne le plafond (cf. couple/invite).
   const rl = await rateLimit(
     `couple-join:${user.id}`,
@@ -38,7 +38,7 @@ export const POST = withErrors(async (req: Request) => {
   const maritalStatus = space.season === "ENGAGED" ? "engaged" : "married";
   // Rattachement atomique : seul le premier conjoint qui rejoint « gagne » la
   // place (userBId null -> user.id). Un second appel quasi simultané voit
-  // count=0 et n'altère AUCUNE saison/statut — pas d'orphelin sorti du matching.
+  // count=0 et n'altère AUCUNE saison/statut - pas d'orphelin sorti du matching.
   const claimed = await prisma.$transaction(async (tx) => {
     const res = await tx.coupleSpace.updateMany({
       where: { id: space.id, userBId: null },

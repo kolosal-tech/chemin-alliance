@@ -46,10 +46,10 @@ export function clientIp(req: Request): string {
   return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
 }
 
-/** Plafond par defaut des bodies JSON (64 Kio) — large devant tous les caps metier. */
+/** Plafond par defaut des bodies JSON (64 Kio) - large devant tous les caps metier. */
 export const MAX_JSON_BYTES = 64 * 1024;
 
-/** Erreur taggee 413 — mappee en PAYLOAD_TOO_LARGE par withErrors. */
+/** Erreur taggee 413 - mappee en PAYLOAD_TOO_LARGE par withErrors. */
 export class PayloadTooLargeError extends Error {
   readonly status = 413;
   constructor(maxBytes: number) {

@@ -3,7 +3,7 @@ import { timingSafeEqual } from "node:crypto";
 /**
  * Garde des routes /api/cron/*.
  *
- * Doctrine "dormant sans secret" : sans CRON_SECRET, on lève 503 — AUCUNE
+ * Doctrine "dormant sans secret" : sans CRON_SECRET, on lève 503 - AUCUNE
  * logique métier n'est atteinte, donc rien ne se déclenche tant que l'opérateur
  * n'a pas posé le secret dans Vercel. Une fois CRON_SECRET posé, Vercel injecte
  * automatiquement l'en-tête `Authorization: Bearer <CRON_SECRET>` sur chaque

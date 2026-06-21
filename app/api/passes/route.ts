@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 
-// Passer un profil — GRATUIT À VIE, exclusion unilatérale des suggestions,
+// Passer un profil - GRATUIT À VIE, exclusion unilatérale des suggestions,
 // aucune raison demandée (doctrine, lib/payments/entitlements -> "pass_user").
 
 const schema = z.object({ targetUserId: z.string().min(1).max(64) });

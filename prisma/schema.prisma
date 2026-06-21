@@ -1,4 +1,4 @@
-// Chemin d'Alliance — schéma Prisma v1
+// Chemin d'Alliance - schéma Prisma v1
 // Données religieuses/familiales = données sensibles RGPD (art. 9).
 // Chaque champ sensible porte un VisibilityLevel ; les champs *Encrypted
 // sont chiffrés applicativement (AES-256-GCM, lib/security/crypto.ts).
@@ -167,7 +167,7 @@ model User {
   @@index([season, isVerified, gender, deletedAt])
 }
 
-// Blocage user-à-user — GRATUIT À VIE (doctrine, lib/payments/entitlements).
+// Blocage user-à-user - GRATUIT À VIE (doctrine, lib/payments/entitlements).
 // Un blocage rend les deux personnes mutuellement invisibles (matching) et
 // coupe tout échange. Jamais derrière un paywall, jamais de raison demandée.
 model Block {
@@ -199,7 +199,7 @@ model Pass {
 
 // Vérification du numéro de téléphone (anti-bot). Code à usage unique, haché,
 // expirant. GRATUIT. L'envoi SMS est dormant tant qu'aucun prestataire (Twilio…)
-// n'est configuré en env — voir lib/sms.ts.
+// n'est configuré en env - voir lib/sms.ts.
 model PhoneVerification {
   id        String   @id @default(cuid())
   userId    String
@@ -212,7 +212,7 @@ model PhoneVerification {
   @@index([userId])
 }
 
-// Espace Couple — la vie d'alliance APRÈS le mariage (saisons Mariés/Parents).
+// Espace Couple - la vie d'alliance APRÈS le mariage (saisons Mariés/Parents).
 // Créé depuis un match avancé ("nous nous sommes mariés") ou par code
 // d'invitation pour les couples déjà mariés hors plateforme.
 // Un utilisateur en saison MARRIED/PARENTS est invisible du matching.
@@ -236,7 +236,7 @@ model CoupleSpace {
 }
 
 // Messagerie privée entre les deux conjoints d'un Espace Couple. Indépendante du
-// matching (modèle Message, lui, est lié à Match) : ici pas de modération — c'est
+// matching (modèle Message, lui, est lié à Match) : ici pas de modération - c'est
 // une conversation privée entre époux. Contenu chiffré au repos (encryptField).
 model CoupleMessage {
   id               String      @id @default(cuid())
@@ -404,7 +404,7 @@ model Booking {
 
 // Productions des agents intelligents (portrait de préparation, bilans,
 // signaux de vigilance, résumés coach). Toujours soumis à un VisibilityLevel
-// et révocables — jamais exposés à l'autre membre.
+// et révocables - jamais exposés à l'autre membre.
 model AgentInsight {
   id         String          @id @default(cuid())
   userId     String?
@@ -467,7 +467,7 @@ model PushSubscription {
   @@index([userId])
 }
 
-// Parrain / Marraine — proche de confiance (famille, pasteur·e, prêtre, ami·e)
+// Parrain / Marraine - proche de confiance (famille, pasteur·e, prêtre, ami·e)
 // désigné par l'utilisateur, PAR EMAIL, sans compte app. Ne lit jamais les
 // conversations : présence (badge de transparence) + bénédiction sur demande.
 // 1 par utilisateur (MVP). Voir docs/superpowers/specs/2026-06-18-parrain-marraine-design.md

@@ -1,5 +1,5 @@
 /**
- * Jeu d'icônes line-art de la couche marketing — cohérent avec le SVG
+ * Jeu d'icônes line-art de la couche marketing - cohérent avec le SVG
  * existant du projet (stroke arrondi, currentColor). Server-safe.
  *
  * NB : pas de logos de marque réels (App Store / Play). Les badges de store

@@ -13,7 +13,7 @@ const schema = z.object({}).strip();
 /**
  * Marque l'onboarding comme fait (flag persistant `User.onboardingDoneAt`).
  * Authentifié, rate-limité, idempotent (ne réécrit pas la date si déjà posée).
- * Ne touche ni au chiffrement ni à l'auth — simple horodatage.
+ * Ne touche ni au chiffrement ni à l'auth - simple horodatage.
  */
 export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();

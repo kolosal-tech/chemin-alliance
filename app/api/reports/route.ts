@@ -10,7 +10,7 @@ const schema = z.object({
   reason: z.string().min(10).max(2000),
 });
 
-/** Signalement — toujours gratuit, jamais derrière un paywall. */
+/** Signalement - toujours gratuit, jamais derrière un paywall. */
 export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
   const rl = await rateLimit(
@@ -29,7 +29,7 @@ export const POST = withErrors(async (req: Request) => {
   });
   if (!target) return jsonError(404, "NOT_FOUND");
 
-  // Dédup : un seul signalement OUVERT par (signaleur, cible) à la fois —
+  // Dédup : un seul signalement OUVERT par (signaleur, cible) à la fois -
   // empêche le spam de signalements et le blocage d'avancement par déni.
   const existing = await prisma.report.findFirst({
     where: {

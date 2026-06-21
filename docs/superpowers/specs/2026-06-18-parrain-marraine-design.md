@@ -1,7 +1,7 @@
-# Parrain / Marraine — design (MVP)
+# Parrain / Marraine - design (MVP)
 
 **Date :** 2026-06-18
-**Statut :** validé (périmètre + nom) — prêt à implémenter
+**Statut :** validé (périmètre + nom) - prêt à implémenter
 
 ## But
 
@@ -21,11 +21,11 @@ L'utilisateur désigne **un** Parrain/Marraine de confiance (parent, pasteur·e,
 
 - Le Parrain/Marraine ne lit **jamais** les conversations (aucun déchiffrement tiers, zéro enjeu RGPD).
 - Le badge n'expose que la **relation** (jamais email/nom du parrain).
-- La page magique ne révèle au parrain que le prénom de son **filleul·e** (l'utilisateur, qui l'a choisi) — **aucune donnée de l'autre partie** du match.
+- La page magique ne révèle au parrain que le prénom de son **filleul·e** (l'utilisateur, qui l'a choisi) - **aucune donnée de l'autre partie** du match.
 - Note du parrain **chiffrée au repos** (AES-256-GCM, `encryptField`/`decryptOptional`).
 - Lien magique = token unique aléatoire (`crypto`), route publique rate-limitée.
 
-## Données (migration prod manuelle — recette Monaco)
+## Données (migration prod manuelle - recette Monaco)
 
 ```prisma
 model Sponsor {
@@ -45,7 +45,7 @@ model Blessing {
   id            String         @id @default(cuid())
   sponsorId     String
   sponsor       Sponsor        @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
-  matchId       String                    // pas de FK Match (validé en route) — migration légère
+  matchId       String                    // pas de FK Match (validé en route) - migration légère
   userId        String                    // = sponsor.userId, pour requêtes
   token         String         @unique
   status        BlessingStatus @default(PENDING)
@@ -59,9 +59,9 @@ model Blessing {
 
 ## API
 
-- `GET/POST/DELETE /api/me/sponsor` — lire / désigner / retirer (auth user).
-- `POST /api/matches/[matchId]/blessing` — demander une bénédiction (crée Blessing PENDING + token, email parrain). Garde : membre du match + parrain existant.
-- `GET /api/blessing/[token]` + `POST /api/blessing/[token]` — page magique (token-auth, pas de session) : lit la demande / soumet décision + note. Rate-limit.
+- `GET/POST/DELETE /api/me/sponsor` - lire / désigner / retirer (auth user).
+- `POST /api/matches/[matchId]/blessing` - demander une bénédiction (crée Blessing PENDING + token, email parrain). Garde : membre du match + parrain existant.
+- `GET /api/blessing/[token]` + `POST /api/blessing/[token]` - page magique (token-auth, pas de session) : lit la demande / soumet décision + note. Rate-limit.
 
 ## UI
 

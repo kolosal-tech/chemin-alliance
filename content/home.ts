@@ -1,5 +1,5 @@
 /**
- * Configuration centrale de la homepage marketing — Chemin d'Alliance.
+ * Configuration centrale de la homepage marketing - Chemin d'Alliance.
  *
  * Ce fichier ne contient AUCUN texte localisé : tout libellé affiché vit dans
  * `messages/<locale>.json` sous le namespace `home` et se référence ici par
@@ -7,7 +7,7 @@
  * traduisibles : URLs, identifiants, ordres, dégradés de placeholders,
  * valeurs de repli des compteurs, références d'icônes.
  *
- * Aucun visuel/logo réel — uniquement des placeholders fictifs et du line-art.
+ * Aucun visuel/logo réel - uniquement des placeholders fictifs et du line-art.
  */
 
 /** Variante d'icône line-art rendue côté composant (clé → SVG). */
@@ -22,7 +22,7 @@ export type IconKey =
   | "truth";
 
 /* ------------------------------------------------------------------ */
-/* « On parle de nous » — noms de presse FICTIFS (placeholders).        */
+/* « On parle de nous » - noms de presse FICTIFS (placeholders).        */
 /* Aucun média réel ; rendus en wordmark typographique, pas en logo.    */
 /* ------------------------------------------------------------------ */
 export const pressLogos = [
@@ -34,7 +34,7 @@ export const pressLogos = [
 ] as const;
 
 /* ------------------------------------------------------------------ */
-/* Bandeau de statistiques — preuve sociale.                           */
+/* Bandeau de statistiques - preuve sociale.                           */
 /* `prismaCount` (optionnel) = modèle interrogé côté serveur ;          */
 /* `fallback` sert si la requête échoue ou renvoie un total trop bas.   */
 /* ------------------------------------------------------------------ */
@@ -75,7 +75,7 @@ export const stats: {
 ];
 
 /* ------------------------------------------------------------------ */
-/* « Pourquoi nous » — nos forces différenciantes.                     */
+/* « Pourquoi nous » - nos forces différenciantes.                     */
 /* ------------------------------------------------------------------ */
 export const whyUs: { id: string; icon: IconKey }[] = [
   { id: "privacy", icon: "shield" },
@@ -85,7 +85,7 @@ export const whyUs: { id: string; icon: IconKey }[] = [
 ];
 
 /* ------------------------------------------------------------------ */
-/* Les 6 étapes du parcours d'Alliance — timeline gamifiée.            */
+/* Les 6 étapes du parcours d'Alliance - timeline gamifiée.            */
 /* `n` = numéro d'étape ; alimente la jauge de progression.            */
 /* ------------------------------------------------------------------ */
 export const journeySteps: { id: string; n: number }[] = [
@@ -108,7 +108,7 @@ export const values: { id: string; icon: IconKey }[] = [
 ];
 
 /* ------------------------------------------------------------------ */
-/* Témoignages — citations dans i18n (`home.testimonials.items.<id>`). */
+/* Témoignages - citations dans i18n (`home.testimonials.items.<id>`). */
 /* `gradient` = dégradé Tailwind du placeholder d'avatar (pas de photo).*/
 /* `months` = ancienneté, rendue via i18n.                              */
 /* ------------------------------------------------------------------ */
@@ -135,15 +135,15 @@ export const testimonials: {
 ];
 
 /* ------------------------------------------------------------------ */
-/* Téléchargement appli — placeholders de stores + PWA.                */
+/* Téléchargement appli - placeholders de stores + PWA.                */
 /* ------------------------------------------------------------------ */
 export const appLinks = {
-  appStore: "#", // placeholder — à remplacer par l'URL App Store réelle
-  googlePlay: "#", // placeholder — à remplacer par l'URL Play Store réelle
+  appStore: "#", // placeholder - à remplacer par l'URL App Store réelle
+  googlePlay: "#", // placeholder - à remplacer par l'URL Play Store réelle
 } as const;
 
 /* ------------------------------------------------------------------ */
-/* Pied de page — structure de navigation (libellés via i18n).         */
+/* Pied de page - structure de navigation (libellés via i18n).         */
 /* `href` interne (next-intl Link).                                     */
 /* ------------------------------------------------------------------ */
 export const footerNav: {
@@ -177,7 +177,7 @@ export const footerNav: {
 ];
 
 /* ------------------------------------------------------------------ */
-/* Avis notés (Deliverable 4) — citations dans i18n                    */
+/* Avis notés (Deliverable 4) - citations dans i18n                    */
 /* (`product.reviews.items.<id>.quote`). `gradient` = avatar placeholder.*/
 /* ------------------------------------------------------------------ */
 export const reviews: {

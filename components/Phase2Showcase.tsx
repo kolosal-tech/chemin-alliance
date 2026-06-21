@@ -8,7 +8,7 @@ import { profileCompletion } from "@/lib/profile-completion";
 
 /**
  * Vitrine design-system des composants Phase 2 (jauge + modale), avec données
- * fictives — permet la validation visuelle sans authentification ni flag actif.
+ * fictives - permet la validation visuelle sans authentification ni flag actif.
  * Non utilisé en production (uniquement /design-system).
  */
 const mock = profileCompletion({

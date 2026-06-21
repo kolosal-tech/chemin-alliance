@@ -53,8 +53,8 @@ const schema = z.object({ content: z.string().min(1).max(4000) });
 
 /**
  * Envoi d'un message :
- * 1. validateAction(send_message) — la doctrine gouverne, pas l'UI.
- * 2. detectContactLeak — si coordonnées détectées, validateAction par type.
+ * 1. validateAction(send_message) - la doctrine gouverne, pas l'UI.
+ * 2. detectContactLeak - si coordonnées détectées, validateAction par type.
  *    Non autorisé -> message stocké BLOCKED (visible expéditeur seul) +
  *    message SYSTÈME éducatif (texte du moteur, jamais une erreur technique).
  */

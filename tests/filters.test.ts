@@ -13,7 +13,7 @@ const p = (
   hasChildren = false,
 ): FilterableProfile => ({ age, isVerified, hasChildren });
 
-describe("lib/filters — parseFilters (Zod défensif)", () => {
+describe("lib/filters - parseFilters (Zod défensif)", () => {
   it("parse des valeurs valides", () => {
     expect(
       parseFilters({
@@ -57,7 +57,7 @@ describe("lib/filters — parseFilters (Zod défensif)", () => {
   });
 });
 
-describe("lib/filters — matchesFilters", () => {
+describe("lib/filters - matchesFilters", () => {
   it("borne d'âge min/max", () => {
     expect(matchesFilters(p(20), { ageMin: 25 })).toBe(false);
     expect(matchesFilters(p(30), { ageMin: 25, ageMax: 40 })).toBe(true);
@@ -80,7 +80,7 @@ describe("lib/filters — matchesFilters", () => {
   });
 });
 
-describe("lib/filters — applyFilters & activeFilterCount", () => {
+describe("lib/filters - applyFilters & activeFilterCount", () => {
   it("applyFilters filtre la liste", () => {
     const list = [p(22, true), p(35, false), p(40, true)];
     const out = applyFilters(list, { ageMin: 30, verified: "1" });

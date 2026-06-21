@@ -6,7 +6,7 @@ import { requireUser } from "@/lib/security/session";
 import { requireMatchMember, buildActionContext } from "@/lib/alliance";
 import { validateAction, type Locale } from "@/lib/core-engine";
 
-/** Demande officielle d'échange — gouvernée par le moteur doctrinal. */
+/** Demande officielle d'échange - gouvernée par le moteur doctrinal. */
 export const POST = withErrors(
   async (req: Request, { params }: { params: { matchId: string } }) => {
     const user = await requireUser();

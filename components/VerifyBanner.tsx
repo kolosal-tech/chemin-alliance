@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 /**
  * Bannière affichée aux membres dont l'email n'est pas encore vérifié.
  * Tant que `isVerified` est faux, le profil n'apparaît pas dans les suggestions
- * (cf. lib/matching) — sans cette bannière, l'utilisateur reste dans un cul-de-sac
+ * (cf. lib/matching) - sans cette bannière, l'utilisateur reste dans un cul-de-sac
  * silencieux. Bouton « renvoyer l'email ».
  */
 export function VerifyBanner() {

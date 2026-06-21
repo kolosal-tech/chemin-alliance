@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
 
-// Passage unilatéral — GRATUIT À VIE (doctrine, lib/payments/entitlements).
+// Passage unilatéral - GRATUIT À VIE (doctrine, lib/payments/entitlements).
 // NON réciproque (≠ blocage) : seul l'auteur cesse de voir le profil passé ;
 // l'autre peut toujours m'être proposé.
 

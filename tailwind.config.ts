@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
-// Design tokens — Chemin d'Alliance (cf. maquette .dc.html)
+// Design tokens - Chemin d'Alliance (cf. maquette .dc.html)
 const config: Config = {
   darkMode: "class",
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],

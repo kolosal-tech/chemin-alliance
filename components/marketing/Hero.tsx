@@ -81,7 +81,7 @@ export async function Hero() {
           </ul>
         </div>
 
-        {/* Colonne visuelle — placeholder soigné, pas de photo */}
+        {/* Colonne visuelle - placeholder soigné, pas de photo */}
         <div className="relative mx-auto w-full max-w-md">
           <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] border border-white/40 bg-gradient-to-br from-navy via-night to-[#0E1626] shadow-phone dark:border-white/10">
             {/* texture dorée */}

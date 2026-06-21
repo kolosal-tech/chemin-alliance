@@ -12,7 +12,7 @@ type ShowcaseProps = {
 };
 
 /**
- * Carte profil gamifiée (Deliverable 4) — présentationnelle, données factices
+ * Carte profil gamifiée (Deliverable 4) - présentationnelle, données factices
  * par défaut (vitrine design-system). Met en avant : anneau de complétude,
  * badge vérifié, étape de parcours, tags foi/intention. Aucune donnée réelle,
  * aucun visuel de personne (dégradé flouté en guise d'avatar).

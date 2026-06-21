@@ -29,7 +29,7 @@ const full: CompletionInput = {
   },
 };
 
-describe("profileCompletion — agrégat", () => {
+describe("profileCompletion - agrégat", () => {
   it("profil vide : 0 %, rien fait, tout manquant", () => {
     const c = profileCompletion(empty);
     expect(c.percent).toBe(0);
@@ -65,7 +65,7 @@ describe("profileCompletion — agrégat", () => {
   });
 });
 
-describe("sectionDone — règles par section", () => {
+describe("sectionDone - règles par section", () => {
   it("blancs/espaces comptés comme manquants", () => {
     expect(sectionDone("city", { ...empty, cityApprox: "   " })).toBe(false);
     expect(
@@ -122,7 +122,7 @@ describe("sectionDone — règles par section", () => {
   });
 });
 
-describe("matchingGateBlocked — gate fort = profil complet ET onboarding", () => {
+describe("matchingGateBlocked - gate fort = profil complet ET onboarding", () => {
   const complete = profileCompletion(full);
   const incomplete = profileCompletion(empty);
 

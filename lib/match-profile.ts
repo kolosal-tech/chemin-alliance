@@ -23,7 +23,7 @@ export type MatchProfileField = {
   visible: boolean;
   /** Valeur résolue (texte déchiffré, ou "yes"/"no" pour les booléens) si visible ; null sinon. */
   value: string | null;
-  /** Étape d'alliance (1..6) à laquelle le champ se déverrouille — pour le libellé verrouillé. */
+  /** Étape d'alliance (1..6) à laquelle le champ se déverrouille - pour le libellé verrouillé. */
   unlocksAtStep: number;
 };
 

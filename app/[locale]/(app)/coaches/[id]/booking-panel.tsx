@@ -42,7 +42,10 @@ export function BookingPanel({
     if (res.ok || res.status === 409) {
       setDone(
         t("booked", {
-          date: format.dateTime(selected, { dateStyle: "full", timeStyle: "short" }),
+          date: format.dateTime(selected, {
+            dateStyle: "full",
+            timeStyle: "short",
+          }),
         }),
       );
     }
@@ -68,13 +71,19 @@ export function BookingPanel({
                   : "border border-sand-200 bg-surface dark:border-anthracite-600 dark:bg-anthracite-800"
               }`}
             >
-              <div className={`text-[11px] ${active ? "text-[#A6AEC0] dark:text-anthracite-800" : "text-sand-600 dark:text-[#7E7A72]"}`}>
+              <div
+                className={`text-[11px] ${active ? "text-[#A6AEC0] dark:text-anthracite-800" : "text-sand-600 dark:text-[#7E7A72]"}`}
+              >
                 {format.dateTime(s, { weekday: "short" })}
               </div>
-              <div className={`font-display text-lg ${active ? "" : "text-night dark:text-[#ECE7DD]"}`}>
+              <div
+                className={`font-display text-lg ${active ? "" : "text-night dark:text-[#ECE7DD]"}`}
+              >
                 {s.getDate()}
               </div>
-              <div className={`text-[10.5px] ${active ? "text-[#E8D9A8] dark:text-anthracite-800" : "text-gold-deep dark:text-gold-light"}`}>
+              <div
+                className={`text-[10.5px] ${active ? "text-[#E8D9A8] dark:text-anthracite-800" : "text-gold-deep dark:text-gold-light"}`}
+              >
                 {format.dateTime(s, { hour: "2-digit", minute: "2-digit" })}
               </div>
             </button>
@@ -82,7 +91,10 @@ export function BookingPanel({
         })}
       </div>
       {done ? (
-        <p role="status" className="rounded-btn bg-[#EAF0EB] px-4 py-3 text-[13.5px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
+        <p
+          role="status"
+          className="rounded-btn bg-[#EAF0EB] px-4 py-3 text-[13.5px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]"
+        >
           {done}
         </p>
       ) : (
@@ -100,9 +112,28 @@ export function BookingPanel({
             disabled={!selected}
             className="flex flex-1 items-center justify-center gap-2 rounded-[13px] bg-navy py-3.5 text-[15px] font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <rect x="4" y="5" width="16" height="16" rx="2.5" stroke="currentColor" strokeWidth="1.6" />
-              <path d="M4 9h16M8 3v4M16 3v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden
+            >
+              <rect
+                x="4"
+                y="5"
+                width="16"
+                height="16"
+                rx="2.5"
+                stroke="currentColor"
+                strokeWidth="1.6"
+              />
+              <path
+                d="M4 9h16M8 3v4M16 3v4"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
             </svg>
             {t("book")}
           </AsyncButton>

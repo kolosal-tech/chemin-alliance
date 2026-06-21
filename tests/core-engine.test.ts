@@ -27,7 +27,7 @@ describe("loadRuleset", () => {
   });
 });
 
-describe("validateAction — blocage des coordonnées", () => {
+describe("validateAction - blocage des coordonnées", () => {
   it("bloque share_phone en Découverte avec message éducatif", () => {
     const res = validateAction({
       rulesetId: "christian_evangelical_default",
@@ -86,7 +86,7 @@ describe("validateAction — blocage des coordonnées", () => {
   });
 });
 
-describe("validateAction — demande d'échange et avancement", () => {
+describe("validateAction - demande d'échange et avancement", () => {
   it("refuse request_contact_exchange en Découverte", () => {
     const res = validateAction({
       rulesetId: "christian_evangelical_default",

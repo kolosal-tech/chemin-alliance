@@ -1,5 +1,5 @@
 /**
- * Complétude du profil — logique PURE et testable, partagée par la jauge
+ * Complétude du profil - logique PURE et testable, partagée par la jauge
  * (OnboardingProgress, façon Duolingo) et le gate fort de Phase 2.
  *
  * Le gate « minimum » (ville + intention) reste défini dans `lib/matching`

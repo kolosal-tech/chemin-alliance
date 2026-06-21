@@ -1,9 +1,9 @@
-# Curriculum de préparation au mariage — Chemin d'Alliance.
+# Curriculum de préparation au mariage - Chemin d'Alliance.
 #
 # Modules guidés, ordonnés selon les 6 étapes du parcours d'Alliance. Cadre
 # BIBLIQUE et doctrine-agnostique au tronc commun ; les spécificités doctrinales
 # (sacrement catholique, accompagnement pastoral évangélique) vivent dans
-# `vertical_notes` — JAMAIS en dur dans le code.
+# `vertical_notes` - JAMAIS en dur dans le code.
 #
 # `scripture` ne contient que des RÉFÉRENCES (livre chap:versets), jamais le
 # texte : respect du droit d'auteur des traductions et liberté de version.
@@ -14,7 +14,7 @@ curriculum:
   version: 1
 
   modules:
-    # ─────────────────────────────────────────── ÉTAPE 1 — DÉCOUVERTE
+    # ─────────────────────────────────────────── ÉTAPE 1 - DÉCOUVERTE
     - id: foundations_identity
       stage: DISCOVERY
       icon: seed
@@ -56,7 +56,7 @@ curriculum:
         es: "Esta semana: escribe 3 maneras en que Dios me llama 'amado/a', sin referencia a una relación."
         pt: "Esta semana: escreva 3 formas como Deus me chama 'amado/a', sem referência a uma relação."
 
-    # ─────────────────────────────────────────── ÉTAPE 2 — DIALOGUE
+    # ─────────────────────────────────────────── ÉTAPE 2 - DIALOGUE
     - id: true_communication
       stage: DIALOGUE
       icon: dialogue
@@ -98,7 +98,7 @@ curriculum:
         es: "Un intercambio esta semana donde reformulo al otro antes de responder: 'Si entiendo bien, tú…'"
         pt: "Uma conversa esta semana onde reformulo o outro antes de responder: 'Se entendo bem, tu…'"
 
-    # ─────────────────────────────────────────── ÉTAPE 3 — DISCERNEMENT
+    # ─────────────────────────────────────────── ÉTAPE 3 - DISCERNEMENT
     - id: discern_together
       stage: DISCERNMENT
       icon: compass
@@ -140,7 +140,7 @@ curriculum:
         es: "Cada uno lista 5 valores no negociables, luego compararlos orando juntos."
         pt: "Cada um lista 5 valores inegociáveis, depois compará-los em oração juntos."
 
-    # ─────────────────────────────────────────── ÉTAPE 4 — ACCOMPAGNEMENT
+    # ─────────────────────────────────────────── ÉTAPE 4 - ACCOMPAGNEMENT
     - id: walk_accompanied
       stage: ACCOMPANIMENT
       icon: hands
@@ -150,10 +150,10 @@ curriculum:
         es: "Caminar acompañados"
         pt: "Caminhar acompanhados"
       summary:
-        fr: "Aucun couple ne tient seul. S'entourer de témoins mûrs — famille, communauté, accompagnateur — qui parlent vrai et prient avec nous."
-        en: "No couple stands alone. Surround yourselves with mature witnesses — family, community, a companion — who speak truth and pray with you."
-        es: "Ninguna pareja se sostiene sola. Rodearse de testigos maduros — familia, comunidad, acompañante — que hablan con verdad y oran con ustedes."
-        pt: "Nenhum casal se sustenta sozinho. Rodear-se de testemunhas maduras — família, comunidade, acompanhante — que falam verdade e oram convosco."
+        fr: "Aucun couple ne tient seul. S'entourer de témoins mûrs - famille, communauté, accompagnateur - qui parlent vrai et prient avec nous."
+        en: "No couple stands alone. Surround yourselves with mature witnesses - family, community, a companion - who speak truth and pray with you."
+        es: "Ninguna pareja se sostiene sola. Rodearse de testigos maduros - familia, comunidad, acompañante - que hablan con verdad y oran con ustedes."
+        pt: "Nenhum casal se sustenta sozinho. Rodear-se de testemunhas maduras - família, comunidade, acompanhante - que falam verdade e oram convosco."
       scripture:
         - "Ecclésiaste 4:9-12"
         - "Proverbes 11:14"
@@ -182,7 +182,7 @@ curriculum:
         es: "Invitar a una pareja o acompañante maduro a orar con nosotros este mes."
         pt: "Convidar um casal ou acompanhante maduro para orar connosco este mês."
 
-    # ─────────────────────────────────────────── ÉTAPE 5 — ENGAGEMENT
+    # ─────────────────────────────────────────── ÉTAPE 5 - ENGAGEMENT
     - id: covenant_commitment
       stage: COMMITMENT
       icon: ring
@@ -224,7 +224,7 @@ curriculum:
         es: "Cada uno escribe qué significa 'para siempre', luego se lo leen."
         pt: "Cada um escreve o que significa 'para sempre', depois leem-no um ao outro."
 
-    # ─────────────────────────────────── ÉTAPE 6 — PRÉPARATION AU MARIAGE
+    # ─────────────────────────────────── ÉTAPE 6 - PRÉPARATION AU MARIAGE
     - id: toward_marriage
       stage: MARRIAGE_PREPARATION
       icon: home
@@ -266,7 +266,7 @@ curriculum:
         es: "Construir juntos un primer presupuesto del hogar y un ritmo de oración de pareja."
         pt: "Construir juntos um primeiro orçamento do lar e um ritmo de oração de casal."
 
-  # Spécificités doctrinales — JAMAIS en dur dans le code, propres à chaque
+  # Spécificités doctrinales - JAMAIS en dur dans le code, propres à chaque
   # verticale. S'ajoutent au tronc commun ci-dessus selon faithProfile.vertical.
   vertical_notes:
     CHRISTIAN_EVANGELICAL:

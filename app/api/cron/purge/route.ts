@@ -7,7 +7,7 @@ import { buildPurgePlan } from "@/lib/cron/retention";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// Cron quotidien : purge idempotente des données expirées — vérifications
+// Cron quotidien : purge idempotente des données expirées - vérifications
 // téléphone expirées, tokens email/MDP expirés (nullifiés), compteurs Coach IA
 // > 90 j. Rejouable sans danger. Dormant : 503 sans CRON_SECRET.
 // NB : les Match PENDING dormants ne sont PAS purgés (peuvent contenir des

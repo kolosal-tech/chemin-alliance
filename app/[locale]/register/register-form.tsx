@@ -86,7 +86,7 @@ export function RegisterForm() {
 
   const input =
     "rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
-  // Cartes d'intention : un SEUL style — fond neutre par défaut, sélection
+  // Cartes d'intention : un SEUL style - fond neutre par défaut, sélection
   // claire (bordure + fond or + anneau). Avant : 3 fonds différents même non
   // cochés -> on ne voyait pas lequel était sélectionné.
   const intentCard =

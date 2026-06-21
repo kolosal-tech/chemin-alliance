@@ -5,7 +5,7 @@ import { decode } from "blurhash";
 
 /**
  * Rend un BlurHash en silhouette floue : canvas 32×40 décodé puis étiré en CSS
- * (lissage natif du navigateur → flou doux). AUCUN octet de la vraie photo —
+ * (lissage natif du navigateur → flou doux). AUCUN octet de la vraie photo -
  * seulement l'empreinte DCT. Si le hash est invalide/absent, le canvas reste
  * transparent et le fond du parent (dégradé de marque) prend le relais.
  */

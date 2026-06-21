@@ -4,7 +4,7 @@ import { withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { decryptOptional } from "@/lib/security/crypto";
 
-/** RGPD — droit à la portabilité : export JSON complet et lisible. */
+/** RGPD - droit à la portabilité : export JSON complet et lisible. */
 export const GET = withErrors(async () => {
   const user = await requireUser();
   const [consents, matches, messages, answers, bookings, reports] =

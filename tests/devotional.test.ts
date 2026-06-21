@@ -3,7 +3,7 @@ import { advanceStreak } from "@/lib/devotional";
 
 const day = (s: string) => new Date(s + "T12:00:00Z"); // midi UTC
 
-describe("advanceStreak — logique de streak quotidien (jour UTC)", () => {
+describe("advanceStreak - logique de streak quotidien (jour UTC)", () => {
   it("première fois : streak = 1", () => {
     const r = advanceStreak(null, day("2026-06-17"), 0, 0);
     expect(r.currentStreak).toBe(1);
@@ -48,7 +48,7 @@ describe("advanceStreak — logique de streak quotidien (jour UTC)", () => {
 
 import { getDailyDevotion } from "@/lib/devotional";
 
-describe("getDailyDevotion — sélection déterministe par jour", () => {
+describe("getDailyDevotion - sélection déterministe par jour", () => {
   it("1er janvier → premier dévotionnel (jour 0, pas off-by-one)", () => {
     const d = getDailyDevotion("fr", new Date("2026-01-01T12:00:00Z"));
     expect(d.id).toBe("amour-patient");

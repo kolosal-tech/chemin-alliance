@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { redactPII } from "@/lib/llm/redaction";
 import { resolveModels } from "@/lib/llm/matrix";
 
-describe("redactPII — purge des coordonnées avant envoi LLM tiers", () => {
+describe("redactPII - purge des coordonnées avant envoi LLM tiers", () => {
   it("masque email, téléphone, lien et pseudo", () => {
     const r = redactPII(
       "Écris-moi à jean.dupont@mail.com ou au +225 07 12 34 56 78, insta @jean_d, https://t.me/jean",
@@ -26,7 +26,7 @@ describe("redactPII — purge des coordonnées avant envoi LLM tiers", () => {
   });
 });
 
-describe("matrix — résolution des modèles par étape × palier", () => {
+describe("matrix - résolution des modèles par étape × palier", () => {
   it("termine toujours par le modèle éprouvé (résilience)", () => {
     const std = resolveModels("dialogue", "standard");
     expect(std.length).toBeGreaterThanOrEqual(1);

@@ -7,7 +7,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Icon } from "./icons";
 
-/** Wordmark — pas de logo image ; glyph dans pastille + nom. */
+/** Wordmark - pas de logo image ; glyph dans pastille + nom. */
 function Wordmark() {
   return (
     <Link
@@ -40,7 +40,7 @@ export function MarketingHeader() {
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-6">
         <Wordmark />
 
-        {/* Liens — desktop */}
+        {/* Liens - desktop */}
         <div className="hidden items-center gap-1 md:flex">
           {navLinks.map((l) => (
             <a
@@ -71,7 +71,7 @@ export function MarketingHeader() {
             {t("start")}
           </Link>
 
-          {/* Burger — mobile */}
+          {/* Burger - mobile */}
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}

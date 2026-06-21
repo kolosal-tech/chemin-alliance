@@ -22,7 +22,7 @@ body {
 /* iOS : empêche le ZOOM automatique au focus d'un champ. iOS Safari zoome dès
    qu'un contrôle de formulaire a une police < 16px (c'est ce qui décadre l'écran
    quand on remplit un formulaire sur iPhone). On force 16px sur mobile pour tous
-   les contrôles — !important pour battre la classe Tailwind text-sm (14px). */
+   les contrôles - !important pour battre la classe Tailwind text-sm (14px). */
 @media (max-width: 640px) {
   input,
   select,
@@ -31,7 +31,7 @@ body {
   }
 }
 /* Mode jour : fond beige chaud (canvas) pour que les cartes claires (surface)
-   ressortent — sinon blanc-sur-blanc, sans contraste. */
+   ressortent - sinon blanc-sur-blanc, sans contraste. */
 body {
   @apply bg-canvas text-ink font-sans antialiased;
 }
@@ -44,7 +44,7 @@ body {
   color: #131d33;
 }
 
-/* Label mono — métadonnées, cadenas, étapes */
+/* Label mono - métadonnées, cadenas, étapes */
 .lbl {
   @apply font-mono uppercase tracking-label;
 }
@@ -162,7 +162,7 @@ body {
   }
 }
 
-/* Focus visible — WCAG AA */
+/* Focus visible - WCAG AA */
 :focus-visible {
   outline: 2px solid #c9a84c;
   outline-offset: 2px;

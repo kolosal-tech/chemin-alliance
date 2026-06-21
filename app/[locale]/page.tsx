@@ -24,7 +24,7 @@ export async function generateMetadata({
     locale: params.locale,
     namespace: "common",
   });
-  const title = `${tc("appName")} — ${t("hero.title")} ${t("hero.titleAccent")}`;
+  const title = `${tc("appName")} - ${t("hero.title")} ${t("hero.titleAccent")}`;
   const description = t("hero.subtitle");
   return {
     title: tc("appName"),
@@ -59,7 +59,7 @@ export default async function HomePage({
         <JourneySteps />
         <ValuesGrid />
 
-        {/* Témoignages — carrousel chargé en différé */}
+        {/* Témoignages - carrousel chargé en différé */}
         <section
           id="testimonials"
           className="scroll-mt-20 border-y border-sand-300/60 bg-cream/60 px-5 py-20 sm:px-6 dark:border-anthracite-700 dark:bg-anthracite-850/60"

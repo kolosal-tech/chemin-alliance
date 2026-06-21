@@ -136,7 +136,7 @@ export default async function SuggestionsPage({
 
       {!onboardingDone ? (
         // Bilan de maturité (« recto-verso ») : affiché une fois, quel que soit
-        // le gate Phase 2 — posture ORIENTER, jamais bloquer.
+        // le gate Phase 2 - posture ORIENTER, jamais bloquer.
         <div className="mt-4">
           <OnboardingIntroCard />
         </div>

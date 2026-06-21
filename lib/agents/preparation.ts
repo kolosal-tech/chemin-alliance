@@ -3,7 +3,7 @@ import type { Locale } from "@/lib/core-engine";
 import { completeJson } from "./llm";
 
 /**
- * Agent 1 — Compagnon de Préparation.
+ * Agent 1 - Compagnon de Préparation.
  * Entretien d'accueil -> Portrait de Préparation (5 dimensions QUALITATIVES,
  * jamais un score) -> orientation douce. L'agent ne bloque JAMAIS l'accès :
  * il propose, la personne choisit, un humain valide tout effet d'accès.

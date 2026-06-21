@@ -41,10 +41,10 @@ export function guardrailResponse(locale: Locale): {
   guardrail: true;
 } {
   const texts: Record<Locale, string> = {
-    fr: "Cette question touche quelque chose de profond, et elle mérite mieux qu'une réponse d'IA. Je peux t'aider à formuler tes propres critères, mais cette décision t'appartient — et un accompagnateur humain vérifié peut t'éclairer en profondeur. Veux-tu que je te montre les coachs disponibles ?",
-    en: "This question touches something deep, and it deserves more than an AI answer. I can help you shape your own criteria, but this decision is yours — and a verified human companion can shed deeper light. Would you like to see the available coaches?",
-    es: "Esta pregunta toca algo profundo y merece más que una respuesta de IA. Puedo ayudarte a formular tus propios criterios, pero esta decisión te pertenece — y un acompañante humano verificado puede iluminarte en profundidad. ¿Quieres ver los coaches disponibles?",
-    pt: "Esta pergunta toca algo profundo e merece mais do que uma resposta de IA. Posso ajudá-lo/a a formular os seus próprios critérios, mas esta decisão pertence-lhe — e um acompanhante humano verificado pode esclarecer em profundidade. Quer ver os coaches disponíveis?",
+    fr: "Cette question touche quelque chose de profond, et elle mérite mieux qu'une réponse d'IA. Je peux t'aider à formuler tes propres critères, mais cette décision t'appartient - et un accompagnateur humain vérifié peut t'éclairer en profondeur. Veux-tu que je te montre les coachs disponibles ?",
+    en: "This question touches something deep, and it deserves more than an AI answer. I can help you shape your own criteria, but this decision is yours - and a verified human companion can shed deeper light. Would you like to see the available coaches?",
+    es: "Esta pregunta toca algo profundo y merece más que una respuesta de IA. Puedo ayudarte a formular tus propios criterios, pero esta decisión te pertenece - y un acompañante humano verificado puede iluminarte en profundidad. ¿Quieres ver los coaches disponibles?",
+    pt: "Esta pergunta toca algo profundo e merece mais do que uma resposta de IA. Posso ajudá-lo/a a formular os seus próprios critérios, mas esta decisão pertence-lhe - e um acompanhante humano verificado pode esclarecer em profundidade. Quer ver os coaches disponíveis?",
   };
   return { text: texts[locale], guardrail: true };
 }

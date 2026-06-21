@@ -76,8 +76,7 @@ export function CoachAdmin({ coaches }: { coaches: Coach[] }) {
 
   const field =
     "w-full rounded-btnsm border border-sand-300 bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-gold dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#ECE7DD]";
-  const label =
-    "lbl mb-1 block text-[9px] text-gold-deep dark:text-gold-light";
+  const label = "lbl mb-1 block text-[9px] text-gold-deep dark:text-gold-light";
 
   return (
     <div className="flex flex-col gap-6">
@@ -125,7 +124,9 @@ export function CoachAdmin({ coaches }: { coaches: Coach[] }) {
             </div>
           </div>
           <div>
-            <span className={label}>Spécialités (séparées par des virgules)</span>
+            <span className={label}>
+              Spécialités (séparées par des virgules)
+            </span>
             <input
               className={field}
               value={specialties}
@@ -161,7 +162,9 @@ export function CoachAdmin({ coaches }: { coaches: Coach[] }) {
             {busy ? "Ajout…" : "Ajouter l'accompagnateur"}
           </button>
           {msg && (
-            <p className="text-[12.5px] text-gold-ink dark:text-[#E0C77A]">{msg}</p>
+            <p className="text-[12.5px] text-gold-ink dark:text-[#E0C77A]">
+              {msg}
+            </p>
           )}
         </div>
       </form>

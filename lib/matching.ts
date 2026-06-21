@@ -48,7 +48,7 @@ export function missingMinimumProfile(user: {
 /**
  * Suggestions filtrées par le Filtre Anti-Malaise Local et le mode invisible.
  * La raison d'exclusion n'est JAMAIS exposée.
- * Max 3 suggestions — la qualité avant la quantité.
+ * Max 3 suggestions - la qualité avant la quantité.
  *
  * `me` est passé déjà chargé (zéro requête redondante) ; les requêtes
  * indépendantes (matchs, signalements) partent en parallèle.
@@ -64,7 +64,7 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
   // suggestion. La page Suggestions affiche un appel à compléter le profil.
   // Symétrique du filtre entrant ci-dessous (on n'apparaît pas non plus).
   if (missingMinimumProfile(me).length > 0) return [];
-  // Phase 2 (derrière flag, OFF par défaut) : gate FORT — profil 100 % complet
+  // Phase 2 (derrière flag, OFF par défaut) : gate FORT - profil 100 % complet
   // ET onboarding fait (flag persistant). Flag absent ⇒ inerte, inchangé.
   if (
     matchingGateBlocked({
@@ -256,7 +256,7 @@ function denominationScore(a: Candidate, b: Candidate): number {
   return da === db ? WEIGHTS.denomination : WEIGHTS.denomination * 0.25;
 }
 
-/** Activité récente du candidat — favorise les profils vivants. */
+/** Activité récente du candidat - favorise les profils vivants. */
 function activityScore(c: Candidate, now: number): number {
   const t =
     c.updatedAt instanceof Date
@@ -271,7 +271,7 @@ function activityScore(c: Candidate, now: number): number {
 
 /**
  * Score d'affinité 0..100 entre `a` (l'utilisateur) et `b` (le candidat).
- * Pur et déterministe — jamais affiché : sert uniquement au classement.
+ * Pur et déterministe - jamais affiché : sert uniquement au classement.
  */
 export function matchScore(
   a: Candidate,
@@ -292,7 +292,7 @@ export function matchScore(
 /**
  * Jitter déterministe [0,1) par (utilisateur, candidat, jour). Hash FNV-1a :
  * stable sur la journée, tourne chaque jour. Amplitude faible côté appelant
- * (≈4 pts) — les très bons matchs restent en tête, les quasi-ex æquo permutent.
+ * (≈4 pts) - les très bons matchs restent en tête, les quasi-ex æquo permutent.
  */
 function dailyJitter(meId: string, candId: string, now: number): number {
   const day = Math.floor(now / 86_400_000);

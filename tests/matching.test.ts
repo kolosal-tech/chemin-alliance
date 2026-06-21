@@ -57,7 +57,7 @@ const STRONG = {
   country: "BF",
 };
 
-describe("matchScore — score d'affinité pondéré 0..100", () => {
+describe("matchScore - score d'affinité pondéré 0..100", () => {
   it("deux profils fortement alignés et actifs atteignent 100", () => {
     const a = cand(STRONG);
     const b = cand(STRONG);

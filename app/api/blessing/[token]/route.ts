@@ -13,7 +13,7 @@ import { encryptField } from "@/lib/security/crypto";
 
 export const runtime = "nodejs";
 
-// Page magique du Parrain/Marraine — authentifiée PAR LE TOKEN (pas de session).
+// Page magique du Parrain/Marraine - authentifiée PAR LE TOKEN (pas de session).
 // Ne révèle que le prénom du filleul·e (qui l'a choisi) ; aucune donnée de
 // l'autre partie du match.
 export const GET = withErrors(

@@ -3,7 +3,7 @@ import type { Locale } from "@/lib/core-engine";
 import { completeText } from "./llm";
 
 /**
- * Agent 4 — Bilan d'Étape. Relecture PRIVÉE pour un seul membre :
+ * Agent 4 - Bilan d'Étape. Relecture PRIVÉE pour un seul membre :
  * construit uniquement à partir de SES réponses et de la couverture des
  * thèmes (jamais le contenu des réponses de l'autre).
  */

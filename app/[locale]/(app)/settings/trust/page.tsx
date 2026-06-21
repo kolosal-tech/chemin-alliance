@@ -54,7 +54,7 @@ export default async function TrustPage({
         )}
       </section>
 
-      {/* Téléphone — dormant */}
+      {/* Téléphone - dormant */}
       <section className="mt-3 flex items-center gap-3 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
         <span aria-hidden className="text-lg">
           {user.phoneVerified ? "✅" : "📱"}

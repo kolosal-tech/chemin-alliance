@@ -5,7 +5,7 @@ import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 
-// Runtime Node explicite : web-push (via lib/push) utilise crypto/https —
+// Runtime Node explicite : web-push (via lib/push) utilise crypto/https -
 // interdit un runtime edge accidentel.
 export const runtime = "nodejs";
 

@@ -19,7 +19,7 @@ const envSchema = z.object({
   NODE_ENV: z
     .enum(["development", "test", "production"])
     .default("development"),
-  // Coach IA — optionnel : sans clé, le mode fallback déterministe est actif.
+  // Coach IA - optionnel : sans clé, le mode fallback déterministe est actif.
   // AI_PROVIDER force le fournisseur (sinon : Anthropic > OpenRouter > OpenAI).
   AI_PROVIDER: z
     .enum(["anthropic", "openrouter", "openai", "fallback"])
@@ -28,37 +28,37 @@ const envSchema = z.object({
   OPENROUTER_API_KEY: z.string().optional(),
   OPENROUTER_MODEL: z.string().default("anthropic/claude-haiku-4.5"),
   OPENAI_API_KEY: z.string().optional(),
-  // Email transactionnel — sans clé, les liens sont loggés (dev).
+  // Email transactionnel - sans clé, les liens sont loggés (dev).
   RESEND_API_KEY: z.string().optional(),
   EMAIL_FROM: z
     .string()
     .default("Chemin d'Alliance <alliance@kolosaltech.com>"),
-  // Rate-limit partagé (Upstash Redis) — sans clés, repli en mémoire par instance.
+  // Rate-limit partagé (Upstash Redis) - sans clés, repli en mémoire par instance.
   UPSTASH_REDIS_REST_URL: z.string().url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
-  // Vérification SMS via Twilio Verify — sans clés, le code est loggé (dormant).
+  // Vérification SMS via Twilio Verify - sans clés, le code est loggé (dormant).
   TWILIO_ACCOUNT_SID: z.string().optional(),
   TWILIO_AUTH_TOKEN: z.string().optional(),
   TWILIO_VERIFY_SERVICE_SID: z.string().optional(),
-  // Paiement (Stripe) — sans clés, FakePaymentProvider (aucun abonnement).
+  // Paiement (Stripe) - sans clés, FakePaymentProvider (aucun abonnement).
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
   STRIPE_PRICE_PREMIUM: z.string().optional(),
   STRIPE_PUBLISHABLE_KEY: z.string().optional(),
-  // Web Push (PWA) — sans clés VAPID, les notifications push sont dormantes.
+  // Web Push (PWA) - sans clés VAPID, les notifications push sont dormantes.
   // Générer : node -e "console.log(require('web-push').generateVAPIDKeys())"
   WEB_PUSH_EMAIL: z.string().default("mailto:alliance@kolosaltech.com"),
   WEB_PUSH_PRIVATE_KEY: z.string().optional(),
   NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY: z.string().optional(),
-  // Photos de profil (Supabase Storage) — sans clés, l'upload est désactivé
+  // Photos de profil (Supabase Storage) - sans clés, l'upload est désactivé
   // (bouton masqué). SERVICE_ROLE_KEY = secret serveur (jamais exposé client).
   SUPABASE_URL: z.string().url().optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
   SUPABASE_PHOTO_BUCKET: z.string().default("profile-photos"),
-  // Cron de rétention (Vercel Cron) — sans secret, les routes /api/cron/* sont
+  // Cron de rétention (Vercel Cron) - sans secret, les routes /api/cron/* sont
   // dormantes (503) : rien ne se déclenche tant que CRON_SECRET n'est pas posé.
   CRON_SECRET: z.string().optional(),
-  // Phase 2 — gate du profil avant le matching. OFF par défaut. "true" = ON.
+  // Phase 2 - gate du profil avant le matching. OFF par défaut. "true" = ON.
   // Lu côté client via lib/flags (process.env inliné par Next) ; déclaré ici
   // pour documentation/validation serveur.
   NEXT_PUBLIC_PHASE2_GATE_PROFILE: z.enum(["true", "false"]).optional(),

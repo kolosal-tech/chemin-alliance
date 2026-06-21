@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { sealInsight, openInsight } from "@/lib/agent-insight";
 
-describe("agent-insight — chiffrement de dataJson", () => {
+describe("agent-insight - chiffrement de dataJson", () => {
   it("round-trip : openInsight(sealInsight(x)) restitue l'objet", () => {
     const data = {
       severity: "high",

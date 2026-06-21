@@ -62,7 +62,7 @@ export const PATCH = withErrors(async (req: Request) => {
   return NextResponse.json({ ok: true });
 });
 
-// RGPD (art.17) — effacement par ANONYMISATION : on purge toutes les données
+// RGPD (art.17) - effacement par ANONYMISATION : on purge toutes les données
 // personnelles et sensibles, mais on conserve le User anonymisé afin de ne PAS
 // détruire le Match et la conversation du partenaire (données de tiers). Le
 // compte devient inutilisable (mot de passe aléatoire, session invalidée) et

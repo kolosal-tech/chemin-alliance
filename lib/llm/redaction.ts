@@ -1,6 +1,6 @@
 // Purge des données personnelles identifiables (PII) AVANT tout envoi à un
 // modèle tiers (directive de confidentialité du document d'architecture LLM).
-// On remplace par des marqueurs lisibles — la structure de la phrase est
+// On remplace par des marqueurs lisibles - la structure de la phrase est
 // préservée pour ne pas fausser le sens du discernement.
 //
 // Périmètre VOLONTAIREMENT restreint aux coordonnées (email, téléphone, @handle,

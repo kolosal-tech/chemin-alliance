@@ -1,5 +1,5 @@
 /**
- * Prix segmenté par région — diaspora vs Afrique francophone (zone XOF).
+ * Prix segmenté par région - diaspora vs Afrique francophone (zone XOF).
  *
  * Constat marché : 9,99 €/mois ≈ 6 560 XOF ≈ ~15 % du SMIC burkinabè. Inadapté
  * en masse locale. On propose donc un palier local fortement réduit (2 000 XOF/

@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl";
  *
  * Les filtres sont portés par l'URL (?ageMin&ageMax&verified&children) : la
  * page serveur les valide via Zod (`lib/filters`) et filtre la liste. Ce
- * composant ne fait que produire ces searchParams — aucun appel réseau, aucune
+ * composant ne fait que produire ces searchParams - aucun appel réseau, aucune
  * mutation, donc aucune surface de rate-limit. Accessible : dialog, Échap,
  * fermeture au backdrop.
  */
@@ -134,7 +134,7 @@ export function FiltersDrawer({ activeCount }: { activeCount: number }) {
                     aria-label={t("min")}
                     className="w-full rounded-btnsm border border-sand-300 bg-canvas px-3 py-2.5 text-[14px] text-night dark:border-anthracite-600 dark:bg-anthracite-900 dark:text-[#ECE7DD]"
                   />
-                  <span className="text-warmgray dark:text-[#9A958B]">—</span>
+                  <span className="text-warmgray dark:text-[#9A958B]">-</span>
                   <input
                     type="number"
                     inputMode="numeric"

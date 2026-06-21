@@ -32,7 +32,7 @@ export function DevotionalClient({
   const [showVerse, setShowVerse] = useState(false); // déplie le verset de la dernière réflexion
   const pendingRef = useRef(false); // anti double-soumission de markDone
 
-  // Dernière réflexion (journal privé local) — affichée en rappel.
+  // Dernière réflexion (journal privé local) - affichée en rappel.
   useEffect(() => {
     const load = () => {
       try {
@@ -120,7 +120,7 @@ export function DevotionalClient({
         </p>
       </article>
 
-      {/* Entrée immersive — chemin principal, clarifie « quoi faire ici ». */}
+      {/* Entrée immersive - chemin principal, clarifie « quoi faire ici ». */}
       <button
         type="button"
         onClick={() => setSessionOpen(true)}

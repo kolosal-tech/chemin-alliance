@@ -7,7 +7,7 @@ import {
 
 const day = (s: string) => new Date(s + "T12:00:00Z"); // midi UTC
 
-describe("retention — logique pure", () => {
+describe("retention - logique pure", () => {
   it("buildPurgePlan : bornes déterministes (tokens=now, aiCoach=now-90j)", () => {
     const now = day("2026-06-18");
     const p = buildPurgePlan(now);

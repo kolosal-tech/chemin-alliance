@@ -16,7 +16,7 @@ import {
   generateInviteCode,
 } from "@/lib/agents/guardian";
 
-describe("Compagnon de Préparation — fallback", () => {
+describe("Compagnon de Préparation - fallback", () => {
   const answers = (overrides: Record<string, string> = {}) =>
     INTERVIEW_QUESTIONS.map((q) => ({
       id: q.id,
@@ -57,7 +57,7 @@ describe("Compagnon de Préparation — fallback", () => {
   });
 });
 
-describe("Veilleur — signaux de risque", () => {
+describe("Veilleur - signaux de risque", () => {
   it("détecte une demande d'argent", () => {
     const r = analyzeRisk(
       "J'ai une urgence financière, envoie-moi 200 euros par Western Union",
@@ -83,7 +83,7 @@ describe("Veilleur — signaux de risque", () => {
   });
 });
 
-describe("Facilitateur — thèmes non couverts", () => {
+describe("Facilitateur - thèmes non couverts", () => {
   it("liste les thèmes jamais abordés jusqu'à l'étape atteinte", () => {
     const { themes, suggestions } = uncoveredThemes(
       "christian_evangelical_default",
@@ -106,7 +106,7 @@ describe("Facilitateur — thèmes non couverts", () => {
   });
 });
 
-describe("Bilan d'étape — données privées", () => {
+describe("Bilan d'étape - données privées", () => {
   it("sépare thèmes partagés / ouverts sans exposer les réponses de l'autre", () => {
     const mine = [
       { questionId: "q1", answer: "ma réponse", userId: "me" },
@@ -123,7 +123,7 @@ describe("Bilan d'étape — données privées", () => {
   });
 });
 
-describe("Sortie Digne — détection de silence", () => {
+describe("Sortie Digne - détection de silence", () => {
   const d = (days: number) => new Date(Date.now() - days * 86_400_000);
   it("silence de 8 jours après message de l'autre -> détecté", () => {
     expect(silenceDetected(d(8), d(12))).toBe(true);

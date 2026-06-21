@@ -5,7 +5,7 @@ import {
   buildMomoPaymentPayload,
 } from "@/lib/payments/flutterwave";
 
-describe("flutterwave — Mobile Money XOF (dormant + webhook)", () => {
+describe("flutterwave - Mobile Money XOF (dormant + webhook)", () => {
   let savedSecret: string | undefined;
   let savedHash: string | undefined;
   beforeEach(() => {
