@@ -52,7 +52,11 @@ export default async function ProfilePage({
         <div className="mb-4 flex gap-2">
           {faith?.denomination && (
             <span className="rounded-[9px] bg-navy px-2.5 py-1.5 text-xs font-semibold text-[#E8D9A8] dark:bg-[#222C42] dark:text-[#B9C6E0]">
-              {optionLabel(faith.denomination, DENOMINATION_LABELS, params.locale)}
+              {optionLabel(
+                faith.denomination,
+                DENOMINATION_LABELS,
+                params.locale,
+              )}
             </span>
           )}
           {user.isVerified && (
@@ -208,7 +212,11 @@ export default async function ProfilePage({
                     {t("profile.interestsLabel")}
                   </div>
                   <p className="mt-0.5 leading-normal text-ink dark:text-[#ECE7DD]">
-                    {localizeList(rel.interests, INTEREST_LABELS, params.locale)}
+                    {localizeList(
+                      rel.interests,
+                      INTEREST_LABELS,
+                      params.locale,
+                    )}
                   </p>
                 </div>
               )}
@@ -218,7 +226,11 @@ export default async function ProfilePage({
                     {t("profile.personalityLabel")}
                   </div>
                   <p className="mt-0.5 leading-normal text-ink dark:text-[#ECE7DD]">
-                    {localizeList(rel.personality, PERSONALITY_LABELS, params.locale)}
+                    {localizeList(
+                      rel.personality,
+                      PERSONALITY_LABELS,
+                      params.locale,
+                    )}
                   </p>
                 </div>
               )}

@@ -31,7 +31,12 @@ export const DENOMINATIONS = [
 ] as const;
 
 export const DENOMINATION_LABELS: LabelMap = {
-  Catholique: { fr: "Catholique", en: "Catholic", es: "Católica", pt: "Católica" },
+  Catholique: {
+    fr: "Catholique",
+    en: "Catholic",
+    es: "Católica",
+    pt: "Católica",
+  },
   Évangélique: {
     fr: "Évangélique",
     en: "Evangelical",
@@ -406,7 +411,9 @@ export function countryLabel(
   const code = COUNTRY_CODE_BY_NAME[value];
   if (code) {
     try {
-      return new Intl.DisplayNames([locale], { type: "region" }).of(code) ?? value;
+      return (
+        new Intl.DisplayNames([locale], { type: "region" }).of(code) ?? value
+      );
     } catch {
       return value;
     }

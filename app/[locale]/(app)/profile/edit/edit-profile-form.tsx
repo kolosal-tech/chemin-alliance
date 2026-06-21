@@ -543,7 +543,12 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
             {field("ministry", t("ministry"), { max: 120 })}
             {field("localChurch", t("localChurch"), { max: 160 })}
             {field("testimony", t("testimonyLabel"), { area: true, max: 1500 })}
-            {chips("interests", t("interestsLabel"), INTERESTS, INTEREST_LABELS)}
+            {chips(
+              "interests",
+              t("interestsLabel"),
+              INTERESTS,
+              INTEREST_LABELS,
+            )}
             {chips(
               "personality",
               t("personalityLabel"),
