@@ -37,13 +37,36 @@ export function Radar({ axes }: { axes: Axes }) {
   ];
 
   return (
-    <svg width="178" height="180" viewBox="0 0 180 184" className="flex-none" role="img" aria-label={keys.map((k) => t(k)).join(", ")}>
+    <svg
+      width="178"
+      height="180"
+      viewBox="0 0 180 184"
+      className="flex-none"
+      role="img"
+      aria-label={keys.map((k) => t(k)).join(", ")}
+    >
       {[1, 0.66, 0.33].map((f) => (
-        <polygon key={f} points={ring(f)} fill="none" className="stroke-sand-300 dark:stroke-anthracite-600" strokeWidth="1" />
+        <polygon
+          key={f}
+          points={ring(f)}
+          fill="none"
+          className="stroke-sand-300 dark:stroke-anthracite-600"
+          strokeWidth="1"
+        />
       ))}
       {keys.map((_, i) => {
         const [x, y] = point(i, R);
-        return <line key={i} x1={cx} y1={cy} x2={x} y2={y} className="stroke-sand-200 dark:stroke-anthracite-700" strokeWidth="1" />;
+        return (
+          <line
+            key={i}
+            x1={cx}
+            y1={cy}
+            x2={x}
+            y2={y}
+            className="stroke-sand-200 dark:stroke-anthracite-700"
+            strokeWidth="1"
+          />
+        );
       })}
       <polygon
         points={shape}
@@ -53,11 +76,24 @@ export function Radar({ axes }: { axes: Axes }) {
       />
       {keys.map((k, i) => {
         const [x, y] = point(i, R * Math.max(0.18, axes[k]));
-        return <circle key={k} cx={x} cy={y} r="2.6" className="fill-navy dark:fill-[#B9C6E0]" />;
+        return (
+          <circle
+            key={k}
+            cx={x}
+            cy={y}
+            r="2.6"
+            className="fill-navy dark:fill-info-darkInk"
+          />
+        );
       })}
-      <g className="fill-warmgray font-mono dark:fill-[#8E8980]" fontSize="8">
+      <g className="fill-warmgray font-mono dark:fill-warmgray" fontSize="8">
         {keys.map((k, i) => (
-          <text key={k} x={labelPos[i][0]} y={labelPos[i][1]} textAnchor={labelPos[i][2]}>
+          <text
+            key={k}
+            x={labelPos[i][0]}
+            y={labelPos[i][1]}
+            textAnchor={labelPos[i][2]}
+          >
             {t(k).toUpperCase()}
           </text>
         ))}

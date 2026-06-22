@@ -66,18 +66,18 @@ body {
     0 8px 32px -12px rgba(0, 0, 0, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
-/* bulle "moi" : verre teinté bleu nuit */
+/* bulle "moi" : verre teinté bleu glacier (info/messagerie) — harmonisé avec
+   les bulles couple (.bubble-self). Couleur de texte intégrée pour rester
+   lisible quel que soit le composant appelant (match, Coach IA). */
 .glass-self {
-  background: rgba(26, 39, 68, 0.78);
+  background: var(--bubble-self-bg);
+  color: var(--bubble-self-text);
   -webkit-backdrop-filter: blur(24px) saturate(140%);
   backdrop-filter: blur(24px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--bubble-self-border);
   box-shadow:
-    0 8px 32px -12px rgba(19, 29, 51, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
-}
-.dark .glass-self {
-  background: rgba(43, 53, 82, 0.6);
+    0 8px 32px -12px rgba(19, 29, 51, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 /* reflet spéculaire en haut de bulle */
 .glass-bubble {
@@ -106,7 +106,9 @@ body {
 }
 
 /* Fallback : pas de backdrop-filter -> fonds opaques équivalents */
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
   .glass {
     background: #fcfbf8;
   }
@@ -114,10 +116,12 @@ body {
     background: #23262c;
   }
   .glass-self {
-    background: #1a2744;
+    background: #dbe3f0;
+    color: #18243f;
   }
   .dark .glass-self {
-    background: #2b3552;
+    background: #38415a;
+    color: #eaf0fa;
   }
 }
 @media (prefers-reduced-transparency: reduce) {
@@ -130,12 +134,237 @@ body {
     background: #23262c;
   }
   .glass-self {
-    background: #1a2744;
+    background: #dbe3f0;
+    color: #18243f;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
   .dark .glass-self {
-    background: #2b3552;
+    background: #38415a;
+    color: #eaf0fa;
+  }
+}
+
+/* ============================================================
+   Liquid Glass — tokens partagés couple/réglages (light / dark)
+   Inspiration Apple : translucide, blur, bordure fine, reflet
+   subtil, ombre interne. Couleurs douces, jamais saturées.
+   ============================================================ */
+:root {
+  /* Hauteur réelle de la bottom-nav mobile (padding bas des pages app). */
+  --bottom-nav-h: 60px;
+  /* Teinte bleutée « goutte d'eau » des bulles envoyées (light). */
+  --bubble-self-bg: rgba(86, 124, 186, 0.2);
+  --bubble-self-border: rgba(86, 124, 186, 0.4);
+  --bubble-self-text: #18243f;
+  /* Bulle reçue : ivoire translucide, texte sombre lisible (light). */
+  --bubble-peer-bg: rgba(255, 253, 248, 0.74);
+  --bubble-peer-border: rgba(40, 31, 12, 0.12);
+  --bubble-peer-text: #2a2823;
+}
+.dark {
+  --bubble-self-bg: rgba(104, 138, 198, 0.28);
+  --bubble-self-border: rgba(150, 180, 226, 0.26);
+  --bubble-self-text: #eaf0fa;
+  --bubble-peer-bg: rgba(72, 77, 88, 0.55);
+  --bubble-peer-border: rgba(255, 255, 255, 0.1);
+  --bubble-peer-text: #e7e2d8;
+}
+
+/* ---------- Bulles de messagerie couple (glass) ---------- */
+.bubble {
+  position: relative;
+  overflow: hidden;
+  -webkit-backdrop-filter: blur(14px) saturate(135%);
+  backdrop-filter: blur(14px) saturate(135%);
+  border: 1px solid transparent;
+  box-shadow:
+    0 6px 18px -12px rgba(19, 29, 51, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.bubble::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 42%;
+  border-radius: inherit;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0)
+  );
+  pointer-events: none;
+}
+.dark .bubble::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0)
+  );
+}
+.bubble-self {
+  background: var(--bubble-self-bg);
+  border-color: var(--bubble-self-border);
+  color: var(--bubble-self-text);
+}
+.bubble-peer {
+  background: var(--bubble-peer-bg);
+  border-color: var(--bubble-peer-border);
+  color: var(--bubble-peer-text);
+}
+
+/* ---------- Zone scrollable propre (messagerie) ----------
+   Gutter stable : la barre de défilement ne chevauche jamais les bulles.
+   Scrollbar fine et discrète ; masquée sur mobile (scroll tactile). */
+.msg-scroll {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 116, 104, 0.45) transparent;
+}
+.msg-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.msg-scroll::-webkit-scrollbar-thumb {
+  background: rgba(120, 116, 104, 0.4);
+  border-radius: 9999px;
+}
+.dark .msg-scroll {
+  scrollbar-color: rgba(200, 196, 186, 0.3) transparent;
+}
+.dark .msg-scroll::-webkit-scrollbar-thumb {
+  background: rgba(200, 196, 186, 0.28);
+}
+@media (max-width: 640px) {
+  .msg-scroll {
+    scrollbar-width: none;
+  }
+  .msg-scroll::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+
+/* ---------- Boutons Liquid Glass ----------
+   Base translucide + blur + bordure fine + inset highlight + ombre douce.
+   Variantes de teinte douces, jamais saturées. */
+.btn-glass {
+  position: relative;
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid transparent;
+  box-shadow:
+    0 6px 20px -12px rgba(19, 29, 51, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.12s ease;
+}
+.btn-glass:active {
+  transform: translateY(0.5px) scale(0.99);
+}
+.btn-glass:disabled {
+  opacity: 0.55;
+}
+.btn-glass-blue {
+  background: rgba(86, 124, 186, 0.22);
+  border-color: rgba(86, 124, 186, 0.42);
+  color: #16263f;
+}
+.dark .btn-glass-blue {
+  background: rgba(104, 138, 198, 0.3);
+  border-color: rgba(150, 180, 226, 0.32);
+  color: #eaf0fa;
+}
+.btn-glass-sage {
+  background: rgba(63, 107, 80, 0.2);
+  border-color: rgba(63, 107, 80, 0.4);
+  color: #234a33;
+}
+.dark .btn-glass-sage {
+  background: rgba(94, 142, 110, 0.3);
+  border-color: rgba(126, 178, 142, 0.3);
+  color: #dff0e6;
+}
+.btn-glass-gold {
+  background: rgba(201, 168, 76, 0.22);
+  border-color: rgba(154, 123, 46, 0.4);
+  color: #6a531c;
+}
+.dark .btn-glass-gold {
+  background: rgba(192, 170, 110, 0.22);
+  border-color: rgba(192, 170, 110, 0.32);
+  color: #e6d6a4;
+}
+.btn-glass-neutral {
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(40, 31, 12, 0.12);
+  color: #5a564e;
+}
+.dark .btn-glass-neutral {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #b6b1a7;
+}
+
+/* État actif de la bottom-nav : pastille glass douce (doré mat, pas flashy). */
+.nav-active {
+  background: rgba(201, 168, 76, 0.16);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  backdrop-filter: blur(10px) saturate(130%);
+  box-shadow: inset 0 0 0 1px rgba(201, 168, 76, 0.28);
+}
+.dark .nav-active {
+  background: rgba(192, 170, 110, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(192, 170, 110, 0.26);
+}
+
+/* Padding bas des pages app : dégage la bottom-nav + l'indicateur iOS. */
+.pb-nav {
+  padding-bottom: calc(
+    var(--bottom-nav-h) + env(safe-area-inset-bottom) + 24px
+  );
+}
+
+/* Fallbacks bulles/boutons : pas de backdrop-filter -> fonds opaques. */
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .bubble,
+  .btn-glass {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .bubble-self {
+    background: #dbe3f0;
+  }
+  .dark .bubble-self {
+    background: #38415a;
+  }
+  .bubble-peer {
+    background: #fbf7ef;
+  }
+  .dark .bubble-peer {
+    background: #41454e;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .bubble,
+  .btn-glass {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .bubble-self {
+    background: #dbe3f0;
+  }
+  .dark .bubble-self {
+    background: #38415a;
+  }
+  .bubble-peer {
+    background: #fbf7ef;
+  }
+  .dark .bubble-peer {
+    background: #41454e;
   }
 }
 
@@ -168,9 +397,12 @@ body {
   outline-offset: 2px;
 }
 
-/* Cibles tactiles >= 44px sur mobile */
+/* Cibles tactiles >= 44px sur mobile.
+   Exception : le switch (role=switch) est une pastille iOS de 24px de haut
+   (conforme WCAG 2.5.8, cible >= 24px). Sans cette exclusion, min-height:44px
+   l'étirait en gros « blob » ovale sur mobile. */
 @media (pointer: coarse) {
-  button,
+  button:not([role="switch"]),
   a,
   [role="button"] {
     min-height: 44px;

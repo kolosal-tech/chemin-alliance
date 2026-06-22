@@ -21,10 +21,11 @@ export function TrustBadge({
     : emailVerified
       ? t("badge.email")
       : t("badge.phone");
-  const sz = size === "sm" ? "text-[9.5px] px-1.5 py-0.5" : "text-[10.5px] px-2 py-0.5";
+  const sz =
+    size === "sm" ? "text-[9.5px] px-1.5 py-0.5" : "text-[10.5px] px-2 py-0.5";
   const tone = both
-    ? "bg-navy/10 text-navy dark:bg-gold-light/15 dark:text-gold-light"
-    : "bg-[#EAF0EB] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]";
+    ? "bg-sage-surface text-sage-ink dark:bg-sage-darkSurface dark:text-sage-darkInk"
+    : "bg-sage-surface text-sage-ink dark:bg-sage-darkSurface dark:text-sage-darkInk";
   return (
     <span
       title={label}

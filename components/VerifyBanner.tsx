@@ -23,7 +23,7 @@ export function VerifyBanner() {
   }
 
   return (
-    <div className="safe-top flex flex-wrap items-center justify-center gap-x-3 gap-y-1 border-b border-gold/30 bg-[#FBF6E9] px-4 py-2 text-center text-[12.5px] text-gold-ink dark:border-[#463A1F] dark:bg-[#272117] dark:text-[#E0C77A]">
+    <div className="safe-top flex flex-wrap items-center justify-center gap-x-3 gap-y-1 border-b border-info-border bg-info-surface px-4 py-2 text-center text-[12.5px] text-info-ink dark:border-info-darkBorder dark:bg-info-darkSurface dark:text-info-darkInk">
       <span>{t("verifyBanner")}</span>
       {state === "sent" ? (
         <span className="font-semibold text-sage">{t("verifyResent")}</span>

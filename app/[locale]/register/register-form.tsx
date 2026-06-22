@@ -107,9 +107,9 @@ export function RegisterForm() {
           <AllianceThread current={1} />
         </div>
       </aside>
-      <main className="relative mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center overflow-hidden px-7 py-10 safe-top safe-bottom">
+      <main className="relative mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center overflow-hidden px-7 py-10 pb-[calc(env(safe-area-inset-bottom)+32px)] safe-top">
         <SacredMotif variant="olive" className="right-[-110px] top-[-30px]" />
-        <h1 className="font-display text-[32px] text-night dark:text-[#ECE7DD]">
+        <h1 className="font-display text-[26px] text-night dark:text-[#ECE7DD] sm:text-[32px]">
           {t("registerTitle")}
         </h1>
         <form onSubmit={submit} className="mt-7 flex flex-col gap-4">
@@ -300,7 +300,7 @@ export function RegisterForm() {
           <button
             type="submit"
             disabled={busy}
-            className="mt-1 flex items-center justify-center gap-2 rounded-btnlg bg-navy px-4 py-4 text-base font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
+            className="btn-glass btn-glass-blue mt-1 flex items-center justify-center gap-2 rounded-btnlg px-4 py-4 text-base font-semibold disabled:opacity-60"
           >
             {busy && <Spinner className="h-4 w-4" />}
             {busy ? tc("loading") : t("register")}

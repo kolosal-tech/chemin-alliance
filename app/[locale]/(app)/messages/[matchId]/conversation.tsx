@@ -295,15 +295,15 @@ export function Conversation({
       )}
 
       {pending && (
-        <div className="mx-3 mt-3 rounded-card border border-gold/50 bg-[#FBF6E9]/80 p-4 dark:border-gold-light/40 dark:bg-[#272117]/70">
-          <p className="text-[13.5px] leading-snug text-[#6F5C2E] dark:text-[#C2B488]">
+        <div className="mx-3 mt-3 rounded-card border border-info-border bg-info-surface/80 p-4 dark:border-info-darkBorder dark:bg-info-darkSurface/70">
+          <p className="text-[13.5px] leading-snug text-info-ink dark:text-info-darkInk">
             {t("messaging.acceptPrompt", { name: other.displayName })}
           </p>
           <div className="mt-3 flex gap-2">
             <AsyncButton
               onClick={acceptMatch}
               disabled={acceptBusy}
-              className="flex-1 rounded-btnsm bg-navy py-2.5 text-[13px] font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
+              className="flex-1 rounded-btnsm bg-navy py-2.5 text-[13px] font-semibold text-navy-foreground disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
             >
               {t("messaging.acceptCta")}
             </AsyncButton>
@@ -323,7 +323,7 @@ export function Conversation({
         </div>
       )}
       {awaitingOther && !pending && (
-        <p className="mx-3 mt-3 rounded-card border border-sand-200 bg-surface px-4 py-3 text-[12.5px] text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
+        <p className="mx-3 mt-3 rounded-card border border-info-border bg-info-surface px-4 py-3 text-[12.5px] text-info-ink dark:border-info-darkBorder dark:bg-info-darkSurface dark:text-info-darkInk">
           {t("messaging.awaitingOther", { name: other.displayName })}
         </p>
       )}
@@ -343,7 +343,7 @@ export function Conversation({
               <div
                 key={m.id}
                 role="status"
-                className="glass glass-bubble max-w-[90%] self-center rounded-[14px] border-[#EAD9A8]/70 bg-[#FBF6E9]/70 px-4 py-3 dark:border-[#463A1F]/70 dark:bg-[#272117]/60"
+                className="glass glass-bubble max-w-[90%] self-center rounded-[14px] border-warn-border/70 bg-warn-surface/70 px-4 py-3 dark:border-warn-darkBorder/70 dark:bg-warn-darkSurface/60"
               >
                 <div className="flex gap-2.5">
                   <svg
@@ -351,7 +351,7 @@ export function Conversation({
                     height="20"
                     viewBox="0 0 24 24"
                     fill="none"
-                    className="mt-0.5 flex-none"
+                    className="mt-0.5 flex-none text-warn dark:text-warn-darkInk"
                     aria-hidden
                   >
                     <rect
@@ -360,21 +360,21 @@ export function Conversation({
                       width="14"
                       height="9"
                       rx="2"
-                      stroke="#9A7B2E"
+                      stroke="currentColor"
                       strokeWidth="1.7"
                     />
                     <path
                       d="M8 11V8a4 4 0 0 1 8 0v3"
-                      stroke="#9A7B2E"
+                      stroke="currentColor"
                       strokeWidth="1.7"
                     />
-                    <circle cx="12" cy="15.5" r="1.3" fill="#9A7B2E" />
+                    <circle cx="12" cy="15.5" r="1.3" fill="currentColor" />
                   </svg>
                   <div>
-                    <div className="mb-0.5 text-[13px] font-semibold text-gold-ink dark:text-[#E0C77A]">
+                    <div className="mb-0.5 text-[13px] font-semibold text-warn-ink dark:text-warn-darkInk">
                       {t("messaging.contactPendingTitle")}
                     </div>
-                    <p className="text-[12.5px] leading-normal text-[#6F5C2E] dark:text-[#C2B488]">
+                    <p className="text-[12.5px] leading-normal text-warn-ink dark:text-warn-darkInk">
                       {m.content}
                     </p>
                   </div>

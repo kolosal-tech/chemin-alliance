@@ -9,6 +9,8 @@ import { BlockedUsers } from "@/components/BlockedUsers";
 import { PhoneVerify } from "@/components/PhoneVerify";
 import { AsyncButton } from "@/components/AsyncButton";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { Switch } from "@/components/Switch";
+import { LogoutButton } from "@/components/LogoutButton";
 import { useToast } from "@/components/Toast";
 import type { VisibilityLevel } from "@prisma/client";
 
@@ -21,43 +23,6 @@ const LEVEL_SEGMENTS: Record<string, { filled: number; cls: string }> = {
   PRIVATE: { filled: 5, cls: "bg-navy dark:bg-[#B9C6E0]" },
   MANUAL_SHARE: { filled: 4, cls: "bg-warmgray" },
 };
-
-function Toggle({
-  checked,
-  onChange,
-  label,
-  disabled,
-}: {
-  checked: boolean;
-  onChange: (v: boolean) => void;
-  label: string;
-  disabled?: boolean;
-}) {
-  // Switch type iOS : piste fine et arrondie (pas de gros carré), pastille
-  // ronde compacte qui glisse. Couleurs : orange doux quand inactif, vert
-  // pastel quand actif, en harmonie avec le doré sombre de l'app.
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      aria-label={label}
-      disabled={disabled}
-      onClick={() => onChange(!checked)}
-      className={`relative inline-flex h-[24px] w-[42px] flex-none items-center rounded-full transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gold/50 focus-visible:ring-offset-surface disabled:opacity-50 dark:focus-visible:ring-offset-anthracite-800 ${
-        checked
-          ? "bg-[#4FA06C] dark:bg-[#4C9566]"
-          : "bg-[#BC8444] dark:bg-[#9E7039]"
-      }`}
-    >
-      <span
-        className={`inline-block h-[18px] w-[18px] rounded-full bg-white shadow-sm transition-transform duration-200 ease-out ${
-          checked ? "translate-x-[21px]" : "translate-x-[3px]"
-        }`}
-      />
-    </button>
-  );
-}
 
 export function PrivacyPanel({
   initial,
@@ -229,7 +194,7 @@ export function PrivacyPanel({
               {t("privacy.antiMalaiseDesc")}
             </p>
           </div>
-          <Toggle
+          <Switch
             checked={state.antiMalaiseEnabled}
             disabled={saving}
             onChange={(v) => {
@@ -318,7 +283,7 @@ export function PrivacyPanel({
         <div className="flex-1 text-sm font-medium text-ink dark:text-[#ECE7DD]">
           {t("privacy.invisibleMode")}
         </div>
-        <Toggle
+        <Switch
           checked={state.invisibleMode}
           disabled={saving}
           onChange={(v) => save({ invisibleMode: v })}
@@ -348,7 +313,15 @@ export function PrivacyPanel({
         </button>
       </div>
 
-      <p className="pb-8 text-center text-[11.5px] text-sand-500 dark:text-[#65625B]">
+      {/* Compte / session : déconnexion en bas de page. */}
+      <section className="border-t border-sand-200 pt-5 dark:border-anthracite-600">
+        <h2 className="lbl mb-2.5 text-[9.5px] text-gold-deep dark:text-gold-light">
+          {t("account.linkTitle")}
+        </h2>
+        <LogoutButton />
+      </section>
+
+      <p className="pb-8 pt-7 text-center text-[11.5px] text-sand-500 dark:text-[#65625B]">
         <Link href="/legal/terms" className="underline">
           {t("legal.terms")}
         </Link>

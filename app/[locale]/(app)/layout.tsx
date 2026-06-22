@@ -17,7 +17,7 @@ export default async function AppLayout({
   if (!user) redirect({ href: "/login", locale: params.locale });
 
   return (
-    <div className="relative mx-auto min-h-dvh max-w-md overflow-x-hidden pb-24 lg:mx-0 lg:max-w-none lg:pb-10 lg:pl-60">
+    <div className="pb-nav relative mx-auto min-h-dvh max-w-md overflow-x-hidden lg:mx-0 lg:max-w-none lg:pb-10 lg:pl-60">
       <SacredMotif variant="tree" className="right-[-140px] top-[60px]" />
       {!user!.isVerified && <VerifyBanner />}
       {children}
