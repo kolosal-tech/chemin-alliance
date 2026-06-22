@@ -849,7 +849,8 @@
       "both": "Perfil verificado",
       "phone": "Tel. verificado"
     },
-    "phoneLevelTodo": "Telefone por verificar"
+    "phoneLevelTodo": "Telefone por verificar",
+    "emailLevelTodo": "Email por verificar"
   },
   "antiScam": {
     "pageTitle": "Reconhecer uma burla",

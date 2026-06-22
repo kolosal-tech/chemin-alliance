@@ -849,7 +849,8 @@
       "both": "Profil vérifié",
       "phone": "Tél. vérifié"
     },
-    "phoneLevelTodo": "Téléphone à vérifier"
+    "phoneLevelTodo": "Téléphone à vérifier",
+    "emailLevelTodo": "Email à vérifier"
   },
   "antiScam": {
     "pageTitle": "Reconnaître une arnaque",

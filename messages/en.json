@@ -849,7 +849,8 @@
       "both": "Verified profile",
       "phone": "Phone verified"
     },
-    "phoneLevelTodo": "Phone to verify"
+    "phoneLevelTodo": "Phone to verify",
+    "emailLevelTodo": "Email to verify"
   },
   "antiScam": {
     "pageTitle": "Spot a scam",
