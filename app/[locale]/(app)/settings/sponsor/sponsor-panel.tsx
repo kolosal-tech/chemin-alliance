@@ -65,7 +65,7 @@ export function SponsorPanel({ initial }: { initial: Sponsor | null }) {
   }
 
   const field =
-    "rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
+    "rounded-btnsm border border-sand-400 bg-surface px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
   const lbl = "lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]";
 
   return (

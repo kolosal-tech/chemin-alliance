@@ -83,7 +83,7 @@ export function ReportButton({ targetUserId }: { targetUserId: string }) {
                     placeholder={t("reasonPlaceholder")}
                     rows={4}
                     maxLength={2000}
-                    className="mt-3 w-full resize-y rounded-btnsm border border-sand-300 bg-white px-3 py-2.5 text-sm leading-relaxed text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+                    className="mt-3 w-full resize-y rounded-btnsm border border-sand-300 bg-surface px-3 py-2.5 text-sm leading-relaxed text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
                   />
                   <div className="mt-4 flex gap-2.5">
                     <button

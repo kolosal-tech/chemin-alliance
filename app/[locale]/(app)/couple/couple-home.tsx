@@ -342,7 +342,7 @@ export function CoupleHome() {
               value={code}
               onChange={(e) => setCode(e.target.value.toUpperCase())}
               placeholder={t("codePlaceholder")}
-              className="flex-1 rounded-btnsm border border-sand-300 bg-white px-3 py-2.5 font-mono text-sm uppercase tracking-wider text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+              className="flex-1 rounded-btnsm border border-sand-300 bg-surface px-3 py-2.5 font-mono text-sm uppercase tracking-wider text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
             />
             <AsyncButton
               onClick={join}
@@ -426,7 +426,7 @@ export function CoupleHome() {
                     if (sendState !== "idle") setSendState("idle");
                   }}
                   placeholder={t("partnerEmailPlaceholder")}
-                  className="flex-1 rounded-btnsm border border-sand-300 bg-white px-3 py-2.5 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+                  className="flex-1 rounded-btnsm border border-sand-300 bg-surface px-3 py-2.5 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
                 />
                 <button
                   type="submit"
@@ -540,7 +540,7 @@ export function CoupleHome() {
             onChange={(e) => setDraft(e.target.value)}
             placeholder={t("messagesPlaceholder")}
             aria-label={t("messagesPlaceholder")}
-            className="min-w-0 flex-1 rounded-btnsm border border-sand-300 bg-white px-3 py-2.5 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+            className="min-w-0 flex-1 rounded-btnsm border border-sand-300 bg-surface px-3 py-2.5 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
           />
           <button
             type="submit"
@@ -590,7 +590,7 @@ export function CoupleHome() {
                       rows={3}
                       placeholder={t("openAnswerPlaceholder")}
                       aria-label={q.text}
-                      className="mt-1.5 w-full resize-y rounded-btnsm border border-sand-300 bg-white px-3 py-2.5 text-[13px] leading-snug text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+                      className="mt-1.5 w-full resize-y rounded-btnsm border border-sand-300 bg-surface px-3 py-2.5 text-[13px] leading-snug text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
                     />
                   </div>
                 ) : (
@@ -637,7 +637,7 @@ export function CoupleHome() {
                         }))
                       }
                       placeholder={t("notePlaceholder")}
-                      className="mt-1.5 w-full rounded-btnsm border border-sand-200 bg-white px-3 py-2 text-[12.5px] text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+                      className="mt-1.5 w-full rounded-btnsm border border-sand-200 bg-surface px-3 py-2 text-[12.5px] text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
                     />
                   </div>
                 ),

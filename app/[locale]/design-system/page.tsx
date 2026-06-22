@@ -74,9 +74,9 @@ export default async function DesignSystemPage({
           <div className="flex flex-col gap-3.5">
             <input
               defaultValue="Texte saisi"
-              className="rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+              className="rounded-btnsm border border-sand-400 bg-surface px-3.5 py-3 text-sm dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
             />
-            <select className="rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#9A958B]">
+            <select className="rounded-btnsm border border-sand-400 bg-surface px-3.5 py-3 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#9A958B]">
               <option>Dénomination</option>
             </select>
             <div className="flex items-center gap-3.5">

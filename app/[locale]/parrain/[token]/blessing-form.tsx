@@ -100,7 +100,7 @@ export function BlessingForm({ token }: { token: string }) {
               rows={3}
               maxLength={500}
               placeholder={t("notePlaceholder")}
-              className="resize-none rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+              className="resize-none rounded-btnsm border border-sand-400 bg-surface px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
             />
           </label>
 
