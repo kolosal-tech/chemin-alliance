@@ -28,17 +28,18 @@ const config: Config = {
         canvas: "#F7F5F0", // fond clair chaud (palette d'origine, plus de beige delave)
         warmgray: "#5A564E",
         ink: "#1C1A17",
-        // Mode sombre = navy profond (palette d'origine), pas un charbon brut.
-        // Le nom "anthracite" est conserve pour ne pas toucher 300+ usages ;
-        // la rampe pointe desormais vers le bleu nuit de reference :
-        // #0E1422 -> #131D33 -> #1A2744 -> #2A3550.
+        // Mode sombre = anthracite CHAUD (maquette section C : "pas une inversion,
+        // un anthracite chaud, le dore qui rayonne davantage"). Le bleu nuit /
+        // navy appartient au mode CLAIR (cf. night, navy). Le nom "anthracite"
+        // est conserve pour ne pas toucher 300+ usages ; rampe ancree sur
+        // l'Anthracite #17181B, lean chaud sur les surfaces hautes.
         anthracite: {
-          950: "#0A0F1C", // nuit la plus profonde
-          900: "#131D33", // navy profond - fond mode sombre
-          850: "#15203A",
-          800: "#1A2744", // navy secondaire - cartes/blocs sombres
-          700: "#213152", // champ/surface surelevee sombre
-          600: "#2A3550", // navy intermediaire - separateurs/bordures sombres
+          950: "#0D0C0B", // nuit la plus profonde (noir chaud)
+          900: "#17171A", // anthracite (proche #17181B) - fond mode sombre
+          850: "#1E1D1E",
+          800: "#23211F", // cartes/blocs sombres (lean chaud)
+          700: "#2D2A24", // champ/surface surelevee sombre
+          600: "#39342C", // separateurs/bordures sombres
         },
         sand: {
           100: "#E7DFD0",
