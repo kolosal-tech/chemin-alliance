@@ -106,7 +106,9 @@ body {
 }
 
 /* Fallback : pas de backdrop-filter -> fonds opaques équivalents */
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
   .glass {
     background: #fcfbf8;
   }
@@ -315,11 +317,15 @@ body {
 
 /* Padding bas des pages app : dégage la bottom-nav + l'indicateur iOS. */
 .pb-nav {
-  padding-bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom) + 24px);
+  padding-bottom: calc(
+    var(--bottom-nav-h) + env(safe-area-inset-bottom) + 24px
+  );
 }
 
 /* Fallbacks bulles/boutons : pas de backdrop-filter -> fonds opaques. */
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
   .bubble,
   .btn-glass {
     -webkit-backdrop-filter: none;

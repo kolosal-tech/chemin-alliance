@@ -60,7 +60,9 @@ test.describe("Messagerie couple + réglages (glass)", () => {
     // (desktop) ou scrollbar masquée (mobile) -> jamais de chevauchement.
     const overflowOk = await feed.evaluate((el) => {
       const s = getComputedStyle(el);
-      return s.scrollbarGutter.includes("stable") || s.scrollbarWidth === "none";
+      return (
+        s.scrollbarGutter.includes("stable") || s.scrollbarWidth === "none"
+      );
     });
     expect(overflowOk).toBeTruthy();
   });
