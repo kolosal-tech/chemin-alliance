@@ -71,7 +71,7 @@ export function RegisterForm() {
         <h1 className="font-display text-[28px] text-night dark:text-[#ECE7DD]">
           {t("verifyTitle")}
         </h1>
-        <p className="mt-4 text-[15px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+        <p className="mt-4 text-[16px] leading-relaxed text-warmgray dark:text-[#9A958B]">
           {t("verifyBody", { email: sentTo })}
         </p>
         <Link
@@ -98,7 +98,7 @@ export function RegisterForm() {
         <SacredMotif variant="olive" className="right-[-70px] top-[60px]" />
         <div className="flex items-center gap-2.5">
           <span aria-hidden className="inline-block h-px w-[22px] bg-gold" />
-          <span className="lbl text-[10px] text-gold">{tc("appName")}</span>
+          <span className="lbl text-[11px] text-gold">{tc("appName")}</span>
         </div>
         <h2 className="max-w-[16ch] font-display text-[44px] font-normal leading-[1.15] text-[#F4F1EA]">
           {tc("tagline")}
@@ -114,7 +114,7 @@ export function RegisterForm() {
         </h1>
         <form onSubmit={submit} className="mt-7 flex flex-col gap-4">
           <fieldset className="flex flex-col gap-1.5">
-            <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">
+            <span className="lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]">
               {t("intentTitle")}
             </span>
             <div className="grid grid-cols-1 gap-2">
@@ -130,7 +130,7 @@ export function RegisterForm() {
                   <span className="block text-sm font-semibold text-ink dark:text-[#ECE7DD]">
                     {t("intentDiscern")}
                   </span>
-                  <span className="block text-[12px] leading-snug text-warmgray dark:text-[#9A958B]">
+                  <span className="block text-[13px] leading-snug text-warmgray dark:text-[#9A958B]">
                     {t("intentDiscernHint")}
                   </span>
                 </span>
@@ -146,7 +146,7 @@ export function RegisterForm() {
                   <span className="block text-sm font-semibold text-ink dark:text-[#ECE7DD]">
                     {t("intentEngaged")}
                   </span>
-                  <span className="block text-[12px] leading-snug text-warmgray dark:text-[#9A958B]">
+                  <span className="block text-[13px] leading-snug text-warmgray dark:text-[#9A958B]">
                     {t("intentEngagedHint")}
                   </span>
                 </span>
@@ -162,7 +162,7 @@ export function RegisterForm() {
                   <span className="block text-sm font-semibold text-ink dark:text-[#ECE7DD]">
                     {t("intentMarried")}
                   </span>
-                  <span className="block text-[12px] leading-snug text-warmgray dark:text-[#9A958B]">
+                  <span className="block text-[13px] leading-snug text-warmgray dark:text-[#9A958B]">
                     {t("intentMarriedHint")}
                   </span>
                 </span>
@@ -170,7 +170,7 @@ export function RegisterForm() {
             </div>
           </fieldset>
           <label className="flex flex-col gap-1.5">
-            <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">
+            <span className="lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]">
               {t("displayName")}
             </span>
             <input
@@ -182,7 +182,7 @@ export function RegisterForm() {
             />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">
+            <span className="lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]">
               {t("gender")}
             </span>
             <select name="gender" required defaultValue="" className={input}>
@@ -195,7 +195,7 @@ export function RegisterForm() {
           </label>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">
+              <span className="lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]">
                 {t("age")}
               </span>
               <input
@@ -208,7 +208,7 @@ export function RegisterForm() {
               />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">
+              <span className="lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]">
                 {t("vertical")}
               </span>
               <select
@@ -230,7 +230,7 @@ export function RegisterForm() {
             </label>
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">
+            <span className="lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]">
               {t("country")}
             </span>
             <input
@@ -243,7 +243,7 @@ export function RegisterForm() {
             />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">
+            <span className="lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]">
               {t("email")}
             </span>
             <input
@@ -255,7 +255,7 @@ export function RegisterForm() {
             />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">
+            <span className="lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]">
               {t("password")} · {t("passwordHint")}
             </span>
             <input
@@ -267,7 +267,7 @@ export function RegisterForm() {
               className={input}
             />
           </label>
-          <label className="flex items-start gap-3 text-[12.5px] leading-normal text-warmgray dark:text-[#9A958B]">
+          <label className="flex items-start gap-3 text-[13.5px] leading-normal text-warmgray dark:text-[#9A958B]">
             <input
               name="consentSensitive"
               type="checkbox"
@@ -275,7 +275,7 @@ export function RegisterForm() {
             />
             <span>{t("consentSensitive")}</span>
           </label>
-          <label className="flex items-start gap-3 text-[12.5px] leading-normal text-warmgray dark:text-[#9A958B]">
+          <label className="flex items-start gap-3 text-[13.5px] leading-normal text-warmgray dark:text-[#9A958B]">
             <input
               name="consentTerms"
               type="checkbox"
@@ -283,7 +283,7 @@ export function RegisterForm() {
             />
             <span>{t("consentTerms")}</span>
           </label>
-          <p className="text-[11.5px] text-sand-500 dark:text-[#65625B]">
+          <p className="text-[12.5px] text-sand-500 dark:text-[#65625B]">
             <Link href="/legal/terms" className="underline">
               {tl("terms")}
             </Link>
@@ -293,7 +293,7 @@ export function RegisterForm() {
             </Link>
           </p>
           {error && (
-            <p role="alert" className="text-[13px] text-danger">
+            <p role="alert" className="text-[14px] text-danger">
               {error}
             </p>
           )}

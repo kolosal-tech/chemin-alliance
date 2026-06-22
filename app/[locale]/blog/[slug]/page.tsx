@@ -75,7 +75,7 @@ export default async function BlogPostPage({
         <article className="mx-auto max-w-2xl px-5 py-12 sm:px-6 sm:py-16">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-1.5 text-[13px] font-medium text-warmgray transition-colors hover:text-night dark:text-[#9A958B] dark:hover:text-[#ECE7DD]"
+            className="inline-flex items-center gap-1.5 text-[14px] font-medium text-warmgray transition-colors hover:text-night dark:text-[#9A958B] dark:hover:text-[#ECE7DD]"
           >
             <Icon
               name="arrowRight"
@@ -85,7 +85,7 @@ export default async function BlogPostPage({
             {t("back")}
           </Link>
 
-          <div className="lbl mt-8 text-[10px] text-gold-deep dark:text-gold-light">
+          <div className="lbl mt-8 text-[11px] text-gold-deep dark:text-gold-light">
             {format.dateTime(new Date(post.date), { dateStyle: "long" })} ·{" "}
             {t("minRead", { min: post.readingMinutes })}
           </div>
@@ -97,7 +97,7 @@ export default async function BlogPostPage({
             className={`mt-8 aspect-[16/8] rounded-cardlg bg-gradient-to-br ${post.gradient}`}
           />
 
-          <div className="mt-10 flex flex-col gap-6 text-[16.5px] leading-relaxed text-ink/90 dark:text-[#C7C2B8]">
+          <div className="mt-10 flex flex-col gap-6 text-[17.5px] leading-relaxed text-ink/90 dark:text-[#C7C2B8]">
             {c.body.map((para, i) => (
               <p key={i}>{para}</p>
             ))}

@@ -76,7 +76,7 @@ export function CoachAdmin({ coaches }: { coaches: Coach[] }) {
 
   const field =
     "w-full rounded-btnsm border border-sand-300 bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-gold dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#ECE7DD]";
-  const label = "lbl mb-1 block text-[9px] text-gold-deep dark:text-gold-light";
+  const label = "lbl mb-1 block text-[10px] text-gold-deep dark:text-gold-light";
 
   return (
     <div className="flex flex-col gap-6">
@@ -162,7 +162,7 @@ export function CoachAdmin({ coaches }: { coaches: Coach[] }) {
             {busy ? "Ajout…" : "Ajouter l'accompagnateur"}
           </button>
           {msg && (
-            <p className="text-[12.5px] text-gold-ink dark:text-[#E0C77A]">
+            <p className="text-[13.5px] text-gold-ink dark:text-[#E0C77A]">
               {msg}
             </p>
           )}
@@ -170,7 +170,7 @@ export function CoachAdmin({ coaches }: { coaches: Coach[] }) {
       </form>
 
       <div>
-        <h2 className="lbl mb-3 text-[9.5px] text-gold-deep dark:text-gold-light">
+        <h2 className="lbl mb-3 text-[10.5px] text-gold-deep dark:text-gold-light">
           Accompagnateurs · {coaches.length}
         </h2>
         <div className="flex flex-col gap-2.5">
@@ -186,27 +186,27 @@ export function CoachAdmin({ coaches }: { coaches: Coach[] }) {
             >
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-display text-[16px] text-night dark:text-[#ECE7DD]">
+                  <span className="font-display text-[17px] text-night dark:text-[#ECE7DD]">
                     {c.displayName}
                   </span>
                   {c.certified && (
-                    <span className="rounded-[6px] bg-gold/20 px-2 py-0.5 text-[10px] font-semibold text-gold-ink dark:text-[#E0C77A]">
+                    <span className="rounded-[6px] bg-gold/20 px-2 py-0.5 text-[11px] font-semibold text-gold-ink dark:text-[#E0C77A]">
                       Vérifié
                     </span>
                   )}
                 </div>
-                <div className="mt-0.5 text-[12.5px] text-sand-600 dark:text-[#7E7A72]">
+                <div className="mt-0.5 text-[13.5px] text-sand-600 dark:text-[#7E7A72]">
                   {c.affiliation} · {c.pricePerSessionEUR} € / séance
                 </div>
                 {c.specialties.length > 0 && (
-                  <div className="mt-1 text-[12px] text-warmgray dark:text-[#9A958B]">
+                  <div className="mt-1 text-[13px] text-warmgray dark:text-[#9A958B]">
                     {c.specialties.join(" · ")}
                   </div>
                 )}
               </div>
               <AsyncButton
                 onClick={() => remove(c.id)}
-                className="flex-none rounded-btnsm border border-sand-300 px-3 py-1.5 text-[12px] text-warmgray hover:border-red-400 hover:text-red-500 dark:border-anthracite-600 dark:text-[#9A958B]"
+                className="flex-none rounded-btnsm border border-sand-300 px-3 py-1.5 text-[13px] text-warmgray hover:border-red-400 hover:text-red-500 dark:border-anthracite-600 dark:text-[#9A958B]"
               >
                 Retirer
               </AsyncButton>

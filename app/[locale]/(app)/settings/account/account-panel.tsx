@@ -8,7 +8,7 @@ import { useToast } from "@/components/Toast";
 
 const inputCls =
   "rounded-btnsm border border-sand-400 bg-surface px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
-const labelCls = "lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]";
+const labelCls = "lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]";
 const btnCls =
   "rounded-btnsm bg-navy py-3 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900";
 
@@ -125,7 +125,7 @@ export function AccountPanel({
 
       {/* Changer le mot de passe */}
       <section className="mb-4 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
-        <div className="text-[15px] font-semibold text-night dark:text-[#ECE7DD]">
+        <div className="text-[16px] font-semibold text-night dark:text-[#ECE7DD]">
           {t("account.passwordSection")}
         </div>
         <form onSubmit={submitPassword} className="mt-3 flex flex-col gap-3">
@@ -166,7 +166,7 @@ export function AccountPanel({
               className={inputCls}
             />
           </label>
-          <p className="text-[11.5px] text-sand-500 dark:text-[#7E7A72]">
+          <p className="text-[12.5px] text-sand-500 dark:text-[#7E7A72]">
             {t("account.passwordRules")}
           </p>
           <button
@@ -182,10 +182,10 @@ export function AccountPanel({
 
       {/* Changer l'email */}
       <section className="mb-4 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
-        <div className="text-[15px] font-semibold text-night dark:text-[#ECE7DD]">
+        <div className="text-[16px] font-semibold text-night dark:text-[#ECE7DD]">
           {t("account.emailSection")}
         </div>
-        <p className="mt-1 text-[12.5px] text-[#6B665C] dark:text-[#9A958B]">
+        <p className="mt-1 text-[13.5px] text-[#6B665C] dark:text-[#9A958B]">
           {t("account.currentEmail")} : {currentEmail}
           {!isVerified && ` · ${t("account.unverified")}`}
         </p>

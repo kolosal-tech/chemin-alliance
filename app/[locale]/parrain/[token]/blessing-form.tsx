@@ -52,14 +52,14 @@ export function BlessingForm({ token }: { token: string }) {
   }
 
   const notice =
-    "mt-5 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-4 text-[14px] leading-relaxed text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]";
+    "mt-5 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-4 text-[15px] leading-relaxed text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]";
 
   return (
     <main className="relative mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center overflow-hidden px-7 safe-top safe-bottom">
       <SacredMotif variant="tree" className="right-[-110px] top-[-20px]" />
       <div className="mb-6 flex items-center gap-2.5">
         <span className="inline-block h-px w-[22px] bg-gold" aria-hidden />
-        <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">
+        <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
           {t("eyebrow")}
         </span>
       </div>
@@ -77,7 +77,7 @@ export function BlessingForm({ token }: { token: string }) {
           <p className="font-display text-[22px] leading-tight">
             {result === "bless" ? t("blessedDone") : t("cautionDone")}
           </p>
-          <p className="mt-2 text-[13.5px] opacity-90">{t("thanks")}</p>
+          <p className="mt-2 text-[14.5px] opacity-90">{t("thanks")}</p>
         </div>
       )}
 
@@ -91,7 +91,7 @@ export function BlessingForm({ token }: { token: string }) {
           </p>
 
           <label className="mt-6 flex flex-col gap-1.5">
-            <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">
+            <span className="lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]">
               {t("noteLabel")}
             </span>
             <textarea
@@ -116,7 +116,7 @@ export function BlessingForm({ token }: { token: string }) {
             <AsyncButton
               onClick={() => respond("caution")}
               disabled={busy}
-              className="rounded-btnlg border border-sand-400 px-4 py-3.5 text-[15px] font-semibold text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
+              className="rounded-btnlg border border-sand-400 px-4 py-3.5 text-[16px] font-semibold text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
             >
               {t("caution")}
             </AsyncButton>

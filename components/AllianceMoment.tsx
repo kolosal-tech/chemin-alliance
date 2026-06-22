@@ -76,20 +76,20 @@ export function AllianceMoment({
           </span>
         </div>
 
-        <span className="lbl mt-4 block text-[10px] text-gold-light">
+        <span className="lbl mt-4 block text-[11px] text-gold-light">
           {t("momentLabel")}
         </span>
         <h2 className="mt-1.5 font-display text-[27px] font-medium leading-tight">
           {name}
         </h2>
-        <p className="mx-auto mt-2.5 max-w-[30ch] text-[13.5px] leading-relaxed text-[#B9C0CE]">
+        <p className="mx-auto mt-2.5 max-w-[30ch] text-[14.5px] leading-relaxed text-[#B9C0CE]">
           {t("momentBody")}
         </p>
 
         <button
           type="button"
           onClick={onContinue}
-          className="mt-6 w-full rounded-btnlg bg-gold py-3.5 text-[15px] font-bold text-night transition-colors hover:bg-gold-light"
+          className="mt-6 w-full rounded-btnlg bg-gold py-3.5 text-[16px] font-bold text-night transition-colors hover:bg-gold-light"
         >
           {t("momentCta")}
         </button>
@@ -97,7 +97,7 @@ export function AllianceMoment({
           <button
             type="button"
             onClick={onLater}
-            className="mt-2.5 text-[13px] text-[#8C93A2] hover:text-[#B9C0CE]"
+            className="mt-2.5 text-[14px] text-[#8C93A2] hover:text-[#B9C0CE]"
           >
             {t("momentLater")}
           </button>

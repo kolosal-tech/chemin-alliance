@@ -100,10 +100,10 @@ export function PrivacyPanel({
         <span aria-hidden className="text-lg text-gold">
           ★
         </span>
-        <span className="flex-1 text-[13px] font-semibold text-gold-ink dark:text-[#E0C77A]">
+        <span className="flex-1 text-[14px] font-semibold text-gold-ink dark:text-[#E0C77A]">
           {t("premium.title")}
         </span>
-        <span className="lbl text-[9px] text-gold-deep dark:text-gold-light">
+        <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">
           {t("premium.price")} →
         </span>
       </Link>
@@ -115,10 +115,10 @@ export function PrivacyPanel({
         <span aria-hidden className="text-lg text-warmgray dark:text-[#9A958B]">
           ⚙
         </span>
-        <span className="flex-1 text-[13px] font-semibold text-night dark:text-[#ECE7DD]">
+        <span className="flex-1 text-[14px] font-semibold text-night dark:text-[#ECE7DD]">
           {t("account.linkTitle")}
         </span>
-        <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">
+        <span className="lbl text-[10px] text-warmgray dark:text-[#9A958B]">
           →
         </span>
       </Link>
@@ -130,10 +130,10 @@ export function PrivacyPanel({
         <span aria-hidden className="text-lg text-sage dark:text-[#7FA98C]">
           ✓
         </span>
-        <span className="flex-1 text-[13px] font-semibold text-night dark:text-[#ECE7DD]">
+        <span className="flex-1 text-[14px] font-semibold text-night dark:text-[#ECE7DD]">
           {t("trust.linkTitle")}
         </span>
-        <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">
+        <span className="lbl text-[10px] text-warmgray dark:text-[#9A958B]">
           →
         </span>
       </Link>
@@ -145,10 +145,10 @@ export function PrivacyPanel({
         <span aria-hidden className="text-lg">
           🤝
         </span>
-        <span className="flex-1 text-[13px] font-semibold text-night dark:text-[#ECE7DD]">
+        <span className="flex-1 text-[14px] font-semibold text-night dark:text-[#ECE7DD]">
           {t("sponsor.linkTitle")}
         </span>
-        <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">
+        <span className="lbl text-[10px] text-warmgray dark:text-[#9A958B]">
           →
         </span>
       </Link>
@@ -160,10 +160,10 @@ export function PrivacyPanel({
         <span aria-hidden className="text-lg text-gold">
           🔔
         </span>
-        <span className="flex-1 text-[13px] font-semibold text-night dark:text-[#ECE7DD]">
+        <span className="flex-1 text-[14px] font-semibold text-night dark:text-[#ECE7DD]">
           {t("notifications.linkTitle")}
         </span>
-        <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">
+        <span className="lbl text-[10px] text-warmgray dark:text-[#9A958B]">
           →
         </span>
       </Link>
@@ -175,10 +175,10 @@ export function PrivacyPanel({
         <span aria-hidden className="text-lg">
           🛡️
         </span>
-        <span className="flex-1 text-[13px] font-semibold text-night dark:text-[#ECE7DD]">
+        <span className="flex-1 text-[14px] font-semibold text-night dark:text-[#ECE7DD]">
           {t("antiScam.linkTitle")}
         </span>
-        <span className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">
+        <span className="lbl text-[10px] text-warmgray dark:text-[#9A958B]">
           →
         </span>
       </Link>
@@ -187,10 +187,10 @@ export function PrivacyPanel({
       <section className="mb-4 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
         <div className="flex items-start gap-3">
           <div className="flex-1">
-            <div className="text-[15px] font-semibold text-night dark:text-[#ECE7DD]">
+            <div className="text-[16px] font-semibold text-night dark:text-[#ECE7DD]">
               {t("privacy.antiMalaiseTitle")}
             </div>
-            <p className="mt-1 text-[12.5px] leading-snug text-[#6B665C] dark:text-[#9A958B]">
+            <p className="mt-1 text-[13.5px] leading-snug text-[#6B665C] dark:text-[#9A958B]">
               {t("privacy.antiMalaiseDesc")}
             </p>
           </div>
@@ -209,7 +209,7 @@ export function PrivacyPanel({
         </div>
         <div className="mt-3.5 border-t border-sand-100 pt-3.5 dark:border-anthracite-700">
           <div className="mb-2 flex items-baseline justify-between">
-            <span className="lbl text-[9px] text-sand-600 dark:text-[#9A958B]">
+            <span className="lbl text-[10px] text-sand-600 dark:text-[#9A958B]">
               {t("privacy.radius")}
             </span>
             <span className="font-mono text-xs text-gold-deep dark:text-gold-light">
@@ -242,7 +242,7 @@ export function PrivacyPanel({
         </div>
       </section>
 
-      <h2 className="lbl mb-2.5 text-[9.5px] text-gold-deep dark:text-gold-light">
+      <h2 className="lbl mb-2.5 text-[10.5px] text-gold-deep dark:text-gold-light">
         {t("privacy.fieldVisibility")}
       </h2>
       <section className="mb-4 overflow-hidden rounded-card border border-sand-200 bg-surface dark:border-anthracite-600 dark:bg-anthracite-800">
@@ -255,10 +255,10 @@ export function PrivacyPanel({
               className={`px-4 py-3 ${i < fields.length - 1 ? "border-b border-sand-100 dark:border-anthracite-700" : ""}`}
             >
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-[13.5px] font-medium text-ink dark:text-[#ECE7DD]">
+                <span className="text-[14.5px] font-medium text-ink dark:text-[#ECE7DD]">
                   {f.label}
                 </span>
-                <span className="lbl text-[8.5px] text-warmgray dark:text-[#9A958B]">
+                <span className="lbl text-[9.5px] text-warmgray dark:text-[#9A958B]">
                   {t(`visibility.${level}`)}
                 </span>
               </div>
@@ -300,14 +300,14 @@ export function PrivacyPanel({
         <a
           href="/api/me/export"
           download
-          className="flex-1 rounded-btnsm border border-sand-400 py-3 text-center text-[13px] font-medium text-[#3A372F] dark:border-anthracite-600 dark:text-[#CFCAC0]"
+          className="flex-1 rounded-btnsm border border-sand-400 py-3 text-center text-[14px] font-medium text-[#3A372F] dark:border-anthracite-600 dark:text-[#CFCAC0]"
         >
           {t("privacy.exportData")}
         </a>
         <button
           type="button"
           onClick={() => setConfirmDelete(true)}
-          className="flex-1 rounded-btnsm border border-[#D8B6B0] py-3 text-[13px] font-medium text-danger dark:border-[#5A3A34]"
+          className="flex-1 rounded-btnsm border border-[#D8B6B0] py-3 text-[14px] font-medium text-danger dark:border-[#5A3A34]"
         >
           {t("privacy.deleteAccount")}
         </button>
@@ -315,13 +315,13 @@ export function PrivacyPanel({
 
       {/* Compte / session : déconnexion en bas de page. */}
       <section className="border-t border-sand-200 pt-5 dark:border-anthracite-600">
-        <h2 className="lbl mb-2.5 text-[9.5px] text-gold-deep dark:text-gold-light">
+        <h2 className="lbl mb-2.5 text-[10.5px] text-gold-deep dark:text-gold-light">
           {t("account.linkTitle")}
         </h2>
         <LogoutButton />
       </section>
 
-      <p className="pb-8 pt-7 text-center text-[11.5px] text-sand-500 dark:text-[#65625B]">
+      <p className="pb-8 pt-7 text-center text-[12.5px] text-sand-500 dark:text-[#65625B]">
         <Link href="/legal/terms" className="underline">
           {t("legal.terms")}
         </Link>
@@ -341,7 +341,7 @@ export function PrivacyPanel({
             <h3 className="font-display text-xl text-night dark:text-[#ECE7DD]">
               {t("privacy.deleteConfirmTitle")}
             </h3>
-            <p className="mt-2 text-[13.5px] leading-normal text-warmgray dark:text-[#9A958B]">
+            <p className="mt-2 text-[14.5px] leading-normal text-warmgray dark:text-[#9A958B]">
               {t("privacy.deleteConfirmBody")}
             </p>
             <div className="mt-4 flex gap-2.5">

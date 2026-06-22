@@ -25,7 +25,7 @@ export function LogoutButton() {
   return (
     <AsyncButton
       onClick={logout}
-      className="btn-glass btn-glass-neutral flex w-full items-center justify-center gap-2 rounded-btnsm py-3.5 text-[13.5px] font-semibold"
+      className="btn-glass btn-glass-neutral flex w-full items-center justify-center gap-2 rounded-btnsm py-3.5 text-[14.5px] font-semibold"
     >
       {t("logout")}
     </AsyncButton>

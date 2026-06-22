@@ -44,12 +44,12 @@ export default async function AdminReportsPage({
       <h1 className="mb-1 font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("title")}
       </h1>
-      <p className="lbl mb-2 text-[9.5px] text-gold-deep dark:text-gold-light">
+      <p className="lbl mb-2 text-[10.5px] text-gold-deep dark:text-gold-light">
         {t("reportsOpen")} · {reports.length}
       </p>
       <Link
         href="/admin/coaches"
-        className="mb-4 inline-block rounded-btnsm border border-sand-300 px-3 py-1.5 text-[12px] font-semibold text-ink dark:border-anthracite-600 dark:text-[#ECE7DD]"
+        className="mb-4 inline-block rounded-btnsm border border-sand-300 px-3 py-1.5 text-[13px] font-semibold text-ink dark:border-anthracite-600 dark:text-[#ECE7DD]"
       >
         Gérer les accompagnateurs (pasteurs / prêtres) →
       </Link>
@@ -69,7 +69,7 @@ export default async function AdminReportsPage({
                 {t("reporter")} <b>{r.reporter.displayName}</b> → {t("target")}{" "}
                 <b>{r.target.displayName}</b>
               </span>
-              <span className="lbl text-[8.5px]">{r.status}</span>
+              <span className="lbl text-[9.5px]">{r.status}</span>
             </div>
             <p className="mb-3 text-sm leading-snug text-ink dark:text-[#CFCAC0]">
               {r.reason}
@@ -79,7 +79,7 @@ export default async function AdminReportsPage({
         ))}
       </div>
 
-      <h2 className="lbl mb-3 mt-7 text-[9.5px] text-gold-deep dark:text-gold-light">
+      <h2 className="lbl mb-3 mt-7 text-[10.5px] text-gold-deep dark:text-gold-light">
         {ta("title")} · {signals.length}
       </h2>
       <div className="flex flex-col gap-2.5 pb-8">
@@ -104,7 +104,7 @@ export default async function AdminReportsPage({
               <div className="mb-1.5 flex flex-wrap items-center gap-2">
                 {data.severity && data.severity !== "none" && (
                   <span
-                    className={`rounded-[6px] px-2 py-0.5 text-[10.5px] font-bold ${high ? "bg-danger/15 text-danger" : "bg-gold/25 text-gold-ink dark:text-[#E0C77A]"}`}
+                    className={`rounded-[6px] px-2 py-0.5 text-[11.5px] font-bold ${high ? "bg-danger/15 text-danger" : "bg-gold/25 text-gold-ink dark:text-[#E0C77A]"}`}
                   >
                     {ta(`severity_${data.severity}`)}
                   </span>
@@ -112,16 +112,16 @@ export default async function AdminReportsPage({
                 {(data.signals ?? []).map((sg) => (
                   <span
                     key={sg}
-                    className="rounded-[6px] bg-gold/20 px-2 py-0.5 text-[10.5px] font-semibold text-gold-ink dark:text-[#E0C77A]"
+                    className="rounded-[6px] bg-gold/20 px-2 py-0.5 text-[11.5px] font-semibold text-gold-ink dark:text-[#E0C77A]"
                   >
                     {ta(`signal_${sg}`)}
                   </span>
                 ))}
-                <span className="ml-auto text-[10.5px] text-sand-600 dark:text-[#7E7A72]">
+                <span className="ml-auto text-[11.5px] text-sand-600 dark:text-[#7E7A72]">
                   {sig.user?.displayName ?? "?"}
                 </span>
               </div>
-              <p className="text-[12.5px] italic leading-snug text-[#6F5C2E] dark:text-[#C2B488]">
+              <p className="text-[13.5px] italic leading-snug text-[#6F5C2E] dark:text-[#C2B488]">
                 « {data.excerpt} »
               </p>
             </article>

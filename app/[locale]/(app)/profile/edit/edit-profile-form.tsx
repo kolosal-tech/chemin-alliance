@@ -272,7 +272,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
             <button
               type="button"
               onClick={load}
-              className="rounded-btnsm border border-sand-400 px-4 py-2 text-[13px] font-semibold text-night dark:border-anthracite-600 dark:text-[#ECE7DD]"
+              className="rounded-btnsm border border-sand-400 px-4 py-2 text-[14px] font-semibold text-night dark:border-anthracite-600 dark:text-[#ECE7DD]"
             >
               {tc("retry")}
             </button>
@@ -310,7 +310,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
 
   const input =
     "rounded-btnsm border border-sand-400 bg-surface px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
-  const lbl = "lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]";
+  const lbl = "lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]";
 
   // Marqueur visuel obligatoire (*) / recommandé / optionnel - pour que la
   // longue liste ne PARAISSE plus tout entière obligatoire.
@@ -454,7 +454,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
                 type="button"
                 onClick={() => toggle(opt)}
                 aria-pressed={on}
-                className={`rounded-full border px-3 py-1.5 text-[12.5px] transition-colors ${
+                className={`rounded-full border px-3 py-1.5 text-[13.5px] transition-colors ${
                   on
                     ? "border-gold bg-gold/15 text-gold-ink dark:border-gold-light/50 dark:text-gold-light"
                     : "border-sand-400 text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
@@ -478,7 +478,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
         </h1>
         <Link
           href="/profile"
-          className="text-[13px] font-semibold text-warmgray dark:text-[#9A958B]"
+          className="text-[14px] font-semibold text-warmgray dark:text-[#9A958B]"
         >
           {tc("cancel")}
         </Link>
@@ -487,10 +487,10 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
       <form onSubmit={submit} className="flex flex-col gap-5">
         {/* ---- Essentiel pour commencer ---- */}
         <section className="flex flex-col gap-3">
-          <h2 className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
+          <h2 className="lbl text-[10.5px] text-gold-deep dark:text-gold-light">
             {t("secEssential")}
           </h2>
-          <p className="-mt-1 text-[12px] leading-snug text-sand-600 dark:text-[#9A958B]">
+          <p className="-mt-1 text-[13px] leading-snug text-sand-600 dark:text-[#9A958B]">
             {t("matchingHint")}
           </p>
           {photoEnabled && (
@@ -509,7 +509,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
                   </div>
                 )}
               </div>
-              <label className="cursor-pointer rounded-btnsm border border-sand-400 px-4 py-2 text-[13px] font-semibold text-night dark:border-anthracite-600 dark:text-[#ECE7DD]">
+              <label className="cursor-pointer rounded-btnsm border border-sand-400 px-4 py-2 text-[14px] font-semibold text-night dark:border-anthracite-600 dark:text-[#ECE7DD]">
                 {photoBusy ? tc("loading") : t("photoChange")}
                 <input
                   type="file"
@@ -565,16 +565,16 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
         <details className="rounded-cardlg border border-sand-200 dark:border-anthracite-600">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-2 p-4">
             <span className="flex flex-col">
-              <span className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
+              <span className="lbl text-[10.5px] text-gold-deep dark:text-gold-light">
                 {t("secMore")}
               </span>
-              <span className="text-[11.5px] font-normal text-sand-500 dark:text-[#7E7A72]">
+              <span className="text-[12.5px] font-normal text-sand-500 dark:text-[#7E7A72]">
                 {t("secMoreHint")}
               </span>
             </span>
             <span
               data-testid="secmore-count"
-              className="flex-none rounded-full bg-sand-200 px-2 py-0.5 font-mono text-[10px] text-sand-700 dark:bg-anthracite-700 dark:text-[#9A958B]"
+              className="flex-none rounded-full bg-sand-200 px-2 py-0.5 font-mono text-[11px] text-sand-700 dark:bg-anthracite-700 dark:text-[#9A958B]"
             >
               {t("secMoreCount", {
                 filled: filledOptional,
@@ -655,7 +655,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
                 <option value="no">{tc("no")}</option>
               </select>
             </label>
-            <label className="flex items-center gap-3 text-[13px] text-ink dark:text-[#ECE7DD]">
+            <label className="flex items-center gap-3 text-[14px] text-ink dark:text-[#ECE7DD]">
               <input
                 type="checkbox"
                 checked={d.photoBlurredByDefault}
@@ -668,14 +668,14 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
         </details>
 
         {error && (
-          <p role="alert" className="text-[13px] text-danger">
+          <p role="alert" className="text-[14px] text-danger">
             {error}
           </p>
         )}
         {saved && (
           <p
             role="status"
-            className="text-[13px] text-[#2E7D5B] dark:text-[#7FC9A6]"
+            className="text-[14px] text-[#2E7D5B] dark:text-[#7FC9A6]"
           >
             {t("saved")}
           </p>

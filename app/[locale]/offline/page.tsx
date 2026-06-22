@@ -17,7 +17,7 @@ export default async function OfflinePage({
         <circle cx="48" cy="28" r="4.5" fill="none" stroke="#C8C2B5" strokeWidth="2" />
       </svg>
       <h1 className="font-display text-[28px] text-night dark:text-[#ECE7DD]">{t("offline")}</h1>
-      <p className="mt-3 max-w-[34ch] text-[15px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+      <p className="mt-3 max-w-[34ch] text-[16px] leading-relaxed text-warmgray dark:text-[#9A958B]">
         {t("offlineBody")}
       </p>
     </main>

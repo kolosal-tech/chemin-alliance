@@ -66,21 +66,21 @@ export function PhoneVerify() {
 
   return (
     <section className="mt-6">
-      <h2 className="lbl mb-2 text-[9.5px] text-gold-deep dark:text-gold-light">
+      <h2 className="lbl mb-2 text-[10.5px] text-gold-deep dark:text-gold-light">
         {t("title")}
       </h2>
       <div className="rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
         {st.verified ? (
-          <p className="flex items-center gap-2 text-[13.5px] text-sage">
+          <p className="flex items-center gap-2 text-[14.5px] text-sage">
             <span aria-hidden>✓</span> {t("verified")} ({st.phone})
           </p>
         ) : !st.smsConfigured ? (
-          <p className="text-[13px] text-warmgray dark:text-[#9A958B]">
+          <p className="text-[14px] text-warmgray dark:text-[#9A958B]">
             {t("comingSoon")}
           </p>
         ) : step === "idle" ? (
           <div className="flex flex-col gap-2.5">
-            <p className="text-[12.5px] leading-snug text-warmgray dark:text-[#9A958B]">
+            <p className="text-[13.5px] leading-snug text-warmgray dark:text-[#9A958B]">
               {t("intro")}
             </p>
             <input
@@ -101,7 +101,7 @@ export function PhoneVerify() {
           </div>
         ) : (
           <div className="flex flex-col gap-2.5">
-            <p className="text-[12.5px] leading-snug text-warmgray dark:text-[#9A958B]">
+            <p className="text-[13.5px] leading-snug text-warmgray dark:text-[#9A958B]">
               {t("sentTo", { phone })}
             </p>
             <input
@@ -123,13 +123,13 @@ export function PhoneVerify() {
             <button
               type="button"
               onClick={() => setStep("idle")}
-              className="py-1 text-center text-[12px] text-warmgray underline dark:text-[#9A958B]"
+              className="py-1 text-center text-[13px] text-warmgray underline dark:text-[#9A958B]"
             >
               {t("change")}
             </button>
           </div>
         )}
-        {error && <p className="mt-2 text-[12.5px] text-danger">{error}</p>}
+        {error && <p className="mt-2 text-[13.5px] text-danger">{error}</p>}
       </div>
     </section>
   );

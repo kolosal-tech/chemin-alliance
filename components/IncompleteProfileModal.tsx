@@ -55,7 +55,7 @@ export function IncompleteProfileModal({
             >
               {t("title")}
             </h2>
-            <p className="mt-1.5 text-[14px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+            <p className="mt-1.5 text-[15px] leading-relaxed text-warmgray dark:text-[#9A958B]">
               {t("body")}
             </p>
           </div>
@@ -63,7 +63,7 @@ export function IncompleteProfileModal({
 
         {/* Mini-jauge */}
         <div className="mt-5">
-          <div className="mb-1.5 flex justify-between text-[12px] font-semibold text-warmgray dark:text-[#9A958B]">
+          <div className="mb-1.5 flex justify-between text-[13px] font-semibold text-warmgray dark:text-[#9A958B]">
             <span>
               {completion.done}/{completion.total}
             </span>
@@ -80,7 +80,7 @@ export function IncompleteProfileModal({
         <div className="mt-6 flex flex-col gap-2.5">
           <Link
             href="/profile/edit"
-            className="inline-flex items-center justify-center gap-1.5 rounded-btn bg-navy px-5 py-3.5 text-[14px] font-semibold text-[#F4F1EA] transition-colors hover:bg-night dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
+            className="inline-flex items-center justify-center gap-1.5 rounded-btn bg-navy px-5 py-3.5 text-[15px] font-semibold text-[#F4F1EA] transition-colors hover:bg-night dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
           >
             {t("cta")}
             <Icon name="arrowRight" className="h-4 w-4" strokeWidth={1.9} />
@@ -88,7 +88,7 @@ export function IncompleteProfileModal({
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="rounded-btn px-5 py-3 text-[14px] font-semibold text-warmgray transition-colors hover:text-night dark:text-[#9A958B] dark:hover:text-[#ECE7DD]"
+            className="rounded-btn px-5 py-3 text-[15px] font-semibold text-warmgray transition-colors hover:text-night dark:text-[#9A958B] dark:hover:text-[#ECE7DD]"
           >
             {t("later")}
           </button>

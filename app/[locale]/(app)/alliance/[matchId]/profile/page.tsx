@@ -96,7 +96,7 @@ export default async function MatchProfilePage({
           className="h-16 w-16 flex-none rounded-2xl"
         />
         <div>
-          <div className="lbl text-[9px] text-gold-deep dark:text-gold-light">
+          <div className="lbl text-[10px] text-gold-deep dark:text-gold-light">
             {t("matchProfile.eyebrow")}
           </div>
           <div className="font-display text-lg text-night dark:text-[#ECE7DD]">
@@ -104,7 +104,7 @@ export default async function MatchProfilePage({
             {other.age ? `, ${other.age}` : ""}
           </div>
           {other.cityApprox && (
-            <div className="text-[12px] text-sand-600 dark:text-[#9A958B]">
+            <div className="text-[13px] text-sand-600 dark:text-[#9A958B]">
               {other.cityApprox}
             </div>
           )}
@@ -115,7 +115,7 @@ export default async function MatchProfilePage({
               size="sm"
             />
             {other.sponsor && (
-              <span className="inline-flex items-center gap-1 rounded-[6px] bg-gold/15 px-2 py-0.5 text-[9.5px] font-semibold text-gold-ink dark:bg-[#272117] dark:text-[#E0C77A]">
+              <span className="inline-flex items-center gap-1 rounded-[6px] bg-gold/15 px-2 py-0.5 text-[10.5px] font-semibold text-gold-ink dark:bg-[#272117] dark:text-[#E0C77A]">
                 🤝 {t("sponsor.badge")}
               </span>
             )}
@@ -123,12 +123,12 @@ export default async function MatchProfilePage({
         </div>
       </header>
 
-      <p className="mb-4 rounded-card border border-sand-200 bg-surface px-4 py-3 text-[12.5px] leading-normal text-sand-700 dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#B6B1A7]">
+      <p className="mb-4 rounded-card border border-sand-200 bg-surface px-4 py-3 text-[13.5px] leading-normal text-sand-700 dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#B6B1A7]">
         {t("matchProfile.intro")}
       </p>
 
       {fields.length === 0 ? (
-        <p className="rounded-card bg-sand-100 px-4 py-6 text-center text-[13px] text-sand-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
+        <p className="rounded-card bg-sand-100 px-4 py-6 text-center text-[14px] text-sand-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
           {t("matchProfile.empty")}
         </p>
       ) : (
@@ -138,11 +138,11 @@ export default async function MatchProfilePage({
               key={f.key}
               className="rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800"
             >
-              <div className="lbl mb-1.5 text-[9px] text-gold-deep dark:text-gold-light">
+              <div className="lbl mb-1.5 text-[10px] text-gold-deep dark:text-gold-light">
                 {t(`matchProfile.field.${f.key}`)}
               </div>
               {f.visible ? (
-                <p className="text-[14px] leading-normal text-night dark:text-[#ECE7DD]">
+                <p className="text-[15px] leading-normal text-night dark:text-[#ECE7DD]">
                   {f.value === null
                     ? t("matchProfile.notProvided")
                     : f.key === "children"
@@ -158,7 +158,7 @@ export default async function MatchProfilePage({
                           : f.value}
                 </p>
               ) : (
-                <p className="flex items-center gap-1.5 text-[12.5px] text-sand-500 dark:text-[#7E7A72]">
+                <p className="flex items-center gap-1.5 text-[13.5px] text-sand-500 dark:text-[#7E7A72]">
                   <svg
                     width="13"
                     height="13"

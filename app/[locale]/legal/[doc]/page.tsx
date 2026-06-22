@@ -92,27 +92,27 @@ export default function LegalPage({
     <main className="mx-auto max-w-2xl px-7 py-12 safe-top safe-bottom">
       <Link href="/" className="flex items-center gap-2.5">
         <span aria-hidden className="inline-block h-px w-[22px] bg-gold" />
-        <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">
+        <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
           Chemin d&apos;Alliance
         </span>
       </Link>
       <h1 className="mt-7 font-display text-[34px] leading-tight text-night dark:text-[#ECE7DD]">
         {doc.title}
       </h1>
-      <p className="lbl mt-2 text-[9.5px] text-sand-600 dark:text-[#7E7A72]">
+      <p className="lbl mt-2 text-[10.5px] text-sand-600 dark:text-[#7E7A72]">
         {doc.updated}
       </p>
 
       {isPrivacy && (
         <div className="mt-6 rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
-          <p className="text-[13px] text-warmgray dark:text-[#9A958B]">
+          <p className="text-[14px] text-warmgray dark:text-[#9A958B]">
             {ui.adaptedFor}{" "}
             <span className="font-semibold text-night dark:text-[#ECE7DD]">
               {REGIME_LABELS[regime][locale]}
             </span>
           </p>
           <div className="mt-3">
-            <span className="lbl text-[9px] text-sand-600 dark:text-[#7E7A72]">
+            <span className="lbl text-[10px] text-sand-600 dark:text-[#7E7A72]">
               {ui.change}
             </span>
             <div className="mt-1.5 flex flex-wrap gap-1.5">
@@ -122,7 +122,7 @@ export default function LegalPage({
                   <Link
                     key={r}
                     href={`/legal/privacy?region=${r}`}
-                    className={`rounded-full border px-3 py-1 text-[12px] transition-colors ${
+                    className={`rounded-full border px-3 py-1 text-[13px] transition-colors ${
                       on
                         ? "border-gold bg-gold/15 font-semibold text-gold-ink dark:border-gold-light/50 dark:text-gold-light"
                         : "border-sand-400 text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
@@ -134,7 +134,7 @@ export default function LegalPage({
               })}
             </div>
           </div>
-          <p className="mt-3 text-[11px] leading-snug text-sand-500 dark:text-[#65625B]">
+          <p className="mt-3 text-[12px] leading-snug text-sand-500 dark:text-[#65625B]">
             {ui.note}
           </p>
         </div>
@@ -143,13 +143,13 @@ export default function LegalPage({
       <div className="mt-8 flex flex-col gap-7">
         {sections.map((s) => (
           <section key={s.h}>
-            <h2 className="font-display text-[19px] text-night dark:text-[#ECE7DD]">
+            <h2 className="font-display text-[20px] text-night dark:text-[#ECE7DD]">
               {s.h}
             </h2>
             {s.p.map((para, i) => (
               <p
                 key={i}
-                className="mt-2 text-[14.5px] leading-relaxed text-warmgray dark:text-[#9A958B]"
+                className="mt-2 text-[15.5px] leading-relaxed text-warmgray dark:text-[#9A958B]"
               >
                 {para}
               </p>

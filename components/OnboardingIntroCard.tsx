@@ -96,19 +96,19 @@ export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
           <span className="flex h-12 w-12 items-center justify-center rounded-card bg-gold/15 text-gold-deep dark:text-gold-light">
             <Icon name="sparkle" className="h-6 w-6" strokeWidth={1.7} />
           </span>
-          <span className="lbl mt-5 block text-[10px] text-gold-deep dark:text-gold-light">
+          <span className="lbl mt-5 block text-[11px] text-gold-deep dark:text-gold-light">
             {t("introLabel")}
           </span>
           <h2 className="mt-1 font-display text-2xl text-night dark:text-[#ECE7DD]">
             {t("introTitle")}
           </h2>
-          <p className="mt-2 max-w-prose text-[15px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+          <p className="mt-2 max-w-prose text-[16px] leading-relaxed text-warmgray dark:text-[#9A958B]">
             {t("introBody")}
           </p>
           <button
             type="button"
             onClick={() => setStep("questions")}
-            className="mt-7 inline-flex items-center gap-1.5 rounded-btn bg-navy px-6 py-3.5 text-[14px] font-semibold text-[#F4F1EA] transition-colors hover:bg-night dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
+            className="mt-7 inline-flex items-center gap-1.5 rounded-btn bg-navy px-6 py-3.5 text-[15px] font-semibold text-[#F4F1EA] transition-colors hover:bg-night dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
           >
             {t("introCta")}
             <Icon name="arrowRight" className="h-4 w-4" strokeWidth={1.9} />
@@ -122,7 +122,7 @@ export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
             <button
               type="button"
               onClick={goBack}
-              className="-ml-1 flex items-center gap-1 text-[13px] font-medium text-warmgray dark:text-[#9A958B]"
+              className="-ml-1 flex items-center gap-1 text-[14px] font-medium text-warmgray dark:text-[#9A958B]"
             >
               <svg
                 width="16"
@@ -141,7 +141,7 @@ export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
               </svg>
               {t("back")}
             </button>
-            <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">
+            <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
               {t("progress", { current: index + 1, total })}
             </span>
           </div>
@@ -166,7 +166,7 @@ export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
                 key={w}
                 type="button"
                 onClick={() => choose(w)}
-                className="flex items-center justify-between rounded-card border border-sand-200 bg-cream/60 px-4 py-3.5 text-left text-[14.5px] text-night transition-colors hover:border-gold hover:bg-gold/5 dark:border-anthracite-600 dark:bg-anthracite-850/60 dark:text-[#ECE7DD] dark:hover:border-gold-light"
+                className="flex items-center justify-between rounded-card border border-sand-200 bg-cream/60 px-4 py-3.5 text-left text-[15.5px] text-night transition-colors hover:border-gold hover:bg-gold/5 dark:border-anthracite-600 dark:bg-anthracite-850/60 dark:text-[#ECE7DD] dark:hover:border-gold-light"
               >
                 {t(`scale${w}`)}
                 <span aria-hidden className="text-warmgray dark:text-[#9A958B]">
@@ -180,34 +180,34 @@ export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
 
       {step === "result" && (
         <>
-          <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">
+          <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
             {t("resultLabel")}
           </span>
           <div className="mt-1 flex items-baseline gap-1.5">
             <span className="font-display text-5xl text-night dark:text-[#ECE7DD]">
               {result.total}
             </span>
-            <span className="text-[15px] text-warmgray dark:text-[#9A958B]">
+            <span className="text-[16px] text-warmgray dark:text-[#9A958B]">
               / 100
             </span>
           </div>
           <h2 className="mt-3 font-display text-xl text-night dark:text-[#ECE7DD]">
             {t(`level.${result.level}.title`)}
           </h2>
-          <p className="mt-2 max-w-prose text-[14.5px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+          <p className="mt-2 max-w-prose text-[15.5px] leading-relaxed text-warmgray dark:text-[#9A958B]">
             {t(`level.${result.level}.body`)}
           </p>
 
           {result.strengths.length > 0 && (
             <div className="mt-5">
-              <p className="lbl text-[9px] text-gold-deep dark:text-gold-light">
+              <p className="lbl text-[10px] text-gold-deep dark:text-gold-light">
                 {t("strengthsLabel")}
               </p>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {result.strengths.map((a) => (
                   <span
                     key={a}
-                    className="rounded-full bg-[#EAF0EB] px-3 py-1 text-[12.5px] font-medium text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]"
+                    className="rounded-full bg-[#EAF0EB] px-3 py-1 text-[13.5px] font-medium text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]"
                   >
                     {t(`axis.${a}.name`)}
                   </span>
@@ -218,14 +218,14 @@ export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
 
           {result.growth.length > 0 && (
             <div className="mt-4">
-              <p className="lbl text-[9px] text-gold-deep dark:text-gold-light">
+              <p className="lbl text-[10px] text-gold-deep dark:text-gold-light">
                 {t("growthLabel")}
               </p>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {result.growth.map((a) => (
                   <span
                     key={a}
-                    className="rounded-full bg-sand-100 px-3 py-1 text-[12.5px] font-medium text-[#6B665C] dark:bg-anthracite-700 dark:text-[#C2BCB0]"
+                    className="rounded-full bg-sand-100 px-3 py-1 text-[13.5px] font-medium text-[#6B665C] dark:bg-anthracite-700 dark:text-[#C2BCB0]"
                   >
                     {t(`axis.${a}.name`)}
                   </span>
@@ -236,22 +236,22 @@ export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
 
           {result.suggestsPreparation && (
             <div className="mt-5 rounded-card border border-gold/30 bg-[#FBF6E9] p-4 dark:border-[#463A1F] dark:bg-[#272117]">
-              <p className="font-display text-[15px] text-night dark:text-[#ECE7DD]">
+              <p className="font-display text-[16px] text-night dark:text-[#ECE7DD]">
                 {t("orientTitle")}
               </p>
-              <p className="mt-1 text-[13.5px] leading-normal text-[#6F5C2E] dark:text-[#C2B488]">
+              <p className="mt-1 text-[14.5px] leading-normal text-[#6F5C2E] dark:text-[#C2B488]">
                 {t("orientBody")}
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 <Link
                   href="/devotional"
-                  className="rounded-btnsm bg-navy px-4 py-2.5 text-[13px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+                  className="rounded-btnsm bg-navy px-4 py-2.5 text-[14px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
                 >
                   {t("orientMeditate")}
                 </Link>
                 <Link
                   href="/coaches"
-                  className="rounded-btnsm border border-gold bg-surface px-4 py-2.5 text-[13px] font-semibold text-gold-ink dark:border-[#6A5A2E] dark:bg-anthracite-800 dark:text-[#E0C77A]"
+                  className="rounded-btnsm border border-gold bg-surface px-4 py-2.5 text-[14px] font-semibold text-gold-ink dark:border-[#6A5A2E] dark:bg-anthracite-800 dark:text-[#E0C77A]"
                 >
                   {t("orientCoach")}
                 </Link>
@@ -263,7 +263,7 @@ export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
             type="button"
             onClick={finish}
             disabled={loading}
-            className="mt-6 inline-flex items-center justify-center gap-1.5 rounded-btn bg-navy px-6 py-3.5 text-[14px] font-semibold text-[#F4F1EA] transition-colors hover:bg-night disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
+            className="mt-6 inline-flex items-center justify-center gap-1.5 rounded-btn bg-navy px-6 py-3.5 text-[15px] font-semibold text-[#F4F1EA] transition-colors hover:bg-night disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
           >
             {t("finish")}
             {loading ? (
