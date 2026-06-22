@@ -849,7 +849,8 @@
       "both": "Perfil verificado",
       "phone": "Tel. verificado"
     },
-    "phoneLevelTodo": "Teléfono por verificar"
+    "phoneLevelTodo": "Teléfono por verificar",
+    "emailLevelTodo": "Correo por verificar"
   },
   "antiScam": {
     "pageTitle": "Reconocer una estafa",
