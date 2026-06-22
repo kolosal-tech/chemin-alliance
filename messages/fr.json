@@ -214,7 +214,8 @@
     "engaged": "Fiancé·e",
     "married": "Marié·e",
     "photoChange": "Changer la photo",
-    "photoError": "Échec de l'envoi de la photo. Réessaie."
+    "photoError": "Échec de l'envoi de la photo. Réessaie.",
+    "secMoreCount": "{filled}/{total} remplis"
   },
   "visibility": {
     "PUBLIC_CONTROLLED": "Public",
@@ -335,7 +336,9 @@
     "book": "Réserver une séance",
     "booked": "Séance demandée pour le {date}. Vous recevrez une confirmation.",
     "reviews": "{count} avis vérifiés",
-    "affiliation": "Affiliation"
+    "affiliation": "Affiliation",
+    "empty": "Pas de coachs disponibles pour l'instant. De nouveaux accompagnateurs arrivent bientôt.",
+    "error": "Impossible de charger les coachs pour le moment."
   },
   "curriculum": {
     "kicker": "Parcours guidé",
@@ -765,7 +768,8 @@
     "sessionDoneBody": "Que ce verset t'accompagne tout au long de ta journée.",
     "sessionDoneCta": "Revenir au dévotionnel",
     "journalTitle": "Ta dernière réflexion",
-    "showVerse": "Voir le verset"
+    "showVerse": "Voir le verset",
+    "markedDoneToast": "Temps spirituel enregistré 🙏"
   },
   "maturity": {
     "introLabel": "Recto · Verso",
@@ -844,7 +848,8 @@
       "email": "Vérifié",
       "both": "Profil vérifié",
       "phone": "Tél. vérifié"
-    }
+    },
+    "phoneLevelTodo": "Téléphone à vérifier"
   },
   "antiScam": {
     "pageTitle": "Reconnaître une arnaque",

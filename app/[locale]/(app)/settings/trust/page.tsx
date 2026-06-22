@@ -61,7 +61,9 @@ export default async function TrustPage({
         </span>
         <div className="flex-1">
           <div className="text-[14px] font-semibold text-night dark:text-[#ECE7DD]">
-            {t("trust.phoneLevel")}
+            {user.phoneVerified
+              ? t("trust.phoneLevel")
+              : t("trust.phoneLevelTodo")}
           </div>
           <div className="text-[12.5px] text-warmgray dark:text-[#9A958B]">
             {user.phoneVerified ? t("trust.phoneDone") : t("trust.phoneSoon")}

@@ -268,6 +268,8 @@ export function PrivacyPanel({
               save({ antiMalaiseRadiusKm: state.antiMalaiseRadiusKm })
             }
             aria-label={t("privacy.radius")}
+            aria-valuenow={state.antiMalaiseRadiusKm}
+            aria-valuetext={`${state.antiMalaiseRadiusKm} km`}
             className="w-full accent-[#1A2744] dark:accent-[#D8B860]"
           />
         </div>
