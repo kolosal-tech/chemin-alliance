@@ -56,9 +56,9 @@ describe("culture - résolution pays → région", () => {
 });
 
 describe("culture - guidance pour le prompt", () => {
-  it("sans pays : demande le pays/ethnie et liste toutes les régions", () => {
+  it("sans pays : ne présume pas l'origine et liste toutes les régions", () => {
     const g = culturalGuidance();
-    expect(g).toMatch(/DEMANDE/);
+    expect(g).toMatch(/ne présumes? jamais/i);
     expect(g).toMatch(/Afrique de l'Ouest/);
     expect(g).toMatch(/lusophone/i);
     expect(g).toMatch(/cadre biblique/i);
@@ -68,7 +68,8 @@ describe("culture - guidance pour le prompt", () => {
     const g = culturalGuidance("Côte d'Ivoire");
     expect(g).toMatch(/Afrique de l'Ouest/);
     expect(g).toMatch(/dot/i);
-    expect(g).toMatch(/DEMANDE/); // demande quand même de confirmer l'ethnie
+    // non-presomptif : ne l'affirme pas, laisse la personne preciser ou corriger
+    expect(g).toMatch(/préciser ou corriger librement/i);
   });
 
   it("chaque région porte un cadre biblique et des points de vigilance", () => {
