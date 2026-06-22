@@ -69,12 +69,12 @@ export function ReportButton({ targetUserId }: { targetUserId: string }) {
               onClick={(e) => e.stopPropagation()}
             >
               {done ? (
-                <p className="py-3 text-center text-[13.5px] leading-relaxed text-sage">
+                <p className="py-3 text-center text-[14.5px] leading-relaxed text-sage">
                   {t("done")}
                 </p>
               ) : (
                 <>
-                  <h3 className="font-display text-[18px] text-night dark:text-[#ECE7DD]">
+                  <h3 className="font-display text-[19px] text-night dark:text-[#ECE7DD]">
                     {t("title")}
                   </h3>
                   <textarea
@@ -89,14 +89,14 @@ export function ReportButton({ targetUserId }: { targetUserId: string }) {
                     <button
                       type="button"
                       onClick={() => setOpen(false)}
-                      className="flex-1 rounded-btnsm border border-sand-400 py-3 text-[13px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
+                      className="flex-1 rounded-btnsm border border-sand-400 py-3 text-[14px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
                     >
                       {tc("cancel")}
                     </button>
                     <AsyncButton
                       onClick={submit}
                       disabled={busy || reason.trim().length < 10}
-                      className="flex-1 rounded-btnsm bg-danger py-3 text-[13px] font-semibold text-white disabled:opacity-50"
+                      className="flex-1 rounded-btnsm bg-danger py-3 text-[14px] font-semibold text-white disabled:opacity-50"
                     >
                       {t("submit")}
                     </AsyncButton>

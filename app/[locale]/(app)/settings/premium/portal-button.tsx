@@ -42,7 +42,7 @@ export function PortalButton({ label }: { label: string }) {
         {label}
       </button>
       {error && (
-        <p className="mt-2 text-center text-[12px] text-[#9A3B30] dark:text-[#E0A99F]">
+        <p className="mt-2 text-center text-[13px] text-[#9A3B30] dark:text-[#E0A99F]">
           {t("premium.manageError")}
         </p>
       )}

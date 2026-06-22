@@ -56,7 +56,7 @@ export function ResetPasswordForm() {
       <SacredMotif variant="tree" className="right-[-110px] top-[-20px]" />
       <div className="mb-8 flex items-center gap-2.5">
         <span className="inline-block h-px w-[22px] bg-gold" aria-hidden />
-        <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">
+        <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
           {tc("appName")}
         </span>
       </div>
@@ -64,11 +64,11 @@ export function ResetPasswordForm() {
         {t("resetTitle")}
       </h1>
       {done ? (
-        <p className="mt-5 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-3 text-[13.5px] leading-relaxed text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
+        <p className="mt-5 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-3 text-[14.5px] leading-relaxed text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
           {t("resetDone")}
         </p>
       ) : !token ? (
-        <p className="mt-5 rounded-card border border-[#E6C9C9] bg-[#F6EAEA] px-4 py-3 text-[13.5px] leading-relaxed text-[#7A2E2E] dark:border-[#4A2E2E] dark:bg-[#2A1B1B] dark:text-[#C79F9F]">
+        <p className="mt-5 rounded-card border border-[#E6C9C9] bg-[#F6EAEA] px-4 py-3 text-[14.5px] leading-relaxed text-[#7A2E2E] dark:border-[#4A2E2E] dark:bg-[#2A1B1B] dark:text-[#C79F9F]">
           {t("resetInvalid")}
         </p>
       ) : (
@@ -78,7 +78,7 @@ export function ResetPasswordForm() {
           </p>
           <form onSubmit={submit} className="mt-7 flex flex-col gap-4">
             <label className="flex flex-col gap-1.5">
-              <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">
+              <span className="lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]">
                 {t("newPassword")}
               </span>
               <input
@@ -88,12 +88,12 @@ export function ResetPasswordForm() {
                 autoComplete="new-password"
                 className="rounded-btnsm border border-sand-400 bg-surface px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
               />
-              <span className="text-[11.5px] text-warmgray dark:text-[#8B8579]">
+              <span className="text-[12.5px] text-warmgray dark:text-[#8B8579]">
                 {t("passwordHint")}
               </span>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className="lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]">
+              <span className="lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]">
                 {t("confirmPassword")}
               </span>
               <input
@@ -105,7 +105,7 @@ export function ResetPasswordForm() {
               />
             </label>
             {error && (
-              <p role="alert" className="text-[13px] text-danger">
+              <p role="alert" className="text-[14px] text-danger">
                 {error}
               </p>
             )}

@@ -35,7 +35,7 @@ export function OnboardingSlides() {
     <button
       type="button"
       onClick={() => setSlide(to)}
-      className="-ml-1 mb-4 flex w-fit items-center gap-1 text-[13px] font-medium text-warmgray dark:text-[#9A958B]"
+      className="-ml-1 mb-4 flex w-fit items-center gap-1 text-[14px] font-medium text-warmgray dark:text-[#9A958B]"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
         <path
@@ -55,7 +55,7 @@ export function OnboardingSlides() {
       <div className="flex items-center justify-between pt-4">
         <div className="flex items-center gap-2.5">
           <span className="inline-block h-px w-[22px] bg-gold" aria-hidden />
-          <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">
+          <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
             {t("s1Label")}
           </span>
         </div>
@@ -83,7 +83,7 @@ export function OnboardingSlides() {
               </Link>
               <Link
                 href="/login"
-                className="rounded-btnlg border border-sand-400 px-7 py-4 text-[15px] font-medium text-ink dark:border-anthracite-600 dark:text-[#D7DCE6]"
+                className="rounded-btnlg border border-sand-400 px-7 py-4 text-[16px] font-medium text-ink dark:border-anthracite-600 dark:text-[#D7DCE6]"
               >
                 {t("s1Login")}
               </Link>
@@ -91,7 +91,7 @@ export function OnboardingSlides() {
           </div>
           <div className="relative rounded-screen bg-night p-10 shadow-phone dark:border dark:border-anthracite-600">
             <SacredMotif variant="dove" className="right-[-70px] top-[-50px]" />
-            <span className="lbl text-[10px] text-gold">{t("s2Label")}</span>
+            <span className="lbl text-[11px] text-gold">{t("s2Label")}</span>
             <h2 className="mb-7 mt-2 font-display text-[26px] leading-tight text-[#F4F1EA]">
               {t("s2Title")}
             </h2>
@@ -100,7 +100,7 @@ export function OnboardingSlides() {
             </div>
           </div>
         </div>
-        <p className="pb-4 text-[11.5px] text-sand-500 dark:text-[#65625B]">
+        <p className="pb-4 text-[12.5px] text-sand-500 dark:text-[#65625B]">
           <Link href="/legal/terms" className="underline">
             {tl("terms")}
           </Link>
@@ -115,10 +115,10 @@ export function OnboardingSlides() {
               key={g}
               className="rounded-cardlg border border-sand-200 bg-surface p-6 dark:border-anthracite-600 dark:bg-anthracite-800"
             >
-              <div className="font-display text-[19px] text-night dark:text-[#ECE7DD]">
+              <div className="font-display text-[20px] text-night dark:text-[#ECE7DD]">
                 {t(`${g}Title`)}
               </div>
-              <p className="mt-2 text-[13.5px] leading-normal text-[#6B665C] dark:text-[#9A958B]">
+              <p className="mt-2 text-[14.5px] leading-normal text-[#6B665C] dark:text-[#9A958B]">
                 {t(`${g}Body`)}
               </p>
             </div>
@@ -148,7 +148,7 @@ export function OnboardingSlides() {
               </button>
               <Link
                 href="/login"
-                className="rounded-btnlg border border-[#2E3A57] px-4 py-3.5 text-center text-[15px] font-medium text-[#D7DCE6]"
+                className="rounded-btnlg border border-[#2E3A57] px-4 py-3.5 text-center text-[16px] font-medium text-[#D7DCE6]"
               >
                 {t("s1Login")}
               </Link>
@@ -164,7 +164,7 @@ export function OnboardingSlides() {
               className="bottom-[-60px] right-[-100px]"
             />
             {back(0)}
-            <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">
+            <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
               {t("s2Label")}
             </span>
             <h2 className="mb-6 mt-2 font-display text-[30px] leading-[1.15] text-night dark:text-[#ECE7DD]">
@@ -191,7 +191,7 @@ export function OnboardingSlides() {
               className="right-[-90px] top-[-30px]"
             />
             {back(1)}
-            <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">
+            <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
               {t("s3Label")}
             </span>
             <h2 className="mb-6 mt-2 font-display text-[30px] leading-[1.15] text-night dark:text-[#ECE7DD]">
@@ -257,10 +257,10 @@ export function OnboardingSlides() {
                       />
                     )}
                   </svg>
-                  <div className="font-display text-[19px] text-night dark:text-[#ECE7DD]">
+                  <div className="font-display text-[20px] text-night dark:text-[#ECE7DD]">
                     {t(`${g}Title`)}
                   </div>
-                  <p className="mt-1.5 text-[13.5px] leading-normal text-[#6B665C] dark:text-[#9A958B]">
+                  <p className="mt-1.5 text-[14.5px] leading-normal text-[#6B665C] dark:text-[#9A958B]">
                     {t(`${g}Body`)}
                   </p>
                 </div>
@@ -279,7 +279,7 @@ export function OnboardingSlides() {
         )}
       </div>
 
-      <p className="pb-2 pt-5 text-center text-[11px] text-sand-500 dark:text-[#65625B] lg:hidden">
+      <p className="pb-2 pt-5 text-center text-[12px] text-sand-500 dark:text-[#65625B] lg:hidden">
         <Link href="/legal/terms" className="underline">
           {tl("terms")}
         </Link>

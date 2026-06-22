@@ -64,7 +64,7 @@ export function LockBadge({ level }: { level: VisibilityLevel }) {
           />
         ))}
       </span>
-      <span className="lbl text-[8px]">{t(level)}</span>
+      <span className="lbl text-[9px]">{t(level)}</span>
     </span>
   );
 }

@@ -24,17 +24,17 @@ export default async function RebuildingPage({
       <h1 className="font-display text-[26px] text-night dark:text-[#ECE7DD]">{t("title")}</h1>
       {word && (
         <div className="mt-4 rounded-cardlg bg-night p-5 dark:border dark:border-[#283655] dark:bg-[#1B2740]">
-          <span className="lbl text-[9px] text-gold dark:text-gold-light">{t("wordTitle")}</span>
-          <p className="mt-2 font-display text-[16px] italic leading-relaxed text-[#D7DCE6]">{word}</p>
+          <span className="lbl text-[10px] text-gold dark:text-gold-light">{t("wordTitle")}</span>
+          <p className="mt-2 font-display text-[17px] italic leading-relaxed text-[#D7DCE6]">{word}</p>
         </div>
       )}
       <ol className="mt-5 flex flex-col gap-3 pb-6">
         {steps.map((s, i) => (
           <li key={s.title} className="flex gap-4 rounded-cardlg border border-sand-200 bg-surface p-4.5 p-5 dark:border-anthracite-600 dark:bg-anthracite-800">
-            <span className="lbl mt-1 flex-none text-[11px] text-gold-deep dark:text-gold-light">0{i + 1}</span>
+            <span className="lbl mt-1 flex-none text-[12px] text-gold-deep dark:text-gold-light">0{i + 1}</span>
             <div>
-              <div className="font-display text-[18px] text-night dark:text-[#ECE7DD]">{s.title}</div>
-              <p className="mt-1 text-[13.5px] leading-normal text-warmgray dark:text-[#9A958B]">{s.body}</p>
+              <div className="font-display text-[19px] text-night dark:text-[#ECE7DD]">{s.title}</div>
+              <p className="mt-1 text-[14.5px] leading-normal text-warmgray dark:text-[#9A958B]">{s.body}</p>
             </div>
           </li>
         ))}

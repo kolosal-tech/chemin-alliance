@@ -50,10 +50,10 @@ export function TestimonialsCarousel() {
             {initials(active.name)}
           </span>
           <div>
-            <div className="text-[15px] font-semibold text-night dark:text-[#ECE7DD]">
+            <div className="text-[16px] font-semibold text-night dark:text-[#ECE7DD]">
               {active.name}
             </div>
-            <div className="text-[13px] text-warmgray dark:text-[#9A958B]">
+            <div className="text-[14px] text-warmgray dark:text-[#9A958B]">
               {t(`items.${active.id}.role`)} ·{" "}
               {t("duration", { months: active.months })}
             </div>

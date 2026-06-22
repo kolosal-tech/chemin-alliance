@@ -17,12 +17,12 @@ export default async function TrustPage({
       <h1 className="font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("trust.title")}
       </h1>
-      <p className="mt-2 text-[13.5px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+      <p className="mt-2 text-[14.5px] leading-relaxed text-warmgray dark:text-[#9A958B]">
         {t("trust.intro")}
       </p>
 
       <div className="mt-4 flex items-center gap-2">
-        <span className="lbl text-[9px] text-gold-deep dark:text-gold-light">
+        <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">
           {t("trust.statusTitle")}
         </span>
         <TrustBadge
@@ -37,19 +37,19 @@ export default async function TrustPage({
           {user.isVerified ? "✅" : "✉️"}
         </span>
         <div className="flex-1">
-          <div className="text-[14px] font-semibold text-night dark:text-[#ECE7DD]">
+          <div className="text-[15px] font-semibold text-night dark:text-[#ECE7DD]">
             {user.isVerified
               ? t("trust.emailLevel")
               : t("trust.emailLevelTodo")}
           </div>
-          <div className="text-[12.5px] text-warmgray dark:text-[#9A958B]">
+          <div className="text-[13.5px] text-warmgray dark:text-[#9A958B]">
             {user.isVerified ? t("trust.emailDone") : t("trust.emailTodo")}
           </div>
         </div>
         {!user.isVerified && (
           <Link
             href="/settings/account"
-            className="rounded-btnsm bg-navy px-3 py-2 text-[12.5px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+            className="rounded-btnsm bg-navy px-3 py-2 text-[13.5px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
           >
             {t("trust.completeEmail")}
           </Link>
@@ -62,18 +62,18 @@ export default async function TrustPage({
           {user.phoneVerified ? "✅" : "📱"}
         </span>
         <div className="flex-1">
-          <div className="text-[14px] font-semibold text-night dark:text-[#ECE7DD]">
+          <div className="text-[15px] font-semibold text-night dark:text-[#ECE7DD]">
             {user.phoneVerified
               ? t("trust.phoneLevel")
               : t("trust.phoneLevelTodo")}
           </div>
-          <div className="text-[12.5px] text-warmgray dark:text-[#9A958B]">
+          <div className="text-[13.5px] text-warmgray dark:text-[#9A958B]">
             {user.phoneVerified ? t("trust.phoneDone") : t("trust.phoneSoon")}
           </div>
         </div>
       </section>
 
-      <p className="mt-4 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-3 text-[12.5px] leading-normal text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
+      <p className="mt-4 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-3 text-[13.5px] leading-normal text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
         {t("trust.privacyNote")}
       </p>
     </main>

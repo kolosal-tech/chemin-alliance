@@ -139,7 +139,7 @@ export function CoachChat({
             <div className="font-display text-lg text-night dark:text-[#ECE7DD]">
               {t("aiCoach.title")}
             </div>
-            <div className="text-[11px] text-sand-600 dark:text-[#7E7A72]">
+            <div className="text-[12px] text-sand-600 dark:text-[#7E7A72]">
               {t("aiCoach.subtitle")}
             </div>
           </div>
@@ -153,7 +153,7 @@ export function CoachChat({
             role="tab"
             aria-selected={mode === "individual"}
             onClick={() => setMode("individual")}
-            className={`flex-1 rounded-[8px] py-1.5 text-[12.5px] font-semibold ${
+            className={`flex-1 rounded-[8px] py-1.5 text-[13.5px] font-semibold ${
               mode === "individual"
                 ? "bg-surface text-night shadow-sm dark:bg-anthracite-600 dark:text-[#ECE7DD]"
                 : "text-sand-600 dark:text-[#7E7A72]"
@@ -166,14 +166,14 @@ export function CoachChat({
             role="tab"
             aria-selected={mode === "couple"}
             onClick={() => setMode("couple")}
-            className={`flex-1 rounded-[8px] py-1.5 text-[12.5px] font-medium ${
+            className={`flex-1 rounded-[8px] py-1.5 text-[13.5px] font-medium ${
               mode === "couple"
                 ? "bg-surface text-night shadow-sm dark:bg-anthracite-600 dark:text-[#ECE7DD]"
                 : "text-sand-600 dark:text-[#7E7A72]"
             }`}
           >
             {t("aiCoach.modeCouple")}{" "}
-            <span className="text-[9px]">· {t("aiCoach.modeCoupleHint")}</span>
+            <span className="text-[10px]">· {t("aiCoach.modeCoupleHint")}</span>
           </button>
         </div>
       </header>
@@ -216,7 +216,7 @@ export function CoachChat({
                 strokeLinecap="round"
               />
             </svg>
-            <p className="text-[12.5px] leading-normal text-[#2A3550] dark:text-[#B9C6E0]">
+            <p className="text-[13.5px] leading-normal text-[#2A3550] dark:text-[#B9C6E0]">
               {t("common.aiTransparency")}
             </p>
           </div>
@@ -230,11 +230,11 @@ export function CoachChat({
                 key={e.id}
                 className="glass-self glass-bubble max-w-[80%] self-end rounded-[14px] rounded-tr-[4px] px-3.5 py-2.5"
               >
-                <p className="text-[13.5px] leading-normal text-info-ink dark:text-info-darkInk">
+                <p className="text-[14.5px] leading-normal text-info-ink dark:text-info-darkInk">
                   {e.text}
                 </p>
                 {fmtTime(e.createdAt) && (
-                  <span className="mt-1 block text-right text-[10px] text-info-ink/60 dark:text-info-darkInk/70">
+                  <span className="mt-1 block text-right text-[11px] text-info-ink/60 dark:text-info-darkInk/70">
                     {fmtTime(e.createdAt)}
                   </span>
                 )}
@@ -265,16 +265,16 @@ export function CoachChat({
                       strokeLinecap="round"
                     />
                   </svg>
-                  <span className="text-[12.5px] font-semibold text-warn-ink dark:text-warn-darkInk">
+                  <span className="text-[13.5px] font-semibold text-warn-ink dark:text-warn-darkInk">
                     {t("aiCoach.guardrailTitle")}
                   </span>
                 </div>
-                <p className="mb-2.5 text-[12.5px] leading-normal text-warn-ink dark:text-warn-darkInk">
+                <p className="mb-2.5 text-[13.5px] leading-normal text-warn-ink dark:text-warn-darkInk">
                   {e.text}
                 </p>
                 <Link
                   href="/coaches"
-                  className="block w-full rounded-[10px] border border-warn-border bg-surface py-2.5 text-center text-[13px] font-semibold text-warn-ink dark:border-warn-darkBorder dark:bg-anthracite-800 dark:text-warn-darkInk"
+                  className="block w-full rounded-[10px] border border-warn-border bg-surface py-2.5 text-center text-[14px] font-semibold text-warn-ink dark:border-warn-darkBorder dark:bg-anthracite-800 dark:text-warn-darkInk"
                 >
                   {t("aiCoach.guardrailCta")}
                 </Link>
@@ -298,10 +298,10 @@ export function CoachChat({
                 <div className="glass glass-bubble rounded-[14px] rounded-tl-[4px] px-3.5 py-2.5">
                   <RichText
                     text={e.text}
-                    className="text-[13.5px] leading-normal text-[#2A2823] dark:text-[#CFCAC0]"
+                    className="text-[14.5px] leading-normal text-[#2A2823] dark:text-[#CFCAC0]"
                   />
                   {fmtTime(e.createdAt) && (
-                    <span className="mt-1 block text-[10px] text-sand-500 dark:text-[#65625B]">
+                    <span className="mt-1 block text-[11px] text-sand-500 dark:text-[#65625B]">
                       {fmtTime(e.createdAt)}
                     </span>
                   )}
@@ -332,7 +332,7 @@ export function CoachChat({
             </div>
             <div className="glass glass-bubble flex items-center gap-2 rounded-[14px] rounded-tl-[4px] px-3.5 py-2.5">
               <Spinner className="h-3.5 w-3.5 text-warmgray dark:text-[#9A958B]" />
-              <span className="text-[13px] italic text-warmgray dark:text-[#9A958B]">
+              <span className="text-[14px] italic text-warmgray dark:text-[#9A958B]">
                 {t("aiCoach.responding")}
               </span>
             </div>
@@ -345,7 +345,7 @@ export function CoachChat({
             role="alert"
             className="self-start rounded-[13px] border border-[#E7C3BD] bg-[#FBEEEC] px-4 py-3 dark:border-[#5A2A22] dark:bg-[#2A1714]"
           >
-            <p className="text-[12.5px] leading-normal text-danger dark:text-[#E59B91]">
+            <p className="text-[13.5px] leading-normal text-danger dark:text-[#E59B91]">
               {error}
             </p>
             {lastQ && (
@@ -353,7 +353,7 @@ export function CoachChat({
                 type="button"
                 onClick={() => void send(lastQ)}
                 disabled={busy}
-                className="mt-2 text-[12.5px] font-semibold text-danger underline underline-offset-2 disabled:opacity-50 dark:text-[#E59B91]"
+                className="mt-2 text-[13.5px] font-semibold text-danger underline underline-offset-2 disabled:opacity-50 dark:text-[#E59B91]"
               >
                 {t("aiCoach.retry")}
               </button>
@@ -364,7 +364,7 @@ export function CoachChat({
         {quota !== null ? (
           <p
             role="status"
-            className="rounded-[13px] border border-warn-border bg-warn-surface px-4 py-3 text-[12.5px] text-warn-ink dark:border-warn-darkBorder dark:bg-warn-darkSurface dark:text-warn-darkInk"
+            className="rounded-[13px] border border-warn-border bg-warn-surface px-4 py-3 text-[13.5px] text-warn-ink dark:border-warn-darkBorder dark:bg-warn-darkSurface dark:text-warn-darkInk"
           >
             {t("aiCoach.quotaReached", { limit: quota })}
           </p>
@@ -373,7 +373,7 @@ export function CoachChat({
           remaining <= 2 && (
             <p
               role="status"
-              className="text-center text-[11.5px] text-sand-600 dark:text-[#7E7A72]"
+              className="text-center text-[12.5px] text-sand-600 dark:text-[#7E7A72]"
             >
               {t("aiCoach.quotaRemaining", { remaining })}
             </p>

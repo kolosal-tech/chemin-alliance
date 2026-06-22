@@ -65,7 +65,7 @@ export default async function HomePage({
           className="scroll-mt-20 border-y border-sand-300/60 bg-cream/60 px-5 py-20 sm:px-6 dark:border-anthracite-700 dark:bg-anthracite-850/60"
         >
           <div className="mx-auto max-w-2xl text-center">
-            <p className="lbl text-[10.5px] text-gold-deep dark:text-gold-light">
+            <p className="lbl text-[11.5px] text-gold-deep dark:text-gold-light">
               {t("kicker")}
             </p>
             <h2 className="mt-3 font-display text-3xl leading-tight text-night sm:text-4xl dark:text-[#ECE7DD]">

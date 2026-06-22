@@ -32,7 +32,7 @@ export default function CoachesError({
           type="button"
           onClick={reset}
           data-testid="coaches-retry"
-          className="mt-4 rounded-btnsm bg-navy px-4 py-2.5 text-[13px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+          className="mt-4 rounded-btnsm bg-navy px-4 py-2.5 text-[14px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
         >
           {tc("retry")}
         </button>

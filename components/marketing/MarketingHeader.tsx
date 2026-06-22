@@ -12,7 +12,7 @@ function Wordmark() {
   return (
     <Link
       href="/"
-      className="flex items-center gap-2.5 font-display text-[17px] font-semibold text-night dark:text-[#ECE7DD]"
+      className="flex items-center gap-2.5 font-display text-[18px] font-semibold text-night dark:text-[#ECE7DD]"
     >
       <span
         aria-hidden
@@ -115,7 +115,7 @@ export function MarketingHeader() {
                 key={l.key}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="rounded-btn px-3 py-3 text-[15px] font-medium text-night dark:text-[#ECE7DD]"
+                className="rounded-btn px-3 py-3 text-[16px] font-medium text-night dark:text-[#ECE7DD]"
               >
                 {t(l.key)}
               </a>

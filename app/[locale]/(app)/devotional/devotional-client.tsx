@@ -93,7 +93,7 @@ export function DevotionalClient({
     <main className="px-5 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <div className="mb-4 flex items-end justify-between">
         <div>
-          <span className="lbl text-[9px] text-gold-deep dark:text-gold-light">
+          <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">
             {t("devotional.subtitle")}
           </span>
           <h1 className="font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
@@ -105,7 +105,7 @@ export function DevotionalClient({
             <div className="font-display text-xl text-gold-deep dark:text-gold-light">
               {streak.current}
             </div>
-            <div className="lbl text-[8px] text-warmgray dark:text-[#9A958B]">
+            <div className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">
               {t("devotional.streakCurrent")}
             </div>
           </div>
@@ -113,7 +113,7 @@ export function DevotionalClient({
             <div className="font-display text-xl text-night dark:text-[#ECE7DD]">
               {streak.longest}
             </div>
-            <div className="lbl text-[8px] text-warmgray dark:text-[#9A958B]">
+            <div className="lbl text-[9px] text-warmgray dark:text-[#9A958B]">
               {t("devotional.streakLongest")}
             </div>
           </div>
@@ -121,10 +121,10 @@ export function DevotionalClient({
       </div>
 
       <article className="rounded-cardlg border border-gold/30 bg-[#FBF6E9] p-5 dark:border-[#463A1F] dark:bg-[#272117]">
-        <div className="lbl mb-1.5 text-[9px] text-gold-deep dark:text-gold-light">
+        <div className="lbl mb-1.5 text-[10px] text-gold-deep dark:text-gold-light">
           {devotion.reference}
         </div>
-        <p className="font-display text-[19px] italic leading-snug text-night dark:text-[#ECE7DD]">
+        <p className="font-display text-[20px] italic leading-snug text-night dark:text-[#ECE7DD]">
           « {devotion.verse} »
         </p>
       </article>
@@ -164,7 +164,7 @@ export function DevotionalClient({
           <span className="block text-base font-semibold text-[#F4F1EA] dark:text-anthracite-900">
             {t("devotional.start")}
           </span>
-          <span className="block text-[12px] text-[#F4F1EA]/75 dark:text-anthracite-900/75">
+          <span className="block text-[13px] text-[#F4F1EA]/75 dark:text-anthracite-900/75">
             {t("devotional.startHint")}
           </span>
         </span>
@@ -182,10 +182,10 @@ export function DevotionalClient({
 
       {lastReflection && (
         <section className="mt-3 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
-          <div className="lbl mb-1.5 text-[9px] text-gold-deep dark:text-gold-light">
+          <div className="lbl mb-1.5 text-[10px] text-gold-deep dark:text-gold-light">
             {t("devotional.journalTitle")}
           </div>
-          <p className="text-[13.5px] italic leading-normal text-[#3A372F] dark:text-[#CFCAC0]">
+          <p className="text-[14.5px] italic leading-normal text-[#3A372F] dark:text-[#CFCAC0]">
             « {lastReflection.text} »
           </p>
           {lastVerse ? (
@@ -195,7 +195,7 @@ export function DevotionalClient({
                 onClick={() => setShowVerse((v) => !v)}
                 aria-expanded={showVerse}
                 title={t("devotional.showVerse")}
-                className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-gold-deep underline decoration-dotted underline-offset-2 dark:text-gold-light"
+                className="mt-1 inline-flex items-center gap-1 text-[12px] font-medium text-gold-deep underline decoration-dotted underline-offset-2 dark:text-gold-light"
               >
                 {lastReflection.reference}
                 <svg
@@ -216,13 +216,13 @@ export function DevotionalClient({
                 </svg>
               </button>
               {showVerse && (
-                <p className="mt-1.5 rounded-btnsm bg-[#FBF6E9] px-3 py-2 font-display text-[13px] italic leading-snug text-night dark:bg-[#272117] dark:text-[#ECE7DD]">
+                <p className="mt-1.5 rounded-btnsm bg-[#FBF6E9] px-3 py-2 font-display text-[14px] italic leading-snug text-night dark:bg-[#272117] dark:text-[#ECE7DD]">
                   « {lastVerse} »
                 </p>
               )}
             </>
           ) : (
-            <p className="mt-1 text-[11px] text-warmgray dark:text-[#9A958B]">
+            <p className="mt-1 text-[12px] text-warmgray dark:text-[#9A958B]">
               {lastReflection.reference}
             </p>
           )}
@@ -230,34 +230,34 @@ export function DevotionalClient({
       )}
 
       <section className="mt-3 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
-        <div className="lbl mb-1.5 text-[9px] text-gold-deep dark:text-gold-light">
+        <div className="lbl mb-1.5 text-[10px] text-gold-deep dark:text-gold-light">
           {t("devotional.meditation")}
         </div>
-        <p className="text-[14px] leading-normal text-[#3A372F] dark:text-[#CFCAC0]">
+        <p className="text-[15px] leading-normal text-[#3A372F] dark:text-[#CFCAC0]">
           {devotion.meditation}
         </p>
       </section>
 
       <section className="mt-3 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
-        <div className="lbl mb-1.5 text-[9px] text-gold-deep dark:text-gold-light">
+        <div className="lbl mb-1.5 text-[10px] text-gold-deep dark:text-gold-light">
           {t("devotional.reflection")}
         </div>
-        <p className="font-display text-[15px] italic text-night dark:text-[#ECE7DD]">
+        <p className="font-display text-[16px] italic text-night dark:text-[#ECE7DD]">
           {devotion.reflection}
         </p>
       </section>
 
       <section className="mt-3 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
-        <div className="lbl mb-1.5 text-[9px] text-gold-deep dark:text-gold-light">
+        <div className="lbl mb-1.5 text-[10px] text-gold-deep dark:text-gold-light">
           {t("devotional.prayer")}
         </div>
-        <p className="text-[14px] leading-normal text-[#3A372F] dark:text-[#CFCAC0]">
+        <p className="text-[15px] leading-normal text-[#3A372F] dark:text-[#CFCAC0]">
           {devotion.prayer}
         </p>
       </section>
 
       {completed ? (
-        <div className="mt-4 rounded-btnlg bg-[#EAF0EB] py-4 text-center text-[14px] font-semibold text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
+        <div className="mt-4 rounded-btnlg bg-[#EAF0EB] py-4 text-center text-[15px] font-semibold text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
           {t("devotional.completedToday")}
           {newRecord && ` · ${t("devotional.newRecord")}`}
         </div>
@@ -268,13 +268,13 @@ export function DevotionalClient({
             onClick={markDone}
             disabled={busy}
             aria-busy={busy}
-            className="mt-4 flex w-full items-center justify-center gap-2 rounded-btnlg border border-sand-200 py-3.5 text-[14px] font-medium text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-btnlg border border-sand-200 py-3.5 text-[15px] font-medium text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
           >
             {busy && <Spinner className="h-4 w-4" />}
             {t("devotional.markDone")}
           </button>
           {error && (
-            <p className="mt-2 text-center text-[12.5px] text-[#9A3B30] dark:text-[#E0A99F]">
+            <p className="mt-2 text-center text-[13.5px] text-[#9A3B30] dark:text-[#E0A99F]">
               {t("devotional.error")}
             </p>
           )}

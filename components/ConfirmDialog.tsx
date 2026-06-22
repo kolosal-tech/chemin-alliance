@@ -130,7 +130,7 @@ export function ConfirmDialog({
         </h3>
         <p
           id={bodyId}
-          className="mt-2 text-[13.5px] leading-normal text-warmgray dark:text-[#9A958B]"
+          className="mt-2 text-[14.5px] leading-normal text-warmgray dark:text-[#9A958B]"
         >
           {body}
         </p>

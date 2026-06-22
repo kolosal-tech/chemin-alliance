@@ -41,7 +41,7 @@ export function BlessingRequest({
     return (
       <div
         role="status"
-        className={`mt-4 rounded-card border px-4 py-3 text-[13px] leading-relaxed ${
+        className={`mt-4 rounded-card border px-4 py-3 text-[14px] leading-relaxed ${
           blessed
             ? "border-[#CFE0D4] bg-[#EAF0EB] text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]"
             : "border-[#EAD9A8] bg-[#FBF6E9] text-[#6F5C2E] dark:border-[#463A1F] dark:bg-[#272117] dark:text-[#C2B488]"
@@ -52,7 +52,7 @@ export function BlessingRequest({
         </p>
         {note && (
           <p className="mt-1.5">
-            <span className="lbl text-[9px] opacity-70">{t("noteLabel")}</span>{" "}
+            <span className="lbl text-[10px] opacity-70">{t("noteLabel")}</span>{" "}
             <span className="italic">« {note} »</span>
           </p>
         )}
@@ -64,7 +64,7 @@ export function BlessingRequest({
     return (
       <p
         role="status"
-        className="mt-4 rounded-card border border-sand-200 bg-surface px-4 py-3 text-[13px] text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]"
+        className="mt-4 rounded-card border border-sand-200 bg-surface px-4 py-3 text-[14px] text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]"
       >
         {t("statusPending")}
       </p>
@@ -76,12 +76,12 @@ export function BlessingRequest({
       <AsyncButton
         onClick={ask}
         disabled={busy}
-        className="w-full rounded-btnlg border border-gold bg-gold/10 px-4 py-3.5 text-[14px] font-semibold text-gold-ink disabled:opacity-60 dark:border-[#6A5A2E] dark:bg-[#272117] dark:text-[#E0C77A]"
+        className="w-full rounded-btnlg border border-gold bg-gold/10 px-4 py-3.5 text-[15px] font-semibold text-gold-ink disabled:opacity-60 dark:border-[#6A5A2E] dark:bg-[#272117] dark:text-[#E0C77A]"
       >
         {t("askBlessing")}
       </AsyncButton>
       {noSponsor && (
-        <p className="mt-2 text-[12.5px] text-warmgray dark:text-[#9A958B]">
+        <p className="mt-2 text-[13.5px] text-warmgray dark:text-[#9A958B]">
           {t("noSponsor")}{" "}
           <Link
             href="/settings/sponsor"
@@ -92,7 +92,7 @@ export function BlessingRequest({
         </p>
       )}
       {err && (
-        <p className="mt-2 text-[12.5px] text-[#9A2E2E] dark:text-[#E0A0A0]">
+        <p className="mt-2 text-[13.5px] text-[#9A2E2E] dark:text-[#E0A0A0]">
           {t("error")}
         </p>
       )}

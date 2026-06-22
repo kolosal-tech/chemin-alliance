@@ -95,6 +95,15 @@ const config: Config = {
         sans: ["var(--font-hanken)", "system-ui", "sans-serif"],
         mono: ["var(--font-spline-mono)", "monospace"],
       },
+      // Lisibilite : +1px sur les tailles de corps/labels (echelle Tailwind),
+      // interlignes conserves pour ne pas toucher au rythme vertical (espacements).
+      // Les titres (xl et au-dessus) gardent les valeurs Tailwind par defaut.
+      fontSize: {
+        xs: ["13px", "16px"], // etait 12px
+        sm: ["15px", "20px"], // etait 14px
+        base: ["17px", "24px"], // etait 16px
+        lg: ["19px", "28px"], // etait 18px
+      },
       borderRadius: {
         card: "16px",
         cardlg: "18px",

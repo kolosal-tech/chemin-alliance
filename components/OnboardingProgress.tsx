@@ -70,7 +70,7 @@ export function OnboardingProgress({
             <span className="font-display text-3xl font-medium text-night dark:text-[#ECE7DD]">
               {percent}%
             </span>
-            <span className="lbl text-[8.5px] text-sand-600 dark:text-[#7E7A72]">
+            <span className="lbl text-[9.5px] text-sand-600 dark:text-[#7E7A72]">
               {t("percentLabel")}
             </span>
           </div>
@@ -81,7 +81,7 @@ export function OnboardingProgress({
           <h2 className="font-display text-2xl text-night dark:text-[#ECE7DD]">
             {t("title")}
           </h2>
-          <p className="mt-1.5 text-[14px] text-warmgray dark:text-[#9A958B]">
+          <p className="mt-1.5 text-[15px] text-warmgray dark:text-[#9A958B]">
             {isComplete
               ? t("subtitleComplete")
               : t("subtitleRemaining", { count: missing.length })}
@@ -89,7 +89,7 @@ export function OnboardingProgress({
           {!isComplete && (
             <Link
               href="/profile/edit"
-              className="mt-4 inline-flex items-center gap-1.5 rounded-btn bg-navy px-5 py-3 text-[14px] font-semibold text-[#F4F1EA] transition-colors hover:bg-night dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
+              className="mt-4 inline-flex items-center gap-1.5 rounded-btn bg-navy px-5 py-3 text-[15px] font-semibold text-[#F4F1EA] transition-colors hover:bg-night dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
             >
               {t("cta")}
               <Icon name="arrowRight" className="h-4 w-4" strokeWidth={1.9} />
@@ -101,7 +101,7 @@ export function OnboardingProgress({
       {/* Checklist */}
       <ul className="mt-6 grid gap-2.5 border-t border-sand-200 pt-5 dark:border-anthracite-700 sm:grid-cols-2">
         {sections.map((s) => (
-          <li key={s.id} className="flex items-center gap-2.5 text-[14px]">
+          <li key={s.id} className="flex items-center gap-2.5 text-[15px]">
             <span
               aria-hidden
               className={`flex h-6 w-6 flex-none items-center justify-center rounded-full transition-colors ${

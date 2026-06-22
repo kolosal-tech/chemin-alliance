@@ -32,12 +32,12 @@ export function BlockedUsers() {
 
   return (
     <section className="mt-6">
-      <h2 className="lbl mb-2 text-[9.5px] text-gold-deep dark:text-gold-light">
+      <h2 className="lbl mb-2 text-[10.5px] text-gold-deep dark:text-gold-light">
         {t("manageTitle")}
       </h2>
       <div className="rounded-cardlg border border-sand-200 bg-surface dark:border-anthracite-600 dark:bg-anthracite-800">
         {list && list.length === 0 && (
-          <p className="px-4 py-4 text-[13px] text-warmgray dark:text-[#9A958B]">
+          <p className="px-4 py-4 text-[14px] text-warmgray dark:text-[#9A958B]">
             {t("empty")}
           </p>
         )}
@@ -51,7 +51,7 @@ export function BlockedUsers() {
             </span>
             <AsyncButton
               onClick={() => unblock(b.id)}
-              className="rounded-btnsm border border-sand-400 px-3 py-1.5 text-[12px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
+              className="rounded-btnsm border border-sand-400 px-3 py-1.5 text-[13px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
             >
               {t("unblock")}
             </AsyncButton>
