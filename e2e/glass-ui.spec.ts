@@ -80,4 +80,16 @@ test.describe("Liquid Glass — vitrine publique", () => {
     await expect(switches.nth(0)).toHaveAttribute("aria-checked", "true");
     await expect(switches.nth(1)).toHaveAttribute("aria-checked", "false");
   });
+
+  test("switch : pastille iOS (pas de blob) même sur mobile tactile", async ({
+    page,
+  }) => {
+    // Sous mobile-chromium (hasTouch -> pointer:coarse), la règle globale
+    // min-height:44px ne doit PAS s'appliquer au switch, sinon la piste de
+    // 24px devient un gros blob ovale de 44px. On garde donc une pastille fine.
+    await gotoDesignSystem(page);
+    const sw = page.getByTestId("glass-showcase").getByRole("switch").first();
+    const box = await sw.boundingBox();
+    expect(box?.height ?? 0).toBeLessThan(30);
+  });
 });

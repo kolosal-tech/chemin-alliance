@@ -287,22 +287,26 @@ export default async function DesignSystemPage({
             </button>
           </div>
           <div className="mt-4 flex items-center gap-3">
-            <span
+            <button
+              type="button"
               role="switch"
               aria-checked="true"
               aria-label="Exemple actif"
+              disabled
               className="relative inline-flex h-[24px] w-[42px] flex-none items-center rounded-full border border-[#4FA06C]/50 bg-[#4FA06C]/85 backdrop-blur-md dark:border-[#4C9566]/50 dark:bg-[#4C9566]/80"
             >
               <span className="ml-[21px] inline-block h-[18px] w-[18px] rounded-full bg-white shadow-sm" />
-            </span>
-            <span
+            </button>
+            <button
+              type="button"
               role="switch"
               aria-checked="false"
               aria-label="Exemple inactif"
+              disabled
               className="relative inline-flex h-[24px] w-[42px] flex-none items-center rounded-full border border-[#7E7363]/30 bg-[#968C78]/30 backdrop-blur-md dark:border-white/15 dark:bg-white/10"
             >
               <span className="ml-[3px] inline-block h-[18px] w-[18px] rounded-full bg-white shadow-sm" />
-            </span>
+            </button>
           </div>
         </section>
       </div>

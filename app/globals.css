@@ -393,9 +393,12 @@ body {
   outline-offset: 2px;
 }
 
-/* Cibles tactiles >= 44px sur mobile */
+/* Cibles tactiles >= 44px sur mobile.
+   Exception : le switch (role=switch) est une pastille iOS de 24px de haut
+   (conforme WCAG 2.5.8, cible >= 24px). Sans cette exclusion, min-height:44px
+   l'étirait en gros « blob » ovale sur mobile. */
 @media (pointer: coarse) {
-  button,
+  button:not([role="switch"]),
   a,
   [role="button"] {
     min-height: 44px;
