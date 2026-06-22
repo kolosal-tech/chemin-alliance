@@ -58,7 +58,7 @@ export function FiltersDrawer({ activeCount }: { activeCount: number }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 rounded-btnsm border border-sand-300 bg-surface px-3.5 py-2 text-[14px] font-semibold text-night dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#ECE7DD]"
+        className="inline-flex items-center gap-2 rounded-btnsm border border-sand-300 bg-surface px-3.5 py-2 text-[16px] font-semibold text-night dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#ECE7DD]"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
           <path
@@ -70,7 +70,7 @@ export function FiltersDrawer({ activeCount }: { activeCount: number }) {
         </svg>
         {t("trigger")}
         {activeCount > 0 && (
-          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-navy px-1.5 text-[12px] font-bold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900">
+          <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-navy px-1.5 text-[13px] font-bold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900">
             {activeCount}
           </span>
         )}
@@ -119,7 +119,7 @@ export function FiltersDrawer({ activeCount }: { activeCount: number }) {
 
             <div className="mt-6 flex flex-col gap-6">
               <fieldset>
-                <legend className="lbl text-[11px] text-gold-deep dark:text-gold-light">
+                <legend className="lbl text-[12px] text-gold-deep dark:text-gold-light">
                   {t("age")}
                 </legend>
                 <div className="mt-3 flex items-center gap-3">
@@ -132,7 +132,7 @@ export function FiltersDrawer({ activeCount }: { activeCount: number }) {
                     onChange={(e) => setAgeMin(e.target.value)}
                     placeholder={t("min")}
                     aria-label={t("min")}
-                    className="w-full rounded-btnsm border border-sand-300 bg-canvas px-3 py-2.5 text-[15px] text-night dark:border-anthracite-600 dark:bg-anthracite-900 dark:text-[#ECE7DD]"
+                    className="w-full rounded-btnsm border border-sand-300 bg-canvas px-3 py-2.5 text-[17px] text-night dark:border-anthracite-600 dark:bg-anthracite-900 dark:text-[#ECE7DD]"
                   />
                   <span className="text-warmgray dark:text-[#9A958B]">-</span>
                   <input
@@ -144,13 +144,13 @@ export function FiltersDrawer({ activeCount }: { activeCount: number }) {
                     onChange={(e) => setAgeMax(e.target.value)}
                     placeholder={t("max")}
                     aria-label={t("max")}
-                    className="w-full rounded-btnsm border border-sand-300 bg-canvas px-3 py-2.5 text-[15px] text-night dark:border-anthracite-600 dark:bg-anthracite-900 dark:text-[#ECE7DD]"
+                    className="w-full rounded-btnsm border border-sand-300 bg-canvas px-3 py-2.5 text-[17px] text-night dark:border-anthracite-600 dark:bg-anthracite-900 dark:text-[#ECE7DD]"
                   />
                 </div>
               </fieldset>
 
               <label className="flex items-center justify-between gap-3">
-                <span className="text-[15px] text-night dark:text-[#ECE7DD]">
+                <span className="text-[17px] text-night dark:text-[#ECE7DD]">
                   {t("verifiedOnly")}
                 </span>
                 <input
@@ -162,7 +162,7 @@ export function FiltersDrawer({ activeCount }: { activeCount: number }) {
               </label>
 
               <fieldset>
-                <legend className="lbl text-[11px] text-gold-deep dark:text-gold-light">
+                <legend className="lbl text-[12px] text-gold-deep dark:text-gold-light">
                   {t("children")}
                 </legend>
                 <div className="mt-3 grid grid-cols-3 gap-2">
@@ -172,7 +172,7 @@ export function FiltersDrawer({ activeCount }: { activeCount: number }) {
                       type="button"
                       onClick={() => setChildren(value)}
                       aria-pressed={children === value}
-                      className={`rounded-btnsm border px-3 py-2.5 text-[14px] font-semibold transition-colors ${
+                      className={`rounded-btnsm border px-3 py-2.5 text-[16px] font-semibold transition-colors ${
                         children === value
                           ? "border-navy bg-navy text-[#F4F1EA] dark:border-gold-light dark:bg-gold-light dark:text-anthracite-900"
                           : "border-sand-300 text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
@@ -195,14 +195,14 @@ export function FiltersDrawer({ activeCount }: { activeCount: number }) {
               <button
                 type="button"
                 onClick={reset}
-                className="rounded-btnsm border border-sand-400 px-4 py-3 text-[15px] font-medium text-[#6B665C] dark:border-anthracite-600 dark:text-[#9A958B]"
+                className="rounded-btnsm border border-sand-400 px-4 py-3 text-[17px] font-medium text-[#6B665C] dark:border-anthracite-600 dark:text-[#9A958B]"
               >
                 {t("reset")}
               </button>
               <button
                 type="button"
                 onClick={apply}
-                className="flex-1 rounded-btnsm bg-navy py-3 text-[15px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+                className="flex-1 rounded-btnsm bg-navy py-3 text-[17px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
               >
                 {t("apply")}
               </button>

@@ -37,12 +37,12 @@ export default async function AdminCoachesPage({
         </h1>
         <Link
           href="/admin/reports"
-          className="lbl text-[10px] text-gold-deep underline dark:text-gold-light"
+          className="lbl text-[11px] text-gold-deep underline dark:text-gold-light"
         >
           Signalements →
         </Link>
       </div>
-      <p className="mb-5 text-[14px] leading-snug text-warmgray dark:text-[#9A958B]">
+      <p className="mb-5 text-[16px] leading-snug text-warmgray dark:text-[#9A958B]">
         Ajoutez les pasteurs, prêtres et conseillers chrétiens vérifiés
         proposés aux membres pour l’accompagnement et le discernement.
       </p>

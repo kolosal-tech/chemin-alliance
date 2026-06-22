@@ -53,7 +53,7 @@ export default async function CoachDetailPage({
           <div>
             <div className="font-display text-2xl">{coach.displayName}</div>
             {coach.certified && (
-              <span className="mt-1.5 inline-flex items-center gap-1.5 rounded-[8px] border border-gold/40 bg-gold/15 px-2.5 py-1 text-[12px] font-semibold text-[#E8D9A8]">
+              <span className="mt-1.5 inline-flex items-center gap-1.5 rounded-[8px] border border-gold/40 bg-gold/15 px-2.5 py-1 text-[13px] font-semibold text-[#E8D9A8]">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
                   <path d="M12 2.5l2.4 1.7 2.9-.2 1 2.8 2.4 1.6-.8 2.8.8 2.8-2.4 1.6-1 2.8-2.9-.2L12 21.5l-2.4-1.7-2.9.2-1-2.8L3.3 15.6l.8-2.8-.8-2.8 2.4-1.6 1-2.8 2.9.2L12 2.5Z" fill="#C9A84C" />
                   <path d="M8.8 12l2.1 2.1 4.3-4.4" stroke="#131D33" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -63,7 +63,7 @@ export default async function CoachDetailPage({
             )}
           </div>
         </div>
-        <div className="mt-4 flex items-center gap-2 text-[14px] text-[#B9C0CE]">
+        <div className="mt-4 flex items-center gap-2 text-[16px] text-[#B9C0CE]">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
             <path d="M12 21c-5-4-8-7-8-11a8 8 0 1 1 16 0c0 4-3 7-8 11Z" stroke="#8A92A6" strokeWidth="1.5" strokeLinejoin="round" />
             <circle cx="12" cy="10" r="2.5" stroke="#8A92A6" strokeWidth="1.5" />
@@ -81,13 +81,13 @@ export default async function CoachDetailPage({
               </svg>
             ))}
           </div>
-          <span className="text-[14px] text-[#3A372F] dark:text-[#CFCAC0]">
+          <span className="text-[16px] text-[#3A372F] dark:text-[#CFCAC0]">
             <b>{coach.ratingAvg.toFixed(1).replace(".", ",")}</b> ·{" "}
             {t("reviews", { count: coach.reviewsCount })}
           </span>
         </div>
 
-        <h2 className="lbl mb-2.5 text-[10.5px] text-gold-deep dark:text-gold-light">
+        <h2 className="lbl mb-2.5 text-[12px] text-gold-deep dark:text-gold-light">
           {t("specialties")}
         </h2>
         <div className="mb-5 flex flex-wrap gap-2">

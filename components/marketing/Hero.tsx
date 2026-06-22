@@ -26,7 +26,7 @@ export async function Hero() {
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 sm:px-6 sm:py-20 lg:grid-cols-2 lg:py-28">
         {/* Colonne texte */}
         <div className="max-w-xl">
-          <span className="lbl inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-3.5 py-1.5 text-[11.5px] text-gold-ink dark:border-gold-light/30 dark:text-gold-light">
+          <span className="lbl inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-3.5 py-1.5 text-[13px] text-gold-ink dark:border-gold-light/30 dark:text-gold-light">
             <Icon name="sparkle" className="h-3.5 w-3.5" strokeWidth={1.8} />
             {t("badge")}
           </span>
@@ -45,7 +45,7 @@ export async function Hero() {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/bienvenue"
-              className="group inline-flex items-center justify-center gap-2 rounded-btnlg bg-navy px-7 py-4 text-[16px] font-semibold text-[#F4F1EA] shadow-cardfeat transition-colors hover:bg-night dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
+              className="group inline-flex items-center justify-center gap-2 rounded-btnlg bg-navy px-7 py-4 text-[18px] font-semibold text-[#F4F1EA] shadow-cardfeat transition-colors hover:bg-night dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
             >
               {t("ctaPrimary")}
               <Icon
@@ -56,7 +56,7 @@ export async function Hero() {
             </Link>
             <Link
               href="/login"
-              className="inline-flex items-center justify-center rounded-btnlg border border-navy/25 bg-surface/70 px-7 py-4 text-[16px] font-semibold text-navy transition-colors hover:border-navy hover:bg-surface dark:border-gold-light/30 dark:bg-anthracite-800/60 dark:text-gold-light dark:hover:border-gold-light"
+              className="inline-flex items-center justify-center rounded-btnlg border border-navy/25 bg-surface/70 px-7 py-4 text-[18px] font-semibold text-navy transition-colors hover:border-navy hover:bg-surface dark:border-gold-light/30 dark:bg-anthracite-800/60 dark:text-gold-light dark:hover:border-gold-light"
             >
               {t("ctaSecondary")}
             </Link>
@@ -66,7 +66,7 @@ export async function Hero() {
             {trust.map((label) => (
               <li
                 key={label}
-                className="flex items-center gap-2 text-[14.5px] font-medium text-warmgray dark:text-[#9A958B]"
+                className="flex items-center gap-2 text-[16px] font-medium text-warmgray dark:text-[#9A958B]"
               >
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sage/15 text-sage dark:bg-sage/25">
                   <Icon
@@ -99,7 +99,7 @@ export async function Hero() {
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-sage/30 text-[#CFE7D6]">
                 <Icon name="shield" className="h-4 w-4" strokeWidth={1.8} />
               </span>
-              <span className="text-[13.5px] font-semibold text-[#F4F1EA]">
+              <span className="text-[15px] font-semibold text-[#F4F1EA]">
                 {t("trust1")}
               </span>
             </div>
@@ -118,7 +118,7 @@ export async function Hero() {
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gold/25 text-gold-light">
                 <Icon name="lock" className="h-4 w-4" strokeWidth={1.8} />
               </span>
-              <span className="text-[13.5px] font-semibold text-[#F4F1EA]">
+              <span className="text-[15px] font-semibold text-[#F4F1EA]">
                 {t("trust2")}
               </span>
             </div>

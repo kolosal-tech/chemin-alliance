@@ -96,7 +96,7 @@ export function SuggestionCard({
         {/* Voile bas pour la lisibilité du texte superposé. */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E16]/80 via-[#0B0E16]/25 to-transparent" />
 
-        <span className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-night/50 px-2.5 py-1 text-[11.5px] font-semibold text-[#E7E2D6] backdrop-blur-[2px]">
+        <span className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-night/50 px-2.5 py-1 text-[13px] font-semibold text-[#E7E2D6] backdrop-blur-[2px]">
           <svg
             width="11"
             height="11"
@@ -123,7 +123,7 @@ export function SuggestionCard({
         </span>
 
         {profile.isVerified && (
-          <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full border border-sage-border bg-night/55 px-2.5 py-1 text-[12px] font-semibold text-sage-ink dark:text-sage-darkInk backdrop-blur-[2px]">
+          <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full border border-sage-border bg-night/55 px-2.5 py-1 text-[13px] font-semibold text-sage-ink dark:text-sage-darkInk backdrop-blur-[2px]">
             <svg
               width="13"
               height="13"
@@ -140,9 +140,9 @@ export function SuggestionCard({
         )}
 
         <div className="absolute inset-x-4 bottom-3.5 text-[#F6F2E9]">
-          <div className="font-display text-[25px] font-medium leading-none [text-shadow:0_1px_8px_rgba(0,0,0,.4)]">
+          <div className="font-display text-[28px] font-medium leading-none [text-shadow:0_1px_8px_rgba(0,0,0,.4)]">
             {profile.displayName}
-            <span className="text-[18px] font-normal opacity-85">
+            <span className="text-[20px] font-normal opacity-85">
               {" "}
               · {profile.age}
             </span>
@@ -150,7 +150,7 @@ export function SuggestionCard({
           <div className="mt-2 flex flex-wrap gap-1.5">
             {profile.denomination && (
               <span
-                className={`rounded-full border px-2.5 py-0.5 text-[11.5px] font-semibold backdrop-blur-[3px] ${
+                className={`rounded-full border px-2.5 py-0.5 text-[13px] font-semibold backdrop-blur-[3px] ${
                   profile.denomination === "Catholique"
                     ? "border-info-border bg-info-surface text-info-ink dark:bg-info-darkSurface dark:text-info-darkInk dark:border-info-darkBorder"
                     : profile.denomination === "Évangélique"
@@ -161,11 +161,11 @@ export function SuggestionCard({
                 {optionLabel(profile.denomination, DENOMINATION_LABELS, locale)}
               </span>
             )}
-            <span className="rounded-full border border-gold/40 bg-gold/20 px-2.5 py-0.5 text-[11.5px] font-semibold text-gold-light backdrop-blur-[3px]">
+            <span className="rounded-full border border-gold/40 bg-gold/20 px-2.5 py-0.5 text-[13px] font-semibold text-gold-light backdrop-blur-[3px]">
               {t("suggestions.intentMarriage")}
             </span>
             {statusKey && (
-              <span className="rounded-full border border-[#F7F5F0]/20 bg-[#F7F5F0]/15 px-2.5 py-0.5 text-[11.5px] font-semibold backdrop-blur-[3px]">
+              <span className="rounded-full border border-[#F7F5F0]/20 bg-[#F7F5F0]/15 px-2.5 py-0.5 text-[13px] font-semibold backdrop-blur-[3px]">
                 {t(`profile.${statusKey}`)}
               </span>
             )}
@@ -175,11 +175,11 @@ export function SuggestionCard({
 
       <div className="p-4">
         {profile.intentionStatement ? (
-          <p className="font-display text-[15px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
+          <p className="font-display text-[17px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
             « {profile.intentionStatement} »
           </p>
         ) : (
-          <div className="flex items-center gap-1.5 text-[13.5px] text-sage dark:text-[#7FA98C]">
+          <div className="flex items-center gap-1.5 text-[15px] text-sage dark:text-[#7FA98C]">
             <svg
               width="14"
               height="14"
@@ -207,7 +207,7 @@ export function SuggestionCard({
         )}
 
         {state === "sent" ? (
-          <p className="mt-3.5 rounded-btnsm bg-[#EAF0EB] px-3 py-2.5 text-center text-[14px] font-medium text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
+          <p className="mt-3.5 rounded-btnsm bg-[#EAF0EB] px-3 py-2.5 text-center text-[16px] font-medium text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
             {t("suggestions.requestSent")}
           </p>
         ) : (

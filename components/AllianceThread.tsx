@@ -80,7 +80,7 @@ export function AllianceThread({
             {STAGES.map((s, i) => (
               <div key={s}>
                 <div
-                  className={`font-display text-[20px] ${
+                  className={`font-display text-[22px] ${
                     i === idx
                       ? "font-medium text-gold-deep dark:text-gold-light"
                       : i < idx
@@ -90,7 +90,7 @@ export function AllianceThread({
                 >
                   {t(s)}
                 </div>
-                <div className="mt-px text-[14px] text-sand-600 dark:text-[#7E7A72]">
+                <div className="mt-px text-[16px] text-sand-600 dark:text-[#7E7A72]">
                   {t(`desc${s}`)}
                 </div>
               </div>
@@ -146,7 +146,7 @@ export function AllianceThread({
         ))}
       </svg>
       {showLabels && (
-        <div className="lbl -mt-1 grid grid-cols-6 gap-0.5 text-[9px] text-sand-500 dark:text-[#65625B]">
+        <div className="lbl -mt-1 grid grid-cols-6 gap-0.5 text-[10px] text-sand-500 dark:text-[#65625B]">
           {STAGES.map((s, i) => (
             <span
               key={s}

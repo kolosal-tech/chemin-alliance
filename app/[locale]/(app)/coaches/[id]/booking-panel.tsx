@@ -53,7 +53,7 @@ export function BookingPanel({
 
   return (
     <div className="pb-6">
-      <h2 className="lbl mb-2.5 text-[10.5px] text-gold-deep dark:text-gold-light">
+      <h2 className="lbl mb-2.5 text-[12px] text-gold-deep dark:text-gold-light">
         {t("availability")}
       </h2>
       <div className="mb-5 flex gap-2.5">
@@ -72,7 +72,7 @@ export function BookingPanel({
               }`}
             >
               <div
-                className={`text-[12px] ${active ? "text-[#A6AEC0] dark:text-anthracite-800" : "text-sand-600 dark:text-[#7E7A72]"}`}
+                className={`text-[13px] ${active ? "text-[#A6AEC0] dark:text-anthracite-800" : "text-sand-600 dark:text-[#7E7A72]"}`}
               >
                 {format.dateTime(s, { weekday: "short" })}
               </div>
@@ -82,7 +82,7 @@ export function BookingPanel({
                 {s.getDate()}
               </div>
               <div
-                className={`text-[11.5px] ${active ? "text-[#E8D9A8] dark:text-anthracite-800" : "text-gold-deep dark:text-gold-light"}`}
+                className={`text-[13px] ${active ? "text-[#E8D9A8] dark:text-anthracite-800" : "text-gold-deep dark:text-gold-light"}`}
               >
                 {format.dateTime(s, { hour: "2-digit", minute: "2-digit" })}
               </div>
@@ -93,7 +93,7 @@ export function BookingPanel({
       {done ? (
         <p
           role="status"
-          className="rounded-btn bg-[#EAF0EB] px-4 py-3 text-[14.5px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]"
+          className="rounded-btn bg-[#EAF0EB] px-4 py-3 text-[16px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]"
         >
           {done}
         </p>
@@ -103,14 +103,14 @@ export function BookingPanel({
             <div className="font-display text-2xl text-night dark:text-[#ECE7DD]">
               {priceEUR}&nbsp;€
             </div>
-            <div className="text-[12px] text-sand-600 dark:text-[#7E7A72]">
+            <div className="text-[13px] text-sand-600 dark:text-[#7E7A72]">
               {t("perSession")}
             </div>
           </div>
           <AsyncButton
             onClick={book}
             disabled={!selected}
-            className="flex flex-1 items-center justify-center gap-2 rounded-[13px] bg-navy py-3.5 text-[16px] font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
+            className="flex flex-1 items-center justify-center gap-2 rounded-[13px] bg-navy py-3.5 text-[18px] font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
           >
             <svg
               width="16"

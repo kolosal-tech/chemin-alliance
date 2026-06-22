@@ -86,7 +86,7 @@ export default async function MessagesListPage({
                 className="h-10 w-10 flex-none rounded-full"
               />
               <div className="flex-1">
-                <div className="font-display text-[17px] text-night dark:text-[#ECE7DD]">
+                <div className="font-display text-[19px] text-night dark:text-[#ECE7DD]">
                   {other.displayName}
                 </div>
                 <div className="mt-1 flex items-center gap-2">
@@ -94,19 +94,19 @@ export default async function MessagesListPage({
                   {m.status === "PENDING" &&
                     m.requestedById &&
                     m.requestedById !== user.id && (
-                      <span className="rounded-[6px] bg-navy px-2 py-0.5 text-[11px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900">
+                      <span className="rounded-[6px] bg-navy px-2 py-0.5 text-[12px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900">
                         {t("messaging.newRequest")}
                       </span>
                     )}
                   {silence && (
-                    <span className="rounded-[6px] bg-[#FBF6E9] px-2 py-0.5 text-[11px] font-semibold text-gold-ink dark:bg-[#2C2818] dark:text-gold-light">
+                    <span className="rounded-[6px] bg-[#FBF6E9] px-2 py-0.5 text-[12px] font-semibold text-gold-ink dark:bg-[#2C2818] dark:text-gold-light">
                       {t("alliance.exitElegant")} ?
                     </span>
                   )}
                 </div>
               </div>
               {unread[m.id] ? (
-                <span className="min-w-[20px] flex-none rounded-full bg-[#C0392B] px-1.5 py-0.5 text-center text-[12px] font-bold text-white">
+                <span className="min-w-[20px] flex-none rounded-full bg-[#C0392B] px-1.5 py-0.5 text-center text-[13px] font-bold text-white">
                   {unread[m.id]}
                 </span>
               ) : null}
@@ -133,13 +133,13 @@ export default async function MessagesListPage({
           href="/rebuilding"
           className="mt-4 block rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800"
         >
-          <div className="font-display text-[18px] text-night dark:text-[#ECE7DD]">
+          <div className="font-display text-[20px] text-night dark:text-[#ECE7DD]">
             {t("agents.rebuild.cardTitle")}
           </div>
-          <p className="mt-1 text-[13.5px] leading-snug text-warmgray dark:text-[#9A958B]">
+          <p className="mt-1 text-[15px] leading-snug text-warmgray dark:text-[#9A958B]">
             {t("agents.rebuild.cardBody")}
           </p>
-          <span className="lbl mt-2 inline-block text-[10px] text-gold-deep dark:text-gold-light">
+          <span className="lbl mt-2 inline-block text-[11px] text-gold-deep dark:text-gold-light">
             {t("agents.rebuild.cta")} →
           </span>
         </Link>

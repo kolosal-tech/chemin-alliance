@@ -31,15 +31,15 @@ export function ForgotPasswordForm() {
       <SacredMotif variant="tree" className="right-[-110px] top-[-20px]" />
       <div className="mb-8 flex items-center gap-2.5">
         <span className="inline-block h-px w-[22px] bg-gold" aria-hidden />
-        <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
+        <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
           {tc("appName")}
         </span>
       </div>
-      <h1 className="font-display text-[32px] text-night dark:text-[#ECE7DD]">
+      <h1 className="font-display text-[36px] text-night dark:text-[#ECE7DD]">
         {t("forgotTitle")}
       </h1>
       {sent ? (
-        <p className="mt-5 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-3 text-[14.5px] leading-relaxed text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
+        <p className="mt-5 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-3 text-[16px] leading-relaxed text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
           {t("forgotSent")}
         </p>
       ) : (
@@ -49,7 +49,7 @@ export function ForgotPasswordForm() {
           </p>
           <form onSubmit={submit} className="mt-7 flex flex-col gap-4">
             <label className="flex flex-col gap-1.5">
-              <span className="lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]">
+              <span className="lbl text-[12px] text-sand-600 dark:text-[#9A958B]">
                 {t("email")}
               </span>
               <input

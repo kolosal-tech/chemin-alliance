@@ -47,7 +47,7 @@ export default async function MissionPage({
             className="-right-16 top-6 hidden md:block"
           />
           <div className="mx-auto max-w-3xl px-5 py-20 text-center sm:px-6 sm:py-24">
-            <p className="lbl text-[11.5px] text-gold-deep dark:text-gold-light">
+            <p className="lbl text-[13px] text-gold-deep dark:text-gold-light">
               {t("kicker")}
             </p>
             <h1 className="mt-4 font-display text-4xl leading-tight text-night sm:text-5xl dark:text-[#ECE7DD]">
@@ -61,7 +61,7 @@ export default async function MissionPage({
 
         {/* Corps */}
         <section className="mx-auto max-w-2xl px-5 py-16 sm:px-6">
-          <div className="flex flex-col gap-6 text-[17px] leading-relaxed text-ink/90 dark:text-[#C7C2B8]">
+          <div className="flex flex-col gap-6 text-[19px] leading-relaxed text-ink/90 dark:text-[#C7C2B8]">
             <p>{t("p1")}</p>
             <p>{t("p2")}</p>
             <p>{t("p3")}</p>
@@ -71,7 +71,7 @@ export default async function MissionPage({
         {/* Partenaires placeholders */}
         <section className="border-y border-sand-300/60 bg-cream/60 dark:border-anthracite-700 dark:bg-anthracite-850/60">
           <div className="mx-auto max-w-5xl px-5 py-12 text-center sm:px-6">
-            <p className="lbl text-[11px] text-sand-600 dark:text-[#7E7A72]">
+            <p className="lbl text-[12px] text-sand-600 dark:text-[#7E7A72]">
               {t("partnersKicker")}
             </p>
             <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
@@ -84,7 +84,7 @@ export default async function MissionPage({
                 </li>
               ))}
             </ul>
-            <p className="mt-5 text-[13px] text-sand-500 dark:text-[#6F6B62]">
+            <p className="mt-5 text-[15px] text-sand-500 dark:text-[#6F6B62]">
               {t("partnersNote")}
             </p>
           </div>
@@ -95,19 +95,19 @@ export default async function MissionPage({
           <h2 className="font-display text-3xl text-night dark:text-[#ECE7DD]">
             {t("ctaTitle")}
           </h2>
-          <p className="mt-3 text-[16px] text-warmgray dark:text-[#A8A296]">
+          <p className="mt-3 text-[18px] text-warmgray dark:text-[#A8A296]">
             {t("ctaBody")}
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Link
               href="/bienvenue"
-              className="rounded-btnlg bg-navy px-7 py-4 text-[16px] font-semibold text-[#F4F1EA] transition-colors hover:bg-night dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
+              className="rounded-btnlg bg-navy px-7 py-4 text-[18px] font-semibold text-[#F4F1EA] transition-colors hover:bg-night dark:bg-gold-light dark:text-anthracite-900 dark:hover:bg-gold"
             >
               {t("ctaPrimary")}
             </Link>
             <Link
               href="/#journey"
-              className="rounded-btnlg border border-navy/25 px-7 py-4 text-[16px] font-semibold text-navy transition-colors hover:border-navy dark:border-gold-light/30 dark:text-gold-light"
+              className="rounded-btnlg border border-navy/25 px-7 py-4 text-[18px] font-semibold text-navy transition-colors hover:border-navy dark:border-gold-light/30 dark:text-gold-light"
             >
               {t("ctaSecondary")}
             </Link>

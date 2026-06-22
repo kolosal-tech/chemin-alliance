@@ -19,10 +19,10 @@ export async function SafetyBlock() {
           <Icon name="shield" className="h-5 w-5" strokeWidth={1.7} />
         </span>
         <div className="min-w-0">
-          <h2 className="font-display text-[18px] text-night dark:text-[#ECE7DD]">
+          <h2 className="font-display text-[20px] text-night dark:text-[#ECE7DD]">
             {t("title")}
           </h2>
-          <p className="mt-1 text-[14.5px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+          <p className="mt-1 text-[16px] leading-relaxed text-warmgray dark:text-[#9A958B]">
             {t("intro")}
           </p>
         </div>
@@ -31,7 +31,7 @@ export async function SafetyBlock() {
         {points.map((p) => (
           <li
             key={p}
-            className="flex items-center gap-2 text-[14px] text-night dark:text-[#ECE7DD]"
+            className="flex items-center gap-2 text-[16px] text-night dark:text-[#ECE7DD]"
           >
             <span
               aria-hidden
@@ -53,7 +53,7 @@ export async function SafetyBlock() {
       </ul>
       <Link
         href="/legal/privacy"
-        className="mt-4 inline-flex items-center gap-1.5 text-[14px] font-semibold text-sage hover:gap-2.5 dark:text-sage-darkInk"
+        className="mt-4 inline-flex items-center gap-1.5 text-[16px] font-semibold text-sage hover:gap-2.5 dark:text-sage-darkInk"
       >
         {t("learnMore")}
         <Icon

@@ -169,23 +169,23 @@ export function MeditationSession({
           <button
             type="button"
             onClick={onClose}
-            className="self-end rounded-full px-3 py-1.5 text-[14px] text-warmgray dark:text-[#9A958B]"
+            className="self-end rounded-full px-3 py-1.5 text-[16px] text-warmgray dark:text-[#9A958B]"
           >
             {t("close")}
           </button>
           <div className="flex flex-1 flex-col items-center justify-center text-center">
-            <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
+            <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
               {devotion.reference}
             </span>
-            <p className="mt-3 max-w-sm font-display text-[22px] italic leading-snug">
+            <p className="mt-3 max-w-sm font-display text-[25px] italic leading-snug">
               « {devotion.verse} »
             </p>
-            <p className="mt-6 max-w-xs text-[15px] leading-relaxed text-[#4A463C] dark:text-[#B7B1A4]">
+            <p className="mt-6 max-w-xs text-[17px] leading-relaxed text-[#4A463C] dark:text-[#B7B1A4]">
               {t("introGuide")}
             </p>
 
             <div className="mt-7 w-full max-w-xs">
-              <div className="lbl mb-2 text-[10px] text-gold-deep dark:text-gold-light">
+              <div className="lbl mb-2 text-[11px] text-gold-deep dark:text-gold-light">
                 {t("durationLabel")}
               </div>
               <div className="flex gap-2">
@@ -195,7 +195,7 @@ export function MeditationSession({
                     type="button"
                     onClick={() => setMinutes(m)}
                     aria-pressed={minutes === m}
-                    className={`flex-1 rounded-btn border py-3 text-[15px] font-semibold transition ${
+                    className={`flex-1 rounded-btn border py-3 text-[17px] font-semibold transition ${
                       minutes === m
                         ? "border-gold bg-gold/15 text-gold-deep dark:text-gold-light"
                         : "border-sand-200 text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
@@ -228,7 +228,7 @@ export function MeditationSession({
               {fmt(remaining)}
             </span>
             {confirmQuit ? (
-              <span className="flex items-center gap-2 text-[13.5px]">
+              <span className="flex items-center gap-2 text-[15px]">
                 {t("quitConfirm")}
                 <button
                   type="button"
@@ -249,7 +249,7 @@ export function MeditationSession({
               <button
                 type="button"
                 onClick={() => setConfirmQuit(true)}
-                className="rounded-full px-3 py-1.5 text-[14px] text-warmgray dark:text-[#9A958B]"
+                className="rounded-full px-3 py-1.5 text-[16px] text-warmgray dark:text-[#9A958B]"
               >
                 {t("quit")}
               </button>
@@ -274,28 +274,28 @@ export function MeditationSession({
                 {inhaling ? t("breatheIn") : t("breatheOut")}
               </span>
             </div>
-            <p className="mt-10 max-w-xs text-center font-display text-[18px] italic leading-snug">
+            <p className="mt-10 max-w-xs text-center font-display text-[20px] italic leading-snug">
               « {devotion.verse} »
             </p>
           </div>
 
           {confirmSkip && remaining > 0 ? (
             <div className="mb-8 flex flex-col items-center gap-3 rounded-btn border border-sand-200 py-4 dark:border-anthracite-600">
-              <span className="px-4 text-center text-[14.5px] text-warmgray dark:text-[#9A958B]">
+              <span className="px-4 text-center text-[16px] text-warmgray dark:text-[#9A958B]">
                 {t("skipConfirm")}
               </span>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setStep("reflection")}
-                  className="rounded-full bg-navy px-4 py-1.5 text-[14px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+                  className="rounded-full bg-navy px-4 py-1.5 text-[16px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
                 >
                   {t("quitYes")}
                 </button>
                 <button
                   type="button"
                   onClick={() => setConfirmSkip(false)}
-                  className="rounded-full px-3 py-1.5 text-[14px] text-warmgray dark:text-[#9A958B]"
+                  className="rounded-full px-3 py-1.5 text-[16px] text-warmgray dark:text-[#9A958B]"
                 >
                   {t("quitNo")}
                 </button>
@@ -307,7 +307,7 @@ export function MeditationSession({
               onClick={() =>
                 remaining > 0 ? setConfirmSkip(true) : setStep("reflection")
               }
-              className="mb-8 w-full rounded-btn border border-sand-200 py-3 text-[14.5px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
+              className="mb-8 w-full rounded-btn border border-sand-200 py-3 text-[16px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
             >
               {t("breatheDone")}
             </button>
@@ -319,13 +319,13 @@ export function MeditationSession({
       {step === "reflection" && (
         <div className="flex flex-1 flex-col px-6 pt-8 safe-top">
           <div className="flex-1">
-            <span className="lbl text-[10px] text-gold-deep dark:text-gold-light">
+            <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
               {t("reflection")}
             </span>
-            <p className="mt-1 font-display text-[19px] italic leading-snug">
+            <p className="mt-1 font-display text-[21px] italic leading-snug">
               {devotion.reflection}
             </p>
-            <p className="mt-5 text-[14.5px] font-medium">
+            <p className="mt-5 text-[16px] font-medium">
               {t("reflectionPrompt")}
             </p>
             <textarea
@@ -334,9 +334,9 @@ export function MeditationSession({
               rows={6}
               aria-label={t("reflectionPrompt")}
               placeholder={t("reflectionPlaceholder")}
-              className="mt-2 w-full rounded-card border border-sand-200 bg-surface p-3 text-[15px] leading-normal text-ink outline-none focus:border-gold dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#ECE7DD]"
+              className="mt-2 w-full rounded-card border border-sand-200 bg-surface p-3 text-[17px] leading-normal text-ink outline-none focus:border-gold dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#ECE7DD]"
             />
-            <p className="mt-2 flex items-center gap-1.5 text-[12.5px] text-warmgray dark:text-[#9A958B]">
+            <p className="mt-2 flex items-center gap-1.5 text-[14px] text-warmgray dark:text-[#9A958B]">
               <svg
                 width="13"
                 height="13"
@@ -374,7 +374,7 @@ export function MeditationSession({
             <span className="text-2xl">🙏</span>
           </div>
           <h2 className="font-display text-2xl">{t("sessionDoneTitle")}</h2>
-          <p className="mt-2 max-w-xs text-[15px] leading-relaxed text-[#4A463C] dark:text-[#B7B1A4]">
+          <p className="mt-2 max-w-xs text-[17px] leading-relaxed text-[#4A463C] dark:text-[#B7B1A4]">
             {t("sessionDoneBody")}
           </p>
           <button

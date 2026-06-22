@@ -44,7 +44,7 @@ export async function StatsBanner() {
   return (
     <section className="border-y border-sand-300/60 bg-night text-cream dark:border-anthracite-700 dark:bg-anthracite-850">
       <div className="mx-auto max-w-6xl px-5 py-12 sm:px-6 sm:py-14">
-        <p className="lbl mb-8 text-center text-[11.5px] text-gold-light/90">
+        <p className="lbl mb-8 text-center text-[13px] text-gold-light/90">
           {t("kicker")}
         </p>
         <dl className="grid grid-cols-2 gap-x-6 gap-y-9 sm:gap-y-10 lg:grid-cols-4">
@@ -63,7 +63,7 @@ export async function StatsBanner() {
                     suffix: s.suffix,
                   })}
                 </dd>
-                <dt className="mt-2 text-[14px] font-medium text-[#C7CBD6] sm:text-sm">
+                <dt className="mt-2 text-[16px] font-medium text-[#C7CBD6] sm:text-sm">
                   {t(s.id)}
                 </dt>
               </div>

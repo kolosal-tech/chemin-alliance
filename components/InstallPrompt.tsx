@@ -93,18 +93,18 @@ export function InstallPrompt() {
           </svg>
         </span>
         <div className="flex-1">
-          <p className="text-[14.5px] font-semibold leading-snug">
+          <p className="text-[16px] font-semibold leading-snug">
             {t("title")}
           </p>
           {isIos ? (
-            <p className="mt-1 text-[13px] leading-normal text-[#A6AEC0]">
+            <p className="mt-1 text-[15px] leading-normal text-[#A6AEC0]">
               {t("iosHint")}
             </p>
           ) : (
             <button
               type="button"
               onClick={install}
-              className="mt-2 rounded-btnsm bg-gold px-4 py-2 text-[14px] font-semibold text-night"
+              className="mt-2 rounded-btnsm bg-gold px-4 py-2 text-[16px] font-semibold text-night"
             >
               {t("cta")}
             </button>

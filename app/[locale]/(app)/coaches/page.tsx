@@ -53,11 +53,11 @@ export default async function CoachesPage({
                   }}
                 />
                 <div className="min-w-0 flex-1">
-                  <div className="font-display text-[18px] text-night dark:text-[#ECE7DD]">
+                  <div className="font-display text-[20px] text-night dark:text-[#ECE7DD]">
                     {c.displayName}
                   </div>
                   {c.certified && (
-                    <span className="mt-1 inline-flex items-center gap-1 rounded-[8px] border border-gold/50 bg-gold/15 px-2 py-0.5 text-[11.5px] font-semibold text-gold-ink dark:text-[#E0C77A]">
+                    <span className="mt-1 inline-flex items-center gap-1 rounded-[8px] border border-gold/50 bg-gold/15 px-2 py-0.5 text-[13px] font-semibold text-gold-ink dark:text-[#E0C77A]">
                       <svg
                         width="11"
                         height="11"
@@ -80,7 +80,7 @@ export default async function CoachesPage({
                   <div className="font-display text-lg text-night dark:text-[#ECE7DD]">
                     {c.pricePerSessionEUR}&nbsp;€
                   </div>
-                  <div className="text-[11.5px] text-sand-600 dark:text-[#7E7A72]">
+                  <div className="text-[13px] text-sand-600 dark:text-[#7E7A72]">
                     ★ {c.ratingAvg.toFixed(1)}
                   </div>
                 </div>

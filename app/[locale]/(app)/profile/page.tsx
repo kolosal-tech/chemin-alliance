@@ -83,7 +83,7 @@ export default async function ProfilePage({
 
         <div className="mb-5">
           <div className="mb-1.5 flex items-baseline justify-between">
-            <span className="lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]">
+            <span className="lbl text-[12px] text-sand-600 dark:text-[#9A958B]">
               {t("profile.completion")}
             </span>
             <span className="font-mono text-xs text-gold-deep dark:text-gold-light">
@@ -111,7 +111,7 @@ export default async function ProfilePage({
           {t("profile.editProfile")}
         </Link>
 
-        <h2 className="lbl mb-3 text-[10.5px] text-gold-deep dark:text-gold-light">
+        <h2 className="lbl mb-3 text-[12px] text-gold-deep dark:text-gold-light">
           {t("profile.spiritualIdentity")}
         </h2>
         <div className="mb-5 flex flex-col gap-3">
@@ -154,11 +154,11 @@ export default async function ProfilePage({
           </div>
         </div>
 
-        <h2 className="lbl mb-2.5 text-[10.5px] text-gold-deep dark:text-gold-light">
+        <h2 className="lbl mb-2.5 text-[12px] text-gold-deep dark:text-gold-light">
           {t("profile.intention")}
         </h2>
         <div className="mb-5 rounded-r-btn border border-l-2 border-sand-200 border-l-gold bg-surface px-4 py-3.5 dark:border-anthracite-600 dark:border-l-gold-light dark:bg-anthracite-800">
-          <p className="font-display text-[16px] italic leading-normal text-[#3A372F] dark:text-[#CFCAC0]">
+          <p className="font-display text-[18px] italic leading-normal text-[#3A372F] dark:text-[#CFCAC0]">
             « {rel?.intentionStatement ?? "-"} »
           </p>
           <div className="mt-2.5 flex items-center gap-1.5">
@@ -182,7 +182,7 @@ export default async function ProfilePage({
           </div>
         </div>
 
-        <h2 className="lbl mb-3 text-[10.5px] text-gold-deep dark:text-gold-light">
+        <h2 className="lbl mb-3 text-[12px] text-gold-deep dark:text-gold-light">
           {t("profile.familyVision")}
         </h2>
         <div className="flex items-center justify-between gap-3 pb-6">
@@ -202,7 +202,7 @@ export default async function ProfilePage({
 
         {(rel?.interests || rel?.personality || rel?.aspirations) && (
           <>
-            <h2 className="lbl mb-3 text-[10.5px] text-gold-deep dark:text-gold-light">
+            <h2 className="lbl mb-3 text-[12px] text-gold-deep dark:text-gold-light">
               {t("profile.aboutMe")}
             </h2>
             <div className="mb-6 flex flex-col gap-3.5 text-sm">

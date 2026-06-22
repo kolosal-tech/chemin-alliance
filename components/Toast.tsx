@@ -192,7 +192,7 @@ function ToastViewport({
           className={`pointer-events-auto flex items-start gap-2.5 rounded-[13px] border px-3.5 py-3 shadow-cardfeat ${STYLES[toast.type]}`}
         >
           <ToastIcon type={toast.type} />
-          <p className="flex-1 text-[14px] leading-snug">{toast.message}</p>
+          <p className="flex-1 text-[16px] leading-snug">{toast.message}</p>
           <button
             type="button"
             onClick={() => onDismiss(toast.id)}

@@ -235,7 +235,7 @@ export function Conversation({
         />
         <div className="flex-1">
           <div className="flex items-center gap-1.5">
-            <span className="font-display text-[18px] text-night dark:text-[#ECE7DD]">
+            <span className="font-display text-[20px] text-night dark:text-[#ECE7DD]">
               {other.displayName}
             </span>
             {other.isVerified && (
@@ -253,7 +253,7 @@ export function Conversation({
         </div>
         <Link
           href={`/alliance/${matchId}`}
-          className="flex flex-none items-center gap-1.5 rounded-full border border-gold/40 bg-gold/10 px-3 py-1.5 text-[12px] font-semibold text-gold-deep transition-colors hover:bg-gold/20 dark:border-gold-light/30 dark:bg-gold-light/10 dark:text-gold-light"
+          className="flex flex-none items-center gap-1.5 rounded-full border border-gold/40 bg-gold/10 px-3 py-1.5 text-[13px] font-semibold text-gold-deep transition-colors hover:bg-gold/20 dark:border-gold-light/30 dark:bg-gold-light/10 dark:text-gold-light"
         >
           <svg
             width="13"
@@ -296,34 +296,34 @@ export function Conversation({
 
       {pending && (
         <div className="mx-3 mt-3 rounded-card border border-info-border bg-info-surface/80 p-4 dark:border-info-darkBorder dark:bg-info-darkSurface/70">
-          <p className="text-[14.5px] leading-snug text-info-ink dark:text-info-darkInk">
+          <p className="text-[16px] leading-snug text-info-ink dark:text-info-darkInk">
             {t("messaging.acceptPrompt", { name: other.displayName })}
           </p>
           <div className="mt-3 flex gap-2">
             <AsyncButton
               onClick={acceptMatch}
               disabled={acceptBusy}
-              className="flex-1 rounded-btnsm bg-navy py-2.5 text-[14px] font-semibold text-navy-foreground disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
+              className="flex-1 rounded-btnsm bg-navy py-2.5 text-[16px] font-semibold text-navy-foreground disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
             >
               {t("messaging.acceptCta")}
             </AsyncButton>
             <AsyncButton
               onClick={declineMatch}
               disabled={acceptBusy}
-              className="rounded-btnsm border border-sand-300 px-4 py-2.5 text-[14px] font-medium text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
+              className="rounded-btnsm border border-sand-300 px-4 py-2.5 text-[16px] font-medium text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
             >
               {t("messaging.declineCta")}
             </AsyncButton>
           </div>
           {actionError && (
-            <p role="alert" className="mt-2 text-[13.5px] text-danger">
+            <p role="alert" className="mt-2 text-[15px] text-danger">
               {actionError}
             </p>
           )}
         </div>
       )}
       {awaitingOther && !pending && (
-        <p className="mx-3 mt-3 rounded-card border border-info-border bg-info-surface px-4 py-3 text-[13.5px] text-info-ink dark:border-info-darkBorder dark:bg-info-darkSurface dark:text-info-darkInk">
+        <p className="mx-3 mt-3 rounded-card border border-info-border bg-info-surface px-4 py-3 text-[15px] text-info-ink dark:border-info-darkBorder dark:bg-info-darkSurface dark:text-info-darkInk">
           {t("messaging.awaitingOther", { name: other.displayName })}
         </p>
       )}
@@ -371,10 +371,10 @@ export function Conversation({
                     <circle cx="12" cy="15.5" r="1.3" fill="currentColor" />
                   </svg>
                   <div>
-                    <div className="mb-0.5 text-[14px] font-semibold text-warn-ink dark:text-warn-darkInk">
+                    <div className="mb-0.5 text-[16px] font-semibold text-warn-ink dark:text-warn-darkInk">
                       {t("messaging.contactPendingTitle")}
                     </div>
-                    <p className="text-[13.5px] leading-normal text-warn-ink dark:text-warn-darkInk">
+                    <p className="text-[15px] leading-normal text-warn-ink dark:text-warn-darkInk">
                       {m.content}
                     </p>
                   </div>
@@ -449,7 +449,7 @@ export function Conversation({
               {confirmId === m.id && (
                 <div
                   role="group"
-                  className="flex items-center gap-2.5 pr-1 text-[12.5px]"
+                  className="flex items-center gap-2.5 pr-1 text-[14px]"
                 >
                   <span className="text-warmgray dark:text-[#9A958B]">
                     {t("messaging.deleteConfirm")}
@@ -497,7 +497,7 @@ export function Conversation({
                   fill="#9A7B2E"
                 />
               </svg>
-              <span className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
+              <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
                 {t("messaging.aiSuggestions")}
               </span>
             </div>

@@ -46,9 +46,9 @@ export function LoginForm() {
         <SacredMotif variant="dove" className="right-[-60px] top-[40px]" />
         <div className="flex items-center gap-2.5">
           <span aria-hidden className="inline-block h-px w-[22px] bg-gold" />
-          <span className="lbl text-[11px] text-gold">{tc("appName")}</span>
+          <span className="lbl text-[12px] text-gold">{tc("appName")}</span>
         </div>
-        <h2 className="max-w-[16ch] font-display text-[44px] font-normal leading-[1.15] text-[#F4F1EA]">
+        <h2 className="max-w-[16ch] font-display text-[49px] font-normal leading-[1.15] text-[#F4F1EA]">
           {tc("tagline")}
         </h2>
         <div className="dark max-w-md">
@@ -59,21 +59,21 @@ export function LoginForm() {
         <SacredMotif variant="tree" className="right-[-110px] top-[-20px]" />
         <div className="mb-8 flex items-center gap-2.5">
           <span className="inline-block h-px w-[22px] bg-gold" aria-hidden />
-          <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
+          <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
             {tc("appName")}
           </span>
         </div>
-        <h1 className="font-display text-[32px] text-night dark:text-[#ECE7DD]">
+        <h1 className="font-display text-[36px] text-night dark:text-[#ECE7DD]">
           {t("loginTitle")}
         </h1>
         {verified && (
-          <p className="mt-3 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-3 text-[14.5px] text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
+          <p className="mt-3 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-3 text-[16px] text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
             {t("verified")}
           </p>
         )}
         <form onSubmit={submit} className="mt-7 flex flex-col gap-4">
           <label className="flex flex-col gap-1.5">
-            <span className="lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]">
+            <span className="lbl text-[12px] text-sand-600 dark:text-[#9A958B]">
               {t("email")}
             </span>
             <input
@@ -85,7 +85,7 @@ export function LoginForm() {
             />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]">
+            <span className="lbl text-[12px] text-sand-600 dark:text-[#9A958B]">
               {t("password")}
             </span>
             <input
@@ -99,13 +99,13 @@ export function LoginForm() {
           <div className="-mt-1 text-right">
             <Link
               href="/forgot-password"
-              className="text-[13.5px] text-gold-deep dark:text-gold-light"
+              className="text-[15px] text-gold-deep dark:text-gold-light"
             >
               {t("forgotLink")}
             </Link>
           </div>
           {error && (
-            <p role="alert" className="text-[14px] text-danger">
+            <p role="alert" className="text-[16px] text-danger">
               {error}
             </p>
           )}

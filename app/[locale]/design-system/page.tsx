@@ -21,7 +21,7 @@ export default async function DesignSystemPage({
 
   const card =
     "rounded-cardlg border border-sand-300 bg-surface p-7 dark:border-anthracite-600 dark:bg-anthracite-800";
-  const label = "lbl mb-5 block text-[11px] text-sand-600 dark:text-[#9A958B]";
+  const label = "lbl mb-5 block text-[12px] text-sand-600 dark:text-[#9A958B]";
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-12 safe-top safe-bottom">
@@ -30,7 +30,7 @@ export default async function DesignSystemPage({
           <h1 className="font-display text-4xl text-night dark:text-[#ECE7DD]">
             {t("title")}
           </h1>
-          <p className="mt-2 text-[16px] text-sand-600 dark:text-[#9A958B]">
+          <p className="mt-2 text-[18px] text-sand-600 dark:text-[#9A958B]">
             {t("subtitle")}
           </p>
         </div>
@@ -83,7 +83,7 @@ export default async function DesignSystemPage({
               <span className="relative h-[27px] w-[46px] rounded-[14px] bg-navy dark:bg-gold-light">
                 <span className="absolute right-[3px] top-[3px] h-[21px] w-[21px] rounded-full bg-white" />
               </span>
-              <span className="text-[14px] text-warmgray dark:text-[#9A958B]">
+              <span className="text-[16px] text-warmgray dark:text-[#9A958B]">
                 Toggle
               </span>
               <span className="relative ml-auto h-[27px] w-[46px] rounded-[14px] bg-sand-400 dark:bg-anthracite-600">
@@ -145,13 +145,13 @@ export default async function DesignSystemPage({
         <section className={card}>
           <span className={label}>{t("toasts")}</span>
           <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-3 rounded-btn border border-sage-border bg-sage-surface px-4 py-3 text-[14.5px] text-sage-ink dark:border-sage-darkBorder dark:bg-sage-darkSurface dark:text-sage-darkInk">
+            <div className="flex items-center gap-3 rounded-btn border border-sage-border bg-sage-surface px-4 py-3 text-[16px] text-sage-ink dark:border-sage-darkBorder dark:bg-sage-darkSurface dark:text-sage-darkInk">
               {t("toastSuccess")}
             </div>
-            <div className="flex items-center gap-3 rounded-btn border border-info-border bg-info-surface px-4 py-3 text-[14.5px] text-info-ink dark:border-info-darkBorder dark:bg-info-darkSurface dark:text-info-darkInk">
+            <div className="flex items-center gap-3 rounded-btn border border-info-border bg-info-surface px-4 py-3 text-[16px] text-info-ink dark:border-info-darkBorder dark:bg-info-darkSurface dark:text-info-darkInk">
               {t("toastInfo")}
             </div>
-            <div className="flex items-center gap-3 rounded-btn border border-warn-border bg-warn-surface px-4 py-3 text-[14.5px] text-warn-ink dark:border-warn-darkBorder dark:bg-warn-darkSurface dark:text-warn-darkInk">
+            <div className="flex items-center gap-3 rounded-btn border border-warn-border bg-warn-surface px-4 py-3 text-[16px] text-warn-ink dark:border-warn-darkBorder dark:bg-warn-darkSurface dark:text-warn-darkInk">
               {t("toastWarn")}
             </div>
           </div>
@@ -194,7 +194,7 @@ export default async function DesignSystemPage({
               <div className="mb-1 text-sm font-semibold text-warn-ink dark:text-warn-darkInk">
                 Coordonnées en attente
               </div>
-              <p className="text-[14px] leading-normal text-warn-ink dark:text-warn-darkInk">
+              <p className="text-[16px] leading-normal text-warn-ink dark:text-warn-darkInk">
                 Pour votre sécurité, le partage de coordonnées sera disponible à
                 la validation mutuelle de confiance, à l&apos;étape
                 Discernement.

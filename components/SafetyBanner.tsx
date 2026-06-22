@@ -50,10 +50,10 @@ export function SafetyBanner({ matchId }: { matchId: string }) {
           ⚠️
         </span>
         <div className="flex-1">
-          <p className="text-[14px] font-semibold text-danger-ink dark:text-danger-darkInk">
+          <p className="text-[16px] font-semibold text-danger-ink dark:text-danger-darkInk">
             {t("antiScam.bannerTitle")}
           </p>
-          <p className="mt-1 text-[13.5px] leading-snug text-danger-ink dark:text-danger-darkInk">
+          <p className="mt-1 text-[15px] leading-snug text-danger-ink dark:text-danger-darkInk">
             {t("antiScam.bannerBody")}
           </p>
           {signals.length > 0 && (
@@ -61,7 +61,7 @@ export function SafetyBanner({ matchId }: { matchId: string }) {
               {signals.map((s) => (
                 <span
                   key={s}
-                  className="rounded-[6px] bg-danger/15 px-2 py-0.5 text-[11.5px] font-semibold text-danger-ink dark:bg-danger-darkSurface dark:text-danger-darkInk"
+                  className="rounded-[6px] bg-danger/15 px-2 py-0.5 text-[13px] font-semibold text-danger-ink dark:bg-danger-darkSurface dark:text-danger-darkInk"
                 >
                   {t(`antiScam.signalLabel.${s}`)}
                 </span>
@@ -70,7 +70,7 @@ export function SafetyBanner({ matchId }: { matchId: string }) {
           )}
           <Link
             href="/safety"
-            className="mt-2 inline-block text-[12.5px] font-semibold text-danger-ink underline dark:text-danger-darkInk"
+            className="mt-2 inline-block text-[14px] font-semibold text-danger-ink underline dark:text-danger-darkInk"
           >
             {t("antiScam.learnMore")}
           </Link>

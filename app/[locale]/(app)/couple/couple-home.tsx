@@ -291,10 +291,10 @@ export function CoupleHome() {
 
   const head = (
     <>
-      <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
+      <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
         {t(engagedCtx ? "titleEngaged" : "title")}
       </span>
-      <h1 className="mb-4 mt-1 font-display text-[26px] leading-tight text-night dark:text-[#ECE7DD]">
+      <h1 className="mb-4 mt-1 font-display text-[29px] leading-tight text-night dark:text-[#ECE7DD]">
         {t(engagedCtx ? "subtitleEngaged" : "subtitle")}
       </h1>
     </>
@@ -306,7 +306,7 @@ export function CoupleHome() {
       <main className="relative px-5 pt-6 pb-8 safe-top lg:mx-auto lg:max-w-3xl">
         <SacredMotif variant="tree" className="right-[-120px] top-[60px]" />
         {head}
-        <p className="text-[16px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+        <p className="text-[18px] leading-relaxed text-warmgray dark:text-[#9A958B]">
           {t(engagedCtx ? "introEngaged" : "introNone")}
         </p>
 
@@ -319,7 +319,7 @@ export function CoupleHome() {
               {t("marriedCta")} · {data.eligibleMatch.other}
             </AsyncButton>
           ) : (
-            <p className="mt-5 rounded-btn bg-sand-100 px-3.5 py-2.5 text-[13.5px] text-sand-600 dark:bg-anthracite-700 dark:text-[#7E7A72]">
+            <p className="mt-5 rounded-btn bg-sand-100 px-3.5 py-2.5 text-[15px] text-sand-600 dark:bg-anthracite-700 dark:text-[#7E7A72]">
               {t("marriedHint")}
             </p>
           ))}
@@ -353,7 +353,7 @@ export function CoupleHome() {
             </AsyncButton>
           </div>
           {error && (
-            <p role="alert" className="mt-2 text-[13.5px] text-danger">
+            <p role="alert" className="mt-2 text-[15px] text-danger">
               {error}
             </p>
           )}
@@ -370,7 +370,7 @@ export function CoupleHome() {
       <main className="relative px-5 pt-6 safe-top lg:mx-auto lg:max-w-3xl">
         {head}
         <div className="rounded-cardlg border border-gold/40 bg-[#FBF6E9] p-5 dark:border-[#463A1F] dark:bg-[#272117]">
-          <p className="font-display text-[19px] italic text-gold-ink dark:text-[#E0C77A]">
+          <p className="font-display text-[21px] italic text-gold-ink dark:text-[#E0C77A]">
             {t("pendingConfirm", { name: s.partner ?? "?" })}
           </p>
           <AsyncButton
@@ -391,10 +391,10 @@ export function CoupleHome() {
         {head}
         {s.inviteCode ? (
           <div className="rounded-cardlg border border-sand-200 bg-surface p-5 text-center dark:border-anthracite-600 dark:bg-anthracite-800">
-            <h2 className="font-display text-[19px] text-night dark:text-[#ECE7DD]">
+            <h2 className="font-display text-[21px] text-night dark:text-[#ECE7DD]">
               {t(engagedCtx ? "inviteTitleEngaged" : "inviteTitle")}
             </h2>
-            <p className="mt-1.5 text-[14px] text-warmgray dark:text-[#9A958B]">
+            <p className="mt-1.5 text-[16px] text-warmgray dark:text-[#9A958B]">
               {t(engagedCtx ? "inviteBodyEngaged" : "inviteBody")}
             </p>
             <p className="mx-auto mt-4 inline-block rounded-btn border border-gold bg-[#FBF6E9] px-5 py-3 font-mono text-lg tracking-widest text-gold-ink dark:border-[#6A5A2E] dark:bg-[#272117] dark:text-[#E0C77A]">
@@ -404,7 +404,7 @@ export function CoupleHome() {
               <button
                 type="button"
                 onClick={() => copyCode(s.inviteCode!)}
-                className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-300 px-4 py-2 text-[14px] font-semibold text-navy dark:border-anthracite-600 dark:text-gold-light"
+                className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-300 px-4 py-2 text-[16px] font-semibold text-navy dark:border-anthracite-600 dark:text-gold-light"
               >
                 {copied ? t("codeCopied") : t("copyCode")}
               </button>
@@ -414,7 +414,7 @@ export function CoupleHome() {
               onSubmit={sendInvite}
               className="mt-5 border-t border-sand-200 pt-4 text-left dark:border-anthracite-600"
             >
-              <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
+              <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
                 {t("sendByEmail")}
               </span>
               <div className="mt-2 flex gap-2">
@@ -439,20 +439,20 @@ export function CoupleHome() {
               {sendState === "sent" && (
                 <p
                   role="status"
-                  className="mt-2 text-[13.5px] text-[#2E7D5B] dark:text-[#7FC9A6]"
+                  className="mt-2 text-[15px] text-[#2E7D5B] dark:text-[#7FC9A6]"
                 >
                   {t("inviteSent")}
                 </p>
               )}
               {sendState === "error" && (
-                <p role="alert" className="mt-2 text-[13.5px] text-danger">
+                <p role="alert" className="mt-2 text-[15px] text-danger">
                   {t("inviteError")}
                 </p>
               )}
             </form>
           </div>
         ) : (
-          <p className="rounded-btn bg-[#EAEDF2] px-3.5 py-3 text-[14.5px] text-[#2A3550] dark:bg-[#1A2233] dark:text-[#B9C6E0]">
+          <p className="rounded-btn bg-[#EAEDF2] px-3.5 py-3 text-[16px] text-[#2A3550] dark:bg-[#1A2233] dark:text-[#B9C6E0]">
             {t(engagedCtx ? "waitingPartnerEngaged" : "waitingPartner")}
           </p>
         )}
@@ -464,17 +464,17 @@ export function CoupleHome() {
   return (
     <main className="relative px-5 pt-6 pb-8 safe-top lg:mx-auto lg:max-w-3xl">
       <SacredMotif variant="flame" className="right-[-100px] top-[120px]" />
-      <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
+      <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
         {t(engagedCtx ? "titleEngaged" : "title")}
       </span>
-      <h1 className="mt-1 font-display text-[26px] text-night dark:text-[#ECE7DD]">
+      <h1 className="mt-1 font-display text-[29px] text-night dark:text-[#ECE7DD]">
         {t("with", { name: s.partner })}
       </h1>
       <div className="mt-2 flex items-center gap-2">
-        <span className="rounded-[8px] bg-navy px-2.5 py-1 text-[12px] font-semibold text-[#E8D9A8] dark:bg-[#222C42] dark:text-[#B9C6E0]">
+        <span className="rounded-[8px] bg-navy px-2.5 py-1 text-[13px] font-semibold text-[#E8D9A8] dark:bg-[#222C42] dark:text-[#B9C6E0]">
           {t(`season${s.season}`)}
         </span>
-        <span className="text-[12px] text-sand-600 dark:text-[#7E7A72]">
+        <span className="text-[13px] text-sand-600 dark:text-[#7E7A72]">
           {t("matchingOff")}
         </span>
       </div>
@@ -482,10 +482,10 @@ export function CoupleHome() {
       {/* Messagerie privée entre conjoints */}
       <section className="mt-5 rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
         <div className="flex items-baseline justify-between">
-          <h2 className="font-display text-[19px] text-night dark:text-[#ECE7DD]">
+          <h2 className="font-display text-[21px] text-night dark:text-[#ECE7DD]">
             {t("messagesTitle")}
           </h2>
-          <span className="text-[11px] text-sand-500 dark:text-[#65625B]">
+          <span className="text-[12px] text-sand-500 dark:text-[#65625B]">
             {t("messagesPrivacy")}
           </span>
         </div>
@@ -497,7 +497,7 @@ export function CoupleHome() {
           className="msg-scroll mt-3 flex max-h-72 flex-col gap-2.5 overflow-y-auto pl-0.5 pr-2"
         >
           {visibleMessages.length === 0 ? (
-            <p className="py-4 text-center text-[14px] text-sand-500 dark:text-[#7E7A72]">
+            <p className="py-4 text-center text-[16px] text-sand-500 dark:text-[#7E7A72]">
               {t("messagesEmpty")}
             </p>
           ) : (
@@ -519,7 +519,7 @@ export function CoupleHome() {
                 </div>
                 {fmtTime(m.createdAt) && (
                   <span
-                    className={`mt-1 px-1 text-[11px] text-sand-500 dark:text-[#65625B] ${
+                    className={`mt-1 px-1 text-[12px] text-sand-500 dark:text-[#65625B] ${
                       m.mine ? "text-right" : "text-left"
                     }`}
                   >
@@ -557,10 +557,10 @@ export function CoupleHome() {
       {/* Check-in du Gardien */}
       <section className="mt-5 rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
         <div className="flex items-baseline justify-between">
-          <h2 className="font-display text-[19px] text-night dark:text-[#ECE7DD]">
+          <h2 className="font-display text-[21px] text-night dark:text-[#ECE7DD]">
             {t("checkinTitle")}
           </h2>
-          <span className="text-[11px] text-sand-500 dark:text-[#65625B]">
+          <span className="text-[12px] text-sand-500 dark:text-[#65625B]">
             {t("checkinPrivacy")}
           </span>
         </div>
@@ -572,7 +572,7 @@ export function CoupleHome() {
                   // Question ouverte : pas de Oui/Non (incohérent) - réponse
                   // libre OBLIGATOIRE, exigée par la validation du bouton d'envoi.
                   <div key={q.id}>
-                    <p className="font-display text-[15.5px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
+                    <p className="font-display text-[17px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
                       {q.text}
                     </p>
                     <textarea
@@ -590,12 +590,12 @@ export function CoupleHome() {
                       rows={3}
                       placeholder={t("openAnswerPlaceholder")}
                       aria-label={q.text}
-                      className="mt-1.5 w-full resize-y rounded-btnsm border border-sand-300 bg-surface px-3 py-2.5 text-[14px] leading-snug text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+                      className="mt-1.5 w-full resize-y rounded-btnsm border border-sand-300 bg-surface px-3 py-2.5 text-[16px] leading-snug text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
                     />
                   </div>
                 ) : (
                   <div key={q.id}>
-                    <p className="font-display text-[15.5px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
+                    <p className="font-display text-[17px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
                       {q.text}
                     </p>
                     <div
@@ -615,7 +615,7 @@ export function CoupleHome() {
                               [q.id]: { value: v, note: a[q.id]?.note ?? "" },
                             }))
                           }
-                          className={`btn-glass rounded-[9px] px-3.5 py-2 text-[13.5px] font-semibold ${
+                          className={`btn-glass rounded-[9px] px-3.5 py-2 text-[15px] font-semibold ${
                             answers[q.id]?.value === v
                               ? "btn-glass-blue"
                               : "btn-glass-neutral"
@@ -637,7 +637,7 @@ export function CoupleHome() {
                         }))
                       }
                       placeholder={t("notePlaceholder")}
-                      className="mt-1.5 w-full rounded-btnsm border border-sand-200 bg-surface px-3 py-2 text-[13.5px] text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+                      className="mt-1.5 w-full rounded-btnsm border border-sand-200 bg-surface px-3 py-2 text-[15px] text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
                     />
                   </div>
                 ),
@@ -661,14 +661,14 @@ export function CoupleHome() {
               {busy ? t("checkinSending") : t("send")}
             </button>
             {checkinError && (
-              <p role="alert" className="mt-2 text-[13.5px] text-danger">
+              <p role="alert" className="mt-2 text-[15px] text-danger">
                 {checkinError}
               </p>
             )}
           </>
         ) : guidance.danger ? (
           <div className="mt-3 rounded-card border border-[#D8B6B0] bg-[#FBEFED] p-4 dark:border-[#5A3A34] dark:bg-[#2A1D1A]">
-            <p className="text-[14.5px] leading-relaxed text-[#7A372C] dark:text-[#E0A89C]">
+            <p className="text-[16px] leading-relaxed text-[#7A372C] dark:text-[#E0A89C]">
               {guidance.word}
             </p>
             <Link
@@ -682,24 +682,24 @@ export function CoupleHome() {
           <div className="mt-3">
             {guidance.word && (
               <div className="rounded-card bg-night p-4 dark:border dark:border-[#283655] dark:bg-[#1B2740]">
-                <span className="lbl text-[10px] text-gold dark:text-gold-light">
+                <span className="lbl text-[11px] text-gold dark:text-gold-light">
                   {t("guardianTitle")}
                 </span>
-                <p className="mt-1.5 font-display text-[15.5px] italic leading-relaxed text-[#D7DCE6]">
+                <p className="mt-1.5 font-display text-[17px] italic leading-relaxed text-[#D7DCE6]">
                   {guidance.word}
                 </p>
               </div>
             )}
             {guidance.rituals.length > 0 && (
               <>
-                <h3 className="lbl mb-2 mt-3.5 text-[10px] text-gold-deep dark:text-gold-light">
+                <h3 className="lbl mb-2 mt-3.5 text-[11px] text-gold-deep dark:text-gold-light">
                   {t("ritualsTitle")}
                 </h3>
                 <div className="flex flex-col gap-2">
                   {guidance.rituals.map((r, i) => (
                     <p
                       key={i}
-                      className="rounded-btn border border-gold/40 bg-[#FBF6E9] px-3.5 py-3 text-[14px] leading-normal text-[#6F5C2E] dark:border-[#463A1F] dark:bg-[#272117] dark:text-[#C2B488]"
+                      className="rounded-btn border border-gold/40 bg-[#FBF6E9] px-3.5 py-3 text-[16px] leading-normal text-[#6F5C2E] dark:border-[#463A1F] dark:bg-[#272117] dark:text-[#C2B488]"
                     >
                       {r}
                     </p>
@@ -708,7 +708,7 @@ export function CoupleHome() {
               </>
             )}
             {!guidance.word && guidance.rituals.length === 0 && (
-              <div className="rounded-card border border-sand-200 bg-surface p-4 text-[14px] leading-normal text-sand-700 dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#B6B1A7]">
+              <div className="rounded-card border border-sand-200 bg-surface p-4 text-[16px] leading-normal text-sand-700 dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#B6B1A7]">
                 {t("checkinDone")}
               </div>
             )}
@@ -719,7 +719,7 @@ export function CoupleHome() {
                 setAnswers({});
                 setCheckinError(null);
               }}
-              className="mt-3 w-full rounded-btnsm border border-sand-400 py-2.5 text-[14px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
+              className="mt-3 w-full rounded-btnsm border border-sand-400 py-2.5 text-[16px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
             >
               {t("checkinAgain")}
             </button>
@@ -733,7 +733,7 @@ export function CoupleHome() {
         <button
           type="button"
           onClick={() => setSeasonConfirm("MARRIED")}
-          className="mt-3.5 w-full rounded-btnsm border border-gold/50 bg-[#FBF6E9] py-3 text-[14px] font-semibold text-gold-ink dark:border-gold-light/40 dark:bg-[#272117] dark:text-gold-light"
+          className="mt-3.5 w-full rounded-btnsm border border-gold/50 bg-[#FBF6E9] py-3 text-[16px] font-semibold text-gold-ink dark:border-gold-light/40 dark:bg-[#272117] dark:text-gold-light"
         >
           {t("marriedCta")}
         </button>
@@ -741,27 +741,27 @@ export function CoupleHome() {
         <button
           type="button"
           onClick={() => setSeasonConfirm("PARENTS")}
-          className="mt-3.5 w-full rounded-btnsm border border-sand-400 py-3 text-[14px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
+          className="mt-3.5 w-full rounded-btnsm border border-sand-400 py-3 text-[16px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
         >
           {t("childArrived")}
         </button>
       ) : (
         <AsyncButton
           onClick={() => setSeason("MARRIED")}
-          className="mt-3.5 w-full rounded-btnsm border border-sand-400 py-3 text-[14px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
+          className="mt-3.5 w-full rounded-btnsm border border-sand-400 py-3 text-[16px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
         >
           {t("backToMarried")}
         </AsyncButton>
       )}
 
       {error && (
-        <p role="alert" className="mt-2 text-[13.5px] text-danger">
+        <p role="alert" className="mt-2 text-[15px] text-danger">
           {error}
         </p>
       )}
 
       {/* Parcours de saison */}
-      <h2 className="lbl mb-2.5 mt-6 text-[10.5px] text-gold-deep dark:text-gold-light">
+      <h2 className="lbl mb-2.5 mt-6 text-[12px] text-gold-deep dark:text-gold-light">
         {t("programsTitle")}
       </h2>
       <div className="flex flex-col gap-2.5 lg:grid lg:grid-cols-3 lg:items-stretch">
@@ -770,10 +770,10 @@ export function CoupleHome() {
             key={p.id}
             className="rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800"
           >
-            <h3 className="font-display text-[18px] text-night dark:text-[#ECE7DD]">
+            <h3 className="font-display text-[20px] text-night dark:text-[#ECE7DD]">
               {p.title}
             </h3>
-            <p className="mt-1 text-[14px] leading-normal text-warmgray dark:text-[#9A958B]">
+            <p className="mt-1 text-[16px] leading-normal text-warmgray dark:text-[#9A958B]">
               {p.body}
             </p>
           </article>
@@ -782,22 +782,22 @@ export function CoupleHome() {
 
       {/* Espace confidence */}
       <section className="mt-6 rounded-cardlg bg-night p-5 dark:border dark:border-[#283655] dark:bg-[#1B2740]">
-        <h2 className="font-display text-[20px] text-[#F4F1EA]">
+        <h2 className="font-display text-[22px] text-[#F4F1EA]">
           {t("confideTitle")}
         </h2>
-        <p className="mt-1.5 text-[14px] leading-normal text-[#B9C0CE]">
+        <p className="mt-1.5 text-[16px] leading-normal text-[#B9C0CE]">
           {t("confideBody")}
         </p>
         <div className="mt-3.5 flex gap-2.5">
           <Link
             href="/coach-ai"
-            className="flex-1 rounded-btnsm bg-gold py-3 text-center text-[14px] font-semibold text-night"
+            className="flex-1 rounded-btnsm bg-gold py-3 text-center text-[16px] font-semibold text-night"
           >
             {t("confideAi")}
           </Link>
           <Link
             href="/coaches"
-            className="flex-1 rounded-btnsm border border-[#2E3A57] py-3 text-center text-[14px] font-medium text-[#D7DCE6]"
+            className="flex-1 rounded-btnsm border border-[#2E3A57] py-3 text-center text-[16px] font-medium text-[#D7DCE6]"
           >
             {t("confideHuman")}
           </Link>
