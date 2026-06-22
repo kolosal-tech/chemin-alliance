@@ -7,6 +7,7 @@ import { requireUser } from "@/lib/security/session";
 import { verifyPassword } from "@/lib/security/password";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import { sendVerificationEmail } from "@/lib/email";
+import { audit } from "@/lib/audit";
 
 const schema = z.object({
   currentPassword: z.string().min(1).max(128),
@@ -49,5 +50,7 @@ export const POST = withErrors(async (req: Request) => {
     },
   });
   await sendVerificationEmail(newEmail, token, (user.locale as Locale) ?? "fr");
+  // PII : on journalise l'événement et l'utilisateur, jamais la nouvelle adresse.
+  audit("email.change", user.id);
   return NextResponse.json({ ok: true });
 });

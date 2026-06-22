@@ -18,7 +18,19 @@ export type Season = "ENGAGED" | "MARRIED" | "PARENTS";
 
 export const CHECKIN_QUESTIONS: Record<
   Season,
-  Array<{ id: string; signal: string; text: Record<Locale, string> }>
+  Array<{
+    id: string;
+    signal: string;
+    /**
+     * "scale" (défaut) = Oui/Non/Pas vraiment ; "open" = réponse libre exigée.
+     * Certaines questions sont des invitations à raconter (« Qu'as-tu
+     * découvert chez l'autre… ») : un Oui/Non n'a aucun sens. On les marque
+     * "open" -> textarea obligatoire côté client, jamais de rituel déterministe
+     * (la note nourrit le mot du Gardien et la détection de danger).
+     */
+    kind?: "scale" | "open";
+    text: Record<Locale, string>;
+  }>
 > = {
   ENGAGED: [
     {
@@ -66,6 +78,7 @@ export const CHECKIN_QUESTIONS: Record<
     {
       id: "chk_discovery",
       signal: "character_reveal",
+      kind: "open",
       text: {
         fr: "Qu'as-tu découvert chez l'autre récemment qui t'a surpris - en bien ou en difficile ?",
         en: "What did you recently discover about your spouse that surprised you - good or hard?",
@@ -237,6 +250,9 @@ export function evaluateCheckin(
   for (const a of answers) {
     const q = questions.find((x) => x.id === a.id);
     if (!q) continue;
+    // Question ouverte (réponse libre) : pas d'échelle Oui/Non, donc aucun
+    // rituel déterministe. La note nourrit déjà le mot du Gardien et DANGER_RE.
+    if (q.kind === "open") continue;
     // « non / pas sûr » sur un signal -> rituel concret correspondant.
     // chk_unspoken inversé : « oui il y a un sujet évité » déclenche.
     const triggered =

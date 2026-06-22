@@ -1,7 +1,7 @@
 "use client";
 
 import { type FormEvent, useCallback, useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
 import { AsyncButton } from "@/components/AsyncButton";
@@ -22,7 +22,7 @@ type CoupleData = {
   } | null;
   season?: "JOURNEY" | "ENGAGED" | "MARRIED" | "PARENTS";
   eligibleMatch?: { id: string; other: string } | null;
-  questions?: Array<{ id: string; text: string }>;
+  questions?: Array<{ id: string; text: string; kind?: "scale" | "open" }>;
   programs?: Array<{ id: string; title: string; body: string }>;
 };
 
@@ -32,6 +32,7 @@ export function CoupleHome() {
   const tc = useTranslations("common");
   const router = useRouter();
   const toast = useToast();
+  const locale = useLocale();
   const [data, setData] = useState<CoupleData | null>(null);
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -52,7 +53,7 @@ export function CoupleHome() {
   >("idle");
   // Messagerie privée entre conjoints (espace actif uniquement).
   const [messages, setMessages] = useState<
-    Array<{ id: string; mine: boolean; content: string }>
+    Array<{ id: string; mine: boolean; content: string; createdAt?: string }>
   >([]);
   const [draft, setDraft] = useState("");
   const [msgBusy, setMsgBusy] = useState(false);
@@ -61,13 +62,27 @@ export function CoupleHome() {
     "MARRIED" | "PARENTS" | null
   >(null);
 
+  // Renvoie la promesse : les appelants (ex. bascule de saison) attendent que
+  // l'état réel soit rechargé AVANT d'annoncer un succès (pas de toast en avance
+  // de phase sur l'état interne).
   const load = useCallback(() => {
-    fetch("/api/couple")
+    return fetch("/api/couple")
       .then((r) => r.json())
       .then(setData)
       .catch(() => {});
   }, []);
-  useEffect(load, [load]);
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  // Horodatage minimal HH:MM, dans la locale de l'utilisateur.
+  const fmtTime = (iso?: string) => {
+    if (!iso) return "";
+    const d = new Date(iso);
+    return Number.isNaN(d.getTime())
+      ? ""
+      : d.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
+  };
 
   // Messagerie : charge l'historique quand l'espace couple est actif et lié.
   const spaceActive =
@@ -92,10 +107,10 @@ export function CoupleHome() {
         body: JSON.stringify({ content: text }),
       });
       if (res.ok) {
-        const m = (await res.json()) as { id: string };
+        const m = (await res.json()) as { id: string; createdAt?: string };
         setMessages((prev) => [
           ...prev,
-          { id: m.id, mine: true, content: text },
+          { id: m.id, mine: true, content: text, createdAt: m.createdAt },
         ]);
         setDraft("");
       } else {
@@ -161,7 +176,9 @@ export function CoupleHome() {
       if (res.ok) {
         setGuidance(null);
         setAnswers({});
-        load();
+        // Attendre le rechargement : le toast ne doit annoncer la nouvelle
+        // saison qu'une fois l'état interne (parcours, check-in) réellement à jour.
+        await load();
         toast.success(
           season === "PARENTS" ? t("childArrivedDone") : t("marriedDone"),
         );
@@ -175,6 +192,11 @@ export function CoupleHome() {
   async function sendCheckin() {
     setBusy(true);
     setCheckinError(null);
+    // Garde-fou : si le Gardien (LLM) ne répond pas, on coupe à 25 s (> le
+    // timeout serveur de 20 s) plutôt que de laisser tourner « réfléchit… »
+    // indéfiniment. L'utilisateur a alors un message clair et peut réessayer.
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 25_000);
     try {
       const res = await fetch("/api/agents/guardian/checkin", {
         method: "POST",
@@ -186,18 +208,26 @@ export function CoupleHome() {
             note: answers[q.id]?.note ?? "",
           })),
         }),
+        signal: controller.signal,
       });
       if (res.ok) {
         setGuidance(await res.json());
         toast.success(t("checkinSent"));
       } else {
-        setCheckinError(
-          res.status === 429 ? t("checkinRateLimited") : t("checkinError"),
-        );
+        const msg =
+          res.status === 429 ? t("checkinRateLimited") : t("checkinError");
+        setCheckinError(msg);
+        toast.error(msg);
       }
-    } catch {
-      setCheckinError(t("checkinError"));
+    } catch (e) {
+      // AbortError = délai dépassé. Les réponses saisies restent intactes
+      // (pas de reset) pour permettre un nouvel envoi immédiat.
+      const timedOut = e instanceof DOMException && e.name === "AbortError";
+      const msg = timedOut ? t("checkinTimeout") : t("checkinError");
+      setCheckinError(msg);
+      toast.error(msg);
     } finally {
+      clearTimeout(timer);
       setBusy(false);
     }
   }
@@ -449,13 +479,24 @@ export function CoupleHome() {
             messages.map((m) => (
               <div
                 key={m.id}
-                className={`max-w-[80%] rounded-[16px] px-3.5 py-2.5 text-sm leading-snug ${
-                  m.mine
-                    ? "self-end bg-navy text-[#EDEFF3] dark:bg-gold-light dark:text-anthracite-900"
-                    : "self-start bg-sand-100 text-[#2A2823] dark:bg-anthracite-700 dark:text-[#CFCAC0]"
+                className={`flex max-w-[80%] flex-col ${
+                  m.mine ? "self-end items-end" : "self-start items-start"
                 }`}
               >
-                {m.content}
+                <div
+                  className={`rounded-[16px] px-3.5 py-2.5 text-sm leading-snug ${
+                    m.mine
+                      ? "bg-navy text-[#EDEFF3] dark:bg-gold-light dark:text-anthracite-900"
+                      : "bg-sand-100 text-[#2A2823] dark:bg-anthracite-700 dark:text-[#CFCAC0]"
+                  }`}
+                >
+                  {m.content}
+                </div>
+                {fmtTime(m.createdAt) && (
+                  <span className="mt-0.5 px-1 text-[10px] text-sand-500 dark:text-[#65625B]">
+                    {fmtTime(m.createdAt)}
+                  </span>
+                )}
               </div>
             ))
           )}
@@ -493,61 +534,92 @@ export function CoupleHome() {
         {!guidance ? (
           <>
             <div className="mt-3 flex flex-col gap-3.5">
-              {(data.questions ?? []).map((q) => (
-                <div key={q.id}>
-                  <p className="font-display text-[14.5px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
-                    {q.text}
-                  </p>
-                  <div
-                    className="mt-1.5 flex gap-1.5"
-                    role="radiogroup"
-                    aria-label={q.text}
-                  >
-                    {(["yes", "no", "unsure"] as const).map((v) => (
-                      <button
-                        key={v}
-                        type="button"
-                        role="radio"
-                        aria-checked={answers[q.id]?.value === v}
-                        onClick={() =>
-                          setAnswers((a) => ({
-                            ...a,
-                            [q.id]: { value: v, note: a[q.id]?.note ?? "" },
-                          }))
-                        }
-                        className={`rounded-[9px] px-3.5 py-2 text-[12.5px] font-semibold ${
-                          answers[q.id]?.value === v
-                            ? "bg-navy text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
-                            : "border border-sand-300 text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
-                        }`}
-                      >
-                        {t(v)}
-                      </button>
-                    ))}
+              {(data.questions ?? []).map((q) =>
+                q.kind === "open" ? (
+                  // Question ouverte : pas de Oui/Non (incohérent) - réponse
+                  // libre OBLIGATOIRE, exigée par la validation du bouton d'envoi.
+                  <div key={q.id}>
+                    <p className="font-display text-[14.5px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
+                      {q.text}
+                    </p>
+                    <textarea
+                      value={answers[q.id]?.note ?? ""}
+                      onChange={(e) =>
+                        setAnswers((a) => ({
+                          ...a,
+                          [q.id]: {
+                            value: a[q.id]?.value ?? "unsure",
+                            note: e.target.value,
+                          },
+                        }))
+                      }
+                      required
+                      rows={3}
+                      placeholder={t("openAnswerPlaceholder")}
+                      aria-label={q.text}
+                      className="mt-1.5 w-full resize-y rounded-btnsm border border-sand-300 bg-white px-3 py-2.5 text-[13px] leading-snug text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+                    />
                   </div>
-                  <input
-                    value={answers[q.id]?.note ?? ""}
-                    onChange={(e) =>
-                      setAnswers((a) => ({
-                        ...a,
-                        [q.id]: {
-                          value: a[q.id]?.value ?? "unsure",
-                          note: e.target.value,
-                        },
-                      }))
-                    }
-                    placeholder={t("notePlaceholder")}
-                    className="mt-1.5 w-full rounded-btnsm border border-sand-200 bg-white px-3 py-2 text-[12.5px] text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
-                  />
-                </div>
-              ))}
+                ) : (
+                  <div key={q.id}>
+                    <p className="font-display text-[14.5px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
+                      {q.text}
+                    </p>
+                    <div
+                      className="mt-1.5 flex gap-1.5"
+                      role="radiogroup"
+                      aria-label={q.text}
+                    >
+                      {(["yes", "no", "unsure"] as const).map((v) => (
+                        <button
+                          key={v}
+                          type="button"
+                          role="radio"
+                          aria-checked={answers[q.id]?.value === v}
+                          onClick={() =>
+                            setAnswers((a) => ({
+                              ...a,
+                              [q.id]: { value: v, note: a[q.id]?.note ?? "" },
+                            }))
+                          }
+                          className={`rounded-[9px] px-3.5 py-2 text-[12.5px] font-semibold ${
+                            answers[q.id]?.value === v
+                              ? "bg-navy text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+                              : "border border-sand-300 text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
+                          }`}
+                        >
+                          {t(v)}
+                        </button>
+                      ))}
+                    </div>
+                    <input
+                      value={answers[q.id]?.note ?? ""}
+                      onChange={(e) =>
+                        setAnswers((a) => ({
+                          ...a,
+                          [q.id]: {
+                            value: a[q.id]?.value ?? "unsure",
+                            note: e.target.value,
+                          },
+                        }))
+                      }
+                      placeholder={t("notePlaceholder")}
+                      className="mt-1.5 w-full rounded-btnsm border border-sand-200 bg-white px-3 py-2 text-[12.5px] text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+                    />
+                  </div>
+                ),
+              )}
             </div>
             <button
               type="button"
               onClick={sendCheckin}
               disabled={
                 busy ||
-                (data.questions ?? []).some((q) => !answers[q.id]?.value)
+                (data.questions ?? []).some((q) =>
+                  q.kind === "open"
+                    ? !answers[q.id]?.note?.trim()
+                    : !answers[q.id]?.value,
+                )
               }
               aria-busy={busy}
               className="mt-4 flex w-full items-center justify-center gap-2 rounded-btnsm bg-navy py-3 text-sm font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"

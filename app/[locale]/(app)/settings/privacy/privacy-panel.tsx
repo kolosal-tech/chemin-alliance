@@ -8,6 +8,8 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { BlockedUsers } from "@/components/BlockedUsers";
 import { PhoneVerify } from "@/components/PhoneVerify";
 import { AsyncButton } from "@/components/AsyncButton";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { useToast } from "@/components/Toast";
 import type { VisibilityLevel } from "@prisma/client";
 
 const LEVEL_SEGMENTS: Record<string, { filled: number; cls: string }> = {
@@ -24,10 +26,12 @@ function Toggle({
   checked,
   onChange,
   label,
+  disabled,
 }: {
   checked: boolean;
   onChange: (v: boolean) => void;
   label: string;
+  disabled?: boolean;
 }) {
   return (
     <button
@@ -35,8 +39,9 @@ function Toggle({
       role="switch"
       aria-checked={checked}
       aria-label={label}
+      disabled={disabled}
       onClick={() => onChange(!checked)}
-      className={`relative h-[27px] w-[46px] flex-none rounded-[14px] transition-colors ${
+      className={`relative h-[27px] w-[46px] flex-none rounded-[14px] transition-colors disabled:opacity-50 ${
         checked
           ? "bg-navy dark:bg-gold-light"
           : "bg-sand-400 dark:bg-anthracite-600"
@@ -65,19 +70,32 @@ export function PrivacyPanel({
 }) {
   const t = useTranslations();
   const router = useRouter();
+  const toast = useToast();
   const [state, setState] = useState(initial);
-  const [notice, setNotice] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  // Désactiver le filtre anti-malaise = action sensible (le profil redevient
+  // visible à la communauté) : on confirme avant.
+  const [confirmAntiMalaiseOff, setConfirmAntiMalaiseOff] = useState(false);
 
   async function save(patch: Partial<typeof initial>) {
-    const next = { ...state, ...patch };
-    setState(next);
-    await fetch("/api/me/privacy-settings", {
-      method: "PATCH",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(patch),
-    });
-    setNotice(t("privacy.saved"));
+    const prev = state;
+    setState({ ...state, ...patch });
+    setSaving(true);
+    try {
+      const res = await fetch("/api/me/privacy-settings", {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(patch),
+      });
+      if (!res.ok) throw new Error("save_failed");
+      toast.success(t("privacy.saved"));
+    } catch {
+      setState(prev); // rollback de l'affichage si l'enregistrement échoue
+      toast.error(t("privacy.saveError"));
+    } finally {
+      setSaving(false);
+    }
   }
 
   async function deleteAccount() {
@@ -211,7 +229,14 @@ export function PrivacyPanel({
           </div>
           <Toggle
             checked={state.antiMalaiseEnabled}
-            onChange={(v) => save({ antiMalaiseEnabled: v })}
+            disabled={saving}
+            onChange={(v) => {
+              if (!v && state.antiMalaiseEnabled) {
+                setConfirmAntiMalaiseOff(true);
+              } else {
+                save({ antiMalaiseEnabled: v });
+              }
+            }}
             label={t("privacy.antiMalaiseTitle")}
           />
         </div>
@@ -291,19 +316,11 @@ export function PrivacyPanel({
         </div>
         <Toggle
           checked={state.invisibleMode}
+          disabled={saving}
           onChange={(v) => save({ invisibleMode: v })}
           label={t("privacy.invisibleMode")}
         />
       </section>
-
-      {notice && (
-        <p
-          role="status"
-          className="mb-3.5 rounded-btn bg-[#EAF0EB] px-3.5 py-2.5 text-[13px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]"
-        >
-          {notice}
-        </p>
-      )}
 
       {/* RGPD - export et suppression, jamais cachés */}
       <PhoneVerify />
@@ -368,6 +385,19 @@ export function PrivacyPanel({
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        open={confirmAntiMalaiseOff}
+        title={t("privacy.antiMalaiseDisableConfirmTitle")}
+        body={t("privacy.antiMalaiseDisableConfirmBody")}
+        confirmLabel={t("privacy.antiMalaiseDisableCta")}
+        tone="danger"
+        onConfirm={async () => {
+          await save({ antiMalaiseEnabled: false });
+          setConfirmAntiMalaiseOff(false);
+        }}
+        onCancel={() => setConfirmAntiMalaiseOff(false)}
+      />
     </main>
   );
 }

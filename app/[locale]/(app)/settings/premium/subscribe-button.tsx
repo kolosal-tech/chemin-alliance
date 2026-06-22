@@ -1,36 +1,54 @@
 "use client";
 
 import { useState } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { useToast } from "@/components/Toast";
 
-/** Lance le checkout Stripe et redirige vers la page de paiement. */
+/**
+ * Action sensible (paiement). Demande une confirmation explicite, montre une
+ * moulinette pendant l'ouverture du checkout (via le bouton de la modale) et
+ * signale toute erreur par un toast plutôt qu'un silence.
+ */
 export function SubscribeButton({ label }: { label: string }) {
   const locale = useLocale();
-  const [busy, setBusy] = useState(false);
+  const t = useTranslations();
+  const toast = useToast();
+  const [confirming, setConfirming] = useState(false);
 
   async function go() {
-    setBusy(true);
     const res = await fetch("/api/billing/checkout", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ locale }),
-    });
-    const data = await res.json().catch(() => null);
+    }).catch(() => null);
+    const data = res ? await res.json().catch(() => null) : null;
     if (data?.url) {
+      // Redirection vers Stripe : on quitte l'app, pas de toast de succès.
       window.location.href = data.url;
     } else {
-      setBusy(false);
+      toast.error(t("premium.checkoutError"));
+      setConfirming(false);
     }
   }
 
   return (
-    <button
-      type="button"
-      onClick={go}
-      disabled={busy}
-      className="mt-4 w-full rounded-btnlg bg-gold py-4 text-base font-semibold text-night disabled:opacity-50"
-    >
-      {label}
-    </button>
+    <>
+      <button
+        type="button"
+        onClick={() => setConfirming(true)}
+        className="mt-4 w-full rounded-btnlg bg-gold py-4 text-base font-semibold text-night"
+      >
+        {label}
+      </button>
+      <ConfirmDialog
+        open={confirming}
+        title={t("premium.confirmTitle")}
+        body={t("premium.confirmBody")}
+        confirmLabel={t("premium.confirmCta")}
+        onConfirm={go}
+        onCancel={() => setConfirming(false)}
+      />
+    </>
   );
 }

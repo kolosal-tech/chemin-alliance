@@ -3,14 +3,14 @@
 import { useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { Spinner } from "@/components/Spinner";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { useToast } from "@/components/Toast";
 
 const inputCls =
   "rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
 const labelCls = "lbl text-[9.5px] text-sand-600 dark:text-[#9A958B]";
 const btnCls =
   "rounded-btnsm bg-navy py-3 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900";
-
-type Msg = { ok: boolean; text: string } | null;
 
 export function AccountPanel({
   currentEmail,
@@ -20,14 +20,16 @@ export function AccountPanel({
   isVerified: boolean;
 }) {
   const t = useTranslations();
+  const toast = useToast();
 
   const [pwd, setPwd] = useState({ current: "", next: "", confirm: "" });
   const [pwdBusy, setPwdBusy] = useState(false);
-  const [pwdMsg, setPwdMsg] = useState<Msg>(null);
 
   const [eml, setEml] = useState({ newEmail: "", password: "" });
   const [emlBusy, setEmlBusy] = useState(false);
-  const [emlMsg, setEmlMsg] = useState<Msg>(null);
+
+  // Identifiant = action sensible : on confirme avant d'exécuter (modale).
+  const [confirm, setConfirm] = useState<null | "pwd" | "email">(null);
 
   function err(code: string | undefined, form: "pwd" | "email"): string {
     switch (code) {
@@ -49,67 +51,70 @@ export function AccountPanel({
     }
   }
 
-  async function submitPassword(e: FormEvent) {
+  function submitPassword(e: FormEvent) {
     e.preventDefault();
-    setPwdMsg(null);
     if (pwd.next !== pwd.confirm) {
-      setPwdMsg({ ok: false, text: t("account.error.passwordMismatch") });
+      toast.error(t("account.error.passwordMismatch"));
       return;
     }
+    setConfirm("pwd");
+  }
+
+  async function doPassword() {
     setPwdBusy(true);
-    const res = await fetch("/api/me/password", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        currentPassword: pwd.current,
-        newPassword: pwd.next,
-      }),
-    });
-    setPwdBusy(false);
-    if (res.ok) {
-      setPwdMsg({ ok: true, text: t("account.passwordSaved") });
-      setPwd({ current: "", next: "", confirm: "" });
-    } else {
-      const code = (await res.json().catch(() => ({})))?.error;
-      setPwdMsg({ ok: false, text: err(code, "pwd") });
+    try {
+      const res = await fetch("/api/me/password", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          currentPassword: pwd.current,
+          newPassword: pwd.next,
+        }),
+      });
+      if (res.ok) {
+        toast.success(t("account.passwordSaved"));
+        setPwd({ current: "", next: "", confirm: "" });
+      } else {
+        const code = (await res.json().catch(() => ({})))?.error;
+        toast.error(err(code, "pwd"));
+      }
+    } catch {
+      toast.error(err(undefined, "pwd"));
+    } finally {
+      setPwdBusy(false);
+      setConfirm(null);
     }
   }
 
-  async function submitEmail(e: FormEvent) {
+  function submitEmail(e: FormEvent) {
     e.preventDefault();
-    setEmlMsg(null);
-    setEmlBusy(true);
-    const res = await fetch("/api/me/email", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        currentPassword: eml.password,
-        newEmail: eml.newEmail,
-      }),
-    });
-    setEmlBusy(false);
-    if (res.ok) {
-      setEmlMsg({ ok: true, text: t("account.emailVerificationSent") });
-      setEml({ newEmail: "", password: "" });
-    } else {
-      const code = (await res.json().catch(() => ({})))?.error;
-      setEmlMsg({ ok: false, text: err(code, "email") });
-    }
+    setConfirm("email");
   }
 
-  function Notice({ msg }: { msg: Msg }) {
-    if (!msg) return null;
-    return (
-      <p
-        className={`mt-3 rounded-btnsm px-3 py-2.5 text-[13px] font-medium ${
-          msg.ok
-            ? "bg-[#EAF0EB] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]"
-            : "bg-[#FBF0EE] text-[#9A3B30] dark:bg-[#2A1B18] dark:text-[#E0A99F]"
-        }`}
-      >
-        {msg.text}
-      </p>
-    );
+  async function doEmail() {
+    setEmlBusy(true);
+    try {
+      const res = await fetch("/api/me/email", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          currentPassword: eml.password,
+          newEmail: eml.newEmail,
+        }),
+      });
+      if (res.ok) {
+        toast.success(t("account.emailVerificationSent"));
+        setEml({ newEmail: "", password: "" });
+      } else {
+        const code = (await res.json().catch(() => ({})))?.error;
+        toast.error(err(code, "email"));
+      }
+    } catch {
+      toast.error(err(undefined, "email"));
+    } finally {
+      setEmlBusy(false);
+      setConfirm(null);
+    }
   }
 
   return (
@@ -172,7 +177,6 @@ export function AccountPanel({
             {pwdBusy && <Spinner className="h-4 w-4" />}
             {t("account.passwordSection")}
           </button>
-          <Notice msg={pwdMsg} />
         </form>
       </section>
 
@@ -220,9 +224,28 @@ export function AccountPanel({
             {emlBusy && <Spinner className="h-4 w-4" />}
             {t("account.emailSection")}
           </button>
-          <Notice msg={emlMsg} />
         </form>
       </section>
+
+      <ConfirmDialog
+        open={confirm !== null}
+        title={
+          confirm === "email"
+            ? t("account.emailConfirmTitle")
+            : t("account.passwordConfirmTitle")
+        }
+        body={
+          confirm === "email"
+            ? t("account.emailConfirmBody")
+            : t("account.passwordConfirmBody")
+        }
+        confirmLabel={t("common.confirm")}
+        onConfirm={async () => {
+          if (confirm === "pwd") await doPassword();
+          else if (confirm === "email") await doEmail();
+        }}
+        onCancel={() => setConfirm(null)}
+      />
     </main>
   );
 }

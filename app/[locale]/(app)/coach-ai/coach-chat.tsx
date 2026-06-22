@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useEffect, useRef, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
 import { RichText } from "@/components/RichText";
@@ -13,6 +13,7 @@ type Entry = {
   text: string;
   guardrail?: boolean;
   mode: "individual" | "couple";
+  createdAt?: string;
 };
 
 export function CoachChat({
@@ -21,6 +22,7 @@ export function CoachChat({
   initialEntries?: Entry[];
 }) {
   const t = useTranslations();
+  const locale = useLocale();
   const [entries, setEntries] = useState<Entry[]>(initialEntries);
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
@@ -32,6 +34,22 @@ export function CoachChat({
   // Dernière question dont l'envoi a échoué : permet « Réessayer » sans
   // ré-ajouter une bulle utilisateur en double.
   const [lastQ, setLastQ] = useState<string | null>(null);
+
+  // Défilement automatique vers le bas dès qu'un message arrive ou que l'IA
+  // commence à répondre : la dernière bulle reste toujours visible.
+  const bottomRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [entries, busy]);
+
+  // Horodatage minimal HH:MM dans la locale de l'utilisateur.
+  const fmtTime = (iso?: string) => {
+    if (!iso) return "";
+    const d = new Date(iso);
+    return Number.isNaN(d.getTime())
+      ? ""
+      : d.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
+  };
 
   async function send(q: string) {
     setError(null);
@@ -66,6 +84,7 @@ export function CoachChat({
             text: data.text,
             guardrail: data.guardrail,
             mode,
+            createdAt: new Date().toISOString(),
           },
         ]);
       } else {
@@ -85,7 +104,13 @@ export function CoachChat({
     if (!q || busy) return;
     setEntries((s) => [
       ...s,
-      { id: crypto.randomUUID(), role: "user", text: q, mode },
+      {
+        id: crypto.randomUUID(),
+        role: "user",
+        text: q,
+        mode,
+        createdAt: new Date().toISOString(),
+      },
     ]);
     setDraft("");
     void send(q);
@@ -208,6 +233,11 @@ export function CoachChat({
                 <p className="text-[13.5px] leading-normal text-[#EDEFF3]">
                   {e.text}
                 </p>
+                {fmtTime(e.createdAt) && (
+                  <span className="mt-1 block text-right text-[10px] text-[#C7CBD6]">
+                    {fmtTime(e.createdAt)}
+                  </span>
+                )}
               </div>
             ) : e.guardrail ? (
               <div
@@ -270,6 +300,11 @@ export function CoachChat({
                     text={e.text}
                     className="text-[13.5px] leading-normal text-[#2A2823] dark:text-[#CFCAC0]"
                   />
+                  {fmtTime(e.createdAt) && (
+                    <span className="mt-1 block text-[10px] text-sand-500 dark:text-[#65625B]">
+                      {fmtTime(e.createdAt)}
+                    </span>
+                  )}
                 </div>
               </div>
             ),
@@ -344,6 +379,8 @@ export function CoachChat({
             </p>
           )
         )}
+
+        <div ref={bottomRef} aria-hidden />
       </div>
 
       <div className="glass z-30 border-t border-sand-200/50 px-3.5 pb-[calc(env(safe-area-inset-bottom)+88px)] lg:pb-4 pt-3 dark:border-anthracite-600/50">
