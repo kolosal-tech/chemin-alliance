@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
+import { audit } from "@/lib/audit";
 
 // Runtime Node explicite : web-push (via lib/push) utilise crypto/https -
 // interdit un runtime edge accidentel.
@@ -66,5 +67,6 @@ export const POST = withErrors(async (req: Request) => {
     },
     update: { userId: user.id, p256dh: keys.p256dh, auth: keys.auth },
   });
+  audit("notifications.enable", user.id);
   return NextResponse.json({ ok: true });
 });

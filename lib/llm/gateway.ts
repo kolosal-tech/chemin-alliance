@@ -19,7 +19,7 @@ const TIMEOUT_MS = 20000;
 // de tiret cadratin (U+2014). On l'injecte dans CHAQUE prompt système ici, au
 // point de passage unique. Cette consigne ne contient elle-même aucun U+2014.
 const EMDASH_BAN =
-  "\n\n[STRICT BAN] Interdiction formelle d'utiliser le tiret cadratin (caractere Unicode U+2014, dit em dash) dans le document genere. Utilise uniquement le tiret standard \"-\", la virgule, les parentheses ou les deux-points selon la grammaire.";
+  '\n\n[STRICT BAN] Interdiction formelle d\'utiliser le tiret cadratin (caractere Unicode U+2014, dit em dash) dans le document genere. Utilise uniquement le tiret standard "-", la virgule, les parentheses ou les deux-points selon la grammaire.';
 
 export type LlmRequest = {
   system: string;

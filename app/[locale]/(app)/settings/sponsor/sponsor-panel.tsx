@@ -76,6 +76,10 @@ export function SponsorPanel({ initial }: { initial: Sponsor | null }) {
       <p className="mt-2 text-[13.5px] leading-relaxed text-warmgray dark:text-[#9A958B]">
         {t("intro")}
       </p>
+      <p className="mt-2.5 flex items-start gap-1.5 rounded-btn bg-sand-100 px-3 py-2 text-[12px] leading-snug text-sand-600 dark:bg-anthracite-700 dark:text-[#9A958B]">
+        <span aria-hidden>🔒</span>
+        <span>{t("privacyNote")}</span>
+      </p>
 
       {sponsor ? (
         <section className="mt-4 flex items-center gap-3 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">

@@ -50,7 +50,9 @@
     "close": "Fermer",
     "loggedOut": "Tu es déconnecté.",
     "logoutConfirmTitle": "Se déconnecter ?",
-    "logoutConfirmBody": "Tu devras te reconnecter pour reprendre ton cheminement."
+    "logoutConfirmBody": "Tu devras te reconnecter pour reprendre ton cheminement.",
+    "themeDarkOn": "Mode sombre activé.",
+    "themeLightOn": "Mode clair activé."
   },
   "nav": {
     "suggestions": "Découvrir",
@@ -385,7 +387,11 @@
     "freeNote": "Blocage, signalement, suppression de compte et filtres de base sont gratuits, pour toujours.",
     "manage": "Gérer mon abonnement",
     "manageInfo": "Modifie ton moyen de paiement ou annule ton abonnement à tout moment.",
-    "manageError": "Impossible d'ouvrir la gestion de l'abonnement. Réessaie plus tard."
+    "manageError": "Impossible d'ouvrir la gestion de l'abonnement. Réessaie plus tard.",
+    "confirmTitle": "S'abonner à Premium ?",
+    "confirmBody": "Tu vas être redirigé·e vers le paiement sécurisé Stripe (9,99 €/mois, sans engagement, résiliable à tout moment). La sécurité et la dignité restent gratuites.",
+    "confirmCta": "Continuer vers le paiement",
+    "checkoutError": "Impossible d'ouvrir le paiement pour le moment. Réessaie dans un instant."
   },
   "privacy": {
     "title": "Confidentialité",
@@ -404,7 +410,11 @@
     "deleteConfirmTitle": "Supprimer définitivement ?",
     "deleteConfirmBody": "Toutes vos données seront effacées : profil, messages, parcours, consentements. Cette action est irréversible.",
     "deleteConfirmCta": "Oui, supprimer mon compte",
-    "saved": "Préférences enregistrées."
+    "saved": "Préférences enregistrées.",
+    "saveError": "Modification non enregistrée. Réessaie.",
+    "antiMalaiseDisableConfirmTitle": "Désactiver le filtre anti-malaise ?",
+    "antiMalaiseDisableConfirmBody": "Ton profil redeviendra visible aux membres de ton église et de ta communauté proche. Tu peux le réactiver à tout moment.",
+    "antiMalaiseDisableCta": "Désactiver"
   },
   "reports": {
     "report": "Signaler",
@@ -614,7 +624,9 @@
     "childArrivedConfirmTitle": "Confirmer l'événement de vie",
     "childArrivedConfirmBody": "Vous passez à la saison « Jeunes parents ». Les check-ins et le parcours s'adapteront. Tu pourras revenir en arrière ensuite.",
     "marriedConfirmTitle": "Confirmer l'événement de vie",
-    "marriedConfirmBody": "Vous passez à la saison « Mariés ». Le parcours et les check-ins s'adapteront à votre nouvelle étape."
+    "marriedConfirmBody": "Vous passez à la saison « Mariés ». Le parcours et les check-ins s'adapteront à votre nouvelle étape.",
+    "checkinTimeout": "Le Gardien met trop de temps à répondre. Tes réponses sont conservées : réessaie dans un instant.",
+    "openAnswerPlaceholder": "Écris quelques mots…"
   },
   "legal": {
     "terms": "Conditions d'utilisation",
@@ -669,7 +681,8 @@
     "linkTitle": "Parrain / Marraine",
     "error": "Une erreur est survenue. Réessaie.",
     "removeConfirmTitle": "Retirer le parrain/la marraine ?",
-    "removeConfirmBody": "Cette personne ne suivra plus votre cheminement. Tu pourras en désigner une autre à tout moment."
+    "removeConfirmBody": "Cette personne ne suivra plus votre cheminement. Tu pourras en désigner une autre à tout moment.",
+    "privacyNote": "Ses coordonnées (nom, email) restent strictement privées : elles servent uniquement à lui transmettre tes demandes, et ne sont jamais partagées ni rendues publiques."
   },
   "blessing": {
     "eyebrow": "Demande de bénédiction",
@@ -709,7 +722,11 @@
       "passwordRules": "Mot de passe trop faible (12+ car., minuscule, majuscule, chiffre).",
       "passwordMismatch": "Les mots de passe ne correspondent pas.",
       "general": "Une erreur est survenue. Réessaie."
-    }
+    },
+    "passwordConfirmTitle": "Confirmer le changement de mot de passe ?",
+    "passwordConfirmBody": "Ton mot de passe actuel sera remplacé. Tu resteras connecté·e sur cet appareil.",
+    "emailConfirmTitle": "Confirmer le changement d'adresse ?",
+    "emailConfirmBody": "Un lien de confirmation sera envoyé à ta nouvelle adresse. Elle ne sera active qu'une fois ce lien validé."
   },
   "devotional": {
     "subtitle": "Un temps avec Dieu, chaque jour.",

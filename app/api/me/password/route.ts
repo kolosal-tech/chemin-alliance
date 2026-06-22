@@ -6,6 +6,7 @@ import { requireUser } from "@/lib/security/session";
 import { hashPassword, verifyPassword } from "@/lib/security/password";
 import { passwordField } from "@/lib/security/password-validation";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
+import { audit } from "@/lib/audit";
 
 const schema = z.object({
   currentPassword: z.string().min(1).max(128),
@@ -36,5 +37,6 @@ export const POST = withErrors(async (req: Request) => {
     where: { id: user.id },
     data: { passwordHash: await hashPassword(newPassword) },
   });
+  audit("password.change", user.id);
   return NextResponse.json({ ok: true });
 });

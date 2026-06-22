@@ -77,6 +77,7 @@ export const GET = withErrors(async () => {
     questions: CHECKIN_QUESTIONS[season].map((q) => ({
       id: q.id,
       text: q.text[locale] ?? q.text.fr,
+      kind: q.kind ?? "scale",
     })),
     programs: SEASON_PROGRAMS[season].map((p) => ({
       id: p.id,

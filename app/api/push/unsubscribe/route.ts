@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { withErrors, readJsonLimited } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
+import { audit } from "@/lib/audit";
 
 export const runtime = "nodejs";
 
@@ -16,5 +17,6 @@ export const POST = withErrors(async (req: Request) => {
   await prisma.pushSubscription.deleteMany({
     where: { endpoint, userId: user.id },
   });
+  audit("notifications.disable", user.id);
   return NextResponse.json({ ok: true });
 });

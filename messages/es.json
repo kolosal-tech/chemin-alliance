@@ -50,7 +50,9 @@
     "close": "Cerrar",
     "loggedOut": "Has cerrado sesión.",
     "logoutConfirmTitle": "¿Cerrar sesión?",
-    "logoutConfirmBody": "Tendrás que iniciar sesión de nuevo para continuar tu camino."
+    "logoutConfirmBody": "Tendrás que iniciar sesión de nuevo para continuar tu camino.",
+    "themeDarkOn": "Modo oscuro activado.",
+    "themeLightOn": "Modo claro activado."
   },
   "nav": {
     "suggestions": "Descubrir",
@@ -385,7 +387,11 @@
     "freeNote": "Bloqueo, denuncia, eliminación de cuenta y filtros básicos son gratis, para siempre.",
     "manage": "Gestionar mi suscripción",
     "manageInfo": "Cambia tu método de pago o cancela tu suscripción cuando quieras.",
-    "manageError": "No se pudo abrir la gestión de la suscripción. Inténtalo más tarde."
+    "manageError": "No se pudo abrir la gestión de la suscripción. Inténtalo más tarde.",
+    "confirmTitle": "¿Suscribirse a Premium?",
+    "confirmBody": "Te llevaremos al pago seguro de Stripe (9,99 €/mes, sin compromiso, cancelable cuando quieras). La seguridad y la dignidad siguen siendo gratuitas.",
+    "confirmCta": "Continuar al pago",
+    "checkoutError": "No se puede abrir el pago ahora mismo. Inténtalo de nuevo en un momento."
   },
   "privacy": {
     "title": "Confidencialidad",
@@ -404,7 +410,11 @@
     "deleteConfirmTitle": "¿Eliminar definitivamente?",
     "deleteConfirmBody": "Todos tus datos serán borrados: perfil, mensajes, camino, consentimientos. Esta acción es irreversible.",
     "deleteConfirmCta": "Sí, eliminar mi cuenta",
-    "saved": "Preferencias guardadas."
+    "saved": "Preferencias guardadas.",
+    "saveError": "Cambio no guardado. Inténtalo de nuevo.",
+    "antiMalaiseDisableConfirmTitle": "¿Desactivar el filtro anti-incomodidad?",
+    "antiMalaiseDisableConfirmBody": "Tu perfil volverá a ser visible para los miembros de tu iglesia y tu comunidad cercana. Puedes reactivarlo cuando quieras.",
+    "antiMalaiseDisableCta": "Desactivar"
   },
   "reports": {
     "report": "Denunciar",
@@ -614,7 +624,9 @@
     "childArrivedConfirmTitle": "Confirmar evento de vida",
     "childArrivedConfirmBody": "Pasaréis a la temporada «Recién padres». Los check-ins y el camino se adaptarán. Podrás volver atrás después.",
     "marriedConfirmTitle": "Confirmar evento de vida",
-    "marriedConfirmBody": "Pasaréis a la temporada «Casados». El camino y los check-ins se adaptarán a vuestra nueva etapa."
+    "marriedConfirmBody": "Pasaréis a la temporada «Casados». El camino y los check-ins se adaptarán a vuestra nueva etapa.",
+    "checkinTimeout": "El Guardián tarda demasiado en responder. Tus respuestas se conservan: inténtalo de nuevo en un momento.",
+    "openAnswerPlaceholder": "Escribe unas palabras…"
   },
   "legal": {
     "terms": "Condiciones de uso",
@@ -669,7 +681,8 @@
     "linkTitle": "Padrino / Madrina",
     "error": "Ocurrió un error. Inténtalo de nuevo.",
     "removeConfirmTitle": "¿Quitar a tu padrino/madrina?",
-    "removeConfirmBody": "Esta persona ya no seguirá tu camino. Puedes designar a otra en cualquier momento."
+    "removeConfirmBody": "Esta persona ya no seguirá tu camino. Puedes designar a otra en cualquier momento.",
+    "privacyNote": "Sus datos (nombre, correo) son estrictamente privados: solo se usan para transmitirle tus solicitudes, y nunca se comparten ni se hacen públicos."
   },
   "blessing": {
     "eyebrow": "Petición de bendición",
@@ -709,7 +722,11 @@
       "passwordRules": "Contraseña demasiado débil (12+ car., minúscula, mayúscula, número).",
       "passwordMismatch": "Las contraseñas no coinciden.",
       "general": "Algo salió mal. Inténtalo de nuevo."
-    }
+    },
+    "passwordConfirmTitle": "¿Confirmar el cambio de contraseña?",
+    "passwordConfirmBody": "Tu contraseña actual será reemplazada. Seguirás conectado·a en este dispositivo.",
+    "emailConfirmTitle": "¿Confirmar el cambio de correo?",
+    "emailConfirmBody": "Se enviará un enlace de confirmación a tu nueva dirección. Solo se activará cuando valides ese enlace."
   },
   "devotional": {
     "subtitle": "Un tiempo con Dios, cada día.",

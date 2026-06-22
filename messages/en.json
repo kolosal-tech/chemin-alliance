@@ -50,7 +50,9 @@
     "close": "Close",
     "loggedOut": "You're signed out.",
     "logoutConfirmTitle": "Sign out?",
-    "logoutConfirmBody": "You'll need to sign in again to continue your journey."
+    "logoutConfirmBody": "You'll need to sign in again to continue your journey.",
+    "themeDarkOn": "Dark mode on.",
+    "themeLightOn": "Light mode on."
   },
   "nav": {
     "suggestions": "Discover",
@@ -385,7 +387,11 @@
     "freeNote": "Blocking, reporting, account deletion and basic filters are free, forever.",
     "manage": "Manage my subscription",
     "manageInfo": "Update your payment method or cancel your subscription anytime.",
-    "manageError": "Could not open subscription management. Try again later."
+    "manageError": "Could not open subscription management. Try again later.",
+    "confirmTitle": "Subscribe to Premium?",
+    "confirmBody": "You'll be taken to secure Stripe checkout (€9.99/month, no commitment, cancel anytime). Safety and dignity stay free.",
+    "confirmCta": "Continue to payment",
+    "checkoutError": "Can't open checkout right now. Please try again shortly."
   },
   "privacy": {
     "title": "Privacy",
@@ -404,7 +410,11 @@
     "deleteConfirmTitle": "Delete permanently?",
     "deleteConfirmBody": "All your data will be erased: profile, messages, journey, consents. This action is irreversible.",
     "deleteConfirmCta": "Yes, delete my account",
-    "saved": "Preferences saved."
+    "saved": "Preferences saved.",
+    "saveError": "Change not saved. Please try again.",
+    "antiMalaiseDisableConfirmTitle": "Turn off the anti-awkwardness filter?",
+    "antiMalaiseDisableConfirmBody": "Your profile will become visible again to members of your church and close community. You can turn it back on anytime.",
+    "antiMalaiseDisableCta": "Turn off"
   },
   "reports": {
     "report": "Report",
@@ -614,7 +624,9 @@
     "childArrivedConfirmTitle": "Confirm life event",
     "childArrivedConfirmBody": "You'll move to the New parents season. Check-ins and the journey will adapt. You can switch back afterwards.",
     "marriedConfirmTitle": "Confirm life event",
-    "marriedConfirmBody": "You'll move to the Married season. The journey and check-ins will adapt to your new chapter."
+    "marriedConfirmBody": "You'll move to the Married season. The journey and check-ins will adapt to your new chapter.",
+    "checkinTimeout": "The Guardian is taking too long to answer. Your answers are kept: please try again shortly.",
+    "openAnswerPlaceholder": "Write a few words…"
   },
   "legal": {
     "terms": "Terms of Service",
@@ -669,7 +681,8 @@
     "linkTitle": "Godparent",
     "error": "Something went wrong. Please try again.",
     "removeConfirmTitle": "Remove your sponsor?",
-    "removeConfirmBody": "This person will no longer follow your journey. You can choose another anytime."
+    "removeConfirmBody": "This person will no longer follow your journey. You can choose another anytime.",
+    "privacyNote": "Their details (name, email) stay strictly private: they're only used to pass on your requests, and are never shared or made public."
   },
   "blessing": {
     "eyebrow": "Blessing request",
@@ -709,7 +722,11 @@
       "passwordRules": "Password too weak (12+ chars, lowercase, uppercase, digit).",
       "passwordMismatch": "Passwords do not match.",
       "general": "Something went wrong. Try again."
-    }
+    },
+    "passwordConfirmTitle": "Confirm password change?",
+    "passwordConfirmBody": "Your current password will be replaced. You'll stay signed in on this device.",
+    "emailConfirmTitle": "Confirm email change?",
+    "emailConfirmBody": "A confirmation link will be sent to your new address. It becomes active only once you validate that link."
   },
   "devotional": {
     "subtitle": "Time with God, every day.",

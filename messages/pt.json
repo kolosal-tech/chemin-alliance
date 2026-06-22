@@ -50,7 +50,9 @@
     "close": "Fechar",
     "loggedOut": "Sessão terminada.",
     "logoutConfirmTitle": "Terminar sessão?",
-    "logoutConfirmBody": "Terás de iniciar sessão novamente para continuar o teu caminho."
+    "logoutConfirmBody": "Terás de iniciar sessão novamente para continuar o teu caminho.",
+    "themeDarkOn": "Modo escuro ativado.",
+    "themeLightOn": "Modo claro ativado."
   },
   "nav": {
     "suggestions": "Descobrir",
@@ -385,7 +387,11 @@
     "freeNote": "Bloqueio, denúncia, eliminação de conta e filtros básicos são grátis, para sempre.",
     "manage": "Gerir a minha subscrição",
     "manageInfo": "Altera o teu método de pagamento ou cancela a subscrição quando quiseres.",
-    "manageError": "Não foi possível abrir a gestão da subscrição. Tenta mais tarde."
+    "manageError": "Não foi possível abrir a gestão da subscrição. Tenta mais tarde.",
+    "confirmTitle": "Assinar o Premium?",
+    "confirmBody": "Vais ser encaminhado·a para o pagamento seguro Stripe (9,99 €/mês, sem compromisso, cancelável a qualquer momento). A segurança e a dignidade continuam gratuitas.",
+    "confirmCta": "Continuar para o pagamento",
+    "checkoutError": "Não foi possível abrir o pagamento agora. Tenta novamente daqui a pouco."
   },
   "privacy": {
     "title": "Confidencialidade",
@@ -404,7 +410,11 @@
     "deleteConfirmTitle": "Eliminar definitivamente?",
     "deleteConfirmBody": "Todos os seus dados serão apagados: perfil, mensagens, percurso, consentimentos. Esta ação é irreversível.",
     "deleteConfirmCta": "Sim, eliminar a minha conta",
-    "saved": "Preferências guardadas."
+    "saved": "Preferências guardadas.",
+    "saveError": "Alteração não guardada. Tenta novamente.",
+    "antiMalaiseDisableConfirmTitle": "Desativar o filtro anti-constrangimento?",
+    "antiMalaiseDisableConfirmBody": "O teu perfil voltará a ser visível para os membros da tua igreja e da tua comunidade próxima. Podes reativá-lo a qualquer momento.",
+    "antiMalaiseDisableCta": "Desativar"
   },
   "reports": {
     "report": "Denunciar",
@@ -614,7 +624,9 @@
     "childArrivedConfirmTitle": "Confirmar evento de vida",
     "childArrivedConfirmBody": "Vão passar para a estação «Novos pais». Os check-ins e o percurso vão adaptar-se. Poderás voltar atrás depois.",
     "marriedConfirmTitle": "Confirmar evento de vida",
-    "marriedConfirmBody": "Vão passar para a estação «Casados». O percurso e os check-ins vão adaptar-se à vossa nova etapa."
+    "marriedConfirmBody": "Vão passar para a estação «Casados». O percurso e os check-ins vão adaptar-se à vossa nova etapa.",
+    "checkinTimeout": "O Guardião está a demorar demasiado a responder. As tuas respostas foram guardadas: tenta novamente daqui a pouco.",
+    "openAnswerPlaceholder": "Escreve algumas palavras…"
   },
   "legal": {
     "terms": "Termos de utilização",
@@ -669,7 +681,8 @@
     "linkTitle": "Padrinho / Madrinha",
     "error": "Ocorreu um erro. Tenta novamente.",
     "removeConfirmTitle": "Remover o teu padrinho/madrinha?",
-    "removeConfirmBody": "Esta pessoa deixará de acompanhar o teu caminho. Podes escolher outra a qualquer momento."
+    "removeConfirmBody": "Esta pessoa deixará de acompanhar o teu caminho. Podes escolher outra a qualquer momento.",
+    "privacyNote": "Os dados dele·a (nome, email) são estritamente privados: servem apenas para lhe transmitir os teus pedidos, e nunca são partilhados nem tornados públicos."
   },
   "blessing": {
     "eyebrow": "Pedido de bênção",
@@ -709,7 +722,11 @@
       "passwordRules": "Palavra-passe demasiado fraca (12+ car., minúscula, maiúscula, número).",
       "passwordMismatch": "As palavras-passe não coincidem.",
       "general": "Ocorreu um erro. Tenta novamente."
-    }
+    },
+    "passwordConfirmTitle": "Confirmar a alteração da palavra-passe?",
+    "passwordConfirmBody": "A tua palavra-passe atual será substituída. Continuarás com sessão iniciada neste dispositivo.",
+    "emailConfirmTitle": "Confirmar a alteração de email?",
+    "emailConfirmBody": "Será enviado um link de confirmação para o teu novo endereço. Só ficará ativo depois de validares esse link."
   },
   "devotional": {
     "subtitle": "Um tempo com Deus, todos os dias.",
