@@ -18,11 +18,25 @@ export default async function CoachesPage({
       <h1 className="mb-4 font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("title")}
       </h1>
-      <div className="flex flex-col gap-3 lg:grid lg:grid-cols-3">
+      {coaches.length === 0 ? (
+        <div
+          data-testid="coaches-empty"
+          className="rounded-cardlg border border-sand-200 bg-surface p-8 text-center dark:border-anthracite-600 dark:bg-anthracite-800"
+        >
+          <p className="text-sm text-warmgray dark:text-[#9A958B]">
+            {t("empty")}
+          </p>
+        </div>
+      ) : (
+      <ul
+        data-testid="coaches-list"
+        className="flex list-none flex-col gap-3 p-0 lg:grid lg:grid-cols-3"
+      >
         {coaches.map((c, i) => (
+          <li key={c.id} data-testid="coach-card">
           <Link
-            key={c.id}
             href={`/coaches/${c.id}`}
+            aria-label={c.displayName}
             className="flex items-center gap-3.5 rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800"
           >
             <span
@@ -61,8 +75,10 @@ export default async function CoachesPage({
               </div>
             </div>
           </Link>
+          </li>
         ))}
-      </div>
+      </ul>
+      )}
     </main>
   );
 }

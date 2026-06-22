@@ -188,7 +188,12 @@ export function NotificationsPanel({
         </div>
 
         {state === "loading" && (
-          <p className="text-[12px] text-warmgray dark:text-[#9A958B]">…</p>
+          <p
+            className="text-[12px] text-warmgray dark:text-[#9A958B]"
+            aria-live="polite"
+          >
+            {t("common.loading")}
+          </p>
         )}
 
         {state === "unsupported" && (

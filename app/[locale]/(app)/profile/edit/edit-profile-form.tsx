@@ -288,19 +288,25 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
   // matrimonial (déjà déterminé par leur saison). Valeur conservée à l'envoi.
   const isCouple = season === "ENGAGED" || season === "MARRIED";
 
-  // Ouvre la section « optionnelle » d'emblée si l'utilisateur a déjà rempli
-  // l'un de ces champs (profil existant) ; repliée pour un profil neuf (court).
-  const hasMore = Boolean(
-    d.denomination ||
-    d.ministry ||
-    d.engagementFrequency ||
-    d.localChurch ||
-    d.testimony ||
-    d.familyVision ||
-    d.interests ||
-    d.personality ||
+  // Section « optionnelle » : repliée par défaut (UX), avec un indicateur de
+  // remplissage (N/M) dans le résumé pour signaler le contenu sans déplier.
+  const optionalValues = [
+    d.denomination,
+    d.engagementFrequency,
+    d.ministry,
+    d.localChurch,
+    d.testimony,
+    d.interests,
+    d.personality,
+    d.familyVision,
     d.aspirations,
-  );
+    d.hasChildren,
+    d.wantsChildren,
+  ];
+  const filledOptional = optionalValues.filter(
+    (v) => v != null && String(v).trim() !== "",
+  ).length;
+  const totalOptional = optionalValues.length;
 
   const input =
     "rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
@@ -556,16 +562,24 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
         </section>
 
         {/* ---- Plus d'informations (optionnel, repliable) ---- */}
-        <details
-          open={hasMore}
-          className="rounded-cardlg border border-sand-200 dark:border-anthracite-600"
-        >
+        <details className="rounded-cardlg border border-sand-200 dark:border-anthracite-600">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-2 p-4">
-            <span className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
-              {t("secMore")}
+            <span className="flex flex-col">
+              <span className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
+                {t("secMore")}
+              </span>
+              <span className="text-[11.5px] font-normal text-sand-500 dark:text-[#7E7A72]">
+                {t("secMoreHint")}
+              </span>
             </span>
-            <span className="text-[11.5px] font-normal text-sand-500 dark:text-[#7E7A72]">
-              {t("secMoreHint")}
+            <span
+              data-testid="secmore-count"
+              className="flex-none rounded-full bg-sand-200 px-2 py-0.5 font-mono text-[10px] text-sand-700 dark:bg-anthracite-700 dark:text-[#9A958B]"
+            >
+              {t("secMoreCount", {
+                filled: filledOptional,
+                total: totalOptional,
+              })}
             </span>
           </summary>
 

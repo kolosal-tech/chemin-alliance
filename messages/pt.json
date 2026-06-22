@@ -214,7 +214,8 @@
     "engaged": "Noivo/a",
     "married": "Casado/a",
     "photoChange": "Alterar foto",
-    "photoError": "Falha ao enviar a foto. Tenta de novo."
+    "photoError": "Falha ao enviar a foto. Tenta de novo.",
+    "secMoreCount": "{filled}/{total} preenchidos"
   },
   "visibility": {
     "PUBLIC_CONTROLLED": "Público",
@@ -335,7 +336,9 @@
     "book": "Reservar uma sessão",
     "booked": "Sessão pedida para {date}. Receberá uma confirmação.",
     "reviews": "{count} avaliações verificadas",
-    "affiliation": "Afiliação"
+    "affiliation": "Afiliação",
+    "empty": "Ainda não há coaches disponíveis. Novos acompanhantes chegam em breve.",
+    "error": "Não foi possível carregar os coaches neste momento."
   },
   "curriculum": {
     "kicker": "Caminho guiado",
@@ -765,7 +768,8 @@
     "sessionDoneBody": "Que este versículo te acompanhe ao longo do dia.",
     "sessionDoneCta": "Voltar ao devocional",
     "journalTitle": "A tua última reflexão",
-    "showVerse": "Ver o versículo"
+    "showVerse": "Ver o versículo",
+    "markedDoneToast": "Tempo espiritual registado 🙏"
   },
   "maturity": {
     "introLabel": "Frente · Verso",
@@ -844,7 +848,8 @@
       "email": "Verificado",
       "both": "Perfil verificado",
       "phone": "Tel. verificado"
-    }
+    },
+    "phoneLevelTodo": "Telefone por verificar"
   },
   "antiScam": {
     "pageTitle": "Reconhecer uma burla",

@@ -9,6 +9,7 @@ import {
   type JournalEntry,
 } from "./meditation-session";
 import { Spinner } from "@/components/Spinner";
+import { useToast } from "@/components/Toast";
 
 export function DevotionalClient({
   devotion,
@@ -20,6 +21,7 @@ export function DevotionalClient({
   initialCompleted: boolean;
 }) {
   const t = useTranslations();
+  const toast = useToast();
   const [streak, setStreak] = useState(initialStreak);
   const [completed, setCompleted] = useState(initialCompleted);
   const [busy, setBusy] = useState(false);
@@ -61,11 +63,18 @@ export function DevotionalClient({
         setStreak({ current: d.currentStreak, longest: d.longestStreak });
         setNewRecord(Boolean(d.isNewRecord));
         setCompleted(true);
+        toast.success(
+          d.isNewRecord
+            ? t("devotional.newRecord")
+            : t("devotional.markedDoneToast"),
+        );
       } else {
         setError(true);
+        toast.error(t("devotional.error"));
       }
     } catch {
       setError(true);
+      toast.error(t("devotional.error"));
     } finally {
       pendingRef.current = false;
       setBusy(false);
