@@ -228,13 +228,15 @@ export function CoachChat({
             e.role === "user" ? (
               <div
                 key={e.id}
-                className="glass-self glass-bubble max-w-[80%] self-end rounded-[14px] rounded-tr-[4px] px-3.5 py-2.5"
+                className="flex max-w-[80%] flex-col items-end self-end"
               >
-                <p className="text-[14.5px] leading-normal text-info-ink dark:text-info-darkInk">
-                  {e.text}
-                </p>
+                <div className="glass-self glass-bubble rounded-[14px] rounded-tr-[4px] px-3.5 py-2.5">
+                  <p className="text-[14.5px] leading-normal text-info-ink dark:text-info-darkInk">
+                    {e.text}
+                  </p>
+                </div>
                 {fmtTime(e.createdAt) && (
-                  <span className="mt-1 block text-right text-[11px] text-info-ink/60 dark:text-info-darkInk/70">
+                  <span className="mt-1 px-1 text-right text-[11px] text-sand-500 dark:text-[#65625B]">
                     {fmtTime(e.createdAt)}
                   </span>
                 )}
@@ -280,32 +282,34 @@ export function CoachChat({
                 </Link>
               </div>
             ) : (
-              <div key={e.id} className="flex max-w-[88%] gap-2.5 self-start">
-                <div className="mt-0.5 flex h-[26px] w-[26px] flex-none items-center justify-center rounded-[8px] bg-night dark:bg-gold-light">
-                  <svg
-                    width="13"
-                    height="13"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    aria-hidden
-                  >
-                    <path
-                      d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
-                      className="fill-gold dark:fill-anthracite-900"
+              <div key={e.id} className="flex max-w-[88%] flex-col self-start">
+                <div className="flex gap-2.5">
+                  <div className="mt-0.5 flex h-[26px] w-[26px] flex-none items-center justify-center rounded-[8px] bg-night dark:bg-gold-light">
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden
+                    >
+                      <path
+                        d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
+                        className="fill-gold dark:fill-anthracite-900"
+                      />
+                    </svg>
+                  </div>
+                  <div className="glass glass-bubble rounded-[14px] rounded-tl-[4px] px-3.5 py-2.5">
+                    <RichText
+                      text={e.text}
+                      className="text-[14.5px] leading-normal text-[#2A2823] dark:text-[#CFCAC0]"
                     />
-                  </svg>
+                  </div>
                 </div>
-                <div className="glass glass-bubble rounded-[14px] rounded-tl-[4px] px-3.5 py-2.5">
-                  <RichText
-                    text={e.text}
-                    className="text-[14.5px] leading-normal text-[#2A2823] dark:text-[#CFCAC0]"
-                  />
-                  {fmtTime(e.createdAt) && (
-                    <span className="mt-1 block text-[11px] text-sand-500 dark:text-[#65625B]">
-                      {fmtTime(e.createdAt)}
-                    </span>
-                  )}
-                </div>
+                {fmtTime(e.createdAt) && (
+                  <span className="ml-[36px] mt-1 px-1 text-[11px] text-sand-500 dark:text-[#65625B]">
+                    {fmtTime(e.createdAt)}
+                  </span>
+                )}
               </div>
             ),
           )}
