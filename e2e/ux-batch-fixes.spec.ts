@@ -76,7 +76,9 @@ test.describe("Lot UX P0-P2", () => {
   });
 
   // P1.4 - Devotionnel : anti double-clic sur "J'ai pris ce temps".
-  test(`[${PRIMARY}] devotional : bouton anti double-clic`, async ({ page }) => {
+  test(`[${PRIMARY}] devotional : bouton anti double-clic`, async ({
+    page,
+  }) => {
     await login(page, PRIMARY);
     await page.goto(`/${PRIMARY}/devotional`);
     const btn = page
