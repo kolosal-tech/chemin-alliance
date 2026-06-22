@@ -4,8 +4,9 @@
 // honorant la culture sans la placer au-dessus de l'Écriture.
 //
 // Principe : un même pays abrite plusieurs ethnies. La base donne le cadre
-// régional ; l'agent DEMANDE toujours à la personne son pays et son ethnie
-// pour préciser, puis aide à discerner ce qui est compatible avec la foi.
+// régional, mais l'agent ne présume jamais l'origine et ne la demande pas
+// d'office ; il n'ouvre ce sujet que s'il est pertinent, puis aide la personne
+// à discerner ce qui est compatible avec la foi à partir de ce qu'elle partage.
 
 export type CultureRegion = {
   key: string;
