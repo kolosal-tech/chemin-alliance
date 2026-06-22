@@ -106,6 +106,7 @@ export async function askCoach(
     // milieu. 1024 laisse de la marge pour un développement complet.
     maxTokens: 1024,
     tier: opts.tier,
+    locale: opts.locale,
   });
   if (text) return { text, guardrail: false, provider: aiProvider };
 

@@ -60,5 +60,6 @@ export async function narrateReview(
 Thèmes encore ouverts: ${data.openThemes.join(", ") || "aucun"}.
 Mes réponses (extraits): ${data.myHighlights.map((h) => h.excerpt).join(" | ")}`,
     400,
+    locale,
   );
 }

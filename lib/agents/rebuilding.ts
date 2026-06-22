@@ -42,5 +42,5 @@ Jamais de "c'était la volonté de Dieu", jamais de promesse ("tu trouveras vite
 jamais de culpabilisation. Tu réponds uniquement avec le mot.`;
 
 export async function consolationWord(locale: Locale): Promise<string | null> {
-  return completeText(`${SYSTEM}\nLangue: ${locale}.`, "La relation vient d'être clôturée avec respect.", 200);
+  return completeText(`${SYSTEM}\nLangue: ${locale}.`, "La relation vient d'être clôturée avec respect.", 200, locale);
 }

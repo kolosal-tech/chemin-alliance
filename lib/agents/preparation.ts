@@ -147,6 +147,8 @@ export async function buildPortrait(
     `${SYSTEM}\nLangue: ${locale}. Schéma: {"dimensions":{"spiritualRooting":{"status":"solid|growing|accompany","note":"…"},…},"overall":"matching_ready|growth_path|human_support","word":"…"}`,
     user,
     portraitSchema,
+    900,
+    locale,
   );
   return llm ? { portrait: llm, viaLlm: true } : { portrait: baseline, viaLlm: false };
 }
