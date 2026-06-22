@@ -291,6 +291,7 @@ export async function guardianWord(
       .map((a) => `${a.id}: ${a.value}${a.note ? ` - ${a.note}` : ""}`)
       .join("\n"),
     400,
+    locale,
   );
 }
 

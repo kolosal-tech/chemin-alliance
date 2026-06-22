@@ -51,5 +51,6 @@ export async function polishSummary(
     `${SYSTEM}\nLangue: ${locale}.`,
     deterministicSummary(input, locale),
     500,
+    locale,
   );
 }

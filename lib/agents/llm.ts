@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { callLLM } from "@/lib/llm/gateway";
+import type { Locale } from "@/lib/core-engine";
 
 /**
  * Appel LLM mutualisé pour tous les agents - délègue à la passerelle unique
@@ -12,8 +13,9 @@ export async function completeText(
   system: string,
   user: string,
   maxTokens = 700,
+  locale?: Locale,
 ): Promise<string | null> {
-  return callLLM({ system, user, step: "accompaniment", maxTokens });
+  return callLLM({ system, user, step: "accompaniment", maxTokens, locale });
 }
 
 /**
@@ -25,11 +27,13 @@ export async function completeJson<T>(
   user: string,
   schema: z.ZodType<T>,
   maxTokens = 900,
+  locale?: Locale,
 ): Promise<T | null> {
   const raw = await completeText(
     `${system}\nRéponds UNIQUEMENT avec un objet JSON valide, sans texte autour, sans balises markdown.`,
     user,
     maxTokens,
+    locale,
   );
   if (!raw) return null;
   const match = raw.match(/\{[\s\S]*\}/);

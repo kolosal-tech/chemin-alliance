@@ -1,4 +1,5 @@
 import { aiProvider, env } from "@/lib/env";
+import type { Locale } from "@/lib/core-engine";
 import { redactPII } from "./redaction";
 import { resolveModels, type Step, type Tier } from "./matrix";
 import { recordLlmCall } from "./telemetry";
@@ -21,6 +22,18 @@ const TIMEOUT_MS = 20000;
 const EMDASH_BAN =
   '\n\n[STRICT BAN] Interdiction formelle d\'utiliser le tiret cadratin (caractere Unicode U+2014, dit em dash) dans le document genere. Utilise uniquement le tiret standard "-", la virgule, les parentheses ou les deux-points selon la grammaire.';
 
+// Verrou de langue : les petits modèles glissent vers l'anglais sur le
+// vocabulaire religieux (« pastor », « local church »…) même quand le prompt
+// demande déjà une langue. On l'impose ici, au point de passage unique, avec
+// une consigne forte rédigée DANS la langue cible. Appliqué seulement si
+// l'appelant fournit une locale.
+const LANG_LOCK: Record<Locale, string> = {
+  fr: "\n\n[LANGUE STRICTE] Réponds INTÉGRALEMENT en français. N'emploie aucun mot d'une autre langue : écris « pasteur » (pas « pastor »), « église locale » (pas « local church »). Tout terme qui te viendrait en anglais doit être traduit en français.",
+  en: "\n\n[STRICT LANGUAGE] Respond ENTIRELY in English. Do not use words from any other language.",
+  es: "\n\n[IDIOMA ESTRICTO] Responde ÍNTEGRAMENTE en español. No utilices palabras de otro idioma, en particular ningún término en inglés.",
+  pt: "\n\n[IDIOMA ESTRITO] Responde INTEGRALMENTE em português. Não utilizes palavras de outro idioma, em particular nenhum termo em inglês.",
+};
+
 export type LlmRequest = {
   system: string;
   user: string;
@@ -29,6 +42,8 @@ export type LlmRequest = {
   maxTokens?: number;
   /** Purge PII avant envoi tiers (défaut: true). */
   redact?: boolean;
+  /** Langue de réponse imposée (verrou fort, anti-fuite anglais). */
+  locale?: Locale;
 };
 
 type Usage = { prompt: number | null; completion: number | null };
@@ -151,7 +166,7 @@ export async function callLLM(req: LlmRequest): Promise<string | null> {
   const redact = req.redact ?? true;
   const rs = redact ? redactPII(req.system) : { text: req.system, count: 0 };
   const ru = redact ? redactPII(req.user) : { text: req.user, count: 0 };
-  const system = rs.text + EMDASH_BAN;
+  const system = rs.text + EMDASH_BAN + (req.locale ? LANG_LOCK[req.locale] : "");
   const user = ru.text;
   const redactedPii = rs.count + ru.count;
 

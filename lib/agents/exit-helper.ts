@@ -37,5 +37,6 @@ export async function draftExitMessage(
     `${SYSTEM}\nLangue: ${locale}.`,
     `Raison choisie: ${reason}. Ce que la personne veut transmettre: ${personalNote || "(rien de précis)"}`,
     300,
+    locale,
   );
 }
