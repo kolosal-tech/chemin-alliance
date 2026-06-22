@@ -11,13 +11,14 @@ import {
 } from "react";
 import { useTranslations } from "next-intl";
 
-type ToastType = "success" | "error" | "info";
+type ToastType = "success" | "error" | "info" | "warning";
 type ToastItem = { id: string; type: ToastType; message: string };
 
 type ToastApi = {
   success: (message: string) => void;
   error: (message: string) => void;
   info: (message: string) => void;
+  warning: (message: string) => void;
 };
 
 const ToastContext = createContext<ToastApi | null>(null);
@@ -33,6 +34,7 @@ export function useToast(): ToastApi {
       success: () => {},
       error: () => {},
       info: () => {},
+      warning: () => {},
     }
   );
 }
@@ -41,6 +43,7 @@ export function useToast(): ToastApi {
 const DURATION: Record<ToastType, number> = {
   success: 4500,
   info: 4500,
+  warning: 5500,
   error: 6500,
 };
 
@@ -77,6 +80,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       success: (m) => push("success", m),
       error: (m) => push("error", m),
       info: (m) => push("info", m),
+      warning: (m) => push("warning", m),
     }),
     [push],
   );
@@ -89,12 +93,16 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// Surfaces sémantiques tokenisées : succès=sauge (confiance), info=glacier,
+// warning=ambre, error=rouge brique. Voir tailwind.config.ts.
 const STYLES: Record<ToastType, string> = {
   success:
-    "border-[#CFE0D4] bg-[#EAF0EB] text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#16241B] dark:text-[#9FC7AC]",
+    "border-sage-border bg-sage-surface text-sage-ink dark:border-sage-darkBorder dark:bg-sage-darkSurface dark:text-sage-darkInk",
   error:
-    "border-[#E7C3BD] bg-[#FBEEEC] text-danger dark:border-[#5A2A22] dark:bg-[#2A1714] dark:text-[#E59B91]",
-  info: "border-[#D4DAE4] bg-[#EAEDF2] text-[#2A3550] dark:border-[#2A3A56] dark:bg-[#1A2233] dark:text-[#B9C6E0]",
+    "border-danger-border bg-danger-surface text-danger dark:border-danger-darkBorder dark:bg-danger-darkSurface dark:text-danger-darkInk",
+  info: "border-info-border bg-info-surface text-info-ink dark:border-info-darkBorder dark:bg-info-darkSurface dark:text-info-darkInk",
+  warning:
+    "border-warn-border bg-warn-surface text-warn-ink dark:border-warn-darkBorder dark:bg-warn-darkSurface dark:text-warn-darkInk",
 };
 
 function ToastIcon({ type }: { type: ToastType }) {
@@ -119,7 +127,7 @@ function ToastIcon({ type }: { type: ToastType }) {
       </svg>
     );
   }
-  if (type === "error") {
+  if (type === "error" || type === "warning") {
     return (
       <svg
         width="18"

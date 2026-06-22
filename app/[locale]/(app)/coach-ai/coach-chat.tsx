@@ -230,11 +230,11 @@ export function CoachChat({
                 key={e.id}
                 className="glass-self glass-bubble max-w-[80%] self-end rounded-[14px] rounded-tr-[4px] px-3.5 py-2.5"
               >
-                <p className="text-[13.5px] leading-normal text-[#EDEFF3]">
+                <p className="text-[13.5px] leading-normal text-info-ink dark:text-info-darkInk">
                   {e.text}
                 </p>
                 {fmtTime(e.createdAt) && (
-                  <span className="mt-1 block text-right text-[10px] text-[#C7CBD6]">
+                  <span className="mt-1 block text-right text-[10px] text-info-ink/60 dark:text-info-darkInk/70">
                     {fmtTime(e.createdAt)}
                   </span>
                 )}
@@ -242,9 +242,9 @@ export function CoachChat({
             ) : e.guardrail ? (
               <div
                 key={e.id}
-                className="max-w-[90%] self-start rounded-[14px] border border-[#EAD9A8] bg-[#FBF6E9] p-3.5 dark:border-[#463A1F] dark:bg-[#272117]"
+                className="max-w-[90%] self-start rounded-[14px] border border-warn-border bg-warn-surface p-3.5 dark:border-warn-darkBorder dark:bg-warn-darkSurface"
               >
-                <div className="mb-2 flex items-center gap-2">
+                <div className="mb-2 flex items-center gap-2 text-warn dark:text-warn-darkInk">
                   <svg
                     width="16"
                     height="16"
@@ -254,27 +254,27 @@ export function CoachChat({
                   >
                     <path
                       d="M12 3l9 16H3L12 3Z"
-                      stroke="#9A7B2E"
+                      stroke="currentColor"
                       strokeWidth="1.6"
                       strokeLinejoin="round"
                     />
                     <path
                       d="M12 10v4M12 16.5h.01"
-                      stroke="#9A7B2E"
+                      stroke="currentColor"
                       strokeWidth="1.7"
                       strokeLinecap="round"
                     />
                   </svg>
-                  <span className="text-[12.5px] font-semibold text-gold-ink dark:text-[#E0C77A]">
+                  <span className="text-[12.5px] font-semibold text-warn-ink dark:text-warn-darkInk">
                     {t("aiCoach.guardrailTitle")}
                   </span>
                 </div>
-                <p className="mb-2.5 text-[12.5px] leading-normal text-[#6F5C2E] dark:text-[#C2B488]">
+                <p className="mb-2.5 text-[12.5px] leading-normal text-warn-ink dark:text-warn-darkInk">
                   {e.text}
                 </p>
                 <Link
                   href="/coaches"
-                  className="block w-full rounded-[10px] border border-gold bg-white py-2.5 text-center text-[13px] font-semibold text-gold-ink dark:border-[#6A5A2E] dark:bg-anthracite-800 dark:text-[#E0C77A]"
+                  className="block w-full rounded-[10px] border border-warn-border bg-white py-2.5 text-center text-[13px] font-semibold text-warn-ink dark:border-warn-darkBorder dark:bg-anthracite-800 dark:text-warn-darkInk"
                 >
                   {t("aiCoach.guardrailCta")}
                 </Link>
@@ -364,7 +364,7 @@ export function CoachChat({
         {quota !== null ? (
           <p
             role="status"
-            className="rounded-[13px] border border-[#EAD9A8] bg-[#FBF6E9] px-4 py-3 text-[12.5px] text-[#6F5C2E] dark:border-[#463A1F] dark:bg-[#272117] dark:text-[#C2B488]"
+            className="rounded-[13px] border border-warn-border bg-warn-surface px-4 py-3 text-[12.5px] text-warn-ink dark:border-warn-darkBorder dark:bg-warn-darkSurface dark:text-warn-darkInk"
           >
             {t("aiCoach.quotaReached", { limit: quota })}
           </p>

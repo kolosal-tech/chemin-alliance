@@ -15,10 +15,10 @@ const LEVEL_COLOR: Record<VisibilityLevel, string> = {
   PUBLIC_CONTROLLED: "text-sage",
   AFTER_MATCH: "text-gold-deep",
   AFTER_DIALOGUE: "text-amberink",
-  AFTER_DISCERNMENT: "text-navy dark:text-[#B9C6E0]",
-  COACH_ONLY: "text-navy dark:text-[#B9C6E0]",
-  PRIVATE: "text-navy dark:text-[#B9C6E0]",
-  MANUAL_SHARE: "text-warmgray dark:text-[#9A958B]",
+  AFTER_DISCERNMENT: "text-navy dark:text-info-darkInk",
+  COACH_ONLY: "text-navy dark:text-info-darkInk",
+  PRIVATE: "text-navy dark:text-info-darkInk",
+  MANUAL_SHARE: "text-warmgray dark:text-sage-darkInk",
 };
 
 /** Cadenas 5 niveaux - indicateur de visibilité par champ. */
@@ -32,11 +32,28 @@ export function LockBadge({ level }: { level: VisibilityLevel }) {
       className={`inline-flex items-center gap-1 rounded-[8px] border border-sand-300 bg-sand-100 px-1.5 py-1 dark:border-anthracite-600 dark:bg-anthracite-700 ${LEVEL_COLOR[level]}`}
     >
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden>
-        <rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" strokeWidth="1.9" />
+        <rect
+          x="5"
+          y="11"
+          width="14"
+          height="9"
+          rx="2"
+          stroke="currentColor"
+          strokeWidth="1.9"
+        />
         {open ? (
-          <path d="M8 11V8a4 4 0 0 1 7-2.6" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" />
+          <path
+            d="M8 11V8a4 4 0 0 1 7-2.6"
+            stroke="currentColor"
+            strokeWidth="1.9"
+            strokeLinecap="round"
+          />
         ) : (
-          <path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" strokeWidth="1.9" />
+          <path
+            d="M8 11V8a4 4 0 0 1 8 0v3"
+            stroke="currentColor"
+            strokeWidth="1.9"
+          />
         )}
       </svg>
       <span className="flex gap-[2px]" aria-hidden>

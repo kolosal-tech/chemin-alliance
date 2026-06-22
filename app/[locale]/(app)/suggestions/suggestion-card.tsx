@@ -123,7 +123,7 @@ export function SuggestionCard({
         </span>
 
         {profile.isVerified && (
-          <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full border border-gold/55 bg-night/55 px-2.5 py-1 text-[11px] font-semibold text-[#F2E6C2] backdrop-blur-[2px]">
+          <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full border border-sage-border bg-night/55 px-2.5 py-1 text-[11px] font-semibold text-sage-ink dark:text-sage-darkInk backdrop-blur-[2px]">
             <svg
               width="13"
               height="13"
@@ -132,7 +132,7 @@ export function SuggestionCard({
             >
               <path
                 d="M12 2.5l2.4 1.7 2.9-.2 1 2.8 2.4 1.6-.8 2.8.8 2.8-2.4 1.6-1 2.8-2.9-.2L12 21.5l-2.4-1.7-2.9.2-1-2.8L3.3 15.6l.8-2.8-.8-2.8 2.4-1.6 1-2.8 2.9.2L12 2.5Z"
-                className="fill-gold dark:fill-gold-light"
+                className="fill-sage dark:fill-sage-darkInk"
               />
             </svg>
             {t("common.verified")}
@@ -149,11 +149,19 @@ export function SuggestionCard({
           </div>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {profile.denomination && (
-              <span className="rounded-full border border-[#F7F5F0]/20 bg-[#F7F5F0]/15 px-2.5 py-0.5 text-[10.5px] font-semibold backdrop-blur-[3px]">
+              <span
+                className={`rounded-full border px-2.5 py-0.5 text-[10.5px] font-semibold backdrop-blur-[3px] ${
+                  profile.denomination === "Catholique"
+                    ? "border-info-border bg-info-surface text-info-ink dark:bg-info-darkSurface dark:text-info-darkInk dark:border-info-darkBorder"
+                    : profile.denomination === "Évangélique"
+                      ? "border-navy bg-navy/10 text-navy dark:bg-gold-light/15 dark:text-gold-light dark:border-gold-light/40"
+                      : "border-sand-200 bg-surface/80 text-anthracite-800 dark:border-anthracite-600 dark:bg-anthracite-800/80 dark:text-anthracite-100"
+                }`}
+              >
                 {optionLabel(profile.denomination, DENOMINATION_LABELS, locale)}
               </span>
             )}
-            <span className="rounded-full border border-gold/45 bg-gold/20 px-2.5 py-0.5 text-[10.5px] font-semibold text-[#F4E7C2] backdrop-blur-[3px]">
+            <span className="rounded-full border border-gold/40 bg-gold/20 px-2.5 py-0.5 text-[10.5px] font-semibold text-gold-light backdrop-blur-[3px]">
               {t("suggestions.intentMarriage")}
             </span>
             {statusKey && (

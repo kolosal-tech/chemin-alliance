@@ -43,17 +43,17 @@ export function SafetyBanner({ matchId }: { matchId: string }) {
   return (
     <div
       data-testid="safety-banner"
-      className="mx-3 mt-3 rounded-card border border-[#D8B6B0] bg-[#FBF0EE] p-4 dark:border-[#5A3A34] dark:bg-[#2A1B18]"
+      className="mx-3 mt-3 rounded-card border border-danger-border bg-danger-surface p-4 dark:border-danger-darkBorder dark:bg-danger-darkSurface"
     >
       <div className="flex items-start gap-2.5">
         <span aria-hidden className="text-lg">
           ⚠️
         </span>
         <div className="flex-1">
-          <p className="text-[13px] font-semibold text-[#9A3B30] dark:text-[#E0A99F]">
+          <p className="text-[13px] font-semibold text-danger-ink dark:text-danger-darkInk">
             {t("antiScam.bannerTitle")}
           </p>
-          <p className="mt-1 text-[12.5px] leading-snug text-[#7A4036] dark:text-[#D2A99F]">
+          <p className="mt-1 text-[12.5px] leading-snug text-danger-ink dark:text-danger-darkInk">
             {t("antiScam.bannerBody")}
           </p>
           {signals.length > 0 && (
@@ -61,7 +61,7 @@ export function SafetyBanner({ matchId }: { matchId: string }) {
               {signals.map((s) => (
                 <span
                   key={s}
-                  className="rounded-[6px] bg-[#F4D9D4] px-2 py-0.5 text-[10.5px] font-semibold text-[#9A3B30] dark:bg-[#3A201C] dark:text-[#E0A99F]"
+                  className="rounded-[6px] bg-danger/15 px-2 py-0.5 text-[10.5px] font-semibold text-danger-ink dark:bg-danger-darkSurface dark:text-danger-darkInk"
                 >
                   {t(`antiScam.signalLabel.${s}`)}
                 </span>
@@ -70,7 +70,7 @@ export function SafetyBanner({ matchId }: { matchId: string }) {
           )}
           <Link
             href="/safety"
-            className="mt-2 inline-block text-[11.5px] font-semibold text-[#9A3B30] underline dark:text-[#E0A99F]"
+            className="mt-2 inline-block text-[11.5px] font-semibold text-danger-ink underline dark:text-danger-darkInk"
           >
             {t("antiScam.learnMore")}
           </Link>
@@ -79,7 +79,7 @@ export function SafetyBanner({ matchId }: { matchId: string }) {
           type="button"
           onClick={() => setDismissed(true)}
           aria-label={t("antiScam.dismiss")}
-          className="flex-none text-[#9A3B30] dark:text-[#E0A99F]"
+          className="flex-none text-danger-ink dark:text-danger-darkInk"
         >
           ✕
         </button>

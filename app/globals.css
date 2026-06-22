@@ -66,18 +66,18 @@ body {
     0 8px 32px -12px rgba(0, 0, 0, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
-/* bulle "moi" : verre teinté bleu nuit */
+/* bulle "moi" : verre teinté bleu glacier (info/messagerie) — harmonisé avec
+   les bulles couple (.bubble-self). Couleur de texte intégrée pour rester
+   lisible quel que soit le composant appelant (match, Coach IA). */
 .glass-self {
-  background: rgba(26, 39, 68, 0.78);
+  background: var(--bubble-self-bg);
+  color: var(--bubble-self-text);
   -webkit-backdrop-filter: blur(24px) saturate(140%);
   backdrop-filter: blur(24px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--bubble-self-border);
   box-shadow:
-    0 8px 32px -12px rgba(19, 29, 51, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
-}
-.dark .glass-self {
-  background: rgba(43, 53, 82, 0.6);
+    0 8px 32px -12px rgba(19, 29, 51, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 /* reflet spéculaire en haut de bulle */
 .glass-bubble {
@@ -116,10 +116,12 @@ body {
     background: #23262c;
   }
   .glass-self {
-    background: #1a2744;
+    background: #dbe3f0;
+    color: #18243f;
   }
   .dark .glass-self {
-    background: #2b3552;
+    background: #38415a;
+    color: #eaf0fa;
   }
 }
 @media (prefers-reduced-transparency: reduce) {
@@ -132,12 +134,14 @@ body {
     background: #23262c;
   }
   .glass-self {
-    background: #1a2744;
+    background: #dbe3f0;
+    color: #18243f;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
   .dark .glass-self {
-    background: #2b3552;
+    background: #38415a;
+    color: #eaf0fa;
   }
 }
 

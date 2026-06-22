@@ -18,7 +18,7 @@ type State =
   | "busy";
 
 const btnCls =
-  "w-full rounded-btnsm bg-navy py-3 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900";
+  "w-full rounded-btnsm bg-navy py-3 text-sm font-semibold text-navy-foreground disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900";
 const btnGhostCls =
   "w-full rounded-btnsm border border-sand-400 py-3 text-sm font-semibold text-night disabled:opacity-50 dark:border-anthracite-600 dark:text-[#ECE7DD]";
 
@@ -197,7 +197,7 @@ export function NotificationsPanel({
         )}
 
         {state === "unsupported" && (
-          <p className="text-[13px] text-amberink dark:text-[#E0B978]">
+          <p className="text-[13px] text-warn dark:text-warn-darkInk">
             {t("notifications.unsupported")}
           </p>
         )}
@@ -209,7 +209,7 @@ export function NotificationsPanel({
         )}
 
         {state === "denied" && (
-          <p className="text-[13px] text-amberink dark:text-[#E0B978]">
+          <p className="text-[13px] text-warn dark:text-warn-darkInk">
             {t("notifications.denied")}
           </p>
         )}
@@ -238,7 +238,7 @@ export function NotificationsPanel({
         )}
 
         {error && (
-          <p className="mt-3 text-[12px] text-clayred dark:text-[#E59B91]">
+          <p className="mt-3 text-[12px] text-danger dark:text-danger-darkInk">
             {error}
           </p>
         )}

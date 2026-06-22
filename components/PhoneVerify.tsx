@@ -94,7 +94,7 @@ export function PhoneVerify() {
             <AsyncButton
               disabled={busy || phone.trim().length < 8}
               onClick={send}
-              className="rounded-btnsm bg-navy py-3 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
+              className="rounded-btnsm bg-navy py-3 text-sm font-semibold text-navy-foreground disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
             >
               {t("sendCode")}
             </AsyncButton>
@@ -116,7 +116,7 @@ export function PhoneVerify() {
             <AsyncButton
               disabled={busy || code.length !== 6}
               onClick={verify}
-              className="rounded-btnsm bg-gold py-3 text-sm font-semibold text-night disabled:opacity-50"
+              className="rounded-btnsm bg-navy py-3 text-sm font-semibold text-navy-foreground disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
             >
               {t("verify")}
             </AsyncButton>

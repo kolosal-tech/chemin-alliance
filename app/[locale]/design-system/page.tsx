@@ -51,7 +51,7 @@ export default async function DesignSystemPage({
             <button className="rounded-btn px-3.5 py-3 text-sm font-semibold text-gold-deep dark:text-gold-light">
               {t("tertiary")}
             </button>
-            <button className="rounded-btn border border-[#D8B6B0] px-5 py-3 text-sm font-semibold text-danger dark:border-[#5A3A34]">
+            <button className="rounded-btn border border-danger-border px-5 py-3 text-sm font-semibold text-danger dark:border-danger-darkBorder dark:text-danger-darkInk">
               {t("destructive")}
             </button>
           </div>
@@ -102,16 +102,16 @@ export default async function DesignSystemPage({
         <section className={card}>
           <span className={label}>{t("badges")}</span>
           <div className="flex flex-wrap gap-2.5">
-            <span className="flex items-center gap-1.5 rounded-[9px] bg-[#EAF0EB] px-3 py-2 text-xs font-semibold text-sage dark:bg-[#1B2A20] dark:text-[#7FA98C]">
+            <span className="flex items-center gap-1.5 rounded-[9px] bg-sage-surface px-3 py-2 text-xs font-semibold text-sage-ink dark:bg-sage-darkSurface dark:text-sage-darkInk">
               ✓ Vérifié
             </span>
             <span className="rounded-[9px] bg-navy px-3 py-2 text-xs font-semibold text-[#E8D9A8]">
               Évangélique
             </span>
-            <span className="rounded-[9px] bg-[#E7EBF1] px-3 py-2 text-xs font-semibold text-[#2A3550] dark:bg-[#222C42] dark:text-[#B9C6E0]">
+            <span className="rounded-[9px] bg-info-surface px-3 py-2 text-xs font-semibold text-info-ink dark:bg-info-darkSurface dark:text-info-darkInk">
               Catholique
             </span>
-            <span className="rounded-[9px] bg-[#F1EBD9] px-3 py-2 text-xs font-semibold text-gold-ink dark:bg-[#2C2818] dark:text-gold-light">
+            <span className="rounded-[9px] bg-gold-surface px-3 py-2 text-xs font-semibold text-gold-ink dark:bg-gold-darkSurface dark:text-gold-darkInk">
               Étape · Discernement
             </span>
             <span className="rounded-[9px] border border-gold/50 bg-gold/15 px-3 py-2 text-xs font-semibold text-gold-ink dark:text-[#E0C77A]">
@@ -145,13 +145,13 @@ export default async function DesignSystemPage({
         <section className={card}>
           <span className={label}>{t("toasts")}</span>
           <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-3 rounded-btn border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-3 text-[13.5px] text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
+            <div className="flex items-center gap-3 rounded-btn border border-sage-border bg-sage-surface px-4 py-3 text-[13.5px] text-sage-ink dark:border-sage-darkBorder dark:bg-sage-darkSurface dark:text-sage-darkInk">
               {t("toastSuccess")}
             </div>
-            <div className="flex items-center gap-3 rounded-btn border border-[#D4DAE4] bg-[#EAEDF2] px-4 py-3 text-[13.5px] text-[#2A3550] dark:border-[#2A3A56] dark:bg-[#1A2233] dark:text-[#B9C6E0]">
+            <div className="flex items-center gap-3 rounded-btn border border-info-border bg-info-surface px-4 py-3 text-[13.5px] text-info-ink dark:border-info-darkBorder dark:bg-info-darkSurface dark:text-info-darkInk">
               {t("toastInfo")}
             </div>
-            <div className="flex items-center gap-3 rounded-btn border border-[#EAD9A8] bg-[#FBF6E9] px-4 py-3 text-[13.5px] text-gold-ink dark:border-[#463A1F] dark:bg-[#272117] dark:text-[#E0C77A]">
+            <div className="flex items-center gap-3 rounded-btn border border-warn-border bg-warn-surface px-4 py-3 text-[13.5px] text-warn-ink dark:border-warn-darkBorder dark:bg-warn-darkSurface dark:text-warn-darkInk">
               {t("toastWarn")}
             </div>
           </div>
@@ -160,7 +160,7 @@ export default async function DesignSystemPage({
         {/* Message système */}
         <section className={card}>
           <span className={label}>{t("systemMsg")}</span>
-          <div className="flex gap-3 rounded-[14px] border border-[#EAD9A8] bg-[#FBF6E9] px-4 py-4 dark:border-[#463A1F] dark:bg-[#272117]">
+          <div className="flex gap-3 rounded-[14px] border border-warn-border bg-warn-surface px-4 py-4 dark:border-warn-darkBorder dark:bg-warn-darkSurface">
             <svg
               width="22"
               height="22"
@@ -175,21 +175,26 @@ export default async function DesignSystemPage({
                 width="14"
                 height="9"
                 rx="2"
-                stroke="#9A7B2E"
+                className="stroke-warn dark:stroke-warn-darkInk"
                 strokeWidth="1.7"
               />
               <path
                 d="M8 11V8a4 4 0 0 1 8 0v3"
-                stroke="#9A7B2E"
+                className="stroke-warn dark:stroke-warn-darkInk"
                 strokeWidth="1.7"
               />
-              <circle cx="12" cy="15.5" r="1.3" fill="#9A7B2E" />
+              <circle
+                cx="12"
+                cy="15.5"
+                r="1.3"
+                className="fill-warn dark:fill-warn-darkInk"
+              />
             </svg>
             <div>
-              <div className="mb-1 text-sm font-semibold text-gold-ink dark:text-[#E0C77A]">
+              <div className="mb-1 text-sm font-semibold text-warn-ink dark:text-warn-darkInk">
                 Coordonnées en attente
               </div>
-              <p className="text-[13px] leading-normal text-[#6F5C2E] dark:text-[#C2B488]">
+              <p className="text-[13px] leading-normal text-warn-ink dark:text-warn-darkInk">
                 Pour votre sécurité, le partage de coordonnées sera disponible à
                 la validation mutuelle de confiance, à l&apos;étape
                 Discernement.
