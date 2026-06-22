@@ -69,7 +69,7 @@ export async function ProfileShowcase({
         </div>
         <div className="min-w-0">
           <div className="flex items-center gap-1.5">
-            <span className="font-display text-[20px] text-night dark:text-[#ECE7DD]">
+            <span className="font-display text-[22px] text-night dark:text-[#ECE7DD]">
               {name}
             </span>
             {verified && (
@@ -85,34 +85,34 @@ export async function ProfileShowcase({
                 />
               </svg>
             )}
-            <span className="text-[14px] text-sand-600 dark:text-[#7E7A72]">
+            <span className="text-[16px] text-sand-600 dark:text-[#7E7A72]">
               · {age}
             </span>
           </div>
-          <p className="lbl mt-1 text-[10px] text-gold-deep dark:text-gold-light">
+          <p className="lbl mt-1 text-[11px] text-gold-deep dark:text-gold-light">
             {t("completion", { pct })}
           </p>
         </div>
       </div>
 
       <div className="mt-4 flex flex-wrap gap-1.5">
-        <span className="rounded-[7px] bg-[#E7EBF1] px-2 py-0.5 text-[11.5px] font-semibold text-[#2A3550] dark:bg-[#222C42] dark:text-[#B9C6E0]">
+        <span className="rounded-[7px] bg-[#E7EBF1] px-2 py-0.5 text-[13px] font-semibold text-[#2A3550] dark:bg-[#222C42] dark:text-[#B9C6E0]">
           {t("denomination")}
         </span>
-        <span className="rounded-[7px] bg-[#F1EBD9] px-2 py-0.5 text-[11.5px] font-semibold text-gold-ink dark:bg-[#2C2818] dark:text-gold-light">
+        <span className="rounded-[7px] bg-[#F1EBD9] px-2 py-0.5 text-[13px] font-semibold text-gold-ink dark:bg-[#2C2818] dark:text-gold-light">
           {t("intention")}
         </span>
       </div>
 
       <div className="mt-4 flex items-center gap-2 rounded-btnsm border border-sand-200 bg-canvas px-3 py-2.5 dark:border-anthracite-600 dark:bg-anthracite-900">
-        <span className="flex h-7 w-7 flex-none items-center justify-center rounded-full bg-navy/8 text-[13px] font-bold text-navy dark:bg-gold-light/10 dark:text-gold-light">
+        <span className="flex h-7 w-7 flex-none items-center justify-center rounded-full bg-navy/8 text-[15px] font-bold text-navy dark:bg-gold-light/10 dark:text-gold-light">
           {stage}
         </span>
         <div className="min-w-0">
-          <span className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
+          <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
             {t("stageLabel")}
           </span>
-          <p className="text-[14px] font-semibold text-night dark:text-[#ECE7DD]">
+          <p className="text-[16px] font-semibold text-night dark:text-[#ECE7DD]">
             {t(`stage.${stage}`)}
           </p>
         </div>

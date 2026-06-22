@@ -32,14 +32,14 @@ function SectionHeading({
         align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-2xl"
       }
     >
-      <p className="lbl text-[11.5px] text-gold-deep dark:text-gold-light">
+      <p className="lbl text-[13px] text-gold-deep dark:text-gold-light">
         {kicker}
       </p>
       <h2 className="mt-3 font-display text-3xl leading-tight text-night sm:text-4xl dark:text-[#ECE7DD]">
         {title}
       </h2>
       {subtitle && (
-        <p className="mt-4 text-[16px] leading-relaxed text-warmgray dark:text-[#A8A296]">
+        <p className="mt-4 text-[18px] leading-relaxed text-warmgray dark:text-[#A8A296]">
           {subtitle}
         </p>
       )}
@@ -55,7 +55,7 @@ export async function PressLogos() {
   return (
     <section className="border-b border-sand-300/50 dark:border-anthracite-800">
       <div className="mx-auto max-w-6xl px-5 py-10 sm:px-6">
-        <p className="lbl mb-6 text-center text-[11px] text-sand-600 dark:text-[#7E7A72]">
+        <p className="lbl mb-6 text-center text-[12px] text-sand-600 dark:text-[#7E7A72]">
           {t("kicker")}
         </p>
         <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 sm:gap-x-14">
@@ -94,7 +94,7 @@ export async function WhyUs() {
               <h3 className="mt-5 font-display text-xl text-night dark:text-[#ECE7DD]">
                 {t(`items.${w.id}.title`)}
               </h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+              <p className="mt-2 text-[17px] leading-relaxed text-warmgray dark:text-[#9A958B]">
                 {t(`items.${w.id}.body`)}
               </p>
             </div>
@@ -137,8 +137,8 @@ export async function JourneySteps() {
 
         {/* Jauge de progression - façon Duolingo (décorative ici) */}
         <div className="mx-auto mt-10 max-w-md">
-          <div className="mb-2 flex items-center justify-between text-[12px] font-semibold text-warmgray dark:text-[#9A958B]">
-            <span className="lbl text-[11px]">{t("progressLabel")}</span>
+          <div className="mb-2 flex items-center justify-between text-[13px] font-semibold text-warmgray dark:text-[#9A958B]">
+            <span className="lbl text-[12px]">{t("progressLabel")}</span>
             <span>1 / {journeySteps.length}</span>
           </div>
           <div className="h-2.5 overflow-hidden rounded-full bg-sand-300 dark:bg-anthracite-700">
@@ -162,12 +162,12 @@ export async function JourneySteps() {
                     className="h-[22px] w-[22px]"
                     strokeWidth={1.7}
                   />
-                  <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-surface bg-gold text-[11px] font-bold text-night dark:border-anthracite-800">
+                  <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-surface bg-gold text-[12px] font-bold text-night dark:border-anthracite-800">
                     {s.n}
                   </span>
                 </span>
                 <div>
-                  <span className="lbl text-[10.5px] text-gold-deep dark:text-gold-light">
+                  <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
                     {t("stepLabel", { n: s.n })}
                   </span>
                   <h3 className="font-display text-lg text-night dark:text-[#ECE7DD]">
@@ -175,7 +175,7 @@ export async function JourneySteps() {
                   </h3>
                 </div>
               </div>
-              <p className="mt-4 text-[15px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+              <p className="mt-4 text-[17px] leading-relaxed text-warmgray dark:text-[#9A958B]">
                 {t(`steps.${s.id}.body`)}
               </p>
             </li>
@@ -203,7 +203,7 @@ export async function ValuesGrid() {
             <h3 className="mt-5 font-display text-xl text-night dark:text-[#ECE7DD]">
               {t(`${v.id}.title`)}
             </h3>
-            <p className="mt-2 text-[15px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+            <p className="mt-2 text-[17px] leading-relaxed text-warmgray dark:text-[#9A958B]">
               {t(`${v.id}.body`)}
             </p>
           </div>
@@ -230,11 +230,11 @@ export async function AppDownloadSection() {
           className="-right-10 -bottom-10 opacity-100"
         />
         <div className="relative max-w-xl">
-          <p className="lbl text-[11.5px] text-gold-light">{t("kicker")}</p>
+          <p className="lbl text-[13px] text-gold-light">{t("kicker")}</p>
           <h2 className="mt-3 font-display text-3xl leading-tight sm:text-4xl">
             {t("title")}
           </h2>
-          <p className="mt-4 text-[16px] leading-relaxed text-[#C7CBD6]">
+          <p className="mt-4 text-[18px] leading-relaxed text-[#C7CBD6]">
             {t("body")}
           </p>
 
@@ -285,7 +285,7 @@ export async function AppDownloadSection() {
 /* --------------------------------------------------------------- */
 function FooterLink({ href, label }: { href: string; label: string }) {
   const cls =
-    "text-[15px] text-warmgray transition-colors hover:text-night dark:text-[#9A958B] dark:hover:text-[#ECE7DD]";
+    "text-[17px] text-warmgray transition-colors hover:text-night dark:text-[#9A958B] dark:hover:text-[#ECE7DD]";
   // mailto / externe
   if (href.startsWith("mailto:") || href.startsWith("http")) {
     return (
@@ -317,7 +317,7 @@ export async function MarketingFooter() {
       <div className="mx-auto max-w-6xl px-5 py-14 sm:px-6">
         <div className="grid gap-10 md:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div className="max-w-xs">
-            <div className="flex items-center gap-2.5 font-display text-[18px] font-semibold text-night dark:text-[#ECE7DD]">
+            <div className="flex items-center gap-2.5 font-display text-[20px] font-semibold text-night dark:text-[#ECE7DD]">
               <span
                 aria-hidden
                 className="flex h-9 w-9 items-center justify-center rounded-[11px] bg-navy text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
@@ -326,14 +326,14 @@ export async function MarketingFooter() {
               </span>
               Chemin d&apos;Alliance
             </div>
-            <p className="mt-4 text-[15px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+            <p className="mt-4 text-[17px] leading-relaxed text-warmgray dark:text-[#9A958B]">
               {t("tagline")}
             </p>
           </div>
 
           {footerNav.map((col) => (
             <div key={col.section}>
-              <p className="lbl mb-4 text-[11px] text-sand-600 dark:text-[#7E7A72]">
+              <p className="lbl mb-4 text-[12px] text-sand-600 dark:text-[#7E7A72]">
                 {t(`sections.${col.section}`)}
               </p>
               <ul className="flex flex-col gap-3">
@@ -347,7 +347,7 @@ export async function MarketingFooter() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-sand-300/70 pt-6 text-[14px] text-sand-600 sm:flex-row sm:items-center sm:justify-between dark:border-anthracite-700 dark:text-[#7E7A72]">
+        <div className="mt-12 flex flex-col gap-3 border-t border-sand-300/70 pt-6 text-[16px] text-sand-600 sm:flex-row sm:items-center sm:justify-between dark:border-anthracite-700 dark:text-[#7E7A72]">
           <p>
             © {year} Chemin d&apos;Alliance. {t("rights")}
           </p>

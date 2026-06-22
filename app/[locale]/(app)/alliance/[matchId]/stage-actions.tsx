@@ -126,7 +126,7 @@ export function StageActions({
               onClick={() => setOpenQ(openQ === q.id ? null : q.id)}
               className="flex w-full items-center gap-2.5 rounded-btn border border-sand-200 bg-surface px-3.5 py-3 text-left dark:border-anthracite-600 dark:bg-anthracite-800"
             >
-              <span className="flex-1 font-display text-[14.5px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
+              <span className="flex-1 font-display text-[16px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
                 {q.text}
               </span>
               {answered.has(q.id) ? (
@@ -203,7 +203,7 @@ export function StageActions({
       {notice && (
         <p
           role="status"
-          className="mt-3 rounded-btn border border-[#D4DAE4] bg-[#EAEDF2] px-3.5 py-2.5 text-[14px] text-[#2A3550] dark:border-[#2A3A56] dark:bg-[#1A2233] dark:text-[#B9C6E0]"
+          className="mt-3 rounded-btn border border-[#D4DAE4] bg-[#EAEDF2] px-3.5 py-2.5 text-[16px] text-[#2A3550] dark:border-[#2A3A56] dark:bg-[#1A2233] dark:text-[#B9C6E0]"
         >
           {notice}
         </p>
@@ -219,7 +219,7 @@ export function StageActions({
           </AsyncButton>
         )}
         {ce === "ACCEPTED" && (
-          <p className="rounded-btn bg-[#EAF0EB] px-3.5 py-2.5 text-[14px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
+          <p className="rounded-btn bg-[#EAF0EB] px-3.5 py-2.5 text-[16px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
             {t("contactAccepted")}
           </p>
         )}
@@ -252,7 +252,7 @@ export function StageActions({
           <button
             type="button"
             onClick={() => setExitOpen(true)}
-            className="flex items-center gap-1.5 text-[14px] text-sand-500 dark:text-[#7E7A72]"
+            className="flex items-center gap-1.5 text-[16px] text-sand-500 dark:text-[#7E7A72]"
           >
             <svg
               width="14"
@@ -273,10 +273,10 @@ export function StageActions({
           </button>
         ) : (
           <div className="w-full rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
-            <h3 className="font-display text-[19px] text-night dark:text-[#ECE7DD]">
+            <h3 className="font-display text-[21px] text-night dark:text-[#ECE7DD]">
               {t("exitTitle")}
             </h3>
-            <p className="mt-1 text-[13.5px] text-warmgray dark:text-[#9A958B]">
+            <p className="mt-1 text-[15px] text-warmgray dark:text-[#9A958B]">
               {t("exitBody")}
             </p>
             <div className="mt-3 flex flex-col gap-1.5">
@@ -285,7 +285,7 @@ export function StageActions({
                   key={tpl}
                   type="button"
                   onClick={() => setExitText(tpl)}
-                  className={`rounded-btn border px-3 py-2.5 text-left text-[13.5px] leading-snug ${
+                  className={`rounded-btn border px-3 py-2.5 text-left text-[15px] leading-snug ${
                     exitText === tpl
                       ? "border-gold bg-[#FBF6E9] text-[#6F5C2E] dark:border-gold-light/60 dark:bg-[#272117] dark:text-[#C2B488]"
                       : "border-sand-200 text-[#3A372F] dark:border-anthracite-600 dark:text-[#CFCAC0]"
@@ -300,7 +300,7 @@ export function StageActions({
                 value={exitReason}
                 onChange={(e) => setExitReason(e.target.value)}
                 aria-label={ta("exit.reasonLabel")}
-                className="flex-1 rounded-btnsm border border-sand-300 bg-surface px-2.5 py-2.5 text-[13.5px] text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+                className="flex-1 rounded-btnsm border border-sand-300 bg-surface px-2.5 py-2.5 text-[15px] text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
               >
                 <option value="no_alignment">
                   {ta("exit.reasonNoAlignment")}
@@ -314,7 +314,7 @@ export function StageActions({
               <AsyncButton
                 onClick={aiDraft}
                 disabled={draftBusy}
-                className="rounded-btnsm border border-gold px-3 py-2.5 text-[13.5px] font-semibold text-gold-ink disabled:opacity-60 dark:border-gold-light/60 dark:text-gold-light"
+                className="rounded-btnsm border border-gold px-3 py-2.5 text-[15px] font-semibold text-gold-ink disabled:opacity-60 dark:border-gold-light/60 dark:text-gold-light"
               >
                 {ta("exit.generate")}
               </AsyncButton>

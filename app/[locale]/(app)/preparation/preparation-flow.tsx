@@ -89,19 +89,19 @@ export function PreparationFlow({
   return (
     <main className="relative px-5 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <SacredMotif variant="tree" className="right-[-120px] top-[40px]" />
-      <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
+      <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
         {t("title")}
       </span>
-      <h1 className="mb-1 mt-1 font-display text-[26px] leading-tight text-night dark:text-[#ECE7DD]">
+      <h1 className="mb-1 mt-1 font-display text-[29px] leading-tight text-night dark:text-[#ECE7DD]">
         {t("subtitle")}
       </h1>
 
       {phase === "intro" && (
         <section className="mt-5">
-          <p className="text-[16px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+          <p className="text-[18px] leading-relaxed text-warmgray dark:text-[#9A958B]">
             {t("intro")}
           </p>
-          <label className="mt-5 flex items-start gap-3 rounded-card border border-sand-200 bg-surface p-4 text-[13.5px] leading-normal text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
+          <label className="mt-5 flex items-start gap-3 rounded-card border border-sand-200 bg-surface p-4 text-[15px] leading-normal text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
             <input
               type="checkbox"
               checked={consent}
@@ -132,7 +132,7 @@ export function PreparationFlow({
             ))}
           </div>
           <div className="rounded-cardlg border border-sand-200 bg-surface p-5 dark:border-anthracite-600 dark:bg-anthracite-800">
-            <p className="font-display text-[19px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
+            <p className="font-display text-[21px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
               {questions[step].text}
             </p>
             <textarea
@@ -184,7 +184,7 @@ export function PreparationFlow({
       {phase === "analyzing" && (
         <p
           role="status"
-          className="mt-8 text-center font-display text-[18px] italic text-warmgray dark:text-[#9A958B]"
+          className="mt-8 text-center font-display text-[20px] italic text-warmgray dark:text-[#9A958B]"
         >
           {t("analyzing")}
         </p>
@@ -193,10 +193,10 @@ export function PreparationFlow({
       {phase === "portrait" && portrait && (
         <section className="mt-5 pb-8">
           <div className="mb-2 flex items-baseline justify-between">
-            <h2 className="lbl text-[10.5px] text-gold-deep dark:text-gold-light">
+            <h2 className="lbl text-[12px] text-gold-deep dark:text-gold-light">
               {t("portraitTitle")}
             </h2>
-            <span className="text-[11.5px] text-sand-500 dark:text-[#65625B]">
+            <span className="text-[13px] text-sand-500 dark:text-[#65625B]">
               {t("neverScore")}
             </span>
           </div>
@@ -214,7 +214,7 @@ export function PreparationFlow({
                       {t(`dim${d.charAt(0).toUpperCase() + d.slice(1)}`)}
                     </span>
                     <span
-                      className={`rounded-[8px] px-2.5 py-1 text-[12px] font-semibold ${STATUS_STYLE[dim.status]}`}
+                      className={`rounded-[8px] px-2.5 py-1 text-[13px] font-semibold ${STATUS_STYLE[dim.status]}`}
                     >
                       {t(
                         `status${dim.status.charAt(0).toUpperCase() + dim.status.slice(1)}`,
@@ -222,7 +222,7 @@ export function PreparationFlow({
                     </span>
                   </div>
                   {dim.note && (
-                    <p className="mt-1.5 text-[13.5px] leading-snug text-warmgray dark:text-[#9A958B]">
+                    <p className="mt-1.5 text-[15px] leading-snug text-warmgray dark:text-[#9A958B]">
                       {dim.note}
                     </p>
                   )}
@@ -232,13 +232,13 @@ export function PreparationFlow({
           </div>
 
           <div className="mt-4 rounded-cardlg bg-night p-5 text-[#F2EFE8] dark:border dark:border-[#283655] dark:bg-[#1B2740]">
-            <p className="font-display text-[17px] italic leading-relaxed text-[#D7DCE6]">
+            <p className="font-display text-[19px] italic leading-relaxed text-[#D7DCE6]">
               {portrait.overall === "matching_ready" && t("overallReady")}
               {portrait.overall === "growth_path" && t("overallGrowth")}
               {portrait.overall === "human_support" && t("overallHuman")}
             </p>
             {portrait.word && (
-              <p className="mt-3 text-[14.5px] leading-relaxed text-[#B9C0CE]">
+              <p className="mt-3 text-[16px] leading-relaxed text-[#B9C0CE]">
                 {portrait.word}
               </p>
             )}
@@ -255,7 +255,7 @@ export function PreparationFlow({
               </Link>
               <Link
                 href="/preparation/modules"
-                className="mt-2 block py-2 text-center text-[13.5px] text-warmgray underline dark:text-[#9A958B]"
+                className="mt-2 block py-2 text-center text-[15px] text-warmgray underline dark:text-[#9A958B]"
               >
                 {t("modulesCta")}
               </Link>
@@ -264,10 +264,10 @@ export function PreparationFlow({
 
           {portrait.overall === "growth_path" && (
             <div className="mt-4 rounded-cardlg border border-gold/40 bg-[#FBF6E9] p-5 dark:border-[#463A1F] dark:bg-[#272117]">
-              <h3 className="font-display text-[19px] text-gold-ink dark:text-[#E0C77A]">
+              <h3 className="font-display text-[21px] text-gold-ink dark:text-[#E0C77A]">
                 {t("growthTitle")}
               </h3>
-              <p className="mt-1.5 text-[14px] leading-normal text-[#6F5C2E] dark:text-[#C2B488]">
+              <p className="mt-1.5 text-[16px] leading-normal text-[#6F5C2E] dark:text-[#C2B488]">
                 {t("growthBody")}
               </p>
               <Link
@@ -285,7 +285,7 @@ export function PreparationFlow({
               {/* Jamais bloquant : la personne reste libre d'avancer. */}
               <Link
                 href="/suggestions"
-                className="mt-2 block py-2 text-center text-[13.5px] text-warmgray underline dark:text-[#9A958B]"
+                className="mt-2 block py-2 text-center text-[15px] text-warmgray underline dark:text-[#9A958B]"
               >
                 {t("growthSkip")}
               </Link>
@@ -294,10 +294,10 @@ export function PreparationFlow({
 
           {portrait.overall === "human_support" && (
             <div className="mt-4 rounded-cardlg border border-[#C9D2E4] bg-[#EEF1F7] p-5 dark:border-[#2A3550] dark:bg-[#171F2E]">
-              <h3 className="font-display text-[19px] text-[#2A3550] dark:text-[#B9C6E0]">
+              <h3 className="font-display text-[21px] text-[#2A3550] dark:text-[#B9C6E0]">
                 {t("humanTitle")}
               </h3>
-              <p className="mt-1.5 text-[14px] leading-normal text-[#46506A] dark:text-[#9FAAC4]">
+              <p className="mt-1.5 text-[16px] leading-normal text-[#46506A] dark:text-[#9FAAC4]">
                 {t("humanBody")}
               </p>
               <Link
@@ -316,13 +316,13 @@ export function PreparationFlow({
                 setPhase("interview");
                 setStep(0);
               }}
-              className="flex-1 rounded-btnsm border border-sand-400 py-3 text-[14px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
+              className="flex-1 rounded-btnsm border border-sand-400 py-3 text-[16px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
             >
               {t("redo")}
             </button>
             <AsyncButton
               onClick={revoke}
-              className="flex-1 rounded-btnsm border border-[#D8B6B0] py-3 text-[14px] font-medium text-danger dark:border-[#5A3A34]"
+              className="flex-1 rounded-btnsm border border-[#D8B6B0] py-3 text-[16px] font-medium text-danger dark:border-[#5A3A34]"
             >
               {t("revoke")}
             </AsyncButton>

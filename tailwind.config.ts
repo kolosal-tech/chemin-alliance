@@ -96,14 +96,19 @@ const config: Config = {
         sans: ["var(--font-hanken)", "system-ui", "sans-serif"],
         mono: ["var(--font-spline-mono)", "monospace"],
       },
-      // Lisibilite : +1px sur les tailles de corps/labels (echelle Tailwind),
-      // interlignes conserves pour ne pas toucher au rythme vertical (espacements).
-      // Les titres (xl et au-dessus) gardent les valeurs Tailwind par defaut.
+      // Echelle typo +12% (facon maquette sur grand iPhone). Couvre toute
+      // l'echelle, titres compris ; interlignes proportionnels. Les tailles
+      // arbitraires text-[Npx] sont bumpees du meme facteur (x1.12).
       fontSize: {
-        xs: ["13px", "16px"], // etait 12px
-        sm: ["15px", "20px"], // etait 14px
-        base: ["17px", "24px"], // etait 16px
-        lg: ["19px", "28px"], // etait 18px
+        xs: ["15px", "18px"], // 13 -> 15
+        sm: ["17px", "23px"], // 15 -> 17
+        base: ["19px", "27px"], // 17 -> 19
+        lg: ["21px", "31px"], // 19 -> 21
+        xl: ["22px", "30px"], // 20 -> 22
+        "2xl": ["27px", "34px"], // 24 -> 27
+        "3xl": ["34px", "40px"], // 30 -> 34
+        "4xl": ["40px", "44px"], // 36 -> 40
+        "5xl": ["54px", "1"], // 48 -> 54
       },
       borderRadius: {
         card: "16px",

@@ -85,7 +85,7 @@ export default async function AlliancePage({
           </svg>
         </Link>
         <div>
-          <div className="lbl text-[10px] text-gold-deep dark:text-gold-light">
+          <div className="lbl text-[11px] text-gold-deep dark:text-gold-light">
             {t("alliance.yourPath")}
           </div>
           <div className="font-display text-lg text-night dark:text-[#ECE7DD]">
@@ -93,7 +93,7 @@ export default async function AlliancePage({
           </div>
           <Link
             href={`/alliance/${match.id}/profile`}
-            className="mt-0.5 inline-flex items-center gap-1 text-[12.5px] text-gold-deep underline-offset-2 hover:underline dark:text-gold-light"
+            className="mt-0.5 inline-flex items-center gap-1 text-[14px] text-gold-deep underline-offset-2 hover:underline dark:text-gold-light"
           >
             {t("alliance.viewProfile")}
           </Link>
@@ -104,24 +104,24 @@ export default async function AlliancePage({
 
       <section className="mb-4 rounded-card bg-night p-4.5 p-5 text-[#F2EFE8] dark:border dark:border-[#283655] dark:bg-[#1B2740]">
         <div className="flex items-center justify-between">
-          <span className="lbl text-[10px] text-gold dark:text-gold-light">
+          <span className="lbl text-[11px] text-gold dark:text-gold-light">
             {t("stages.stageInProgress", { n: num })}
           </span>
-          <span className="text-[12px] text-[#8A92A6]">
+          <span className="text-[13px] text-[#8A92A6]">
             {t("stages.sinceDays", { days: sinceDays })}
           </span>
         </div>
-        <div className="my-1.5 font-display text-[26px]">
+        <div className="my-1.5 font-display text-[29px]">
           {t(`stages.${match.stage}`)}
         </div>
-        <p className="text-[14px] leading-normal text-[#B9C0CE]">
+        <p className="text-[16px] leading-normal text-[#B9C0CE]">
           {match.stage !== "CLOSED" ? t(`stages.desc${match.stage}`) : ""}
         </p>
       </section>
 
       {questions.length > 0 && (
         <>
-          <h2 className="lbl mb-2.5 text-[10.5px] text-gold-deep dark:text-gold-light">
+          <h2 className="lbl mb-2.5 text-[12px] text-gold-deep dark:text-gold-light">
             {t("alliance.questionsTitle")}
           </h2>
           <StageActions
@@ -142,16 +142,16 @@ export default async function AlliancePage({
       )}
 
       <div className="mb-1.5 mt-5 flex items-baseline justify-between">
-        <h2 className="lbl text-[10.5px] text-gold-deep dark:text-gold-light">
+        <h2 className="lbl text-[12px] text-gold-deep dark:text-gold-light">
           {t("alliance.topicsTitle")}
         </h2>
-        <span className="text-[11.5px] text-sand-500 dark:text-[#65625B]">
+        <span className="text-[13px] text-sand-500 dark:text-[#65625B]">
           {t("alliance.neverScore")}
         </span>
       </div>
       <div className="flex items-center gap-2 rounded-[14px] border border-sand-200 bg-surface p-2.5 dark:border-anthracite-600 dark:bg-anthracite-800">
         <Radar axes={axes} />
-        <ul className="flex flex-1 flex-col gap-1.5 text-[12.5px]">
+        <ul className="flex flex-1 flex-col gap-1.5 text-[14px]">
           {topics.map((topic) => (
             <li key={topic.key} className="flex items-center gap-1.5">
               <span

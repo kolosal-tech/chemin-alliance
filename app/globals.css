@@ -9,6 +9,15 @@
   color-scheme: dark;
 }
 
+/* Echelle UI : +12% facon maquette. Le design de reference est dessine en
+   375px ; les grands iPhone (Pro Max ~440px) etiraient la colonne donc tout
+   paraissait plus petit. La racine en rem agrandit les espacements (p/m/gap,
+   hauteurs) ; les tailles de texte sont bumpees en parallele (tailwind
+   fontSize + classes arbitraires text-[Npx]). */
+html {
+  font-size: 112.5%;
+}
+
 /* Jamais de scroll horizontal : les motifs décoratifs débordent le viewport
    (SacredMotif en right/left négatifs) -> on les rogne au lieu d'élargir la page. */
 html,
@@ -27,7 +36,7 @@ body {
   input,
   select,
   textarea {
-    font-size: 16px !important;
+    font-size: 17px !important;
   }
 }
 /* Mode jour : fond beige chaud (canvas) pour que les cartes claires (surface)
@@ -152,7 +161,7 @@ body {
    ============================================================ */
 :root {
   /* Hauteur réelle de la bottom-nav mobile (padding bas des pages app). */
-  --bottom-nav-h: 60px;
+  --bottom-nav-h: 70px;
   /* Teinte bleutée « goutte d'eau » des bulles envoyées (light). */
   --bubble-self-bg: rgba(86, 124, 186, 0.2);
   --bubble-self-border: rgba(86, 124, 186, 0.4);

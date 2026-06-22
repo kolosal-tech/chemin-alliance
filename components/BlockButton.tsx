@@ -81,24 +81,24 @@ export function BlockButton({
               className="w-full max-w-sm rounded-cardlg border border-sand-200 bg-cream p-5 shadow-[0_20px_60px_-15px_rgba(19,29,51,0.5)] dark:border-anthracite-600 dark:bg-anthracite-850"
               onClick={(e) => e.stopPropagation()}
             >
-              <h3 className="font-display text-[19px] text-night dark:text-[#ECE7DD]">
+              <h3 className="font-display text-[21px] text-night dark:text-[#ECE7DD]">
                 {t("confirmTitle", { name: targetName })}
               </h3>
-              <p className="mt-2 text-[14.5px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+              <p className="mt-2 text-[16px] leading-relaxed text-warmgray dark:text-[#9A958B]">
                 {t("confirmBody")}
               </p>
-              <p className="mt-2 text-[12.5px] text-sage">{t("free")}</p>
+              <p className="mt-2 text-[14px] text-sage">{t("free")}</p>
               <div className="mt-5 flex gap-2.5">
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="flex-1 rounded-btnsm border border-sand-400 py-3 text-[14px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
+                  className="flex-1 rounded-btnsm border border-sand-400 py-3 text-[16px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
                 >
                   {t("cancel")}
                 </button>
                 <AsyncButton
                   onClick={block}
-                  className="flex-1 rounded-btnsm bg-danger py-3 text-[14px] font-semibold text-white disabled:opacity-50"
+                  className="flex-1 rounded-btnsm bg-danger py-3 text-[16px] font-semibold text-white disabled:opacity-50"
                 >
                   {t("confirm")}
                 </AsyncButton>

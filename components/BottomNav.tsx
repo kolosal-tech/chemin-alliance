@@ -83,7 +83,7 @@ export function BottomNav({ married = false }: { married?: boolean }) {
         className="hidden items-center gap-2.5 px-6 pb-8 pt-9 lg:flex"
       >
         <span aria-hidden className="inline-block h-px w-[22px] bg-gold" />
-        <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
+        <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
           {tc("appName")}
         </span>
       </Link>
@@ -95,7 +95,7 @@ export function BottomNav({ married = false }: { married?: boolean }) {
               key={tab.href}
               href={tab.href}
               aria-current={active ? "page" : undefined}
-              className={`relative flex min-w-[60px] flex-col items-center gap-0.5 rounded-btn px-2 py-1.5 text-[11px] font-medium lg:min-w-0 lg:flex-row lg:gap-3 lg:px-4 lg:py-3 lg:text-sm ${
+              className={`relative flex min-w-[60px] flex-col items-center gap-0.5 rounded-btn px-2 py-1.5 text-[12px] font-medium lg:min-w-0 lg:flex-row lg:gap-3 lg:px-4 lg:py-3 lg:text-sm ${
                 active
                   ? "nav-active text-gold-deep dark:text-[#C0AA6E]"
                   : "text-warmgray hover:lg:bg-sand-100/60 dark:text-[#9A958B] dark:hover:lg:bg-anthracite-700/60"
@@ -117,7 +117,7 @@ export function BottomNav({ married = false }: { married?: boolean }) {
                 />
               </svg>
               {tab.key === "messages" && unread > 0 && (
-                <span className="absolute right-2 top-0.5 min-w-[16px] rounded-full bg-[#C0392B] px-1 text-center text-[10px] font-bold leading-[15px] text-white lg:static lg:ml-auto lg:self-center">
+                <span className="absolute right-2 top-0.5 min-w-[16px] rounded-full bg-[#C0392B] px-1 text-center text-[11px] font-bold leading-[15px] text-white lg:static lg:ml-auto lg:self-center">
                   {unread > 9 ? "9+" : unread}
                 </span>
               )}

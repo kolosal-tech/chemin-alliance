@@ -18,18 +18,18 @@ export default async function SafetyPage({
       <h1 className="font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("pageTitle")}
       </h1>
-      <p className="mt-2 text-[14.5px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+      <p className="mt-2 text-[16px] leading-relaxed text-warmgray dark:text-[#9A958B]">
         {t("pageDesc")}
       </p>
 
-      <h2 className="lbl mb-2 mt-5 text-[10.5px] text-gold-deep dark:text-gold-light">
+      <h2 className="lbl mb-2 mt-5 text-[12px] text-gold-deep dark:text-gold-light">
         {t("redFlagsTitle")}
       </h2>
       <ul className="flex flex-col gap-2">
         {RED_FLAGS.map((k) => (
           <li
             key={k}
-            className="flex items-start gap-2.5 rounded-card border border-sand-200 bg-surface p-3.5 text-[14px] text-[#3A372F] dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#CFCAC0]"
+            className="flex items-start gap-2.5 rounded-card border border-sand-200 bg-surface p-3.5 text-[16px] text-[#3A372F] dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#CFCAC0]"
           >
             <span aria-hidden className="text-danger">
               ⚑
@@ -39,14 +39,14 @@ export default async function SafetyPage({
         ))}
       </ul>
 
-      <h2 className="lbl mb-2 mt-5 text-[10.5px] text-gold-deep dark:text-gold-light">
+      <h2 className="lbl mb-2 mt-5 text-[12px] text-gold-deep dark:text-gold-light">
         {t("stepsTitle")}
       </h2>
       <ol className="flex flex-col gap-2">
         {STEPS.map((k, i) => (
           <li
             key={k}
-            className="flex items-start gap-2.5 rounded-card border border-sand-200 bg-surface p-3.5 text-[14px] text-[#3A372F] dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#CFCAC0]"
+            className="flex items-start gap-2.5 rounded-card border border-sand-200 bg-surface p-3.5 text-[16px] text-[#3A372F] dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#CFCAC0]"
           >
             <span className="font-display text-gold-deep dark:text-gold-light">
               {i + 1}
@@ -56,7 +56,7 @@ export default async function SafetyPage({
         ))}
       </ol>
 
-      <p className="mt-5 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-3 text-[13.5px] leading-normal text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
+      <p className="mt-5 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-3 text-[15px] leading-normal text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
         {t("reminder")}
       </p>
     </main>

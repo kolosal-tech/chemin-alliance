@@ -53,7 +53,7 @@ export function InstallButton() {
 
   if (installed) {
     return (
-      <span className="inline-flex items-center justify-center gap-2 rounded-btnlg border border-sage/40 bg-sage/10 px-6 py-4 text-[16px] font-semibold text-sage">
+      <span className="inline-flex items-center justify-center gap-2 rounded-btnlg border border-sage/40 bg-sage/10 px-6 py-4 text-[18px] font-semibold text-sage">
         <Icon name="check" className="h-[18px] w-[18px]" strokeWidth={2.2} />
         {t("installed")}
       </span>
@@ -64,7 +64,7 @@ export function InstallButton() {
     <AsyncButton
       onClick={install}
       disabled={!deferred}
-      className="inline-flex items-center justify-center gap-2 rounded-btnlg bg-gold px-6 py-4 text-[16px] font-semibold text-night transition-colors hover:bg-gold-deep hover:text-cream disabled:cursor-default disabled:opacity-60 dark:bg-gold-light dark:hover:bg-gold"
+      className="inline-flex items-center justify-center gap-2 rounded-btnlg bg-gold px-6 py-4 text-[18px] font-semibold text-night transition-colors hover:bg-gold-deep hover:text-cream disabled:cursor-default disabled:opacity-60 dark:bg-gold-light dark:hover:bg-gold"
     >
       <Icon name="download" className="h-[18px] w-[18px]" strokeWidth={1.9} />
       {deferred ? t("install") : t("comingSoon")}

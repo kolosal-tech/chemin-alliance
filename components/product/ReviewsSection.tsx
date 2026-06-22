@@ -34,7 +34,7 @@ export async function ReviewsSection() {
 
   return (
     <section>
-      <p className="lbl text-[11px] text-gold-deep dark:text-gold-light">
+      <p className="lbl text-[12px] text-gold-deep dark:text-gold-light">
         {t("kicker")}
       </p>
       <h2 className="mt-2 font-display text-2xl text-night dark:text-[#ECE7DD]">
@@ -50,7 +50,7 @@ export async function ReviewsSection() {
               rating={r.rating}
               label={t("ratingLabel", { n: r.rating })}
             />
-            <p className="mt-3 flex-1 font-display text-[16px] italic leading-relaxed text-[#3A372F] dark:text-[#CFCAC0]">
+            <p className="mt-3 flex-1 font-display text-[18px] italic leading-relaxed text-[#3A372F] dark:text-[#CFCAC0]">
               « {t(`items.${r.id}.quote`)} »
             </p>
             <div className="mt-4 flex items-center gap-2.5">
@@ -58,7 +58,7 @@ export async function ReviewsSection() {
                 aria-hidden
                 className={`h-8 w-8 flex-none rounded-full bg-gradient-to-br ${r.gradient}`}
               />
-              <span className="text-[14px] font-semibold text-night dark:text-[#ECE7DD]">
+              <span className="text-[16px] font-semibold text-night dark:text-[#ECE7DD]">
                 {r.name}
               </span>
             </div>

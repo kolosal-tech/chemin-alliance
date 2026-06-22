@@ -79,7 +79,7 @@ export default async function BlogIndexPage({
   };
 
   const chip = (active: boolean) =>
-    `rounded-full px-4 py-2 text-[14px] font-semibold transition-colors ${
+    `rounded-full px-4 py-2 text-[16px] font-semibold transition-colors ${
       active
         ? "bg-navy text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
         : "border border-sand-300 bg-surface text-warmgray hover:text-night dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B] dark:hover:text-[#ECE7DD]"
@@ -90,13 +90,13 @@ export default async function BlogIndexPage({
       <MarketingHeader />
       <main>
         <section className="mx-auto max-w-3xl px-5 py-16 text-center sm:px-6 sm:py-20">
-          <p className="lbl text-[11.5px] text-gold-deep dark:text-gold-light">
+          <p className="lbl text-[13px] text-gold-deep dark:text-gold-light">
             {t("kicker")}
           </p>
           <h1 className="mt-4 font-display text-4xl leading-tight text-night sm:text-5xl dark:text-[#ECE7DD]">
             {t("title")}
           </h1>
-          <p className="mt-5 text-[17px] leading-relaxed text-warmgray dark:text-[#A8A296]">
+          <p className="mt-5 text-[19px] leading-relaxed text-warmgray dark:text-[#A8A296]">
             {t("subtitle")}
           </p>
         </section>
@@ -133,7 +133,7 @@ export default async function BlogIndexPage({
                       <div
                         className={`relative aspect-[16/9] bg-gradient-to-br ${post.gradient}`}
                       >
-                        <span className="lbl absolute left-4 top-4 rounded-full bg-black/25 px-2.5 py-1 text-[10px] text-[#F4F1EA] backdrop-blur">
+                        <span className="lbl absolute left-4 top-4 rounded-full bg-black/25 px-2.5 py-1 text-[11px] text-[#F4F1EA] backdrop-blur">
                           {t(`categories.${post.category}`)}
                         </span>
                         <Icon
@@ -143,7 +143,7 @@ export default async function BlogIndexPage({
                         />
                       </div>
                       <div className="flex flex-1 flex-col p-6">
-                        <div className="lbl text-[11px] text-sand-600 dark:text-[#7E7A72]">
+                        <div className="lbl text-[12px] text-sand-600 dark:text-[#7E7A72]">
                           {format.dateTime(new Date(post.date), {
                             dateStyle: "long",
                           })}{" "}
@@ -152,10 +152,10 @@ export default async function BlogIndexPage({
                         <h2 className="mt-3 font-display text-2xl leading-snug text-night dark:text-[#ECE7DD]">
                           {c.title}
                         </h2>
-                        <p className="mt-2 flex-1 text-[15.5px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+                        <p className="mt-2 flex-1 text-[17px] leading-relaxed text-warmgray dark:text-[#9A958B]">
                           {c.excerpt}
                         </p>
-                        <span className="mt-5 inline-flex items-center gap-1.5 text-[15px] font-semibold text-navy group-hover:gap-2.5 dark:text-gold-light">
+                        <span className="mt-5 inline-flex items-center gap-1.5 text-[17px] font-semibold text-navy group-hover:gap-2.5 dark:text-gold-light">
                           {t("readMore")}
                           <Icon
                             name="arrowRight"
@@ -176,7 +176,7 @@ export default async function BlogIndexPage({
               {page > 1 ? (
                 <Link
                   href={pageHref(page - 1)}
-                  className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-300 px-4 py-2.5 text-[14px] font-semibold text-night dark:border-anthracite-600 dark:text-[#ECE7DD]"
+                  className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-300 px-4 py-2.5 text-[16px] font-semibold text-night dark:border-anthracite-600 dark:text-[#ECE7DD]"
                 >
                   <Icon
                     name="arrowRight"
@@ -186,7 +186,7 @@ export default async function BlogIndexPage({
                   {t("prev")}
                 </Link>
               ) : (
-                <span className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-200 px-4 py-2.5 text-[14px] font-semibold text-sand-400 dark:border-anthracite-700 dark:text-[#56524B]">
+                <span className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-200 px-4 py-2.5 text-[16px] font-semibold text-sand-400 dark:border-anthracite-700 dark:text-[#56524B]">
                   <Icon
                     name="arrowRight"
                     className="h-4 w-4 rotate-180"
@@ -195,13 +195,13 @@ export default async function BlogIndexPage({
                   {t("prev")}
                 </span>
               )}
-              <span className="text-[14px] text-warmgray dark:text-[#9A958B]">
+              <span className="text-[16px] text-warmgray dark:text-[#9A958B]">
                 {page} / {totalPages}
               </span>
               {page < totalPages ? (
                 <Link
                   href={pageHref(page + 1)}
-                  className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-300 px-4 py-2.5 text-[14px] font-semibold text-night dark:border-anthracite-600 dark:text-[#ECE7DD]"
+                  className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-300 px-4 py-2.5 text-[16px] font-semibold text-night dark:border-anthracite-600 dark:text-[#ECE7DD]"
                 >
                   {t("next")}
                   <Icon
@@ -211,7 +211,7 @@ export default async function BlogIndexPage({
                   />
                 </Link>
               ) : (
-                <span className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-200 px-4 py-2.5 text-[14px] font-semibold text-sand-400 dark:border-anthracite-700 dark:text-[#56524B]">
+                <span className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-200 px-4 py-2.5 text-[16px] font-semibold text-sand-400 dark:border-anthracite-700 dark:text-[#56524B]">
                   {t("next")}
                   <Icon
                     name="arrowRight"

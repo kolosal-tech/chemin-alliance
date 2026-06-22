@@ -46,7 +46,7 @@ export function AllianceMoment({
 
         <div className="relative mb-1 flex items-center justify-center">
           <span
-            className="z-10 -mr-5 flex h-[78px] w-[78px] items-center justify-center rounded-full border-2 border-gold/70 font-display text-[30px]"
+            className="z-10 -mr-5 flex h-[78px] w-[78px] items-center justify-center rounded-full border-2 border-gold/70 font-display text-[34px]"
             style={{
               background:
                 "radial-gradient(110% 90% at 40% 30%, #8A7A6A 0%, #5C4D44 50%, #352A28 100%)",
@@ -76,20 +76,20 @@ export function AllianceMoment({
           </span>
         </div>
 
-        <span className="lbl mt-4 block text-[11px] text-gold-light">
+        <span className="lbl mt-4 block text-[12px] text-gold-light">
           {t("momentLabel")}
         </span>
-        <h2 className="mt-1.5 font-display text-[27px] font-medium leading-tight">
+        <h2 className="mt-1.5 font-display text-[30px] font-medium leading-tight">
           {name}
         </h2>
-        <p className="mx-auto mt-2.5 max-w-[30ch] text-[14.5px] leading-relaxed text-[#B9C0CE]">
+        <p className="mx-auto mt-2.5 max-w-[30ch] text-[16px] leading-relaxed text-[#B9C0CE]">
           {t("momentBody")}
         </p>
 
         <button
           type="button"
           onClick={onContinue}
-          className="mt-6 w-full rounded-btnlg bg-gold py-3.5 text-[16px] font-bold text-night transition-colors hover:bg-gold-light"
+          className="mt-6 w-full rounded-btnlg bg-gold py-3.5 text-[18px] font-bold text-night transition-colors hover:bg-gold-light"
         >
           {t("momentCta")}
         </button>
@@ -97,7 +97,7 @@ export function AllianceMoment({
           <button
             type="button"
             onClick={onLater}
-            className="mt-2.5 text-[14px] text-[#8C93A2] hover:text-[#B9C0CE]"
+            className="mt-2.5 text-[16px] text-[#8C93A2] hover:text-[#B9C0CE]"
           >
             {t("momentLater")}
           </button>

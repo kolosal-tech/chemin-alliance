@@ -44,7 +44,7 @@ export function PhotoHeader({
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0E1422]/35 via-transparent to-[#0E1422]/85" />
-      <span className="lbl absolute left-5 top-5 rounded-[20px] bg-[#0E1422]/40 px-2.5 py-1.5 text-[10px] text-white/70 backdrop-blur-sm safe-top">
+      <span className="lbl absolute left-5 top-5 rounded-[20px] bg-[#0E1422]/40 px-2.5 py-1.5 text-[11px] text-white/70 backdrop-blur-sm safe-top">
         {t("profile.blurredDefault", { level: t("stages.DISCOVERY") })}
       </span>
       {/* Bouton discret, descendu dans la zone de photo (juste au-dessus du
@@ -53,7 +53,7 @@ export function PhotoHeader({
       <button
         type="button"
         onClick={() => setRevealed(!revealed)}
-        className="absolute bottom-[60px] right-4 z-10 flex items-center gap-1.5 rounded-full border border-white/25 bg-[#0E1422]/40 px-2.5 py-1.5 text-[12px] font-medium text-[#F2EFE8]/90 backdrop-blur-md transition-colors hover:bg-[#0E1422]/60"
+        className="absolute bottom-[60px] right-4 z-10 flex items-center gap-1.5 rounded-full border border-white/25 bg-[#0E1422]/40 px-2.5 py-1.5 text-[13px] font-medium text-[#F2EFE8]/90 backdrop-blur-md transition-colors hover:bg-[#0E1422]/60"
       >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
           <path
@@ -72,7 +72,7 @@ export function PhotoHeader({
         {revealed ? t("profile.hide") : t("profile.reveal")}
       </button>
       <div className="absolute bottom-5 left-5 right-5 flex items-center gap-2.5">
-        <h1 className="font-display text-[32px] font-medium text-[#F8F6F0]">
+        <h1 className="font-display text-[36px] font-medium text-[#F8F6F0]">
           {displayName}
         </h1>
         {isVerified && (

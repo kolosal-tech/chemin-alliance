@@ -147,7 +147,7 @@ export function NotificationsPanel({
       <div className="mb-2 flex items-center justify-between">
         <Link
           href="/settings/privacy"
-          className="lbl text-[11px] text-warmgray dark:text-[#9A958B]"
+          className="lbl text-[12px] text-warmgray dark:text-[#9A958B]"
         >
           ← {t("notifications.back")}
         </Link>
@@ -160,7 +160,7 @@ export function NotificationsPanel({
       <h1 className="mb-2 font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("notifications.title")}
       </h1>
-      <p className="mb-5 text-[14px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+      <p className="mb-5 text-[16px] leading-relaxed text-warmgray dark:text-[#9A958B]">
         {t("notifications.intro")}
       </p>
 
@@ -175,7 +175,7 @@ export function NotificationsPanel({
                 ? t("notifications.statusOn")
                 : t("notifications.statusOff")}
             </p>
-            <p className="mt-0.5 text-[13px] text-warmgray dark:text-[#9A958B]">
+            <p className="mt-0.5 text-[15px] text-warmgray dark:text-[#9A958B]">
               {t("notifications.events")}
             </p>
           </div>
@@ -189,7 +189,7 @@ export function NotificationsPanel({
 
         {state === "loading" && (
           <p
-            className="text-[13px] text-warmgray dark:text-[#9A958B]"
+            className="text-[15px] text-warmgray dark:text-[#9A958B]"
             aria-live="polite"
           >
             {t("common.loading")}
@@ -197,19 +197,19 @@ export function NotificationsPanel({
         )}
 
         {state === "unsupported" && (
-          <p className="text-[14px] text-warn dark:text-warn-darkInk">
+          <p className="text-[16px] text-warn dark:text-warn-darkInk">
             {t("notifications.unsupported")}
           </p>
         )}
 
         {state === "disabled" && (
-          <p className="text-[14px] text-warmgray dark:text-[#9A958B]">
+          <p className="text-[16px] text-warmgray dark:text-[#9A958B]">
             {t("notifications.soon")}
           </p>
         )}
 
         {state === "denied" && (
-          <p className="text-[14px] text-warn dark:text-warn-darkInk">
+          <p className="text-[16px] text-warn dark:text-warn-darkInk">
             {t("notifications.denied")}
           </p>
         )}
@@ -238,13 +238,13 @@ export function NotificationsPanel({
         )}
 
         {error && (
-          <p className="mt-3 text-[13px] text-danger dark:text-danger-darkInk">
+          <p className="mt-3 text-[15px] text-danger dark:text-danger-darkInk">
             {error}
           </p>
         )}
 
         {isIOS && !isStandalone && serverEnabled && state !== "unsupported" && (
-          <p className="mt-4 border-t border-sand-200 pt-3 text-[13px] leading-relaxed text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]">
+          <p className="mt-4 border-t border-sand-200 pt-3 text-[15px] leading-relaxed text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]">
             {t("notifications.iosHint")}
           </p>
         )}

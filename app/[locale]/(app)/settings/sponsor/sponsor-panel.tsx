@@ -66,17 +66,17 @@ export function SponsorPanel({ initial }: { initial: Sponsor | null }) {
 
   const field =
     "rounded-btnsm border border-sand-400 bg-surface px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
-  const lbl = "lbl text-[10.5px] text-sand-600 dark:text-[#9A958B]";
+  const lbl = "lbl text-[12px] text-sand-600 dark:text-[#9A958B]";
 
   return (
     <main className="px-5 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <h1 className="font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("title")}
       </h1>
-      <p className="mt-2 text-[14.5px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+      <p className="mt-2 text-[16px] leading-relaxed text-warmgray dark:text-[#9A958B]">
         {t("intro")}
       </p>
-      <p className="mt-2.5 flex items-start gap-1.5 rounded-btn bg-sand-100 px-3 py-2 text-[13px] leading-snug text-sand-600 dark:bg-anthracite-700 dark:text-[#9A958B]">
+      <p className="mt-2.5 flex items-start gap-1.5 rounded-btn bg-sand-100 px-3 py-2 text-[15px] leading-snug text-sand-600 dark:bg-anthracite-700 dark:text-[#9A958B]">
         <span aria-hidden>🔒</span>
         <span>{t("privacyNote")}</span>
       </p>
@@ -87,16 +87,16 @@ export function SponsorPanel({ initial }: { initial: Sponsor | null }) {
             🤝
           </span>
           <div className="flex-1">
-            <div className="text-[15px] font-semibold text-night dark:text-[#ECE7DD]">
+            <div className="text-[17px] font-semibold text-night dark:text-[#ECE7DD]">
               {sponsor.name}
             </div>
-            <div className="text-[13.5px] text-warmgray dark:text-[#9A958B]">
+            <div className="text-[15px] text-warmgray dark:text-[#9A958B]">
               {t(`relations.${sponsor.relation}`)} · {sponsor.email}
             </div>
           </div>
         </section>
       ) : (
-        <p className="mt-4 text-[14px] text-warmgray dark:text-[#9A958B]">
+        <p className="mt-4 text-[16px] text-warmgray dark:text-[#9A958B]">
           {t("none")}
         </p>
       )}
@@ -142,7 +142,7 @@ export function SponsorPanel({ initial }: { initial: Sponsor | null }) {
           <button
             type="submit"
             disabled={busy}
-            className="flex flex-1 items-center justify-center gap-2 rounded-btnlg bg-navy px-4 py-3.5 text-[16px] font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
+            className="flex flex-1 items-center justify-center gap-2 rounded-btnlg bg-navy px-4 py-3.5 text-[18px] font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
           >
             {busy && <Spinner className="h-4 w-4" />}
             {busy ? tc("loading") : sponsor ? t("update") : t("save")}
@@ -152,7 +152,7 @@ export function SponsorPanel({ initial }: { initial: Sponsor | null }) {
               type="button"
               onClick={() => setConfirmRemove(true)}
               disabled={busy}
-              className="rounded-btnlg border border-sand-400 px-4 py-3.5 text-[16px] font-semibold text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
+              className="rounded-btnlg border border-sand-400 px-4 py-3.5 text-[18px] font-semibold text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
             >
               {t("remove")}
             </button>

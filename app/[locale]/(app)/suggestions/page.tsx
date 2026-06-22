@@ -95,18 +95,18 @@ export default async function SuggestionsPage({
                 </svg>
               </span>
               <div className="min-w-0 flex-1">
-                <span className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
+                <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
                   {t("agents.prep.bannerBadge")}
                 </span>
-                <p className="font-display text-[17px] leading-tight text-[#5A4718] dark:text-[#E8D9A8]">
+                <p className="font-display text-[19px] leading-tight text-[#5A4718] dark:text-[#E8D9A8]">
                   {t("agents.prep.bannerTitle")}
                 </p>
               </div>
             </div>
-            <p className="mt-2.5 text-[13.5px] leading-snug text-[#6F5C2E] dark:text-[#C2B488]">
+            <p className="mt-2.5 text-[15px] leading-snug text-[#6F5C2E] dark:text-[#C2B488]">
               {t("agents.prep.banner")}
             </p>
-            <span className="mt-3 inline-flex items-center gap-1.5 rounded-btnsm bg-gradient-to-r from-gold-deep to-gold px-4 py-2 text-[14px] font-semibold text-white">
+            <span className="mt-3 inline-flex items-center gap-1.5 rounded-btnsm bg-gradient-to-r from-gold-deep to-gold px-4 py-2 text-[16px] font-semibold text-white">
               {t("agents.prep.bannerCta")} <span aria-hidden>→</span>
             </span>
           </div>
@@ -121,10 +121,10 @@ export default async function SuggestionsPage({
             <AllianceThread current={1} showLabels={false} />
           </div>
           <div className="flex-1">
-            <span className="lbl text-[9.5px] text-gold-deep dark:text-gold-light">
+            <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
               {t("stages.currentStage")}
             </span>
-            <div className="mt-0.5 text-[14px] font-semibold text-night dark:text-[#ECE7DD]">
+            <div className="mt-0.5 text-[16px] font-semibold text-night dark:text-[#ECE7DD]">
               {t("stages.DISCOVERY")}
             </div>
           </div>
@@ -150,7 +150,7 @@ export default async function SuggestionsPage({
           {missing.length === 0 &&
             (suggestions.length > 0 || filterCount > 0) && (
               <div className="flex items-center justify-between gap-3 lg:col-span-3">
-                <p className="text-[14px] text-warmgray dark:text-[#9A958B]">
+                <p className="text-[16px] text-warmgray dark:text-[#9A958B]">
                   {t("suggestions.profilesCount", { count: shown.length })}
                 </p>
                 <FiltersDrawer activeCount={filterCount} />
@@ -166,7 +166,7 @@ export default async function SuggestionsPage({
               </p>
               <ul className="mt-3 flex flex-col gap-1.5">
                 {missing.includes("city") && (
-                  <li className="flex items-center gap-2 text-[14px] text-night dark:text-[#ECE7DD]">
+                  <li className="flex items-center gap-2 text-[16px] text-night dark:text-[#ECE7DD]">
                     <span
                       aria-hidden
                       className="text-gold-deep dark:text-gold-light"
@@ -177,7 +177,7 @@ export default async function SuggestionsPage({
                   </li>
                 )}
                 {missing.includes("intention") && (
-                  <li className="flex items-center gap-2 text-[14px] text-night dark:text-[#ECE7DD]">
+                  <li className="flex items-center gap-2 text-[16px] text-night dark:text-[#ECE7DD]">
                     <span
                       aria-hidden
                       className="text-gold-deep dark:text-gold-light"
@@ -190,7 +190,7 @@ export default async function SuggestionsPage({
               </ul>
               <Link
                 href="/profile/edit"
-                className="mt-4 inline-flex items-center gap-1.5 rounded-btnsm bg-navy px-4 py-2.5 text-[14px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-btnsm bg-navy px-4 py-2.5 text-[16px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
               >
                 {t("suggestions.completeCta")} <span aria-hidden>→</span>
               </Link>

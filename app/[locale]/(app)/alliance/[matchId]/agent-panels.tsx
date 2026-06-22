@@ -30,11 +30,11 @@ export function FacilitatorPanel({ matchId }: { matchId: string }) {
   if (!data) return null;
   return (
     <section className="mt-5">
-      <h2 className="lbl mb-2.5 text-[10.5px] text-gold-deep dark:text-gold-light">
+      <h2 className="lbl mb-2.5 text-[12px] text-gold-deep dark:text-gold-light">
         {t("title")}
       </h2>
       {data.suggestions.length === 0 ? (
-        <p className="rounded-btn bg-[#EAF0EB] px-3.5 py-2.5 text-[14px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
+        <p className="rounded-btn bg-[#EAF0EB] px-3.5 py-2.5 text-[16px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
           {t("none")}
         </p>
       ) : (
@@ -44,10 +44,10 @@ export function FacilitatorPanel({ matchId }: { matchId: string }) {
               key={s.id}
               className="flex items-center gap-2.5 rounded-btn border border-dashed border-gold/50 bg-surface px-3.5 py-3 dark:border-gold-light/40 dark:bg-anthracite-800"
             >
-              <span className="lbl flex-none text-[9px] text-gold-deep dark:text-gold-light">
+              <span className="lbl flex-none text-[10px] text-gold-deep dark:text-gold-light">
                 {s.theme}
               </span>
-              <span className="flex-1 font-display text-[14.5px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
+              <span className="flex-1 font-display text-[16px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
                 {s.text}
               </span>
             </div>
@@ -88,22 +88,22 @@ export function ReviewPanel({ matchId }: { matchId: string }) {
       ) : (
         <div className="rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
           <div className="mb-1 flex items-baseline justify-between">
-            <h3 className="font-display text-[19px] text-night dark:text-[#ECE7DD]">
+            <h3 className="font-display text-[21px] text-night dark:text-[#ECE7DD]">
               {t("title")}
             </h3>
-            <span className="text-[11px] text-sand-500 dark:text-[#65625B]">
+            <span className="text-[12px] text-sand-500 dark:text-[#65625B]">
               {t("private")}
             </span>
           </div>
           {review.myHighlights.length === 0 ? (
-            <p className="text-[14px] text-warmgray dark:text-[#9A958B]">
+            <p className="text-[16px] text-warmgray dark:text-[#9A958B]">
               {t("empty")}
             </p>
           ) : (
             <>
-              <div className="mt-2 flex flex-col gap-2 text-[14px]">
+              <div className="mt-2 flex flex-col gap-2 text-[16px]">
                 <div>
-                  <span className="lbl text-[9.5px] text-sage">
+                  <span className="lbl text-[11px] text-sage">
                     {t("aligned")}
                   </span>
                   <p className="text-ink dark:text-[#CFCAC0]">
@@ -111,7 +111,7 @@ export function ReviewPanel({ matchId }: { matchId: string }) {
                   </p>
                 </div>
                 <div>
-                  <span className="lbl text-[9.5px] text-amberink">
+                  <span className="lbl text-[11px] text-amberink">
                     {t("open")}
                   </span>
                   <p className="text-ink dark:text-[#CFCAC0]">
@@ -120,7 +120,7 @@ export function ReviewPanel({ matchId }: { matchId: string }) {
                 </div>
               </div>
               {review.narrative && (
-                <p className="mt-3 border-t border-sand-100 pt-3 font-display text-[15px] italic leading-relaxed text-[#3A372F] dark:border-anthracite-700 dark:text-[#CFCAC0]">
+                <p className="mt-3 border-t border-sand-100 pt-3 font-display text-[17px] italic leading-relaxed text-[#3A372F] dark:border-anthracite-700 dark:text-[#CFCAC0]">
                   {review.narrative}
                 </p>
               )}

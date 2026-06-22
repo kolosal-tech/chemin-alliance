@@ -39,13 +39,13 @@ export default async function GuidesPage({
       <MarketingHeader />
       <main>
         <section className="mx-auto max-w-3xl px-5 py-16 text-center sm:px-6 sm:py-20">
-          <p className="lbl text-[11.5px] text-gold-deep dark:text-gold-light">
+          <p className="lbl text-[13px] text-gold-deep dark:text-gold-light">
             {t("kicker")}
           </p>
           <h1 className="mt-4 font-display text-4xl leading-tight text-night sm:text-5xl dark:text-[#ECE7DD]">
             {t("title")}
           </h1>
-          <p className="mt-5 text-[17px] leading-relaxed text-warmgray dark:text-[#A8A296]">
+          <p className="mt-5 text-[19px] leading-relaxed text-warmgray dark:text-[#A8A296]">
             {t("subtitle")}
           </p>
         </section>
@@ -61,11 +61,11 @@ export default async function GuidesPage({
                   <h2 className="mt-5 font-display text-xl text-night dark:text-[#ECE7DD]">
                     {t(`topics.${g.id}.title`)}
                   </h2>
-                  <p className="mt-2 flex-1 text-[15px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+                  <p className="mt-2 flex-1 text-[17px] leading-relaxed text-warmgray dark:text-[#9A958B]">
                     {t(`topics.${g.id}.desc`)}
                   </p>
                   {g.ready ? (
-                    <span className="mt-5 inline-flex w-fit items-center gap-1.5 text-[15px] font-semibold text-navy group-hover:gap-2.5 dark:text-gold-light">
+                    <span className="mt-5 inline-flex w-fit items-center gap-1.5 text-[17px] font-semibold text-navy group-hover:gap-2.5 dark:text-gold-light">
                       {t("readGuide")}
                       <Icon
                         name="arrowRight"
@@ -74,7 +74,7 @@ export default async function GuidesPage({
                       />
                     </span>
                   ) : (
-                    <span className="mt-5 inline-flex w-fit items-center gap-1.5 rounded-full bg-gold/12 px-3 py-1.5 text-[12px] font-semibold text-gold-ink dark:bg-gold-light/10 dark:text-gold-light">
+                    <span className="mt-5 inline-flex w-fit items-center gap-1.5 rounded-full bg-gold/12 px-3 py-1.5 text-[13px] font-semibold text-gold-ink dark:bg-gold-light/10 dark:text-gold-light">
                       {t("soon")}
                     </span>
                   )}
