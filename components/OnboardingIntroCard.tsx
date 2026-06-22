@@ -251,7 +251,7 @@ export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
                 </Link>
                 <Link
                   href="/coaches"
-                  className="rounded-btnsm border border-gold bg-white px-4 py-2.5 text-[13px] font-semibold text-gold-ink dark:border-[#6A5A2E] dark:bg-anthracite-800 dark:text-[#E0C77A]"
+                  className="rounded-btnsm border border-gold bg-surface px-4 py-2.5 text-[13px] font-semibold text-gold-ink dark:border-[#6A5A2E] dark:bg-anthracite-800 dark:text-[#E0C77A]"
                 >
                   {t("orientCoach")}
                 </Link>

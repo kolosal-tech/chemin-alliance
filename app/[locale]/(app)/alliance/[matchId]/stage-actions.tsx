@@ -170,7 +170,7 @@ export function StageActions({
               )}
             </button>
             {openQ === q.id && (
-              <div className="mt-1.5 rounded-btn border border-sand-200 bg-white p-3 dark:border-anthracite-600 dark:bg-anthracite-700">
+              <div className="mt-1.5 rounded-btn border border-sand-200 bg-surface p-3 dark:border-anthracite-600 dark:bg-anthracite-700">
                 <textarea
                   value={answer}
                   onChange={(e) => setAnswer(e.target.value)}
@@ -300,7 +300,7 @@ export function StageActions({
                 value={exitReason}
                 onChange={(e) => setExitReason(e.target.value)}
                 aria-label={ta("exit.reasonLabel")}
-                className="flex-1 rounded-btnsm border border-sand-300 bg-white px-2.5 py-2.5 text-[12.5px] text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+                className="flex-1 rounded-btnsm border border-sand-300 bg-surface px-2.5 py-2.5 text-[12.5px] text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
               >
                 <option value="no_alignment">
                   {ta("exit.reasonNoAlignment")}
@@ -323,7 +323,7 @@ export function StageActions({
               value={exitText}
               onChange={(e) => setExitText(e.target.value)}
               rows={3}
-              className="mt-2.5 w-full resize-none rounded-btn border border-sand-200 bg-white p-3 text-sm text-ink outline-none dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+              className="mt-2.5 w-full resize-none rounded-btn border border-sand-200 bg-surface p-3 text-sm text-ink outline-none dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
             />
             <div className="mt-2 flex justify-end gap-2">
               <button

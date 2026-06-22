@@ -129,7 +129,7 @@ export default async function CurriculumPage({
 
       <Link
         href="/coaches"
-        className="mb-10 block rounded-btnlg border border-gold bg-white py-3.5 text-center text-sm font-semibold text-gold-ink dark:border-[#6A5A2E] dark:bg-anthracite-800 dark:text-[#E0C77A]"
+        className="mb-10 block rounded-btnlg border border-gold bg-surface py-3.5 text-center text-sm font-semibold text-gold-ink dark:border-[#6A5A2E] dark:bg-anthracite-800 dark:text-[#E0C77A]"
       >
         {t("coachCta")}
       </Link>

@@ -60,7 +60,7 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 .dark .glass {
-  background: rgba(40, 44, 54, 0.45);
+  background: rgba(26, 39, 68, 0.5);
   border-color: rgba(255, 255, 255, 0.1);
   box-shadow:
     0 8px 32px -12px rgba(0, 0, 0, 0.55),
@@ -113,7 +113,7 @@ body {
     background: #fcfbf8;
   }
   .dark .glass {
-    background: #23262c;
+    background: #1a2744;
   }
   .glass-self {
     background: #dbe3f0;
@@ -131,7 +131,7 @@ body {
     backdrop-filter: none;
   }
   .dark .glass {
-    background: #23262c;
+    background: #1a2744;
   }
   .glass-self {
     background: #dbe3f0;
@@ -166,7 +166,7 @@ body {
   --bubble-self-bg: rgba(104, 138, 198, 0.28);
   --bubble-self-border: rgba(150, 180, 226, 0.26);
   --bubble-self-text: #eaf0fa;
-  --bubble-peer-bg: rgba(72, 77, 88, 0.55);
+  --bubble-peer-bg: rgba(36, 49, 82, 0.55);
   --bubble-peer-border: rgba(255, 255, 255, 0.1);
   --bubble-peer-text: #e7e2d8;
 }
@@ -345,7 +345,7 @@ body {
     background: #fbf7ef;
   }
   .dark .bubble-peer {
-    background: #41454e;
+    background: #243152;
   }
 }
 @media (prefers-reduced-transparency: reduce) {
@@ -364,7 +364,7 @@ body {
     background: #fbf7ef;
   }
   .dark .bubble-peer {
-    background: #41454e;
+    background: #243152;
   }
 }
 

@@ -144,7 +144,7 @@ export function PreparationFlow({
                 }))
               }
               rows={5}
-              className="mt-4 w-full resize-none rounded-btn border border-sand-300 bg-white p-3.5 text-sm text-ink outline-none dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+              className="mt-4 w-full resize-none rounded-btn border border-sand-300 bg-surface p-3.5 text-sm text-ink outline-none dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
             />
             <div className="mt-3 flex justify-between">
               {step > 0 ? (
@@ -278,7 +278,7 @@ export function PreparationFlow({
               </Link>
               <Link
                 href="/coaches"
-                className="mt-2 block rounded-btnsm border border-gold bg-white py-3 text-center text-sm font-semibold text-gold-ink dark:border-[#6A5A2E] dark:bg-anthracite-800 dark:text-[#E0C77A]"
+                className="mt-2 block rounded-btnsm border border-gold bg-surface py-3 text-center text-sm font-semibold text-gold-ink dark:border-[#6A5A2E] dark:bg-anthracite-800 dark:text-[#E0C77A]"
               >
                 {t("growthCta")}
               </Link>

@@ -81,7 +81,7 @@ export function LoginForm() {
               type="email"
               required
               autoComplete="email"
-              className="rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+              className="rounded-btnsm border border-sand-400 bg-surface px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
             />
           </label>
           <label className="flex flex-col gap-1.5">
@@ -93,7 +93,7 @@ export function LoginForm() {
               type="password"
               required
               autoComplete="current-password"
-              className="rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+              className="rounded-btnsm border border-sand-400 bg-surface px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
             />
           </label>
           <div className="-mt-1 text-right">

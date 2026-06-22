@@ -89,7 +89,7 @@ export function PhoneVerify() {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="+225 07 00 00 00 00"
-              className="rounded-btn border border-sand-300 bg-white p-3 text-sm text-ink outline-none dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+              className="rounded-btn border border-sand-300 bg-surface p-3 text-sm text-ink outline-none dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
             />
             <AsyncButton
               disabled={busy || phone.trim().length < 8}
@@ -111,7 +111,7 @@ export function PhoneVerify() {
                 setCode(e.target.value.replace(/\D/g, "").slice(0, 6))
               }
               placeholder="000000"
-              className="rounded-btn border border-sand-300 bg-white p-3 text-center font-mono text-lg tracking-[0.4em] text-ink outline-none dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+              className="rounded-btn border border-sand-300 bg-surface p-3 text-center font-mono text-lg tracking-[0.4em] text-ink outline-none dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
             />
             <AsyncButton
               disabled={busy || code.length !== 6}

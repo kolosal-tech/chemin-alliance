@@ -85,12 +85,12 @@ export function RegisterForm() {
   }
 
   const input =
-    "rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
+    "rounded-btnsm border border-sand-400 bg-surface px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]";
   // Cartes d'intention : un SEUL style - fond neutre par défaut, sélection
   // claire (bordure + fond or + anneau). Avant : 3 fonds différents même non
   // cochés -> on ne voyait pas lequel était sélectionné.
   const intentCard =
-    "flex cursor-pointer items-start gap-3 rounded-btn border border-sand-400 bg-white p-3 transition-colors has-[:checked]:border-gold has-[:checked]:bg-[#FBF6E9] has-[:checked]:ring-1 has-[:checked]:ring-gold dark:border-anthracite-600 dark:bg-anthracite-700 dark:has-[:checked]:border-gold-light dark:has-[:checked]:bg-[#272117] dark:has-[:checked]:ring-gold-light";
+    "flex cursor-pointer items-start gap-3 rounded-btn border border-sand-400 bg-surface p-3 transition-colors has-[:checked]:border-gold has-[:checked]:bg-[#FBF6E9] has-[:checked]:ring-1 has-[:checked]:ring-gold dark:border-anthracite-600 dark:bg-anthracite-700 dark:has-[:checked]:border-gold-light dark:has-[:checked]:bg-[#272117] dark:has-[:checked]:ring-gold-light";
 
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-2">

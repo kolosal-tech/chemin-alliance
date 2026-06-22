@@ -274,7 +274,7 @@ export function CoachChat({
                 </p>
                 <Link
                   href="/coaches"
-                  className="block w-full rounded-[10px] border border-warn-border bg-white py-2.5 text-center text-[13px] font-semibold text-warn-ink dark:border-warn-darkBorder dark:bg-anthracite-800 dark:text-warn-darkInk"
+                  className="block w-full rounded-[10px] border border-warn-border bg-surface py-2.5 text-center text-[13px] font-semibold text-warn-ink dark:border-warn-darkBorder dark:bg-anthracite-800 dark:text-warn-darkInk"
                 >
                   {t("aiCoach.guardrailCta")}
                 </Link>

@@ -86,7 +86,7 @@ export function ResetPasswordForm() {
                 type="password"
                 required
                 autoComplete="new-password"
-                className="rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+                className="rounded-btnsm border border-sand-400 bg-surface px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
               />
               <span className="text-[11.5px] text-warmgray dark:text-[#8B8579]">
                 {t("passwordHint")}
@@ -101,7 +101,7 @@ export function ResetPasswordForm() {
                 type="password"
                 required
                 autoComplete="new-password"
-                className="rounded-btnsm border border-sand-400 bg-white px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+                className="rounded-btnsm border border-sand-400 bg-surface px-3.5 py-3 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
               />
             </label>
             {error && (
