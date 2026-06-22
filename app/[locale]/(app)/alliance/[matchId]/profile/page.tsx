@@ -66,7 +66,7 @@ export default async function MatchProfilePage({
   });
 
   return (
-    <main className="px-5 pt-5 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-4 pt-5 safe-top lg:mx-auto lg:max-w-2xl">
       <header className="mb-4 flex items-center gap-3">
         <Link
           href={`/alliance/${match.id}`}

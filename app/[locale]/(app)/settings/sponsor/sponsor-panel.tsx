@@ -69,7 +69,7 @@ export function SponsorPanel({ initial }: { initial: Sponsor | null }) {
   const lbl = "lbl text-[12px] text-sand-600 dark:text-[#9A958B]";
 
   return (
-    <main className="px-5 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <h1 className="font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("title")}
       </h1>

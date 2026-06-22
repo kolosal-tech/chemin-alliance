@@ -48,7 +48,7 @@ export default async function ProfilePage({
         blurredByDefault={user.photoBlurredByDefault}
         photoUrl={photoUrl}
       />
-      <div className="px-5 pt-4">
+      <div className="px-4 pt-4">
         <div className="mb-4 flex gap-2">
           {faith?.denomination && (
             <span className="rounded-[9px] bg-navy px-2.5 py-1.5 text-xs font-semibold text-[#E8D9A8] dark:bg-[#222C42] dark:text-[#B9C6E0]">

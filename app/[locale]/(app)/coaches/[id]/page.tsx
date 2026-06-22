@@ -35,7 +35,7 @@ export default async function CoachDetailPage({
 
   return (
     <main className="safe-top lg:mx-auto lg:max-w-2xl">
-      <div className="relative bg-night px-6 pb-6 pt-12 text-[#F2EFE8]">
+      <div className="relative bg-night px-5 pb-6 pt-12 text-[#F2EFE8]">
         <Link href="/coaches" aria-label={tc("back")} className="absolute left-5 top-12">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
             <path d="M15 5l-7 7 7 7" stroke="#A6AEC0" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -72,7 +72,7 @@ export default async function CoachDetailPage({
         </div>
       </div>
 
-      <div className="px-5 pt-5">
+      <div className="px-4 pt-5">
         <div className="mb-5 flex items-center gap-2.5">
           <div className="flex gap-0.5" aria-hidden>
             {[1, 2, 3, 4, 5].map((i) => (

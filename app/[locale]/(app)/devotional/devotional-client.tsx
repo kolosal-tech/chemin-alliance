@@ -90,7 +90,7 @@ export function DevotionalClient({
     : null;
 
   return (
-    <main className="px-5 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <div className="mb-4 flex items-end justify-between">
         <div>
           <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
@@ -133,7 +133,7 @@ export function DevotionalClient({
       <button
         type="button"
         onClick={() => setSessionOpen(true)}
-        className="mt-3 flex w-full items-center gap-3 rounded-cardlg bg-navy px-5 py-4 text-left dark:bg-gold-light"
+        className="mt-3 flex w-full items-center gap-3 rounded-cardlg bg-navy px-4 py-4 text-left dark:bg-gold-light"
       >
         <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-white/15 dark:bg-anthracite-900/15">
           <svg

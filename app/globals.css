@@ -15,7 +15,7 @@
    hauteurs) ; les tailles de texte sont bumpees en parallele (tailwind
    fontSize + classes arbitraires text-[Npx]). */
 html {
-  font-size: 112.5%;
+  font-size: 110%;
 }
 
 /* Jamais de scroll horizontal : les motifs décoratifs débordent le viewport

@@ -143,7 +143,7 @@ export function NotificationsPanel({
   }
 
   return (
-    <main className="px-5 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <div className="mb-2 flex items-center justify-between">
         <Link
           href="/settings/privacy"

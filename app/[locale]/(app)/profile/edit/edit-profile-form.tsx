@@ -263,7 +263,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
 
   if (!d) {
     return (
-      <main className="px-5 pt-8 text-center text-sm text-warmgray safe-top">
+      <main className="px-4 pt-8 text-center text-sm text-warmgray safe-top">
         {loadFailed ? (
           <div className="flex flex-col items-center gap-3">
             <p role="alert" className="text-danger">
@@ -471,7 +471,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
   };
 
   return (
-    <main className="safe-top px-5 pb-28 pt-6 lg:mx-auto lg:max-w-2xl">
+    <main className="safe-top px-4 pb-28 pt-6 lg:mx-auto lg:max-w-2xl">
       <div className="mb-5 flex items-center justify-between">
         <h1 className="font-display text-[29px] text-night dark:text-[#ECE7DD]">
           {t("editTitle")}

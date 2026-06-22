@@ -19,7 +19,7 @@ export default async function RebuildingPage({
   const word = await consolationWord(locale);
 
   return (
-    <main className="relative px-5 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="relative px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <SacredMotif variant="olive" className="right-[-110px] top-[60px]" />
       <h1 className="font-display text-[29px] text-night dark:text-[#ECE7DD]">{t("title")}</h1>
       {word && (

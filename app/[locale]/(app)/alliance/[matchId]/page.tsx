@@ -60,7 +60,7 @@ export default async function AlliancePage({
   const { axes, topics } = compatibilityTopics(me, other);
 
   return (
-    <main className="px-5 pt-5 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-4 pt-5 safe-top lg:mx-auto lg:max-w-2xl">
       <header className="mb-3 flex items-center gap-3">
         <Link
           href={`/messages/${match.id}`}

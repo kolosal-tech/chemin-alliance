@@ -14,7 +14,7 @@ export default async function SafetyPage({
   const t = await getTranslations("antiScam");
 
   return (
-    <main className="px-5 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <h1 className="font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("pageTitle")}
       </h1>
