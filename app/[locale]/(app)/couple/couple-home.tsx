@@ -470,7 +470,10 @@ export function CoupleHome() {
             {t("messagesPrivacy")}
           </span>
         </div>
-        <div className="mt-3 flex max-h-72 flex-col gap-2 overflow-y-auto">
+        {/* Fil des messages : padding droit pour décoller les bulles du bord
+            et de la barre de défilement ; mots longs coupés pour éviter tout
+            débordement horizontal sur mobile. */}
+        <div className="mt-3 flex max-h-72 flex-col gap-2.5 overflow-y-auto pl-0.5 pr-1.5">
           {messages.length === 0 ? (
             <p className="py-4 text-center text-[13px] text-sand-500 dark:text-[#7E7A72]">
               {t("messagesEmpty")}
@@ -479,21 +482,25 @@ export function CoupleHome() {
             messages.map((m) => (
               <div
                 key={m.id}
-                className={`flex max-w-[80%] flex-col ${
-                  m.mine ? "self-end items-end" : "self-start items-start"
+                className={`flex max-w-[82%] flex-col ${
+                  m.mine ? "items-end self-end" : "items-start self-start"
                 }`}
               >
                 <div
-                  className={`rounded-[16px] px-3.5 py-2.5 text-sm leading-snug ${
+                  className={`whitespace-pre-wrap [overflow-wrap:anywhere] rounded-[18px] px-3.5 py-2.5 text-sm leading-snug ${
                     m.mine
-                      ? "bg-navy text-[#EDEFF3] dark:bg-gold-light dark:text-anthracite-900"
-                      : "bg-sand-100 text-[#2A2823] dark:bg-anthracite-700 dark:text-[#CFCAC0]"
+                      ? "rounded-br-md bg-navy text-[#EDEFF3] dark:bg-gold-light dark:text-anthracite-900"
+                      : "rounded-bl-md border border-black/10 bg-sand-200 text-[#2A2823] dark:border-white/10 dark:bg-[#343842] dark:text-[#E6E1D7]"
                   }`}
                 >
                   {m.content}
                 </div>
                 {fmtTime(m.createdAt) && (
-                  <span className="mt-0.5 px-1 text-[10px] text-sand-500 dark:text-[#65625B]">
+                  <span
+                    className={`mt-1 px-1 text-[10px] text-sand-500 dark:text-[#65625B] ${
+                      m.mine ? "text-right" : "text-left"
+                    }`}
+                  >
                     {fmtTime(m.createdAt)}
                   </span>
                 )}
@@ -501,19 +508,23 @@ export function CoupleHome() {
             ))
           )}
         </div>
-        <form onSubmit={sendMessage} className="mt-3 flex items-center gap-2">
+        {/* Zone de saisie : l'input prend toute la largeur disponible (min-w-0
+            pour autoriser le rétrécissement) et le bouton Envoyer est figé
+            (shrink-0) afin de ne jamais chevaucher le texte ni les bulles.
+            Bouton vert sauge, distinct des bulles dorées. */}
+        <form onSubmit={sendMessage} className="mt-3 flex items-stretch gap-2">
           <input
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             placeholder={t("messagesPlaceholder")}
             aria-label={t("messagesPlaceholder")}
-            className="flex-1 rounded-btnsm border border-sand-300 bg-white px-3 py-2.5 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+            className="min-w-0 flex-1 rounded-btnsm border border-sand-300 bg-white px-3 py-2.5 text-sm text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
           />
           <button
             type="submit"
             disabled={msgBusy || !draft.trim()}
             aria-busy={msgBusy}
-            className="flex items-center justify-center gap-2 rounded-btnsm bg-navy px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
+            className="flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-btnsm bg-sage px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#365C45] disabled:opacity-50"
           >
             {msgBusy && <Spinner className="h-4 w-4" />}
             {t("messagesSend")}

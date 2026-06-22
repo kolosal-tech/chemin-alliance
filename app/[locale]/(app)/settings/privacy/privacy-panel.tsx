@@ -33,6 +33,9 @@ function Toggle({
   label: string;
   disabled?: boolean;
 }) {
+  // Switch type iOS : piste fine et arrondie (pas de gros carré), pastille
+  // ronde compacte qui glisse. Couleurs : orange doux quand inactif, vert
+  // pastel quand actif, en harmonie avec le doré sombre de l'app.
   return (
     <button
       type="button"
@@ -41,17 +44,16 @@ function Toggle({
       aria-label={label}
       disabled={disabled}
       onClick={() => onChange(!checked)}
-      className={`relative h-[27px] w-[46px] flex-none rounded-[14px] transition-colors disabled:opacity-50 ${
+      className={`relative inline-flex h-[24px] w-[42px] flex-none items-center rounded-full transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gold/50 focus-visible:ring-offset-surface disabled:opacity-50 dark:focus-visible:ring-offset-anthracite-800 ${
         checked
-          ? "bg-navy dark:bg-gold-light"
-          : "bg-sand-400 dark:bg-anthracite-600"
+          ? "bg-[#4FA06C] dark:bg-[#4C9566]"
+          : "bg-[#BC8444] dark:bg-[#9E7039]"
       }`}
     >
       <span
-        className={`absolute top-[3px] h-[21px] w-[21px] rounded-full bg-white shadow transition-transform ${
-          checked ? "translate-x-[22px]" : "translate-x-[3px]"
+        className={`inline-block h-[18px] w-[18px] rounded-full bg-white shadow-sm transition-transform duration-200 ease-out ${
+          checked ? "translate-x-[21px]" : "translate-x-[3px]"
         }`}
-        style={{ left: 0 }}
       />
     </button>
   );
