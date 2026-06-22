@@ -23,6 +23,8 @@ export default async function CoachAiPage({
     text: decryptOptional(r.contentEncrypted) ?? "",
     guardrail: r.guardrail,
     mode: r.mode === "couple" ? ("couple" as const) : ("individual" as const),
+    // Horodatage persistant : restitué au rechargement (comme la messagerie couple).
+    createdAt: r.createdAt.toISOString(),
   }));
   return <CoachChat initialEntries={initialEntries} />;
 }
