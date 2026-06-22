@@ -47,12 +47,15 @@ export function PhotoHeader({
       <span className="lbl absolute left-5 top-5 rounded-[20px] bg-[#0E1422]/40 px-2.5 py-1.5 text-[9px] text-white/70 backdrop-blur-sm safe-top">
         {t("profile.blurredDefault", { level: t("stages.DISCOVERY") })}
       </span>
+      {/* Bouton discret, descendu dans la zone de photo (juste au-dessus du
+          nom) et fondu dans le flou : il ne masque plus la photo et garde
+          l'icone d'oeil, simplement affinee. */}
       <button
         type="button"
         onClick={() => setRevealed(!revealed)}
-        className="absolute right-5 top-4 flex items-center gap-1.5 rounded-[20px] border border-white/40 bg-[#0E1422]/45 px-3.5 py-2 text-xs font-medium text-[#F2EFE8] backdrop-blur-md safe-top"
+        className="absolute bottom-[60px] right-4 z-10 flex items-center gap-1.5 rounded-full border border-white/25 bg-[#0E1422]/40 px-2.5 py-1.5 text-[11px] font-medium text-[#F2EFE8]/90 backdrop-blur-md transition-colors hover:bg-[#0E1422]/60"
       >
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
           <path
             d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"
             stroke="currentColor"
