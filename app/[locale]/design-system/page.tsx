@@ -239,6 +239,72 @@ export default async function DesignSystemPage({
           <span className={label}>{t("reviews")}</span>
           <ReviewsSection />
         </section>
+
+        {/* Liquid Glass - bulles, boutons, switch (référence + test public) */}
+        <section
+          className={`${card} md:col-span-2`}
+          data-testid="glass-showcase"
+        >
+          <span className={label}>Liquid Glass</span>
+          <div
+            data-testid="msg-scroll"
+            className="msg-scroll flex max-h-56 flex-col gap-2.5 overflow-y-auto pl-0.5 pr-2"
+          >
+            <div className="flex max-w-[82%] flex-col items-start self-start">
+              <div
+                data-testid="bubble-peer"
+                className="bubble bubble-peer rounded-[18px] rounded-bl-md px-3.5 py-2.5 text-sm leading-snug"
+              >
+                Bonjour mon amour, comment vas-tu ce matin&nbsp;?
+              </div>
+            </div>
+            <div className="flex max-w-[82%] flex-col items-end self-end">
+              <div
+                data-testid="bubble-self"
+                className="bubble bubble-self rounded-[18px] rounded-br-md px-3.5 py-2.5 text-sm leading-snug"
+              >
+                Très bien, j&apos;ai prié pour nous deux.
+              </div>
+            </div>
+            <div className="flex max-w-[82%] flex-col items-end self-end">
+              <div className="bubble bubble-self rounded-[18px] rounded-br-md px-3.5 py-2.5 text-sm leading-snug">
+                On se voit ce soir&nbsp;?
+              </div>
+            </div>
+          </div>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <button className="btn-glass btn-glass-blue rounded-btn px-5 py-3 text-sm">
+              CTA principal
+            </button>
+            <button className="btn-glass btn-glass-sage rounded-btn px-5 py-3 text-sm">
+              Envoyer
+            </button>
+            <button className="btn-glass btn-glass-gold rounded-btn px-5 py-3 text-sm">
+              Doré doux
+            </button>
+            <button className="btn-glass btn-glass-neutral rounded-btn px-5 py-3 text-sm">
+              Neutre
+            </button>
+          </div>
+          <div className="mt-4 flex items-center gap-3">
+            <span
+              role="switch"
+              aria-checked="true"
+              aria-label="Exemple actif"
+              className="relative inline-flex h-[24px] w-[42px] flex-none items-center rounded-full border border-[#4FA06C]/50 bg-[#4FA06C]/85 backdrop-blur-md dark:border-[#4C9566]/50 dark:bg-[#4C9566]/80"
+            >
+              <span className="ml-[21px] inline-block h-[18px] w-[18px] rounded-full bg-white shadow-sm" />
+            </span>
+            <span
+              role="switch"
+              aria-checked="false"
+              aria-label="Exemple inactif"
+              className="relative inline-flex h-[24px] w-[42px] flex-none items-center rounded-full border border-[#7E7363]/30 bg-[#968C78]/30 backdrop-blur-md dark:border-white/15 dark:bg-white/10"
+            >
+              <span className="ml-[3px] inline-block h-[18px] w-[18px] rounded-full bg-white shadow-sm" />
+            </span>
+          </div>
+        </section>
       </div>
     </main>
   );

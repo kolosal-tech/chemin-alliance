@@ -1,6 +1,12 @@
 "use client";
 
-import { type FormEvent, useCallback, useEffect, useState } from "react";
+import {
+  type FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
@@ -57,6 +63,9 @@ export function CoupleHome() {
   >([]);
   const [draft, setDraft] = useState("");
   const [msgBusy, setMsgBusy] = useState(false);
+  // Fil de messages : on garde la vue calée sur le DERNIER message. Sans cela,
+  // le scroll reste en haut et la première bulle apparaît « coupée ».
+  const feedRef = useRef<HTMLDivElement>(null);
   // Événement de vie à confirmer (changement de saison du couple).
   const [seasonConfirm, setSeasonConfirm] = useState<
     "MARRIED" | "PARENTS" | null
@@ -94,6 +103,16 @@ export function CoupleHome() {
       .then((j) => setMessages(j.messages ?? []))
       .catch(() => {});
   }, [spaceActive]);
+
+  // Cale la vue sur le dernier message à chaque mise à jour du fil.
+  useEffect(() => {
+    const el = feedRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [messages]);
+
+  // Garde-fou : on n'affiche jamais une bulle au contenu vide (sinon une bulle
+  // « fantôme » illisible apparaît, cf. bug de la bulle beige vide).
+  const visibleMessages = messages.filter((m) => m.content.trim().length > 0);
 
   async function sendMessage(e: FormEvent) {
     e.preventDefault();
@@ -473,13 +492,16 @@ export function CoupleHome() {
         {/* Fil des messages : padding droit pour décoller les bulles du bord
             et de la barre de défilement ; mots longs coupés pour éviter tout
             débordement horizontal sur mobile. */}
-        <div className="mt-3 flex max-h-72 flex-col gap-2.5 overflow-y-auto pl-0.5 pr-1.5">
-          {messages.length === 0 ? (
+        <div
+          ref={feedRef}
+          className="msg-scroll mt-3 flex max-h-72 flex-col gap-2.5 overflow-y-auto pl-0.5 pr-2"
+        >
+          {visibleMessages.length === 0 ? (
             <p className="py-4 text-center text-[13px] text-sand-500 dark:text-[#7E7A72]">
               {t("messagesEmpty")}
             </p>
           ) : (
-            messages.map((m) => (
+            visibleMessages.map((m) => (
               <div
                 key={m.id}
                 className={`flex max-w-[82%] flex-col ${
@@ -487,10 +509,10 @@ export function CoupleHome() {
                 }`}
               >
                 <div
-                  className={`whitespace-pre-wrap [overflow-wrap:anywhere] rounded-[18px] px-3.5 py-2.5 text-sm leading-snug ${
+                  className={`bubble whitespace-pre-wrap [overflow-wrap:anywhere] rounded-[18px] px-3.5 py-2.5 text-sm leading-snug ${
                     m.mine
-                      ? "rounded-br-md bg-navy text-[#EDEFF3] dark:bg-gold-light dark:text-anthracite-900"
-                      : "rounded-bl-md border border-black/10 bg-sand-200 text-[#2A2823] dark:border-white/10 dark:bg-[#343842] dark:text-[#E6E1D7]"
+                      ? "bubble-self rounded-br-md"
+                      : "bubble-peer rounded-bl-md"
                   }`}
                 >
                   {m.content}
@@ -524,7 +546,7 @@ export function CoupleHome() {
             type="submit"
             disabled={msgBusy || !draft.trim()}
             aria-busy={msgBusy}
-            className="flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-btnsm bg-sage px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#365C45] disabled:opacity-50"
+            className="btn-glass btn-glass-sage flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-btnsm px-4 py-2.5 text-sm"
           >
             {msgBusy && <Spinner className="h-4 w-4" />}
             {t("messagesSend")}
@@ -593,10 +615,10 @@ export function CoupleHome() {
                               [q.id]: { value: v, note: a[q.id]?.note ?? "" },
                             }))
                           }
-                          className={`rounded-[9px] px-3.5 py-2 text-[12.5px] font-semibold ${
+                          className={`btn-glass rounded-[9px] px-3.5 py-2 text-[12.5px] font-semibold ${
                             answers[q.id]?.value === v
-                              ? "bg-navy text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
-                              : "border border-sand-300 text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
+                              ? "btn-glass-blue"
+                              : "btn-glass-neutral"
                           }`}
                         >
                           {t(v)}
@@ -633,7 +655,7 @@ export function CoupleHome() {
                 )
               }
               aria-busy={busy}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-btnsm bg-navy py-3 text-sm font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
+              className="btn-glass btn-glass-blue mt-4 flex w-full items-center justify-center gap-2 rounded-btnsm py-3 text-sm font-semibold disabled:opacity-60"
             >
               {busy && <Spinner className="h-4 w-4" />}
               {busy ? t("checkinSending") : t("send")}

@@ -97,7 +97,7 @@ export function BottomNav({ married = false }: { married?: boolean }) {
               aria-current={active ? "page" : undefined}
               className={`relative flex min-w-[60px] flex-col items-center gap-0.5 rounded-btn px-2 py-1.5 text-[10px] font-medium lg:min-w-0 lg:flex-row lg:gap-3 lg:px-4 lg:py-3 lg:text-sm ${
                 active
-                  ? "text-gold-deep dark:text-gold-light lg:bg-gold/10"
+                  ? "nav-active text-gold-deep dark:text-[#C0AA6E]"
                   : "text-warmgray hover:lg:bg-sand-100/60 dark:text-[#9A958B] dark:hover:lg:bg-anthracite-700/60"
               }`}
             >
