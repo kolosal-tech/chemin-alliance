@@ -72,7 +72,7 @@ export default async function SuggestionsPage({
   );
 
   return (
-    <main className="px-5 pt-6 safe-top">
+    <main className="px-4 pt-6 safe-top">
       {!hasPortrait && (
         <Link
           href="/preparation"

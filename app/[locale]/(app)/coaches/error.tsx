@@ -15,7 +15,7 @@ export default function CoachesError({
   const tc = useTranslations("common");
   return (
     <main
-      className="px-5 pt-6 safe-top lg:mx-auto lg:max-w-4xl"
+      className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-4xl"
       data-testid="coaches-error"
     >
       <h1 className="mb-4 font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">

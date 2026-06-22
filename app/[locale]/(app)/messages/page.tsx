@@ -41,7 +41,7 @@ export default async function MessagesListPage({
   });
 
   return (
-    <main className="px-5 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <h1 className="mb-4 font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("messaging.title")}
       </h1>

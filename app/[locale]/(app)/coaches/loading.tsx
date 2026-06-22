@@ -6,7 +6,7 @@ export default function CoachesLoading() {
   const block = "animate-pulse rounded bg-sand-200 dark:bg-anthracite-700";
   return (
     <main
-      className="px-5 pt-6 safe-top lg:mx-auto lg:max-w-4xl"
+      className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-4xl"
       aria-busy="true"
       data-testid="coaches-loading"
     >

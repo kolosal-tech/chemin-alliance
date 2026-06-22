@@ -25,7 +25,7 @@ export default async function CurriculumPage({
   const modules = getCurriculum(locale, faith?.vertical ?? null);
 
   return (
-    <main className="px-5 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
         {t("kicker")}
       </span>

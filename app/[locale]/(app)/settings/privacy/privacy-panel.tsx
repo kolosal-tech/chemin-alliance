@@ -82,7 +82,7 @@ export function PrivacyPanel({
   ];
 
   return (
-    <main className="px-5 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
           {t("privacy.title")}
@@ -333,7 +333,7 @@ export function PrivacyPanel({
 
       {confirmDelete && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-night/60 px-6"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-night/60 px-5"
           role="dialog"
           aria-modal="true"
         >

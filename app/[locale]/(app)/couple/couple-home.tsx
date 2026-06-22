@@ -279,7 +279,7 @@ export function CoupleHome() {
 
   if (!data) {
     return (
-      <main className="px-5 pt-8 text-center text-sm text-warmgray safe-top">
+      <main className="px-4 pt-8 text-center text-sm text-warmgray safe-top">
         {tc("loading")}
       </main>
     );
@@ -303,7 +303,7 @@ export function CoupleHome() {
   // --- Pas d'espace ---
   if (!data.space) {
     return (
-      <main className="relative px-5 pt-6 pb-8 safe-top lg:mx-auto lg:max-w-3xl">
+      <main className="relative px-4 pt-6 pb-8 safe-top lg:mx-auto lg:max-w-3xl">
         <SacredMotif variant="tree" className="right-[-120px] top-[60px]" />
         {head}
         <p className="text-[18px] leading-relaxed text-warmgray dark:text-[#9A958B]">
@@ -367,7 +367,7 @@ export function CoupleHome() {
   // --- En attente : je dois confirmer le mariage ---
   if (s.pendingMyConfirmation) {
     return (
-      <main className="relative px-5 pt-6 safe-top lg:mx-auto lg:max-w-3xl">
+      <main className="relative px-4 pt-6 safe-top lg:mx-auto lg:max-w-3xl">
         {head}
         <div className="rounded-cardlg border border-gold/40 bg-[#FBF6E9] p-5 dark:border-[#463A1F] dark:bg-[#272117]">
           <p className="font-display text-[21px] italic text-gold-ink dark:text-[#E0C77A]">
@@ -387,7 +387,7 @@ export function CoupleHome() {
   // --- En attente du conjoint ---
   if (s.status === "PENDING" || !s.partner) {
     return (
-      <main className="relative px-5 pt-6 safe-top lg:mx-auto lg:max-w-3xl">
+      <main className="relative px-4 pt-6 safe-top lg:mx-auto lg:max-w-3xl">
         {head}
         {s.inviteCode ? (
           <div className="rounded-cardlg border border-sand-200 bg-surface p-5 text-center dark:border-anthracite-600 dark:bg-anthracite-800">
@@ -397,7 +397,7 @@ export function CoupleHome() {
             <p className="mt-1.5 text-[16px] text-warmgray dark:text-[#9A958B]">
               {t(engagedCtx ? "inviteBodyEngaged" : "inviteBody")}
             </p>
-            <p className="mx-auto mt-4 inline-block rounded-btn border border-gold bg-[#FBF6E9] px-5 py-3 font-mono text-lg tracking-widest text-gold-ink dark:border-[#6A5A2E] dark:bg-[#272117] dark:text-[#E0C77A]">
+            <p className="mx-auto mt-4 inline-block rounded-btn border border-gold bg-[#FBF6E9] px-4 py-3 font-mono text-lg tracking-widest text-gold-ink dark:border-[#6A5A2E] dark:bg-[#272117] dark:text-[#E0C77A]">
               {s.inviteCode}
             </p>
             <div className="mt-3">
@@ -462,7 +462,7 @@ export function CoupleHome() {
 
   // --- Espace actif ---
   return (
-    <main className="relative px-5 pt-6 pb-8 safe-top lg:mx-auto lg:max-w-3xl">
+    <main className="relative px-4 pt-6 pb-8 safe-top lg:mx-auto lg:max-w-3xl">
       <SacredMotif variant="flame" className="right-[-100px] top-[120px]" />
       <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
         {t(engagedCtx ? "titleEngaged" : "title")}
