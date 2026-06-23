@@ -7,8 +7,20 @@ import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 
 export const runtime = "nodejs";
 
-// Aucun champ attendu : on valide/strip défensivement tout corps reçu.
-const schema = z.object({}).strip();
+// Résultat du bilan de maturité (lib/maturity scoreMaturity). Optionnel, validé
+// défensivement : on le persiste pour que le moteur de matching l'exploite (P1),
+// via AgentInsight (pas de migration de schéma).
+const maturitySchema = z
+  .object({
+    perAxis: z.record(z.string(), z.number()).optional(),
+    total: z.number().optional(),
+    level: z.enum(["growing", "preparing", "ready"]).optional(),
+    strengths: z.array(z.string()).max(6).optional(),
+    growth: z.array(z.string()).max(6).optional(),
+    suggestsPreparation: z.boolean().optional(),
+  })
+  .strip();
+const schema = z.object({ maturity: maturitySchema.optional() }).strip();
 
 /**
  * Marque l'onboarding comme fait (flag persistant `User.onboardingDoneAt`).
@@ -24,12 +36,31 @@ export const POST = withErrors(async (req: Request) => {
   );
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
-  schema.parse(await readJsonLimited(req).catch(() => ({})));
+  const body = schema.parse(await readJsonLimited(req).catch(() => ({})));
 
   if (!user.onboardingDoneAt) {
     await prisma.user.update({
       where: { id: user.id },
       data: { onboardingDoneAt: new Date() },
+    });
+  }
+
+  // P1 : persiste le bilan de maturité (exploitable par le matching). Stocké en
+  // AgentInsight (dataJson) - zéro migration. On révoque l'ancien pour ne garder
+  // que le plus récent (idempotent sur re-soumission).
+  if (body.maturity && Object.keys(body.maturity).length > 0) {
+    await prisma.agentInsight.updateMany({
+      where: { userId: user.id, agentId: "maturity", revokedAt: null },
+      data: { revokedAt: new Date() },
+    });
+    await prisma.agentInsight.create({
+      data: {
+        userId: user.id,
+        agentId: "maturity",
+        kind: "BILAN",
+        dataJson: body.maturity,
+        visibility: "PRIVATE",
+      },
     });
   }
   return NextResponse.json({ ok: true });
