@@ -112,7 +112,24 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
       const fd = new FormData();
       fd.append("photo", file);
       const res = await fetch("/api/me/photo", { method: "POST", body: fd });
-      if (!res.ok) throw new Error("upload");
+      if (!res.ok) {
+        const body = (await res.json().catch(() => null)) as {
+          error?: string;
+        } | null;
+        const code = body?.error;
+        setError(
+          code === "BAD_TYPE"
+            ? t("photoErrorType")
+            : code === "TOO_LARGE" || res.status === 413
+              ? t("photoErrorTooLarge")
+              : code === "RATE_LIMITED" || res.status === 429
+                ? t("photoErrorRate")
+                : code === "PHOTO_DISABLED"
+                  ? t("photoErrorDisabled")
+                  : t("photoError"),
+        );
+        return;
+      }
       const j = (await res.json()) as { photoUrl: string };
       setPhotoUrl(j.photoUrl);
       router.refresh();
@@ -353,6 +370,8 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
           value={d[key] as string}
           onChange={(e) => set(key, e.target.value as Data[typeof key])}
           maxLength={opts.max}
+          minLength={opts.min}
+          required={opts.required}
           rows={4}
           className={`${input} resize-y leading-relaxed`}
         />
@@ -527,7 +546,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
             max: 40,
             required: true,
           })}
-          {field("cityApprox", t("cityLabel"), { max: 80, recommended: true })}
+          {field("cityApprox", t("cityLabel"), { max: 80, required: true })}
           {select("country", t("countryLabel"), countryOptions, {}, (v) =>
             countryLabel(v, locale),
           )}
@@ -535,7 +554,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
             field("intentionStatement", t("intentionStatementLabel"), {
               area: true,
               max: 280,
-              recommended: true,
+              required: true,
             })}
           {!isCouple && (
             <label className="flex flex-col gap-1.5">

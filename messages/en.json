@@ -215,7 +215,11 @@
     "married": "Married",
     "photoChange": "Change photo",
     "photoError": "Photo upload failed. Try again.",
-    "secMoreCount": "{filled}/{total} filled"
+    "secMoreCount": "{filled}/{total} filled",
+    "photoErrorType": "Unsupported format. Use a JPG, PNG or WebP image.",
+    "photoErrorTooLarge": "Image too large. Choose a photo under 5 MB.",
+    "photoErrorRate": "Too many attempts. Please wait a moment before trying again.",
+    "photoErrorDisabled": "Photo upload is temporarily unavailable. Try again later."
   },
   "visibility": {
     "PUBLIC_CONTROLLED": "Public",
@@ -243,7 +247,9 @@
     "needCity": "Your city or region",
     "needIntention": "Your intention (what you're seeking)",
     "photoReveal": "Revealed as you progress",
-    "requestSent": "Interest request gently sent."
+    "requestSent": "Interest request gently sent.",
+    "blockedVerifyTitle": "Verify your email address",
+    "blockedVerifyBody": "Your aligned profiles are waiting. Confirm your email first to appear in matches and discover others."
   },
   "alliance": {
     "yourPath": "Your journey",
@@ -325,7 +331,9 @@
     "responding": "The AI is replying…",
     "error": "Couldn't get a response. Check your connection and try again.",
     "retry": "Try again",
-    "fallbackNotice": "Guided mode: prepared answers per stage, no external AI."
+    "fallbackNotice": "Guided mode: prepared answers per stage, no external AI.",
+    "verifyTitle": "Verify your email to chat with the AI Coach",
+    "verifyBody": "The AI Coach is available once your email address is confirmed. The verification link is in your inbox (check your spam too)."
   },
   "coaches": {
     "title": "Verified coaches",
@@ -496,7 +504,12 @@
       "banner": "New: take your preparation interview - 5 questions to discern where you are.",
       "bannerCta": "Take the interview",
       "bannerBadge": "Recommended · 2 min",
-      "bannerTitle": "Start with your interview"
+      "bannerTitle": "Start with your interview",
+      "analyzingTitle": "We are preparing your spiritual and relational portrait",
+      "analyzing1": "Analyzing your answers...",
+      "analyzing2": "Identifying your points of alignment...",
+      "analyzing3": "Highlighting your strengths...",
+      "analyzing4": "Preparing your summary..."
     },
     "facil": {
       "title": "Topics never addressed together",
@@ -601,7 +614,7 @@
     "unsure": "Not really",
     "notePlaceholder": "A word if you wish (private)…",
     "send": "Send to the Guardian",
-    "guardianTitle": "The Couple's Guardian",
+    "guardianTitle": "AI Pastor",
     "ritualsTitle": "Suggested rituals this week",
     "checkinDone": "Check-in saved - everything seems fine this week. Keep it up.",
     "checkinAgain": "Do another check-in",

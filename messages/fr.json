@@ -215,7 +215,11 @@
     "married": "Marié·e",
     "photoChange": "Changer la photo",
     "photoError": "Échec de l'envoi de la photo. Réessaie.",
-    "secMoreCount": "{filled}/{total} remplis"
+    "secMoreCount": "{filled}/{total} remplis",
+    "photoErrorType": "Format non supporté. Utilise une image JPG, PNG ou WebP.",
+    "photoErrorTooLarge": "Image trop lourde. Choisis une photo de moins de 5 Mo.",
+    "photoErrorRate": "Trop d'essais. Patiente un instant avant de réessayer.",
+    "photoErrorDisabled": "L'envoi de photo est momentanément indisponible. Réessaie plus tard."
   },
   "visibility": {
     "PUBLIC_CONTROLLED": "Public",
@@ -243,7 +247,9 @@
     "needCity": "Ta ville ou région",
     "needIntention": "Ta phrase d'intention (ce que tu cherches)",
     "photoReveal": "Se dévoile en avançant",
-    "requestSent": "Demande d'intérêt envoyée avec douceur."
+    "requestSent": "Demande d'intérêt envoyée avec douceur.",
+    "blockedVerifyTitle": "Vérifie ton adresse email",
+    "blockedVerifyBody": "Tes profils alignés t'attendent. Confirme d'abord ton email pour apparaître dans les rencontres et découvrir les autres."
   },
   "alliance": {
     "yourPath": "Votre parcours",
@@ -325,7 +331,9 @@
     "responding": "L'IA répond…",
     "error": "La réponse n'a pas pu être obtenue. Vérifie ta connexion et réessaie.",
     "retry": "Réessayer",
-    "fallbackNotice": "Mode guidé : réponses préparées par étape, sans IA externe."
+    "fallbackNotice": "Mode guidé : réponses préparées par étape, sans IA externe.",
+    "verifyTitle": "Vérifie ton email pour parler au Coach IA",
+    "verifyBody": "Le Coach IA t'accompagne dès que ton adresse email est confirmée. Le lien de vérification est dans ta boîte de réception (pense à regarder les spams)."
   },
   "coaches": {
     "title": "Coachs vérifiés",
@@ -496,7 +504,12 @@
       "banner": "Nouveau : fais ton entretien de préparation - 5 questions pour discerner où tu en es.",
       "bannerCta": "Faire l'entretien",
       "bannerBadge": "Recommandé · 2 min",
-      "bannerTitle": "Commence par ton entretien"
+      "bannerTitle": "Commence par ton entretien",
+      "analyzingTitle": "Nous préparons ton portrait spirituel et relationnel",
+      "analyzing1": "Analyse de tes réponses...",
+      "analyzing2": "Identification de tes points d'alignement...",
+      "analyzing3": "Mise en lumière de tes forces...",
+      "analyzing4": "Préparation de ta synthèse..."
     },
     "facil": {
       "title": "Sujets jamais abordés ensemble",
@@ -601,7 +614,7 @@
     "unsure": "Pas vraiment",
     "notePlaceholder": "Un mot si tu veux préciser (privé)…",
     "send": "Envoyer au Gardien",
-    "guardianTitle": "Le Gardien du Couple",
+    "guardianTitle": "Pasteur IA",
     "ritualsTitle": "Rituels proposés cette semaine",
     "checkinDone": "Check-in enregistré - tout semble aller bien cette semaine. Continuez ainsi.",
     "checkinAgain": "Refaire un check-in",

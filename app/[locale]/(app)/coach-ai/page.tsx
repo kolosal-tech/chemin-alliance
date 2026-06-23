@@ -1,4 +1,4 @@
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { prisma } from "@/lib/db";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { decryptOptional } from "@/lib/security/crypto";
@@ -11,6 +11,19 @@ export default async function CoachAiPage({
 }) {
   setRequestLocale(params.locale);
   const user = await requirePageUser(params.locale);
+  // Email non verifie : l'IA payante reste fermee (cf. audit ticket 1). La
+  // banniere globale (layout) propose deja le renvoi du lien de verification.
+  if (!user.isVerified) {
+    const t = await getTranslations("aiCoach");
+    return (
+      <main className="safe-top px-3 pt-6 lg:mx-auto lg:max-w-xl">
+        <div className="rounded-card border border-info-border bg-info-surface p-5 text-info-ink dark:border-info-darkBorder dark:bg-info-darkSurface dark:text-info-darkInk">
+          <h1 className="font-display text-xl">{t("verifyTitle")}</h1>
+          <p className="mt-2 text-sm leading-relaxed">{t("verifyBody")}</p>
+        </div>
+      </main>
+    );
+  }
   // Historique persistant (déchiffré) - restitué au rechargement de la page.
   const rows = await prisma.coachMessage.findMany({
     where: { userId: user.id },

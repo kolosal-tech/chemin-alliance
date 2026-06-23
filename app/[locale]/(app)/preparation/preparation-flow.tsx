@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
 import { AsyncButton } from "@/components/AsyncButton";
+import { Spinner } from "@/components/Spinner";
 
 type Portrait = {
   dimensions: Record<
@@ -29,6 +30,52 @@ const STATUS_STYLE: Record<string, string> = {
   accompany:
     "bg-[#EAEDF2] text-[#2A3550] dark:bg-[#1A2233] dark:text-[#B9C6E0]",
 };
+
+// Ecran de generation : la creation du portrait appelle un LLM (20-40s sur
+// reseau lent ou repli fournisseur). Sans retour visuel, l'utilisateur croit
+// l'app gelee juste apres 5 questions intimes. Spinner + messages de
+// reassurance qui avancent (cappes au dernier, jamais en boucle).
+function GenerationScreen() {
+  const t = useTranslations("agents.prep");
+  const messages = [
+    t("analyzing1"),
+    t("analyzing2"),
+    t("analyzing3"),
+    t("analyzing4"),
+  ];
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const id = setInterval(
+      () => setI((n) => Math.min(n + 1, messages.length - 1)),
+      3500,
+    );
+    return () => clearInterval(id);
+  }, [messages.length]);
+  return (
+    <section
+      className="mt-10 flex flex-col items-center gap-5 text-center"
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+    >
+      <Spinner className="h-8 w-8 text-gold" />
+      <p className="font-display text-[20px] italic leading-snug text-night dark:text-[#ECE7DD]">
+        {t("analyzingTitle")}
+      </p>
+      <p className="min-h-[1.5em] text-[16px] text-warmgray dark:text-[#9A958B]">
+        {messages[i]}
+      </p>
+      <div className="flex gap-1.5" aria-hidden>
+        {messages.map((_, n) => (
+          <span
+            key={n}
+            className={`h-1.5 w-1.5 rounded-full ${n <= i ? "bg-gold" : "bg-sand-300 dark:bg-anthracite-600"}`}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export function PreparationFlow({
   questions,
@@ -181,14 +228,7 @@ export function PreparationFlow({
         </section>
       )}
 
-      {phase === "analyzing" && (
-        <p
-          role="status"
-          className="mt-8 text-center font-display text-[20px] italic text-warmgray dark:text-[#9A958B]"
-        >
-          {t("analyzing")}
-        </p>
-      )}
+      {phase === "analyzing" && <GenerationScreen />}
 
       {phase === "portrait" && portrait && (
         <section className="mt-5 pb-8">
