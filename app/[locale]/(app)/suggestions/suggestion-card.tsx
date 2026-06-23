@@ -5,6 +5,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { AsyncButton } from "@/components/AsyncButton";
 import { Spinner } from "@/components/Spinner";
 import { BlurhashImage } from "@/components/BlurhashImage";
+import { Radar } from "@/components/Radar";
 import { optionLabel, DENOMINATION_LABELS } from "@/lib/profile-options";
 
 const GRADIENTS = [
@@ -25,6 +26,14 @@ type Profile = {
   intentionStatement: string | null;
   gradient: number;
   photoBlurhash?: string | null;
+  // P2 : axes de compatibilité (0..1) pour le radar « sujets à approfondir ».
+  axes?: {
+    faith: number;
+    children: number;
+    finances: number;
+    location: number;
+    vision: number;
+  } | null;
 };
 
 export function SuggestionCard({
@@ -204,6 +213,38 @@ export function SuggestionCard({
             </svg>
             {t("suggestions.alignedClose")}
           </div>
+        )}
+
+        {profile.axes && (
+          <details className="group mt-3 border-t border-sand-100 pt-3 dark:border-anthracite-700">
+            <summary className="flex cursor-pointer list-none items-center gap-1.5 text-[14px] font-semibold text-gold-deep dark:text-gold-light">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
+                  fill="currentColor"
+                />
+              </svg>
+              {t("suggestions.compatibilityToggle")}
+              <span
+                aria-hidden
+                className="ml-auto text-warmgray transition-transform group-open:rotate-90 dark:text-[#9A958B]"
+              >
+                ›
+              </span>
+            </summary>
+            <div className="mt-1 flex flex-col items-center">
+              <Radar axes={profile.axes} />
+              <p className="-mt-1 text-[12px] text-warmgray dark:text-[#8B8579]">
+                {t("suggestions.compatibilityNote")}
+              </p>
+            </div>
+          </details>
         )}
 
         {state === "sent" ? (
