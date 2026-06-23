@@ -119,7 +119,7 @@ export function CoachChat({
   return (
     <div className="fixed inset-0 z-30 mx-auto flex w-full max-w-md flex-col bg-cream dark:bg-anthracite-900 lg:left-60 lg:max-w-2xl">
       <SacredMotif variant="flame" className="right-[-90px] top-[160px]" />
-      <header className="glass safe-top z-30 border-b border-sand-200/50 px-4 pb-3 pt-3 dark:border-anthracite-600/50">
+      <header className="glass safe-top z-30 border-b border-sand-200/50 px-3 pb-3 pt-3 dark:border-anthracite-600/50">
         <div className="mb-3 flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-night dark:bg-gold-light">
             <svg
@@ -186,11 +186,11 @@ export function CoachChat({
       <div
         role="log"
         aria-live="polite"
-        className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-4 py-4 [&>*]:shrink-0"
+        className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-3 py-4 [&>*]:shrink-0"
       >
         {/* Bandeau de transparence - obligatoire */}
         <div
-          className="glass glass-bubble rounded-[13px] border-[#D4DAE4]/70 bg-[#EAEDF2]/70 px-4 py-3 dark:border-[#2A3A56]/70 dark:bg-[#1A2233]/60"
+          className="glass glass-bubble rounded-[13px] border-[#D4DAE4]/70 bg-[#EAEDF2]/70 px-3 py-3 dark:border-[#2A3A56]/70 dark:bg-[#1A2233]/60"
           role="note"
         >
           <div className="flex gap-2.5">
@@ -347,7 +347,7 @@ export function CoachChat({
         {error && (
           <div
             role="alert"
-            className="self-start rounded-[13px] border border-[#E7C3BD] bg-[#FBEEEC] px-4 py-3 dark:border-[#5A2A22] dark:bg-[#2A1714]"
+            className="self-start rounded-[13px] border border-[#E7C3BD] bg-[#FBEEEC] px-3 py-3 dark:border-[#5A2A22] dark:bg-[#2A1714]"
           >
             <p className="text-[15px] leading-normal text-danger dark:text-[#E59B91]">
               {error}
@@ -368,7 +368,7 @@ export function CoachChat({
         {quota !== null ? (
           <p
             role="status"
-            className="rounded-[13px] border border-warn-border bg-warn-surface px-4 py-3 text-[15px] text-warn-ink dark:border-warn-darkBorder dark:bg-warn-darkSurface dark:text-warn-darkInk"
+            className="rounded-[13px] border border-warn-border bg-warn-surface px-3 py-3 text-[15px] text-warn-ink dark:border-warn-darkBorder dark:bg-warn-darkSurface dark:text-warn-darkInk"
           >
             {t("aiCoach.quotaReached", { limit: quota })}
           </p>

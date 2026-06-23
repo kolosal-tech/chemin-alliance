@@ -224,7 +224,7 @@ export function SuggestionCard({
               onClick={pass}
               disabled={state === "passing"}
               aria-label={t("suggestions.pass")}
-              className="flex items-center justify-center gap-2 rounded-btn border border-sand-400 px-4 py-3 text-sm font-medium text-[#6B665C] disabled:opacity-50 dark:border-anthracite-600 dark:text-[#9A958B]"
+              className="flex items-center justify-center gap-2 rounded-btn border border-sand-400 px-3 py-3 text-sm font-medium text-[#6B665C] disabled:opacity-50 dark:border-anthracite-600 dark:text-[#9A958B]"
             >
               {state === "passing" && <Spinner className="h-4 w-4" />}
               {t("suggestions.pass")}

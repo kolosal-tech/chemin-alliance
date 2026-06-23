@@ -93,12 +93,12 @@ export function BookingPanel({
       {done ? (
         <p
           role="status"
-          className="rounded-btn bg-[#EAF0EB] px-4 py-3 text-[16px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]"
+          className="rounded-btn bg-[#EAF0EB] px-3 py-3 text-[16px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]"
         >
           {done}
         </p>
       ) : (
-        <div className="flex items-center gap-3.5 rounded-cardlg border border-sand-200 bg-surface px-4 py-3.5 dark:border-anthracite-600 dark:bg-anthracite-800">
+        <div className="flex items-center gap-3.5 rounded-cardlg border border-sand-200 bg-surface px-3 py-3.5 dark:border-anthracite-600 dark:bg-anthracite-800">
           <div>
             <div className="font-display text-2xl text-night dark:text-[#ECE7DD]">
               {priceEUR}&nbsp;€

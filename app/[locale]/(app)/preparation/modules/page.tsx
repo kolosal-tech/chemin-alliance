@@ -25,7 +25,7 @@ export default async function CurriculumPage({
   const modules = getCurriculum(locale, faith?.vertical ?? null);
 
   return (
-    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-3 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
         {t("kicker")}
       </span>
@@ -42,7 +42,7 @@ export default async function CurriculumPage({
             key={m.id}
             className="overflow-hidden rounded-cardlg border border-sand-200 bg-surface dark:border-anthracite-600 dark:bg-anthracite-800"
           >
-            <div className="flex items-center gap-3 border-b border-sand-100 bg-[#FBF6E9] px-4 py-3 dark:border-anthracite-700 dark:bg-[#272117]">
+            <div className="flex items-center gap-3 border-b border-sand-100 bg-[#FBF6E9] px-3 py-3 dark:border-anthracite-700 dark:bg-[#272117]">
               <span className="flex h-7 w-7 flex-none items-center justify-center rounded-full bg-gold text-[16px] font-semibold text-night">
                 {i + 1}
               </span>
@@ -56,7 +56,7 @@ export default async function CurriculumPage({
               </div>
             </div>
 
-            <div className="px-4 py-4">
+            <div className="px-3 py-4">
               <p className="text-[17px] leading-relaxed text-ink dark:text-[#CFCAC0]">
                 {m.summary}
               </p>

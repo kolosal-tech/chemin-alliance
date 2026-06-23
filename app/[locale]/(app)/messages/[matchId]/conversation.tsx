@@ -209,7 +209,7 @@ export function Conversation({
       <SacredMotif variant="dove" className="right-[-100px] bottom-[200px]" />
 
       {/* Header verre */}
-      <header className="glass safe-top z-30 flex items-center gap-3 border-b border-sand-200/50 px-4 py-3 dark:border-anthracite-600/50">
+      <header className="glass safe-top z-30 flex items-center gap-3 border-b border-sand-200/50 px-3 py-3 dark:border-anthracite-600/50">
         <Link href="/messages" aria-label={t("common.back")} className="p-1">
           <svg
             width="20"
@@ -310,7 +310,7 @@ export function Conversation({
             <AsyncButton
               onClick={declineMatch}
               disabled={acceptBusy}
-              className="rounded-btnsm border border-sand-300 px-4 py-2.5 text-[16px] font-medium text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
+              className="rounded-btnsm border border-sand-300 px-3 py-2.5 text-[16px] font-medium text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
             >
               {t("messaging.declineCta")}
             </AsyncButton>
@@ -323,7 +323,7 @@ export function Conversation({
         </div>
       )}
       {awaitingOther && !pending && (
-        <p className="mx-3 mt-3 rounded-card border border-info-border bg-info-surface px-4 py-3 text-[15px] text-info-ink dark:border-info-darkBorder dark:bg-info-darkSurface dark:text-info-darkInk">
+        <p className="mx-3 mt-3 rounded-card border border-info-border bg-info-surface px-3 py-3 text-[15px] text-info-ink dark:border-info-darkBorder dark:bg-info-darkSurface dark:text-info-darkInk">
           {t("messaging.awaitingOther", { name: other.displayName })}
         </p>
       )}
@@ -331,7 +331,7 @@ export function Conversation({
       {/* Messages - verre liquide. min-h-0 indispensable : sans lui, flex-1
           ne se contraint pas, la colonne déborde et le bloc de saisie collant
           recouvre les derniers messages. */}
-      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-4 py-4 pb-2 [&>*]:shrink-0">
+      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-3 py-4 pb-2 [&>*]:shrink-0">
         {messages.length === 0 && (
           <p className="mx-auto mt-8 max-w-[32ch] text-center text-sm text-sand-600 dark:text-[#7E7A72]">
             {t("messaging.emptyState")}
@@ -343,7 +343,7 @@ export function Conversation({
               <div
                 key={m.id}
                 role="status"
-                className="glass glass-bubble max-w-[90%] self-center rounded-[14px] border-warn-border/70 bg-warn-surface/70 px-4 py-3 dark:border-warn-darkBorder/70 dark:bg-warn-darkSurface/60"
+                className="glass glass-bubble max-w-[90%] self-center rounded-[14px] border-warn-border/70 bg-warn-surface/70 px-3 py-3 dark:border-warn-darkBorder/70 dark:bg-warn-darkSurface/60"
               >
                 <div className="flex gap-2.5">
                   <svg

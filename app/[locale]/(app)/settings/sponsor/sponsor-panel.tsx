@@ -69,7 +69,7 @@ export function SponsorPanel({ initial }: { initial: Sponsor | null }) {
   const lbl = "lbl text-[12px] text-sand-600 dark:text-[#9A958B]";
 
   return (
-    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-3 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <h1 className="font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("title")}
       </h1>
@@ -142,7 +142,7 @@ export function SponsorPanel({ initial }: { initial: Sponsor | null }) {
           <button
             type="submit"
             disabled={busy}
-            className="flex flex-1 items-center justify-center gap-2 rounded-btnlg bg-navy px-4 py-3.5 text-[18px] font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
+            className="flex flex-1 items-center justify-center gap-2 rounded-btnlg bg-navy px-3 py-3.5 text-[18px] font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
           >
             {busy && <Spinner className="h-4 w-4" />}
             {busy ? tc("loading") : sponsor ? t("update") : t("save")}
@@ -152,7 +152,7 @@ export function SponsorPanel({ initial }: { initial: Sponsor | null }) {
               type="button"
               onClick={() => setConfirmRemove(true)}
               disabled={busy}
-              className="rounded-btnlg border border-sand-400 px-4 py-3.5 text-[18px] font-semibold text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
+              className="rounded-btnlg border border-sand-400 px-3 py-3.5 text-[18px] font-semibold text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
             >
               {t("remove")}
             </button>

@@ -13,7 +13,7 @@ export default async function TrustPage({
   const user = await requirePageUser(params.locale);
 
   return (
-    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-3 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <h1 className="font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("trust.title")}
       </h1>
@@ -73,7 +73,7 @@ export default async function TrustPage({
         </div>
       </section>
 
-      <p className="mt-4 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-3 text-[15px] leading-normal text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
+      <p className="mt-4 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-3 py-3 text-[15px] leading-normal text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
         {t("trust.privacyNote")}
       </p>
     </main>

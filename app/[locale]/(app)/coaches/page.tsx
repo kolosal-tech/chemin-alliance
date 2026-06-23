@@ -16,7 +16,7 @@ export default async function CoachesPage({
   });
 
   return (
-    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-4xl">
+    <main className="px-3 pt-6 safe-top lg:mx-auto lg:max-w-4xl">
       <h1 className="mb-4 font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("title")}
       </h1>

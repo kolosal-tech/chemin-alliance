@@ -165,7 +165,7 @@ export function MeditationSession({
 
       {/* ─────────────── INTRO ─────────────── */}
       {step === "intro" && (
-        <div className="flex flex-1 flex-col px-5 pt-8 safe-top">
+        <div className="flex flex-1 flex-col px-4 pt-8 safe-top">
           <button
             type="button"
             onClick={onClose}
@@ -222,7 +222,7 @@ export function MeditationSession({
 
       {/* ─────────────── RESPIRATION ─────────────── */}
       {step === "breathing" && (
-        <div className="flex flex-1 flex-col px-5 pt-6 safe-top">
+        <div className="flex flex-1 flex-col px-4 pt-6 safe-top">
           <div className="flex items-center justify-between">
             <span className="font-display text-lg tabular-nums">
               {fmt(remaining)}
@@ -281,14 +281,14 @@ export function MeditationSession({
 
           {confirmSkip && remaining > 0 ? (
             <div className="mb-8 flex flex-col items-center gap-3 rounded-btn border border-sand-200 py-4 dark:border-anthracite-600">
-              <span className="px-4 text-center text-[16px] text-warmgray dark:text-[#9A958B]">
+              <span className="px-3 text-center text-[16px] text-warmgray dark:text-[#9A958B]">
                 {t("skipConfirm")}
               </span>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setStep("reflection")}
-                  className="rounded-full bg-navy px-4 py-1.5 text-[16px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+                  className="rounded-full bg-navy px-3 py-1.5 text-[16px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
                 >
                   {t("quitYes")}
                 </button>
@@ -317,7 +317,7 @@ export function MeditationSession({
 
       {/* ─────────────── RÉFLEXION ─────────────── */}
       {step === "reflection" && (
-        <div className="flex flex-1 flex-col px-5 pt-8 safe-top">
+        <div className="flex flex-1 flex-col px-4 pt-8 safe-top">
           <div className="flex-1">
             <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
               {t("reflection")}
@@ -369,7 +369,7 @@ export function MeditationSession({
 
       {/* ─────────────── CLÔTURE ─────────────── */}
       {step === "done" && (
-        <div className="flex flex-1 flex-col items-center justify-center px-5 text-center safe-top">
+        <div className="flex flex-1 flex-col items-center justify-center px-4 text-center safe-top">
           <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#EAF0EB] dark:bg-[#1B2A20]">
             <span className="text-2xl">🙏</span>
           </div>

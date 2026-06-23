@@ -87,7 +87,7 @@ export function PreparationFlow({
   }
 
   return (
-    <main className="relative px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="relative px-3 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <SacredMotif variant="tree" className="right-[-120px] top-[40px]" />
       <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
         {t("title")}
@@ -163,7 +163,7 @@ export function PreparationFlow({
                   type="button"
                   disabled={!(answers[questions[step].id] ?? "").trim()}
                   onClick={() => setStep(step + 1)}
-                  className="rounded-btnsm bg-navy px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
+                  className="rounded-btnsm bg-navy px-3 py-2.5 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
                 >
                   {t("next")}
                 </button>
@@ -171,7 +171,7 @@ export function PreparationFlow({
                 <AsyncButton
                   disabled={!(answers[questions[step].id] ?? "").trim()}
                   onClick={submit}
-                  className="rounded-btnsm bg-gold px-4 py-2.5 text-sm font-semibold text-night disabled:opacity-50"
+                  className="rounded-btnsm bg-gold px-3 py-2.5 text-sm font-semibold text-night disabled:opacity-50"
                 >
                   {t("submit")}
                 </AsyncButton>
@@ -207,7 +207,7 @@ export function PreparationFlow({
               return (
                 <div
                   key={d}
-                  className={`px-4 py-3.5 ${i < DIMS.length - 1 ? "border-b border-sand-100 dark:border-anthracite-700" : ""}`}
+                  className={`px-3 py-3.5 ${i < DIMS.length - 1 ? "border-b border-sand-100 dark:border-anthracite-700" : ""}`}
                 >
                   <div className="flex items-center justify-between gap-3">
                     <span className="text-sm font-medium text-ink dark:text-[#ECE7DD]">

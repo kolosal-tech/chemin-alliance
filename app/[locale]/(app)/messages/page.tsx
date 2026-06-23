@@ -41,7 +41,7 @@ export default async function MessagesListPage({
   });
 
   return (
-    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-3 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <h1 className="mb-4 font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("messaging.title")}
       </h1>
@@ -57,7 +57,7 @@ export default async function MessagesListPage({
               </p>
               <Link
                 href="/couple"
-                className="mt-3 inline-block rounded-btnsm bg-navy px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+                className="mt-3 inline-block rounded-btnsm bg-navy px-3 py-2.5 text-sm font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
               >
                 {t("messaging.coupleSpaceCta")}
               </Link>

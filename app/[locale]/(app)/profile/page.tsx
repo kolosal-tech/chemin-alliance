@@ -48,7 +48,7 @@ export default async function ProfilePage({
         blurredByDefault={user.photoBlurredByDefault}
         photoUrl={photoUrl}
       />
-      <div className="px-4 pt-4">
+      <div className="px-3 pt-4">
         <div className="mb-4 flex gap-2">
           {faith?.denomination && (
             <span className="rounded-[9px] bg-navy px-2.5 py-1.5 text-xs font-semibold text-[#E8D9A8] dark:bg-[#222C42] dark:text-[#B9C6E0]">
@@ -157,7 +157,7 @@ export default async function ProfilePage({
         <h2 className="lbl mb-2.5 text-[12px] text-gold-deep dark:text-gold-light">
           {t("profile.intention")}
         </h2>
-        <div className="mb-5 rounded-r-btn border border-l-2 border-sand-200 border-l-gold bg-surface px-4 py-3.5 dark:border-anthracite-600 dark:border-l-gold-light dark:bg-anthracite-800">
+        <div className="mb-5 rounded-r-btn border border-l-2 border-sand-200 border-l-gold bg-surface px-3 py-3.5 dark:border-anthracite-600 dark:border-l-gold-light dark:bg-anthracite-800">
           <p className="font-display text-[18px] italic leading-normal text-[#3A372F] dark:text-[#CFCAC0]">
             « {rel?.intentionStatement ?? "-"} »
           </p>
