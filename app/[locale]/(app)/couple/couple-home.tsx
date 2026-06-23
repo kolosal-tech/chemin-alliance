@@ -566,6 +566,9 @@ export function CoupleHome() {
         </div>
         {!guidance ? (
           <>
+            <p className="mt-2.5 text-[12px] text-gold-deep dark:text-gold-light">
+              {t("checkinRequiredHint")}
+            </p>
             <div className="mt-3 flex flex-col gap-3.5">
               {(data.questions ?? []).map((q) =>
                 q.kind === "open" ? (
@@ -574,6 +577,7 @@ export function CoupleHome() {
                   <div key={q.id}>
                     <p className="font-display text-[17px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
                       {q.text}
+                      <span className="text-gold"> *</span>
                     </p>
                     <textarea
                       value={answers[q.id]?.note ?? ""}
@@ -597,6 +601,7 @@ export function CoupleHome() {
                   <div key={q.id}>
                     <p className="font-display text-[17px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
                       {q.text}
+                      <span className="text-gold"> *</span>
                     </p>
                     <div
                       className="mt-1.5 flex gap-1.5"

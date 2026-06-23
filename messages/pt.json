@@ -595,6 +595,7 @@
     "seasonPARENTS": "Pais jovens",
     "checkinTitle": "Check-in da semana",
     "checkinPrivacy": "As tuas respostas são privadas - o teu cônjuge não as vê.",
+    "checkinRequiredHint": "* obrigatório para enviar",
     "yes": "Sim",
     "no": "Não",
     "unsure": "Nem por isso",
