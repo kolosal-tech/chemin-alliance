@@ -52,6 +52,9 @@ export function CoupleHome() {
   } | null>(null);
   const [busy, setBusy] = useState(false);
   const [checkinError, setCheckinError] = useState<string | null>(null);
+  // Passe à true au 1er envoi tenté : sert à surligner en rouge les questions
+  // restées sans réponse (au lieu de simplement désactiver le bouton).
+  const [attempted, setAttempted] = useState(false);
   const [copied, setCopied] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
   const [sendState, setSendState] = useState<
@@ -250,6 +253,20 @@ export function CoupleHome() {
       setBusy(false);
     }
   }
+
+  // Une question est « sans réponse » si son contrôle obligatoire est vide.
+  const checkinUnanswered = (q: { id: string; kind?: "scale" | "open" }) =>
+    q.kind === "open" ? !answers[q.id]?.note?.trim() : !answers[q.id]?.value;
+
+  // Clic sur Envoyer : si une réponse manque, on surligne au lieu d'envoyer.
+  function tryCheckin() {
+    if ((data?.questions ?? []).some(checkinUnanswered)) {
+      setAttempted(true);
+      return;
+    }
+    void sendCheckin();
+  }
+
   async function copyCode(value: string) {
     try {
       await navigator.clipboard.writeText(value);
@@ -570,14 +587,18 @@ export function CoupleHome() {
               {t("checkinRequiredHint")}
             </p>
             <div className="mt-3 flex flex-col gap-3.5">
-              {(data.questions ?? []).map((q) =>
-                q.kind === "open" ? (
+              {(data.questions ?? []).map((q) => {
+                const missing = attempted && checkinUnanswered(q);
+                return q.kind === "open" ? (
                   // Question ouverte : pas de Oui/Non (incohérent) - réponse
                   // libre OBLIGATOIRE, exigée par la validation du bouton d'envoi.
                   <div key={q.id}>
                     <p className="font-display text-[17px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
                       {q.text}
-                      <span className="text-gold"> *</span>
+                      <span className={missing ? "text-danger" : "text-gold"}>
+                        {" "}
+                        *
+                      </span>
                     </p>
                     <textarea
                       value={answers[q.id]?.note ?? ""}
@@ -594,19 +615,28 @@ export function CoupleHome() {
                       rows={3}
                       placeholder={t("openAnswerPlaceholder")}
                       aria-label={q.text}
-                      className="mt-1.5 w-full resize-y rounded-btnsm border border-sand-300 bg-surface px-3 py-2.5 text-[16px] leading-snug text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
+                      aria-invalid={missing}
+                      className={`mt-1.5 w-full resize-y rounded-btnsm border border-sand-300 bg-surface px-3 py-2.5 text-[16px] leading-snug text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD] ${
+                        missing ? "ring-2 ring-danger" : ""
+                      }`}
                     />
                   </div>
                 ) : (
                   <div key={q.id}>
                     <p className="font-display text-[17px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
                       {q.text}
-                      <span className="text-gold"> *</span>
+                      <span className={missing ? "text-danger" : "text-gold"}>
+                        {" "}
+                        *
+                      </span>
                     </p>
                     <div
-                      className="mt-1.5 flex gap-1.5"
+                      className={`mt-1.5 flex gap-1.5 ${
+                        missing ? "rounded-[11px] ring-2 ring-danger" : ""
+                      }`}
                       role="radiogroup"
                       aria-label={q.text}
+                      aria-invalid={missing}
                     >
                       {(["yes", "no", "unsure"] as const).map((v) => (
                         <button
@@ -645,20 +675,13 @@ export function CoupleHome() {
                       className="mt-1.5 w-full rounded-btnsm border border-sand-200 bg-surface px-3 py-2 text-[15px] text-ink dark:border-anthracite-600 dark:bg-anthracite-700 dark:text-[#ECE7DD]"
                     />
                   </div>
-                ),
-              )}
+                );
+              })}
             </div>
             <button
               type="button"
-              onClick={sendCheckin}
-              disabled={
-                busy ||
-                (data.questions ?? []).some((q) =>
-                  q.kind === "open"
-                    ? !answers[q.id]?.note?.trim()
-                    : !answers[q.id]?.value,
-                )
-              }
+              onClick={tryCheckin}
+              disabled={busy}
               aria-busy={busy}
               className="btn-glass btn-glass-blue mt-4 flex w-full items-center justify-center gap-2 rounded-btnsm py-3 text-sm font-semibold disabled:opacity-60"
             >
