@@ -17,6 +17,9 @@ import type { MaturityResult, MaturityAxis } from "@/lib/maturity";
 type Candidate = User & {
   faithProfile: FaithProfile | null;
   relationshipProfile: RelationshipProfile | null;
+  // P6 : présence d'un Parrain/Marraine (signal de confiance). Optionnel pour
+  // rester compatible avec Me (qui n'inclut pas le sponsor).
+  sponsor?: { relation: string } | null;
 };
 
 // L'utilisateur courant, déjà chargé par la session (requireUser /
@@ -147,6 +150,8 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
       faithProfile: true,
       relationshipProfile: true,
       privacySettings: true,
+      // P6 : signal de confiance "accompagné·e" (a un Parrain/Marraine).
+      sponsor: { select: { relation: true } },
     },
     take: 24,
   });

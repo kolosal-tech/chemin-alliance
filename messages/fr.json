@@ -254,7 +254,8 @@
     "compatibilityToggle": "Voir la compatibilité",
     "compatibilityNote": "Jamais un score, juste des repères pour discerner.",
     "previewTitle": "{count} profils t'attendent",
-    "previewAge": "{age} ans"
+    "previewAge": "{age} ans",
+    "accompaniedBadge": "Accompagné·e"
   },
   "alliance": {
     "yourPath": "Votre parcours",
