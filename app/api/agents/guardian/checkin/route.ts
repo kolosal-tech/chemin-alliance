@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { sealInsight } from "@/lib/agent-insight";
+import { sealInsight, openInsight } from "@/lib/agent-insight";
 import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit } from "@/lib/security/rate-limit";
@@ -59,7 +59,26 @@ export const POST = withErrors(async (req: Request) => {
     });
   }
 
-  const word = await guardianWord(season, body.answers, locale);
+  // P5 : mémoire du Pasteur - charge le dernier check-in (mot + rituels) pour
+  // qu'il y revienne avec délicatesse. Privé, propre à l'utilisateur ici.
+  const prev = await prisma.agentInsight.findFirst({
+    where: {
+      coupleSpaceId: space.id,
+      userId: user.id,
+      agentId: "guardian",
+      kind: "CHECKIN",
+      revokedAt: null,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+  const prevData = prev
+    ? openInsight<{ word?: string; rituals?: string[] }>(prev.dataJson)
+    : null;
+  const previous = prevData
+    ? { word: prevData.word ?? null, rituals: prevData.rituals ?? [] }
+    : null;
+
+  const word = await guardianWord(season, body.answers, locale, previous);
   await prisma.agentInsight.create({
     data: {
       userId: user.id,
@@ -69,6 +88,7 @@ export const POST = withErrors(async (req: Request) => {
       dataJson: sealInsight({
         answers: body.answers,
         rituals: evaluated.rituals,
+        word,
       }),
       visibility: "PRIVATE",
     },

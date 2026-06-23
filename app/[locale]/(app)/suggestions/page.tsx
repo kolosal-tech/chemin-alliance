@@ -98,7 +98,13 @@ export default async function SuggestionsPage({
         >
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-gold/15 text-gold-deep dark:text-gold-light">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
                 <path
                   d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
                   fill="currentColor"
