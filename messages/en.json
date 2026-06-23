@@ -595,6 +595,7 @@
     "seasonPARENTS": "Young parents",
     "checkinTitle": "This week's check-in",
     "checkinPrivacy": "Your answers stay private - your spouse never sees them.",
+    "checkinRequiredHint": "* required to send",
     "yes": "Yes",
     "no": "No",
     "unsure": "Not really",

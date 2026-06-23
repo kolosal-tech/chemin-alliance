@@ -83,6 +83,22 @@ export const DENOMINATION_LABELS: LabelMap = {
   Autre: { fr: "Autre", en: "Other", es: "Otra", pt: "Outra" },
 };
 
+// Variantes héritées (saisie libre avant la liste curée) -> valeur canonique.
+// Evite les doublons dans le menu : « Assemblée de Dieu » (singulier, faux) et
+// « Assemblées de Dieu » (pluriel, correct) ne doivent pas coexister.
+const DENOMINATION_ALIASES: Record<string, string> = {
+  "assemblée de dieu": "Assemblées de Dieu",
+  "assemblee de dieu": "Assemblées de Dieu",
+  "assemblees de dieu": "Assemblées de Dieu",
+};
+
+/** Normalise une dénomination héritée vers la valeur canonique de la liste. */
+export function canonicalDenomination(value?: string | null): string {
+  if (!value) return "";
+  const v = value.trim();
+  return DENOMINATION_ALIASES[v.toLowerCase()] ?? v;
+}
+
 // ─────────────────────────── Fréquence d'engagement ───────────────────────────
 export const ENGAGEMENT_FREQUENCIES = [
   "Chaque semaine",

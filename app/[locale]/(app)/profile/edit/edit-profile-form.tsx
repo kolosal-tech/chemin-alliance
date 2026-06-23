@@ -22,6 +22,7 @@ import {
   PERSONALITY_LABELS,
   optionLabel,
   countryLabel,
+  canonicalDenomination,
   type Locale,
 } from "@/lib/profile-options";
 import { Spinner } from "@/components/Spinner";
@@ -139,7 +140,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
           cityApprox: u.cityApprox ?? "",
           country: u.country ?? "",
           photoBlurredByDefault: u.photoBlurredByDefault ?? true,
-          denomination: f.denomination ?? "",
+          denomination: canonicalDenomination(f.denomination),
           ministry: f.ministry ?? "",
           engagementFrequency: f.engagementFrequency ?? "",
           localChurch: f.localChurch ?? "",
