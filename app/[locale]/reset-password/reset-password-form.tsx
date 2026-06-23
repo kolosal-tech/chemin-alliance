@@ -7,7 +7,9 @@ import { Link, useRouter } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
 import { Spinner } from "@/components/Spinner";
 
-export function ResetPasswordForm({ token: tokenProp }: { token?: string } = {}) {
+export function ResetPasswordForm({
+  token: tokenProp,
+}: { token?: string } = {}) {
   const t = useTranslations("auth");
   const tc = useTranslations("common");
   const router = useRouter();
