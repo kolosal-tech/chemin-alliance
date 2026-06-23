@@ -252,7 +252,9 @@
     "blockedVerifyTitle": "Verifica tu correo electrónico",
     "blockedVerifyBody": "Tus perfiles afines te esperan. Confirma primero tu correo para aparecer en los encuentros y descubrir a los demás.",
     "compatibilityToggle": "Ver la compatibilidad",
-    "compatibilityNote": "Nunca una puntuación, solo señales para discernir."
+    "compatibilityNote": "Nunca una puntuación, solo señales para discernir.",
+    "previewTitle": "{count} perfiles te esperan",
+    "previewAge": "{age} años"
   },
   "alliance": {
     "yourPath": "Vuestro camino",

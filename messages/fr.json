@@ -252,7 +252,9 @@
     "blockedVerifyTitle": "Vérifie ton adresse email",
     "blockedVerifyBody": "Tes profils alignés t'attendent. Confirme d'abord ton email pour apparaître dans les rencontres et découvrir les autres.",
     "compatibilityToggle": "Voir la compatibilité",
-    "compatibilityNote": "Jamais un score, juste des repères pour discerner."
+    "compatibilityNote": "Jamais un score, juste des repères pour discerner.",
+    "previewTitle": "{count} profils t'attendent",
+    "previewAge": "{age} ans"
   },
   "alliance": {
     "yourPath": "Votre parcours",

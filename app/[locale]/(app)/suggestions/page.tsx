@@ -5,6 +5,7 @@ import {
   getSuggestions,
   missingMinimumProfile,
   compatibilityTopics,
+  getDiscoveryPreview,
 } from "@/lib/matching";
 import { prisma } from "@/lib/db";
 import { Link } from "@/i18n/navigation";
@@ -19,6 +20,7 @@ import { OnboardingProgress } from "@/components/OnboardingProgress";
 import { IncompleteProfileModal } from "@/components/IncompleteProfileModal";
 import { OnboardingIntroCard } from "@/components/OnboardingIntroCard";
 import { SuggestionsVerifyNotice } from "@/components/SuggestionsVerifyNotice";
+import { DiscoveryPreview } from "@/components/DiscoveryPreview";
 import { parseFilters, matchesFilters, activeFilterCount } from "@/lib/filters";
 import { FiltersDrawer } from "@/components/product/FiltersDrawer";
 import { SafetyBlock } from "@/components/product/SafetyBlock";
@@ -48,6 +50,11 @@ export default async function SuggestionsPage({
     }),
   ]);
   const hasPortrait = portraitCount > 0;
+  // P3 : aperçu de découverte pré-vérification (silhouettes anonymisées) pour
+  // les comptes non vérifiés - une seule requête, et seulement dans ce cas.
+  const discoveryPreview = user.isVerified
+    ? []
+    : await getDiscoveryPreview(user);
   // Gate profil minimum : si ville/intention manquent, getSuggestions renvoie []
   // ET on affiche un appel à compléter plutôt que « pas de suggestion ».
   const missing = missingMinimumProfile(user);
@@ -209,10 +216,14 @@ export default async function SuggestionsPage({
           {missing.length === 0 &&
             shown.length === 0 &&
             (!user.isVerified ? (
-              // Liste vide parce que l'email n'est pas vérifié (matching renvoie
-              // [] tant que !isVerified) : on explique la vraie cause au lieu du
+              // Liste vide car email non vérifié (matching renvoie [] tant que
+              // !isVerified). P3 : on montre un aperçu de silhouettes (vivier
+              // vivant) + la vraie cause avec CTA de renvoi, plutôt que le
               // générique "pas de suggestion aujourd'hui".
-              <SuggestionsVerifyNotice />
+              <div className="flex flex-col gap-3 lg:col-span-3">
+                <DiscoveryPreview teasers={discoveryPreview} />
+                <SuggestionsVerifyNotice />
+              </div>
             ) : (
               <p className="rounded-card border border-sand-200 bg-surface p-5 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B] lg:col-span-3">
                 {t("suggestions.empty")}
