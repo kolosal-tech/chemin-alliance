@@ -281,7 +281,23 @@ export async function guardianWord(
   season: Season,
   answers: Array<{ id: string; value: string; note: string }>,
   locale: Locale,
+  previous?: { word: string | null; rituals: string[] } | null,
 ): Promise<string | null> {
+  // P5 : mémoire entre check-ins. On rappelle au Pasteur ce qu'il avait dit et
+  // suggéré la dernière fois, pour qu'il y revienne avec délicatesse (sentiment
+  // d'un accompagnateur qui se souvient), sans culpabiliser.
+  const memory =
+    previous && (previous.word || previous.rituals.length > 0)
+      ? `\n\nMÉMOIRE (dernier check-in de ce couple) :${
+          previous.word
+            ? ` tu avais répondu « ${previous.word.slice(0, 280)} ».`
+            : ""
+        }${
+          previous.rituals.length > 0
+            ? ` Tu avais suggéré : ${previous.rituals.join(" ; ")}.`
+            : ""
+        } Reviens-y avec douceur : demande comment cela a évolué, sans juger, avant de proposer la suite.`
+      : "";
   return completeText(
     `${SYSTEM}\nLangue: ${locale}. Saison: ${
       season === "PARENTS"
@@ -289,7 +305,7 @@ export async function guardianWord(
         : season === "ENGAGED"
           ? "fiancés en préparation au mariage"
           : "premières années de mariage"
-    }.`,
+    }.${memory}`,
     answers
       .map((a) => `${a.id}: ${a.value}${a.note ? ` - ${a.note}` : ""}`)
       .join("\n"),
