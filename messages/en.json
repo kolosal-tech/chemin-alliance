@@ -250,7 +250,9 @@
     "photoReveal": "Revealed as you progress",
     "requestSent": "Interest request gently sent.",
     "blockedVerifyTitle": "Verify your email address",
-    "blockedVerifyBody": "Your aligned profiles are waiting. Confirm your email first to appear in matches and discover others."
+    "blockedVerifyBody": "Your aligned profiles are waiting. Confirm your email first to appear in matches and discover others.",
+    "compatibilityToggle": "See compatibility",
+    "compatibilityNote": "Never a score, just markers to help discern."
   },
   "alliance": {
     "yourPath": "Your journey",

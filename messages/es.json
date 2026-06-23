@@ -250,7 +250,9 @@
     "photoReveal": "Se revela al avanzar",
     "requestSent": "Solicitud de interés enviada con delicadeza.",
     "blockedVerifyTitle": "Verifica tu correo electrónico",
-    "blockedVerifyBody": "Tus perfiles afines te esperan. Confirma primero tu correo para aparecer en los encuentros y descubrir a los demás."
+    "blockedVerifyBody": "Tus perfiles afines te esperan. Confirma primero tu correo para aparecer en los encuentros y descubrir a los demás.",
+    "compatibilityToggle": "Ver la compatibilidad",
+    "compatibilityNote": "Nunca una puntuación, solo señales para discernir."
   },
   "alliance": {
     "yourPath": "Vuestro camino",

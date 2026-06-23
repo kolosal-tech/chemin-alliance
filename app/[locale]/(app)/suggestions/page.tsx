@@ -1,7 +1,11 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { redirect } from "@/i18n/navigation";
-import { getSuggestions, missingMinimumProfile } from "@/lib/matching";
+import {
+  getSuggestions,
+  missingMinimumProfile,
+  compatibilityTopics,
+} from "@/lib/matching";
 import { prisma } from "@/lib/db";
 import { Link } from "@/i18n/navigation";
 import { AllianceThread } from "@/components/AllianceThread";
@@ -235,6 +239,8 @@ export default async function SuggestionsPage({
                       : null,
                   gradient: i % 3,
                   photoBlurhash: s.photoBlurhash ?? null,
+                  // P2 : axes de compatibilité viewer<->candidat pour le radar.
+                  axes: compatibilityTopics(user, s).axes,
                 }}
               />
             ))}
