@@ -33,8 +33,14 @@ export async function verifyEmailToken(
 
   await prisma.user.update({
     where: { id: user.id },
-    data: { isVerified: true, emailVerifyToken: null, emailVerifyExpires: null },
+    data: {
+      isVerified: true,
+      emailVerifyToken: null,
+      emailVerifyExpires: null,
+    },
   });
 
-  return NextResponse.redirect(`${env.APP_URL}/${user.locale}/login?verified=1`);
+  return NextResponse.redirect(
+    `${env.APP_URL}/${user.locale}/login?verified=1`,
+  );
 }

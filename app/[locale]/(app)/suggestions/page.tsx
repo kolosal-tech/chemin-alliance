@@ -74,7 +74,10 @@ export default async function SuggestionsPage({
 
   return (
     <main className="px-3 pt-6 safe-top">
-      {!hasPortrait && (
+      {/* Bannière « entretien » seulement APRÈS le bilan de maturité, pour ne pas
+          présenter deux questionnaires concurrents à un nouvel inscrit : il fait
+          d'abord son bilan (OnboardingIntroCard), puis on l'invite au portrait. */}
+      {onboardingDone && !hasPortrait && (
         <Link
           href="/preparation"
           className="mb-4 block overflow-hidden rounded-cardlg bg-gradient-to-br from-gold to-gold-deep p-[1.5px] shadow-[0_6px_22px_-8px_rgba(154,123,46,0.55)]"

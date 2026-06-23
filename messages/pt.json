@@ -139,7 +139,7 @@
     "noAccount": "Ainda não tem conta?",
     "hasAccount": "Já tem conta?",
     "verifyTitle": "Verifique o seu email",
-    "verifyBody": "Foi enviado um link de verificação para {email}. Em desenvolvimento, o link aparece nos logs do servidor.",
+    "verifyBody": "Um link de verificação foi enviado para {email}. Verifica também a tua pasta de spam.",
     "verified": "Email verificado. Bem-vindo/a ao caminho.",
     "errorCredentials": "Email ou palavra-passe incorretos.",
     "errorEmailTaken": "Já existe uma conta com este email.",
