@@ -59,6 +59,24 @@ function verificationHtml(link: string, locale: Locale): string {
   </div></body></html>`;
 }
 
+// Adresse nue extraite de EMAIL_FROM ("Nom <addr@dom>" -> "addr@dom").
+const FROM_ADDRESS = env.EMAIL_FROM.match(/<([^>]+)>/)?.[1] ?? env.EMAIL_FROM;
+
+// Partie texte derivee du HTML : Gmail penalise les emails HTML-only. On
+// conserve le lien (href) et on aplatit le reste en texte lisible.
+function htmlToText(html: string): string {
+  const link = html.match(/href="([^"]+)"/)?.[1];
+  const body = html
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&mdash;/g, "-")
+    .replace(/&amp;/g, "&")
+    .replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  return link ? `${body}\n\n${link}` : body;
+}
+
 async function sendViaResend(to: string, subject: string, html: string) {
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -66,7 +84,21 @@ async function sendViaResend(to: string, subject: string, html: string) {
       "content-type": "application/json",
       authorization: `Bearer ${env.RESEND_API_KEY}`,
     },
-    body: JSON.stringify({ from: env.EMAIL_FROM, to: [to], subject, html }),
+    body: JSON.stringify({
+      from: env.EMAIL_FROM,
+      to: [to],
+      subject,
+      html,
+      // Levier delivrabilite #1 : une partie texte (multipart) reduit le score
+      // spam Gmail. reply_to + List-Unsubscribe (mailto, un-clic) sont des
+      // signaux positifs supplementaires. SPF/DKIM/DMARC restent cote DNS.
+      text: htmlToText(html),
+      reply_to: env.EMAIL_FROM,
+      headers: {
+        "List-Unsubscribe": `<mailto:${FROM_ADDRESS}?subject=unsubscribe>`,
+        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+      },
+    }),
   });
   if (!res.ok) {
     const detail = await res.text().catch(() => "");

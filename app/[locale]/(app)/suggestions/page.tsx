@@ -14,6 +14,7 @@ import {
 import { OnboardingProgress } from "@/components/OnboardingProgress";
 import { IncompleteProfileModal } from "@/components/IncompleteProfileModal";
 import { OnboardingIntroCard } from "@/components/OnboardingIntroCard";
+import { SuggestionsVerifyNotice } from "@/components/SuggestionsVerifyNotice";
 import { parseFilters, matchesFilters, activeFilterCount } from "@/lib/filters";
 import { FiltersDrawer } from "@/components/product/FiltersDrawer";
 import { SafetyBlock } from "@/components/product/SafetyBlock";
@@ -134,9 +135,11 @@ export default async function SuggestionsPage({
         </div>
       </header>
 
-      {!onboardingDone ? (
-        // Bilan de maturité (« recto-verso ») : affiché une fois, quel que soit
-        // le gate Phase 2 - posture ORIENTER, jamais bloquer.
+      {!onboardingDone && !hasPortrait ? (
+        // Bilan de maturité (« recto-verso ») : affiché une fois tant que le
+        // portrait n'existe pas. Une fois l'entretien fait (portrait présent),
+        // on n'invite plus à « commencer ton bilan » même si onboardingDoneAt
+        // n'a pas été posé - sinon l'utilisateur croit devoir tout recommencer.
         <div className="mt-4">
           <OnboardingIntroCard />
         </div>
@@ -196,11 +199,18 @@ export default async function SuggestionsPage({
               </Link>
             </div>
           )}
-          {missing.length === 0 && shown.length === 0 && (
-            <p className="rounded-card border border-sand-200 bg-surface p-5 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B] lg:col-span-3">
-              {t("suggestions.empty")}
-            </p>
-          )}
+          {missing.length === 0 &&
+            shown.length === 0 &&
+            (!user.isVerified ? (
+              // Liste vide parce que l'email n'est pas vérifié (matching renvoie
+              // [] tant que !isVerified) : on explique la vraie cause au lieu du
+              // générique "pas de suggestion aujourd'hui".
+              <SuggestionsVerifyNotice />
+            ) : (
+              <p className="rounded-card border border-sand-200 bg-surface p-5 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B] lg:col-span-3">
+                {t("suggestions.empty")}
+              </p>
+            ))}
           {missing.length === 0 &&
             shown.map((s, i) => (
               <SuggestionCard

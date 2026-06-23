@@ -215,7 +215,11 @@
     "married": "Casado/a",
     "photoChange": "Alterar foto",
     "photoError": "Falha ao enviar a foto. Tenta de novo.",
-    "secMoreCount": "{filled}/{total} preenchidos"
+    "secMoreCount": "{filled}/{total} preenchidos",
+    "photoErrorType": "Formato não suportado. Usa uma imagem JPG, PNG ou WebP.",
+    "photoErrorTooLarge": "Imagem demasiado pesada. Escolhe uma foto com menos de 5 MB.",
+    "photoErrorRate": "Demasiadas tentativas. Aguarda um momento antes de tentar de novo.",
+    "photoErrorDisabled": "O envio de foto está indisponível de momento. Tenta mais tarde."
   },
   "visibility": {
     "PUBLIC_CONTROLLED": "Público",
@@ -243,7 +247,9 @@
     "needCity": "A sua cidade ou região",
     "needIntention": "A sua intenção (o que procura)",
     "photoReveal": "Revela-se ao avançares",
-    "requestSent": "Pedido de interesse enviado com delicadeza."
+    "requestSent": "Pedido de interesse enviado com delicadeza.",
+    "blockedVerifyTitle": "Verifica o teu email",
+    "blockedVerifyBody": "Os teus perfis afins esperam por ti. Confirma primeiro o teu email para apareceres nos encontros e descobrir os outros."
   },
   "alliance": {
     "yourPath": "O vosso percurso",
@@ -325,7 +331,9 @@
     "responding": "A IA está respondendo…",
     "error": "Não foi possível obter a resposta. Verifica a tua ligação e tenta novamente.",
     "retry": "Tentar novamente",
-    "fallbackNotice": "Modo guiado: respostas preparadas por etapa, sem IA externa."
+    "fallbackNotice": "Modo guiado: respostas preparadas por etapa, sem IA externa.",
+    "verifyTitle": "Verifica o teu email para falar com o Coach IA",
+    "verifyBody": "O Coach IA acompanha-te assim que confirmares o teu email. O link de verificação está na tua caixa de entrada (vê também o spam)."
   },
   "coaches": {
     "title": "Coaches verificados",
@@ -496,7 +504,12 @@
       "banner": "Novo: faça a sua entrevista de preparação - 5 perguntas para discernir onde está.",
       "bannerCta": "Fazer a entrevista",
       "bannerBadge": "Recomendado · 2 min",
-      "bannerTitle": "Começa pela tua entrevista"
+      "bannerTitle": "Começa pela tua entrevista",
+      "analyzingTitle": "Estamos a preparar o teu retrato espiritual e relacional",
+      "analyzing1": "A analisar as tuas respostas...",
+      "analyzing2": "A identificar os teus pontos de alinhamento...",
+      "analyzing3": "A realçar as tuas forças...",
+      "analyzing4": "A preparar a tua síntese..."
     },
     "facil": {
       "title": "Temas nunca abordados juntos",
@@ -601,7 +614,7 @@
     "unsure": "Nem por isso",
     "notePlaceholder": "Uma palavra se quiseres precisar (privado)…",
     "send": "Enviar ao Guardião",
-    "guardianTitle": "O Guardião do Casal",
+    "guardianTitle": "Pastor IA",
     "ritualsTitle": "Rituais propostos esta semana",
     "checkinDone": "Check-in guardado - esta semana parece correr bem. Continuem assim.",
     "checkinAgain": "Fazer outro check-in",

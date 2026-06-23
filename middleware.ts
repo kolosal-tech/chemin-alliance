@@ -15,6 +15,13 @@ export default function middleware(req: NextRequest) {
   // Les routes /api ne passent pas par l'i18n : on n'applique QUE la garde de
   // taille, puis on laisse le handler s'executer (NextResponse.next()).
   if (req.nextUrl.pathname.startsWith("/api/")) {
+    // L'upload de photo est multipart (jusqu'a 5 Mio) et applique sa propre
+    // borne de taille + allow-list dans le handler (lib/storage). Le plafond
+    // JSON de 256 Kio rejetterait toute photo de telephone en 413 avant meme
+    // d'atteindre la route : on l'exclut explicitement.
+    if (req.nextUrl.pathname === "/api/me/photo") {
+      return NextResponse.next();
+    }
     if (MUTATING.has(req.method)) {
       const declared = Number(req.headers.get("content-length") ?? "");
       if (Number.isFinite(declared) && declared > MAX_API_BODY_BYTES) {

@@ -10,7 +10,7 @@ import {
 import { requireUser } from "@/lib/security/session";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import { askCoach, DAILY_FREE_LIMIT } from "@/lib/ai-coach";
-import { encryptField } from "@/lib/security/crypto";
+import { encryptField, decryptOptional } from "@/lib/security/crypto";
 import { tierForSubscription } from "@/lib/llm/matrix";
 import type { Locale } from "@/lib/core-engine";
 
@@ -22,6 +22,9 @@ const schema = z.object({
 
 export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
+  // Email non verifie : l'IA payante (cout fournisseur) reste fermee, comme le
+  // matching. La lecture du contenu de l'app reste libre (cf. audit ticket 1).
+  if (!user.isVerified) return jsonError(403, "EMAIL_NOT_VERIFIED");
   const rl = await rateLimit(
     `ai:${user.id}:${clientIp(req)}`,
     LIMITS.aiCoach.limit,
@@ -63,6 +66,22 @@ export const POST = withErrors(async (req: Request) => {
     }
   }
 
+  // Memoire de conversation : on renvoie les derniers tours au modele pour une
+  // continuite naturelle (le coach ne "redemarre" plus a chaque message). On
+  // exclut les tours garde-fous (redirection coach humain) du contexte renvoye.
+  const priorRows = await prisma.coachMessage.findMany({
+    where: { userId: user.id, mode: body.mode, guardrail: false },
+    orderBy: { createdAt: "desc" },
+    take: 10,
+  });
+  const history = priorRows
+    .reverse()
+    .map((r) => ({
+      role: r.role === "coach" ? ("assistant" as const) : ("user" as const),
+      content: decryptOptional(r.contentEncrypted) ?? "",
+    }))
+    .filter((h) => h.content.length > 0);
+
   const reply = await askCoach(body.question, {
     stage,
     locale: (user.locale ?? "fr") as Locale,
@@ -70,6 +89,7 @@ export const POST = withErrors(async (req: Request) => {
     country: user.country ?? undefined,
     // Palier LLM : premium (opus-4.8) pour un abonnement actif, sinon standard.
     tier: tierForSubscription(user.subscriptionStatus),
+    history,
   });
   // Persistance chiffrée : la question + la réponse, pour qu'elles survivent
   // au rechargement de la page (le coach était jusque-là sans mémoire).

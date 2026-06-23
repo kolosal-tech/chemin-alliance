@@ -34,6 +34,9 @@ const LANG_LOCK: Record<Locale, string> = {
   pt: "\n\n[IDIOMA ESTRITO] Responde INTEGRALMENTE em português. Não utilizes palavras de outro idioma, em particular nenhum termo em inglês.",
 };
 
+/** Un tour de conversation precedent (memoire), du plus ancien au plus recent. */
+export type LlmTurn = { role: "user" | "assistant"; content: string };
+
 export type LlmRequest = {
   system: string;
   user: string;
@@ -44,6 +47,8 @@ export type LlmRequest = {
   redact?: boolean;
   /** Langue de réponse imposée (verrou fort, anti-fuite anglais). */
   locale?: Locale;
+  /** Tours precedents renvoyes au modele pour la continuite (defaut: aucun). */
+  history?: LlmTurn[];
 };
 
 type Usage = { prompt: number | null; completion: number | null };
@@ -74,6 +79,7 @@ async function openAiCompatible(
   user: string,
   maxTokens: number,
   extraBody: Record<string, unknown>,
+  history: LlmTurn[] = [],
 ): Promise<LlmResult> {
   return withTimeout(
     async (signal) => {
@@ -91,6 +97,7 @@ async function openAiCompatible(
           max_tokens: maxTokens,
           messages: [
             { role: "system", content: system },
+            ...history,
             { role: "user", content: user },
           ],
           ...extraBody,
@@ -118,6 +125,7 @@ async function anthropic(
   system: string,
   user: string,
   maxTokens: number,
+  history: LlmTurn[] = [],
 ): Promise<LlmResult> {
   return withTimeout(
     async (signal) => {
@@ -133,7 +141,7 @@ async function anthropic(
           model,
           max_tokens: maxTokens,
           system,
-          messages: [{ role: "user", content: user }],
+          messages: [...history, { role: "user", content: user }],
         }),
       });
       if (!res.ok) return { text: null, usage: NO_USAGE };
@@ -168,6 +176,11 @@ export async function callLLM(req: LlmRequest): Promise<string | null> {
   const ru = redact ? redactPII(req.user) : { text: req.user, count: 0 };
   const system = rs.text + EMDASH_BAN + (req.locale ? LANG_LOCK[req.locale] : "");
   const user = ru.text;
+  // Memoire : on purge aussi les PII de chaque tour precedent avant envoi tiers.
+  const history: LlmTurn[] = (req.history ?? []).map((h) => ({
+    role: h.role,
+    content: redact ? redactPII(h.content).text : h.content,
+  }));
   const redactedPii = rs.count + ru.count;
 
   const started = Date.now();
@@ -179,7 +192,7 @@ export async function callLLM(req: LlmRequest): Promise<string | null> {
     // Anthropic 1P : canal direct (pas de tiers), pas de matrice OpenRouter.
     attempts = 1;
     model = ANTHROPIC_MODEL;
-    result = await anthropic(ANTHROPIC_MODEL, system, user, maxTokens);
+    result = await anthropic(ANTHROPIC_MODEL, system, user, maxTokens, history);
   } else if (aiProvider === "openrouter") {
     // OpenRouter : matrice multi-modèles + opt-out de collecte des données.
     for (const m of resolveModels(req.step, tier)) {
@@ -192,6 +205,7 @@ export async function callLLM(req: LlmRequest): Promise<string | null> {
         user,
         maxTokens,
         { provider: { data_collection: "deny" } },
+        history,
       );
       if (r.text) {
         result = r;
@@ -211,6 +225,7 @@ export async function callLLM(req: LlmRequest): Promise<string | null> {
       user,
       maxTokens,
       {},
+      history,
     );
   }
 

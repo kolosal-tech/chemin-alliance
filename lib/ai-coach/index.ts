@@ -84,6 +84,8 @@ export async function askCoach(
     rulesetId?: string;
     country?: string;
     tier?: Tier;
+    /** Tours precedents (memoire de conversation), du plus ancien au plus recent. */
+    history?: Array<{ role: "user" | "assistant"; content: string }>;
   },
 ): Promise<CoachReply> {
   if (isSensitiveTopic(question)) {
@@ -107,6 +109,7 @@ export async function askCoach(
     maxTokens: 1024,
     tier: opts.tier,
     locale: opts.locale,
+    history: opts.history,
   });
   if (text) return { text, guardrail: false, provider: aiProvider };
 
