@@ -7,11 +7,15 @@ import { Link, useRouter } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
 import { Spinner } from "@/components/Spinner";
 
-export function ResetPasswordForm() {
+export function ResetPasswordForm({ token: tokenProp }: { token?: string } = {}) {
   const t = useTranslations("auth");
   const tc = useTranslations("common");
   const router = useRouter();
-  const token = useSearchParams().get("token") ?? "";
+  // Token en segment de chemin (nouveau lien, sans `=`) prioritaire ; repli sur
+  // `?token=` (liens déjà envoyés). useSearchParams toujours appelé (règle des
+  // hooks), mais le prop l'emporte. Évite la corruption quoted-printable du `=`.
+  const queryToken = useSearchParams().get("token") ?? "";
+  const token = tokenProp || queryToken;
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
   const [busy, setBusy] = useState(false);
