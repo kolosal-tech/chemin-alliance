@@ -195,6 +195,48 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
   return scored.slice(0, 3).map((x) => x.c);
 }
 
+// P3 : aperçu de découverte PRE-VERIFICATION. Quelques silhouettes anonymisées
+// (ni nom, ni intention, ni id, AUCUNE action) pour montrer qu'un vivier
+// existe et inciter à vérifier l'email. N'ouvre aucune mise en relation : le
+// matching réel reste fermé tant que !isVerified (cf. getSuggestions).
+export type DiscoveryTeaser = {
+  age: number | null;
+  vertical: string | null;
+  photoBlurhash: string | null;
+};
+
+export async function getDiscoveryPreview(
+  me: Me,
+  limit = 3,
+): Promise<DiscoveryTeaser[]> {
+  const oppositeGender =
+    me.gender === "M" ? "F" : me.gender === "F" ? "M" : null;
+  const rows = await prisma.user.findMany({
+    where: {
+      id: { not: me.id },
+      season: "JOURNEY",
+      isVerified: true,
+      deletedAt: null,
+      privacySettings: { isNot: { invisibleMode: true } },
+      cityApprox: { not: null },
+      relationshipProfile: { is: { intentionStatement: { not: null } } },
+      ...(oppositeGender ? { gender: oppositeGender } : {}),
+    },
+    select: {
+      age: true,
+      photoBlurhash: true,
+      faithProfile: { select: { vertical: true } },
+    },
+    orderBy: { createdAt: "desc" },
+    take: limit,
+  });
+  return rows.map((r) => ({
+    age: r.age,
+    vertical: r.faithProfile?.vertical ?? null,
+    photoBlurhash: r.photoBlurhash,
+  }));
+}
+
 // ---- Score d'affinité pondéré (0..100) ------------------------------------
 // Remplace l'ancien score entier 0..8 qui n'exploitait que vertical +
 // denomination + enfants. On pondère désormais foi, vision de mariage,
