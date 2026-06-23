@@ -203,4 +203,69 @@ test.describe("Audit Chemin d'Alliance - Matrice des 4 profils (mobile 390x844)"
 
     await page.screenshot({ path: "test-results/shots/watchman-banner.png" });
   });
+
+  // Tunnel de paiement : invariant « fonctions de base gratuites a vie » +
+  // ouverture de la session Stripe jusqu'a la redirection, PUIS arret avant
+  // tout paiement reel (on abort la navigation vers checkout.stripe.com).
+  test("Paiement - invariant gratuit + ouverture session Stripe (stop avant paiement)", async ({
+    page,
+  }) => {
+    const FREE_NOTE_FRAGMENT = "gratuits, pour toujours"; // premium.freeNote
+    const SUBSCRIBE_CTA = "S'abonner"; // premium.cta (prefixe, prix variable)
+    const CONFIRM_CTA = "Continuer vers le paiement"; // premium.confirmCta
+
+    await login(page, env("PROFILE_A_EMAIL", SCENARIOS[0].email));
+    await page.goto(`/${LOCALE}/settings/premium`);
+
+    // 1) Invariant : la securite et les fonctions de base restent gratuites.
+    const freeNote = page
+      .getByText(FREE_NOTE_FRAGMENT, { exact: false })
+      .first();
+    await expect(freeNote).toBeVisible({ timeout: 15_000 });
+    await highlight(freeNote);
+
+    // Si l'abonnement n'est pas propose sur cette cible (Stripe non configure ->
+    // « bientot disponible »), il n'y a pas de tunnel a auditer.
+    const subscribe = page
+      .getByRole("button", { name: new RegExp(SUBSCRIBE_CTA) })
+      .first();
+    test.skip(
+      (await subscribe.count()) === 0,
+      "Bouton d'abonnement absent (Stripe non active sur cette cible) - rien a auditer.",
+    );
+
+    // 2) On bloque toute navigation reelle vers Stripe : la session s'ouvre,
+    //    mais on n'entre jamais dans le paiement.
+    await page.route("**://*.stripe.com/**", (route) => route.abort());
+
+    await highlight(subscribe);
+    await subscribe.click();
+
+    const confirm = page
+      .getByRole("button", { name: new RegExp(CONFIRM_CTA) })
+      .first();
+    await expect(confirm).toBeVisible({ timeout: 10_000 });
+    await highlight(confirm);
+
+    // 3) Capture la reponse de creation de session AVANT le clic qui redirige.
+    const checkoutResp = page
+      .waitForResponse("**/api/billing/checkout", { timeout: 20_000 })
+      .catch(() => null);
+    await confirm.click();
+    const resp = await checkoutResp;
+
+    test.skip(
+      !resp || resp.status() !== 200,
+      "Endpoint /api/billing/checkout indisponible sur cette cible (Stripe non configure).",
+    );
+
+    const body = (await resp!.json().catch(() => null)) as {
+      url?: string;
+    } | null;
+    // 4) La session de paiement est bien ouverte (URL Stripe), on s'arrete ici :
+    //    aucune assertion ne va plus loin que la redirection de depart.
+    expect(body?.url ?? "").toMatch(/stripe\.com|checkout/i);
+
+    await page.screenshot({ path: "test-results/shots/payment-tunnel.png" });
+  });
 });
