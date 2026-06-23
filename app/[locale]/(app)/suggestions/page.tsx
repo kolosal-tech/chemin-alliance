@@ -88,43 +88,41 @@ export default async function SuggestionsPage({
       {/* Bannière « entretien » seulement APRÈS le bilan de maturité, pour ne pas
           présenter deux questionnaires concurrents à un nouvel inscrit : il fait
           d'abord son bilan (OnboardingIntroCard), puis on l'invite au portrait. */}
+      {/* P4 : enrichissement OPTIONNEL (entretien/portrait Coach IA), pas un 2e
+          questionnaire obligatoire. Visuel sobre (carte de surface, pas le gold
+          d'une action principale), copie repositionnée en « optionnel ». */}
       {onboardingDone && !hasPortrait && (
         <Link
           href="/preparation"
-          className="mb-4 block overflow-hidden rounded-cardlg bg-gradient-to-br from-gold to-gold-deep p-[1.5px] shadow-[0_6px_22px_-8px_rgba(154,123,46,0.55)]"
+          className="mb-4 block rounded-cardlg border border-sand-200 bg-surface p-4 transition-colors hover:border-gold/50 dark:border-anthracite-600 dark:bg-anthracite-800 dark:hover:border-gold-light/40"
         >
-          <div className="rounded-[16.5px] bg-gradient-to-br from-[#FBF3DC] to-[#F3E6BE] p-4 dark:from-[#2B2410] dark:to-[#211A0B]">
-            <div className="flex items-center gap-3">
-              <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-gradient-to-br from-gold-light to-gold-deep shadow-inner">
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  aria-hidden
-                >
-                  <path
-                    d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
-                    fill="#fff"
-                  />
-                </svg>
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-gold/15 text-gold-deep dark:text-gold-light">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path
+                  d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+            <div className="min-w-0 flex-1">
+              <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
+                {t("agents.prep.bannerBadge")}
               </span>
-              <div className="min-w-0 flex-1">
-                <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
-                  {t("agents.prep.bannerBadge")}
-                </span>
-                <p className="font-display text-[19px] leading-tight text-[#5A4718] dark:text-[#E8D9A8]">
-                  {t("agents.prep.bannerTitle")}
-                </p>
-              </div>
+              <p className="font-display text-[18px] leading-tight text-night dark:text-[#ECE7DD]">
+                {t("agents.prep.bannerTitle")}
+              </p>
             </div>
-            <p className="mt-2.5 text-[15px] leading-snug text-[#6F5C2E] dark:text-[#C2B488]">
-              {t("agents.prep.banner")}
-            </p>
-            <span className="mt-3 inline-flex items-center gap-1.5 rounded-btnsm bg-gradient-to-r from-gold-deep to-gold px-3 py-2 text-[16px] font-semibold text-white">
-              {t("agents.prep.bannerCta")} <span aria-hidden>→</span>
+            <span
+              aria-hidden
+              className="flex-none text-[18px] text-gold-deep dark:text-gold-light"
+            >
+              ›
             </span>
           </div>
+          <p className="mt-2 text-[15px] leading-snug text-warmgray dark:text-[#9A958B]">
+            {t("agents.prep.banner")}
+          </p>
         </Link>
       )}
       <header className="rounded-cardlg border border-sand-200 bg-cream/80 p-5 dark:border-anthracite-600 dark:bg-anthracite-850/80">
