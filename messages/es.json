@@ -254,7 +254,8 @@
     "compatibilityToggle": "Ver la compatibilidad",
     "compatibilityNote": "Nunca una puntuación, solo señales para discernir.",
     "previewTitle": "{count} perfiles te esperan",
-    "previewAge": "{age} años"
+    "previewAge": "{age} años",
+    "accompaniedBadge": "Acompañado/a"
   },
   "alliance": {
     "yourPath": "Vuestro camino",

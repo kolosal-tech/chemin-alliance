@@ -34,6 +34,8 @@ type Profile = {
     location: number;
     vision: number;
   } | null;
+  // P6 : a désigné un Parrain/Marraine (signal de confiance "accompagné·e").
+  hasSponsor?: boolean;
 };
 
 export function SuggestionCard({
@@ -173,6 +175,26 @@ export function SuggestionCard({
             <span className="rounded-full border border-gold/40 bg-gold/20 px-2.5 py-0.5 text-[13px] font-semibold text-gold-light backdrop-blur-[3px]">
               {t("suggestions.intentMarriage")}
             </span>
+            {profile.hasSponsor && (
+              <span className="flex items-center gap-1 rounded-full border border-[#3F6B50]/55 bg-[#3F6B50]/30 px-2.5 py-0.5 text-[13px] font-semibold text-[#EAF0EB] backdrop-blur-[3px]">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path
+                    d="M12 3l7 3v5c0 4.2-2.8 7.6-7 9-4.2-1.4-7-4.8-7-9V6l7-3Z"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M9 12l2 2 4-4"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                {t("suggestions.accompaniedBadge")}
+              </span>
+            )}
             {statusKey && (
               <span className="rounded-full border border-[#F7F5F0]/20 bg-[#F7F5F0]/15 px-2.5 py-0.5 text-[13px] font-semibold backdrop-blur-[3px]">
                 {t(`profile.${statusKey}`)}

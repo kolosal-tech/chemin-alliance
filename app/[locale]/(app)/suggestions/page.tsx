@@ -256,6 +256,8 @@ export default async function SuggestionsPage({
                   photoBlurhash: s.photoBlurhash ?? null,
                   // P2 : axes de compatibilité viewer<->candidat pour le radar.
                   axes: compatibilityTopics(user, s).axes,
+                  // P6 : signal de confiance "accompagné·e" (a un Parrain/Marraine).
+                  hasSponsor: s.sponsor != null,
                 }}
               />
             ))}
