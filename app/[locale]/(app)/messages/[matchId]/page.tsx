@@ -71,6 +71,7 @@ export default async function ConversationPage({
           mine: m.senderId === user.id,
           content: decryptOptional(m.contentEncrypted) ?? "",
           blocked: m.moderationStatus === "BLOCKED",
+          createdAt: m.createdAt.toISOString(),
         }))}
     />
   );
