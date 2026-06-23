@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import type { AllianceStage, MessageKind } from "@prisma/client";
 import { StageBadge } from "@/components/StageBadge";
@@ -21,6 +21,7 @@ type Msg = {
   mine: boolean;
   content: string;
   blocked: boolean;
+  createdAt: string;
 };
 
 /**
@@ -50,8 +51,16 @@ export function Conversation({
   initialMessages: Msg[];
 }) {
   const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const toast = useToast();
+  // Horodatage hors bulle (heure courte localisée), comme la messagerie couple.
+  const fmtTime = (iso: string) => {
+    const d = new Date(iso);
+    return Number.isNaN(d.getTime())
+      ? ""
+      : d.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
+  };
   const [pending, setPending] = useState(awaitingMyAccept ?? false);
   const [acceptBusy, setAcceptBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -179,6 +188,7 @@ export function Conversation({
           mine: true,
           content: text,
           blocked: true,
+          createdAt: new Date().toISOString(),
         },
         {
           id: data.systemMessageId,
@@ -186,6 +196,7 @@ export function Conversation({
           mine: true,
           content: data.systemMessage,
           blocked: false,
+          createdAt: new Date().toISOString(),
         },
       ]);
     } else {
@@ -197,6 +208,7 @@ export function Conversation({
           mine: true,
           content: text,
           blocked: false,
+          createdAt: new Date().toISOString(),
         },
       ]);
     }
@@ -233,13 +245,19 @@ export function Conversation({
           photoBlurhash={other.photoBlurhash}
           className="h-9 w-9 flex-none rounded-full"
         />
-        <div className="flex-1">
-          <div className="flex items-center gap-1.5">
-            <span className="font-display text-[20px] text-night dark:text-[#ECE7DD]">
+        <div className="min-w-0 flex-1">
+          <div className="flex min-w-0 items-center gap-1.5">
+            <span className="truncate font-display text-[20px] text-night dark:text-[#ECE7DD]">
               {other.displayName}
             </span>
             {other.isVerified && (
-              <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden>
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                aria-hidden
+                className="flex-none"
+              >
                 <path
                   d="M12 2.5l2.4 1.7 2.9-.2 1 2.8 2.4 1.6-.8 2.8.8 2.8-2.4 1.6-1 2.8-2.9-.2L12 21.5l-2.4-1.7-2.9.2-1-2.8L3.3 15.6l.8-2.8-.8-2.8 2.4-1.6 1-2.8 2.9.2L12 2.5Z"
                   className="fill-gold dark:fill-gold-light"
@@ -253,7 +271,8 @@ export function Conversation({
         </div>
         <Link
           href={`/alliance/${matchId}`}
-          className="flex flex-none items-center gap-1.5 rounded-full border border-gold/40 bg-gold/10 px-3 py-1.5 text-[13px] font-semibold text-gold-deep transition-colors hover:bg-gold/20 dark:border-gold-light/30 dark:bg-gold-light/10 dark:text-gold-light"
+          aria-label={t("nav.path")}
+          className="flex flex-none items-center gap-1.5 rounded-full border border-gold/40 bg-gold/10 px-2.5 py-1.5 text-[13px] font-semibold text-gold-deep transition-colors hover:bg-gold/20 dark:border-gold-light/30 dark:bg-gold-light/10 dark:text-gold-light"
         >
           <svg
             width="13"
@@ -276,7 +295,7 @@ export function Conversation({
               strokeLinejoin="round"
             />
           </svg>
-          {t("nav.path")}
+          <span className="hidden min-[420px]:inline">{t("nav.path")}</span>
         </Link>
         <ReportButton targetUserId={other.id} />
         <BlockButton targetUserId={other.id} targetName={other.displayName} />
@@ -384,25 +403,36 @@ export function Conversation({
           }
 
           const text = (
+            // Bulle envoyée : on laisse `.glass-self` (globals.css) gérer la
+            // couleur du texte, qui est déjà adaptée au thème (#18243f en clair,
+            // #eaf0fa en sombre). Forcer une couleur ici cassait le contraste
+            // (texte quasi blanc sur bulle bleu pâle en mode clair).
             <p
               className={`text-sm leading-snug ${
-                m.mine ? "text-[#EDEFF3]" : "text-[#2A2823] dark:text-[#CFCAC0]"
+                m.mine ? "" : "text-[#2A2823] dark:text-[#CFCAC0]"
               } ${m.blocked ? "line-through decoration-[#9B4A3E]/60" : ""}`}
             >
               {m.content}
             </p>
           );
 
-          // Message reçu : bulle simple alignée à gauche.
+          // Message reçu : bulle simple alignée à gauche + heure dessous.
           if (!m.mine) {
             return (
               <div
                 key={m.id}
-                className={`glass glass-bubble max-w-[78%] self-start rounded-[18px] rounded-tl-[4px] px-3.5 py-2.5 ${
-                  m.blocked ? "opacity-60" : ""
-                }`}
+                className="flex max-w-[78%] flex-col items-start gap-0.5 self-start"
               >
-                {text}
+                <div
+                  className={`glass glass-bubble rounded-[18px] rounded-tl-[4px] px-3.5 py-2.5 ${
+                    m.blocked ? "opacity-60" : ""
+                  }`}
+                >
+                  {text}
+                </div>
+                <span className="px-1 text-[11px] text-warmgray dark:text-[#7E7A72]">
+                  {fmtTime(m.createdAt)}
+                </span>
               </div>
             );
           }
@@ -446,6 +476,9 @@ export function Conversation({
                   {text}
                 </div>
               </div>
+              <span className="px-1 text-[11px] text-warmgray dark:text-[#7E7A72]">
+                {fmtTime(m.createdAt)}
+              </span>
               {confirmId === m.id && (
                 <div
                   role="group"
