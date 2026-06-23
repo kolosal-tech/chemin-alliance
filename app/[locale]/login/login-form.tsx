@@ -12,7 +12,9 @@ export function LoginForm() {
   const t = useTranslations("auth");
   const tc = useTranslations("common");
   const router = useRouter();
-  const verified = useSearchParams().get("verified");
+  const params = useSearchParams();
+  const verified = params.get("verified");
+  const verifyError = params.get("verifyError");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -69,6 +71,11 @@ export function LoginForm() {
         {verified && (
           <p className="mt-3 rounded-card border border-[#CFE0D4] bg-[#EAF0EB] px-4 py-3 text-[16px] text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
             {t("verified")}
+          </p>
+        )}
+        {verifyError && !verified && (
+          <p className="mt-3 rounded-card border border-info-border bg-info-surface px-4 py-3 text-[16px] leading-relaxed text-info-ink dark:border-info-darkBorder dark:bg-info-darkSurface dark:text-info-darkInk">
+            {t("verifyError")}
           </p>
         )}
         <form onSubmit={submit} className="mt-7 flex flex-col gap-4">

@@ -158,7 +158,8 @@
     "resetSubmit": "Redefinir a minha palavra-passe",
     "resetMismatch": "As duas palavras-passe não coincidem.",
     "resetDone": "Palavra-passe alterada. A redirecionar para o início de sessão…",
-    "resetInvalid": "Este link é inválido ou expirou. Pede um novo link de redefinição."
+    "resetInvalid": "Este link é inválido ou expirou. Pede um novo link de redefinição.",
+    "verifyError": "Este link de verificação já não é válido (expirado ou já usado). Inicia sessão: aparecerá em cima um botão « Reenviar email » para receberes um novo link."
   },
   "profile": {
     "title": "Perfil",

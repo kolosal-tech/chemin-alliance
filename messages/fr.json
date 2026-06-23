@@ -158,7 +158,8 @@
     "resetSubmit": "Réinitialiser mon mot de passe",
     "resetMismatch": "Les deux mots de passe ne correspondent pas.",
     "resetDone": "Mot de passe modifié. Redirection vers la connexion…",
-    "resetInvalid": "Ce lien est invalide ou expiré. Redemande un lien de réinitialisation."
+    "resetInvalid": "Ce lien est invalide ou expiré. Redemande un lien de réinitialisation.",
+    "verifyError": "Ce lien de vérification n'est plus valide (expiré ou déjà utilisé). Connecte-toi : un bouton « Renvoyer l'email » apparaîtra en haut pour recevoir un nouveau lien."
   },
   "profile": {
     "title": "Profil",

@@ -158,7 +158,8 @@
     "resetSubmit": "Restablecer mi contraseña",
     "resetMismatch": "Las dos contraseñas no coinciden.",
     "resetDone": "Contraseña cambiada. Redirigiendo al inicio de sesión…",
-    "resetInvalid": "Este enlace no es válido o ha caducado. Solicita un nuevo enlace."
+    "resetInvalid": "Este enlace no es válido o ha caducado. Solicita un nuevo enlace.",
+    "verifyError": "Este enlace de verificación ya no es válido (caducado o ya usado). Inicia sesión: arriba aparecerá un botón « Reenviar correo » para recibir un nuevo enlace."
   },
   "profile": {
     "title": "Perfil",
