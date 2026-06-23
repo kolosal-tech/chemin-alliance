@@ -12,6 +12,7 @@ import {
   OPTIONS_PER_AXIS,
   scoreMaturity,
   type MaturityAnswers,
+  type MaturityResult,
 } from "@/lib/maturity";
 
 /**
@@ -42,7 +43,7 @@ export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
   const total = MATURITY_AXES.length;
 
   // Pose le flag persistant + garde le résultat en local. Idempotent (une fois).
-  function persist(r: { total: number; level: string }) {
+  function persist(r: MaturityResult) {
     if (persistedRef.current) return;
     persistedRef.current = true;
     try {
@@ -54,9 +55,14 @@ export function OnboardingIntroCard({ onDone }: { onDone?: () => void }) {
       /* mode privé : sans gravité */
     }
     if (onDone) return; // vitrine : pas de réseau
-    // fetch ne rejette pas sur 4xx/5xx ; en cas d'échec on laissera le bilan
-    // réapparaître plus tard (idempotent), ce n'est pas bloquant.
-    fetch("/api/me/onboarding-done", { method: "POST" }).catch(() => {});
+    // P1 : on envoie le résultat complet pour la persistance serveur (le moteur
+    // de matching l'exploite). fetch ne rejette pas sur 4xx/5xx ; échec non
+    // bloquant (le bilan reste idempotent et réapparaît au besoin).
+    fetch("/api/me/onboarding-done", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ maturity: r }),
+    }).catch(() => {});
   }
 
   function choose(weight: number) {

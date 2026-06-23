@@ -12,6 +12,7 @@ import {
   profileCompletion,
   matchingGateBlocked,
 } from "@/lib/profile-completion";
+import type { MaturityResult, MaturityAxis } from "@/lib/maturity";
 
 type Candidate = User & {
   faithProfile: FaithProfile | null;
@@ -43,6 +44,23 @@ export function missingMinimumProfile(user: {
   if (!user.relationshipProfile?.intentionStatement?.trim())
     missing.push("intention");
   return missing;
+}
+
+// P1 : nudge de classement selon le bilan de maturité du viewer (JAMAIS un
+// filtre, jamais bloquant). Si le viewer a un axe de croissance "vision" ou
+// "stability", on remonte doucement les profils ancrés (vision familiale +
+// intention renseignées = signal de sérieux complémentaire). Poids faible et
+// déterministe ; sans bilan, effet nul (comportement historique inchangé).
+function maturityNudge(maturity: MaturityResult | null, c: Candidate): number {
+  if (!maturity) return 0;
+  const growth = (maturity.growth ?? []) as MaturityAxis[];
+  const seeksGrounding =
+    growth.includes("vision") || growth.includes("stability");
+  if (!seeksGrounding) return 0;
+  const grounded =
+    !!c.relationshipProfile?.familyVisionEncrypted &&
+    !!c.relationshipProfile?.intentionStatement;
+  return grounded ? 6 : 0;
 }
 
 /**
@@ -152,6 +170,14 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
     return true;
   });
 
+  // P1 : bilan de maturité du viewer (s'il existe), pour nudger le classement.
+  const maturityInsight = await prisma.agentInsight.findFirst({
+    where: { userId: me.id, agentId: "maturity", revokedAt: null },
+    orderBy: { createdAt: "desc" },
+  });
+  const maturity =
+    (maturityInsight?.dataJson as unknown as MaturityResult | null) ?? null;
+
   // Classement par affinité de fond (jamais montré comme score). Un jitter
   // déterministe par jour casse l'ordre figé sans hasard non-reproductible :
   // deux cohortes ne voient plus exactement les mêmes 3 profils.
@@ -159,7 +185,10 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
   const scored = filtered
     .map((c) => ({
       c,
-      s: matchScore(me, c, now) + dailyJitter(me.id, c.id, now) * 4,
+      s:
+        matchScore(me, c, now) +
+        dailyJitter(me.id, c.id, now) * 4 +
+        maturityNudge(maturity, c),
     }))
     .sort((a, b) => b.s - a.s);
 
