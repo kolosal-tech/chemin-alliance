@@ -1,24 +1,10 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
-import { jsonError, withErrors } from "@/lib/api-helpers";
-import { env } from "@/lib/env";
+import { withErrors } from "@/lib/api-helpers";
+import { verifyEmailToken } from "@/lib/auth/email-verification";
 
+// Route historique : `?token=<hex>`. Conservée pour les liens déjà envoyés.
+// Les nouveaux emails pointent vers `/api/auth/verify-email/<hex>` (segment de
+// chemin) pour éviter la corruption du `=` par l'encodage quoted-printable.
 export const GET = withErrors(async (req: Request) => {
   const token = new URL(req.url).searchParams.get("token");
-  if (!token) return jsonError(400, "TOKEN_REQUIRED");
-
-  const user = await prisma.user.findUnique({
-    where: { emailVerifyToken: token },
-  });
-  if (!user) return jsonError(400, "TOKEN_INVALID");
-  if (user.emailVerifyExpires && user.emailVerifyExpires.getTime() < Date.now()) {
-    return jsonError(400, "TOKEN_EXPIRED");
-  }
-
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { isVerified: true, emailVerifyToken: null, emailVerifyExpires: null },
-  });
-
-  return NextResponse.redirect(`${env.APP_URL}/${user.locale}/login?verified=1`);
+  return verifyEmailToken(token);
 });

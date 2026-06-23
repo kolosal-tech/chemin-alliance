@@ -112,7 +112,9 @@ export async function sendVerificationEmail(
   token: string,
   locale: Locale = "fr",
 ) {
-  const link = `${env.APP_URL}/api/auth/verify-email?token=${token}`;
+  // Segment de chemin (pas `?token=`) : le `=` est corrompu par l'encodage
+  // quoted-printable des emails (`=11` -> octet 0x11), ce qui cassait le lien.
+  const link = `${env.APP_URL}/api/auth/verify-email/${token}`;
   if (env.RESEND_API_KEY) {
     const ok = await sendViaResend(
       email,
@@ -299,7 +301,7 @@ function resetHtml(link: string, locale: Locale): string {
 
 /**
  * Envoie le lien de réinitialisation de mot de passe. Le lien pointe vers la
- * page (locale) /reset-password?token=… où le membre saisit un nouveau MDP.
+ * page (locale) /reset-password/<token> où le membre saisit un nouveau MDP.
  * Jamais d'échec visible : panne fournisseur -> trace serveur (mode dev).
  */
 export async function sendPasswordResetEmail(
@@ -307,7 +309,8 @@ export async function sendPasswordResetEmail(
   token: string,
   locale: Locale = "fr",
 ) {
-  const link = `${env.APP_URL}/${locale}/reset-password?token=${token}`;
+  // Segment de chemin (pas `?token=`) : même corruption quoted-printable du `=`.
+  const link = `${env.APP_URL}/${locale}/reset-password/${token}`;
   if (env.RESEND_API_KEY) {
     const ok = await sendViaResend(
       email,
