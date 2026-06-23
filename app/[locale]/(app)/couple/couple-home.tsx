@@ -279,7 +279,7 @@ export function CoupleHome() {
 
   if (!data) {
     return (
-      <main className="px-4 pt-8 text-center text-sm text-warmgray safe-top">
+      <main className="px-3 pt-8 text-center text-sm text-warmgray safe-top">
         {tc("loading")}
       </main>
     );
@@ -303,7 +303,7 @@ export function CoupleHome() {
   // --- Pas d'espace ---
   if (!data.space) {
     return (
-      <main className="relative px-4 pt-6 pb-8 safe-top lg:mx-auto lg:max-w-3xl">
+      <main className="relative px-3 pt-6 pb-8 safe-top lg:mx-auto lg:max-w-3xl">
         <SacredMotif variant="tree" className="right-[-120px] top-[60px]" />
         {head}
         <p className="text-[18px] leading-relaxed text-warmgray dark:text-[#9A958B]">
@@ -347,7 +347,7 @@ export function CoupleHome() {
             <AsyncButton
               onClick={join}
               disabled={code.length < 8}
-              className="rounded-btnsm bg-navy px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
+              className="rounded-btnsm bg-navy px-3 py-2.5 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
             >
               {t("join")}
             </AsyncButton>
@@ -367,7 +367,7 @@ export function CoupleHome() {
   // --- En attente : je dois confirmer le mariage ---
   if (s.pendingMyConfirmation) {
     return (
-      <main className="relative px-4 pt-6 safe-top lg:mx-auto lg:max-w-3xl">
+      <main className="relative px-3 pt-6 safe-top lg:mx-auto lg:max-w-3xl">
         {head}
         <div className="rounded-cardlg border border-gold/40 bg-[#FBF6E9] p-5 dark:border-[#463A1F] dark:bg-[#272117]">
           <p className="font-display text-[21px] italic text-gold-ink dark:text-[#E0C77A]">
@@ -387,7 +387,7 @@ export function CoupleHome() {
   // --- En attente du conjoint ---
   if (s.status === "PENDING" || !s.partner) {
     return (
-      <main className="relative px-4 pt-6 safe-top lg:mx-auto lg:max-w-3xl">
+      <main className="relative px-3 pt-6 safe-top lg:mx-auto lg:max-w-3xl">
         {head}
         {s.inviteCode ? (
           <div className="rounded-cardlg border border-sand-200 bg-surface p-5 text-center dark:border-anthracite-600 dark:bg-anthracite-800">
@@ -397,14 +397,14 @@ export function CoupleHome() {
             <p className="mt-1.5 text-[16px] text-warmgray dark:text-[#9A958B]">
               {t(engagedCtx ? "inviteBodyEngaged" : "inviteBody")}
             </p>
-            <p className="mx-auto mt-4 inline-block rounded-btn border border-gold bg-[#FBF6E9] px-4 py-3 font-mono text-lg tracking-widest text-gold-ink dark:border-[#6A5A2E] dark:bg-[#272117] dark:text-[#E0C77A]">
+            <p className="mx-auto mt-4 inline-block rounded-btn border border-gold bg-[#FBF6E9] px-3 py-3 font-mono text-lg tracking-widest text-gold-ink dark:border-[#6A5A2E] dark:bg-[#272117] dark:text-[#E0C77A]">
               {s.inviteCode}
             </p>
             <div className="mt-3">
               <button
                 type="button"
                 onClick={() => copyCode(s.inviteCode!)}
-                className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-300 px-4 py-2 text-[16px] font-semibold text-navy dark:border-anthracite-600 dark:text-gold-light"
+                className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-300 px-3 py-2 text-[16px] font-semibold text-navy dark:border-anthracite-600 dark:text-gold-light"
               >
                 {copied ? t("codeCopied") : t("copyCode")}
               </button>
@@ -431,7 +431,7 @@ export function CoupleHome() {
                 <button
                   type="submit"
                   disabled={sendState === "sending" || !inviteEmail.trim()}
-                  className="rounded-btnsm bg-navy px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
+                  className="rounded-btnsm bg-navy px-3 py-2.5 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
                 >
                   {sendState === "sending" ? t("sending") : t("sendInvite")}
                 </button>
@@ -462,7 +462,7 @@ export function CoupleHome() {
 
   // --- Espace actif ---
   return (
-    <main className="relative px-4 pt-6 pb-8 safe-top lg:mx-auto lg:max-w-3xl">
+    <main className="relative px-3 pt-6 pb-8 safe-top lg:mx-auto lg:max-w-3xl">
       <SacredMotif variant="flame" className="right-[-100px] top-[120px]" />
       <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
         {t(engagedCtx ? "titleEngaged" : "title")}
@@ -546,7 +546,7 @@ export function CoupleHome() {
             type="submit"
             disabled={msgBusy || !draft.trim()}
             aria-busy={msgBusy}
-            className="btn-glass btn-glass-sage flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-btnsm px-4 py-2.5 text-sm"
+            className="btn-glass btn-glass-sage flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-btnsm px-3 py-2.5 text-sm"
           >
             {msgBusy && <Spinner className="h-4 w-4" />}
             {t("messagesSend")}

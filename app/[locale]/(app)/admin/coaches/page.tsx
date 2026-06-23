@@ -30,7 +30,7 @@ export default async function AdminCoachesPage({
   });
 
   return (
-    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-3 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
           Accompagnateurs humains

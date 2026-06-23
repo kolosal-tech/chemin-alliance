@@ -72,7 +72,7 @@ export default async function SuggestionsPage({
   );
 
   return (
-    <main className="px-4 pt-6 safe-top">
+    <main className="px-3 pt-6 safe-top">
       {!hasPortrait && (
         <Link
           href="/preparation"
@@ -106,7 +106,7 @@ export default async function SuggestionsPage({
             <p className="mt-2.5 text-[15px] leading-snug text-[#6F5C2E] dark:text-[#C2B488]">
               {t("agents.prep.banner")}
             </p>
-            <span className="mt-3 inline-flex items-center gap-1.5 rounded-btnsm bg-gradient-to-r from-gold-deep to-gold px-4 py-2 text-[16px] font-semibold text-white">
+            <span className="mt-3 inline-flex items-center gap-1.5 rounded-btnsm bg-gradient-to-r from-gold-deep to-gold px-3 py-2 text-[16px] font-semibold text-white">
               {t("agents.prep.bannerCta")} <span aria-hidden>→</span>
             </span>
           </div>
@@ -190,7 +190,7 @@ export default async function SuggestionsPage({
               </ul>
               <Link
                 href="/profile/edit"
-                className="mt-4 inline-flex items-center gap-1.5 rounded-btnsm bg-navy px-4 py-2.5 text-[16px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-btnsm bg-navy px-3 py-2.5 text-[16px] font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
               >
                 {t("suggestions.completeCta")} <span aria-hidden>→</span>
               </Link>

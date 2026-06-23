@@ -41,7 +41,7 @@ export function BlessingRequest({
     return (
       <div
         role="status"
-        className={`mt-4 rounded-card border px-4 py-3 text-[16px] leading-relaxed ${
+        className={`mt-4 rounded-card border px-3 py-3 text-[16px] leading-relaxed ${
           blessed
             ? "border-[#CFE0D4] bg-[#EAF0EB] text-[#2E5440] dark:border-[#2E4A38] dark:bg-[#1B2A20] dark:text-[#9FC7AC]"
             : "border-[#EAD9A8] bg-[#FBF6E9] text-[#6F5C2E] dark:border-[#463A1F] dark:bg-[#272117] dark:text-[#C2B488]"
@@ -64,7 +64,7 @@ export function BlessingRequest({
     return (
       <p
         role="status"
-        className="mt-4 rounded-card border border-sand-200 bg-surface px-4 py-3 text-[16px] text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]"
+        className="mt-4 rounded-card border border-sand-200 bg-surface px-3 py-3 text-[16px] text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]"
       >
         {t("statusPending")}
       </p>
@@ -76,7 +76,7 @@ export function BlessingRequest({
       <AsyncButton
         onClick={ask}
         disabled={busy}
-        className="w-full rounded-btnlg border border-gold bg-gold/10 px-4 py-3.5 text-[17px] font-semibold text-gold-ink disabled:opacity-60 dark:border-[#6A5A2E] dark:bg-[#272117] dark:text-[#E0C77A]"
+        className="w-full rounded-btnlg border border-gold bg-gold/10 px-3 py-3.5 text-[17px] font-semibold text-gold-ink disabled:opacity-60 dark:border-[#6A5A2E] dark:bg-[#272117] dark:text-[#E0C77A]"
       >
         {t("askBlessing")}
       </AsyncButton>

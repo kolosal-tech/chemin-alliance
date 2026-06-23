@@ -82,7 +82,7 @@ export function PrivacyPanel({
   ];
 
   return (
-    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-3 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
           {t("privacy.title")}
@@ -252,7 +252,7 @@ export function PrivacyPanel({
           return (
             <div
               key={f.key}
-              className={`px-4 py-3 ${i < fields.length - 1 ? "border-b border-sand-100 dark:border-anthracite-700" : ""}`}
+              className={`px-3 py-3 ${i < fields.length - 1 ? "border-b border-sand-100 dark:border-anthracite-700" : ""}`}
             >
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-[16px] font-medium text-ink dark:text-[#ECE7DD]">
@@ -279,7 +279,7 @@ export function PrivacyPanel({
         })}
       </section>
 
-      <section className="mb-3.5 flex items-center gap-3 rounded-[14px] border border-sand-200 bg-surface px-4 py-3.5 dark:border-anthracite-600 dark:bg-anthracite-800">
+      <section className="mb-3.5 flex items-center gap-3 rounded-[14px] border border-sand-200 bg-surface px-3 py-3.5 dark:border-anthracite-600 dark:bg-anthracite-800">
         <div className="flex-1 text-sm font-medium text-ink dark:text-[#ECE7DD]">
           {t("privacy.invisibleMode")}
         </div>
@@ -333,7 +333,7 @@ export function PrivacyPanel({
 
       {confirmDelete && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-night/60 px-5"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-night/60 px-4"
           role="dialog"
           aria-modal="true"
         >

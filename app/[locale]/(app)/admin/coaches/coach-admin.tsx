@@ -156,7 +156,7 @@ export function CoachAdmin({ coaches }: { coaches: Coach[] }) {
           <button
             type="submit"
             disabled={busy || displayName.trim().length < 2}
-            className="mt-1 flex items-center justify-center gap-2 rounded-btnlg bg-navy px-4 py-3 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
+            className="mt-1 flex items-center justify-center gap-2 rounded-btnlg bg-navy px-3 py-3 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
           >
             {busy && <Spinner className="h-4 w-4" />}
             {busy ? "Ajout…" : "Ajouter l'accompagnateur"}

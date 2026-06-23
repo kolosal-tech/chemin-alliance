@@ -263,7 +263,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
 
   if (!d) {
     return (
-      <main className="px-4 pt-8 text-center text-sm text-warmgray safe-top">
+      <main className="px-3 pt-8 text-center text-sm text-warmgray safe-top">
         {loadFailed ? (
           <div className="flex flex-col items-center gap-3">
             <p role="alert" className="text-danger">
@@ -272,7 +272,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
             <button
               type="button"
               onClick={load}
-              className="rounded-btnsm border border-sand-400 px-4 py-2 text-[16px] font-semibold text-night dark:border-anthracite-600 dark:text-[#ECE7DD]"
+              className="rounded-btnsm border border-sand-400 px-3 py-2 text-[16px] font-semibold text-night dark:border-anthracite-600 dark:text-[#ECE7DD]"
             >
               {tc("retry")}
             </button>
@@ -471,7 +471,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
   };
 
   return (
-    <main className="safe-top px-4 pb-28 pt-6 lg:mx-auto lg:max-w-2xl">
+    <main className="safe-top px-3 pb-28 pt-6 lg:mx-auto lg:max-w-2xl">
       <div className="mb-5 flex items-center justify-between">
         <h1 className="font-display text-[29px] text-night dark:text-[#ECE7DD]">
           {t("editTitle")}
@@ -509,7 +509,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
                   </div>
                 )}
               </div>
-              <label className="cursor-pointer rounded-btnsm border border-sand-400 px-4 py-2 text-[16px] font-semibold text-night dark:border-anthracite-600 dark:text-[#ECE7DD]">
+              <label className="cursor-pointer rounded-btnsm border border-sand-400 px-3 py-2 text-[16px] font-semibold text-night dark:border-anthracite-600 dark:text-[#ECE7DD]">
                 {photoBusy ? tc("loading") : t("photoChange")}
                 <input
                   type="file"

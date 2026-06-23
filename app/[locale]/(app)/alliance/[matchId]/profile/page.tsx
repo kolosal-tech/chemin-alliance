@@ -66,7 +66,7 @@ export default async function MatchProfilePage({
   });
 
   return (
-    <main className="px-4 pt-5 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-3 pt-5 safe-top lg:mx-auto lg:max-w-2xl">
       <header className="mb-4 flex items-center gap-3">
         <Link
           href={`/alliance/${match.id}`}
@@ -123,12 +123,12 @@ export default async function MatchProfilePage({
         </div>
       </header>
 
-      <p className="mb-4 rounded-card border border-sand-200 bg-surface px-4 py-3 text-[15px] leading-normal text-sand-700 dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#B6B1A7]">
+      <p className="mb-4 rounded-card border border-sand-200 bg-surface px-3 py-3 text-[15px] leading-normal text-sand-700 dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#B6B1A7]">
         {t("matchProfile.intro")}
       </p>
 
       {fields.length === 0 ? (
-        <p className="rounded-card bg-sand-100 px-4 py-6 text-center text-[16px] text-sand-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
+        <p className="rounded-card bg-sand-100 px-3 py-6 text-center text-[16px] text-sand-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
           {t("matchProfile.empty")}
         </p>
       ) : (

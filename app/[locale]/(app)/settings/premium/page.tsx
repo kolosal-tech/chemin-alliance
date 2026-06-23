@@ -30,7 +30,7 @@ export default async function PremiumPage({
   const justPaid = !active && searchParams?.status === "success";
 
   return (
-    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-xl">
+    <main className="px-3 pt-6 safe-top lg:mx-auto lg:max-w-xl">
       <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
         {t("kicker")}
       </span>

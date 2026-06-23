@@ -189,7 +189,7 @@ export function StageActions({
                   <AsyncButton
                     onClick={() => saveAnswer(q.id)}
                     disabled={!answer.trim()}
-                    className="rounded-btnsm bg-navy px-4 py-2 text-xs font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
+                    className="rounded-btnsm bg-navy px-3 py-2 text-xs font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
                   >
                     {tc("save")}
                   </AsyncButton>
@@ -336,7 +336,7 @@ export function StageActions({
               <AsyncButton
                 onClick={closeElegantly}
                 disabled={!exitText.trim()}
-                className="rounded-btnsm border border-[#D8B6B0] px-4 py-2 text-xs font-semibold text-danger disabled:opacity-50 dark:border-[#5A3A34]"
+                className="rounded-btnsm border border-[#D8B6B0] px-3 py-2 text-xs font-semibold text-danger disabled:opacity-50 dark:border-[#5A3A34]"
               >
                 {t("exitConfirm")}
               </AsyncButton>

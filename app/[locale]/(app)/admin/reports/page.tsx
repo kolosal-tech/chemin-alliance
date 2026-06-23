@@ -40,7 +40,7 @@ export default async function AdminReportsPage({
   });
 
   return (
-    <main className="px-4 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
+    <main className="px-3 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
       <h1 className="mb-1 font-display text-2xl font-medium text-night dark:text-[#ECE7DD]">
         {t("title")}
       </h1>
