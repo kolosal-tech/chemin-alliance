@@ -158,7 +158,8 @@
     "resetSubmit": "Reset my password",
     "resetMismatch": "The two passwords don't match.",
     "resetDone": "Password changed. Redirecting to sign in…",
-    "resetInvalid": "This link is invalid or expired. Request a new reset link."
+    "resetInvalid": "This link is invalid or expired. Request a new reset link.",
+    "verifyError": "This verification link is no longer valid (expired or already used). Log in: a « Resend email » button will appear at the top to get a new link."
   },
   "profile": {
     "title": "Profile",

@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { jsonError } from "@/lib/api-helpers";
 import { env } from "@/lib/env";
 
 /**
@@ -18,17 +17,24 @@ import { env } from "@/lib/env";
 export async function verifyEmailToken(
   token: string | null | undefined,
 ): Promise<NextResponse> {
-  if (!token) return jsonError(400, "TOKEN_REQUIRED");
+  // Échec (lien manquant, invalide, déjà utilisé ou expiré) : on NE renvoie PAS
+  // de JSON brut (un clic depuis l'email afficherait {"error":"TOKEN_..."}). On
+  // redirige vers le login avec un drapeau ; l'i18n middleware localise, et la
+  // page invite à se reconnecter pour renvoyer un lien (via VerifyBanner).
+  const fail = () =>
+    NextResponse.redirect(`${env.APP_URL}/login?verifyError=1`);
+
+  if (!token) return fail();
 
   const user = await prisma.user.findUnique({
     where: { emailVerifyToken: token },
   });
-  if (!user) return jsonError(400, "TOKEN_INVALID");
+  if (!user) return fail();
   if (
     user.emailVerifyExpires &&
     user.emailVerifyExpires.getTime() < Date.now()
   ) {
-    return jsonError(400, "TOKEN_EXPIRED");
+    return fail();
   }
 
   await prisma.user.update({
