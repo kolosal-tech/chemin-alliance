@@ -7,6 +7,7 @@ import { requireUser } from "@/lib/security/session";
 import { verifyPassword } from "@/lib/security/password";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import { sendVerificationEmail } from "@/lib/email";
+import { EMAIL_VERIFY_TTL_MS } from "@/lib/auth/email-verification";
 import { audit } from "@/lib/audit";
 
 const schema = z.object({
@@ -46,7 +47,7 @@ export const POST = withErrors(async (req: Request) => {
       email: newEmail,
       isVerified: false,
       emailVerifyToken: token,
-      emailVerifyExpires: new Date(Date.now() + 24 * 60 * 60_000),
+      emailVerifyExpires: new Date(Date.now() + EMAIL_VERIFY_TTL_MS),
     },
   });
   await sendVerificationEmail(newEmail, token, (user.locale as Locale) ?? "fr");

@@ -11,6 +11,7 @@ import {
 import { hashPassword } from "@/lib/security/password";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import { sendVerificationEmail } from "@/lib/email";
+import { EMAIL_VERIFY_TTL_MS } from "@/lib/auth/email-verification";
 
 const schema = z.object({
   email: z.string().email().toLowerCase(),
@@ -83,9 +84,10 @@ export const POST = withErrors(async (req: Request) => {
       rulesetId,
       season,
       emailVerifyToken: token,
-      // Symétrie avec le changement d'email (me/email) : le lien d'inscription
-      // expire après 24 h (verify-email vérifie cette date, null-safe).
-      emailVerifyExpires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      // Le lien d'inscription expire après EMAIL_VERIFY_TTL_MS (7 j). 24 h était
+      // trop court quand l'email tombait en spam. verify-email vérifie cette
+      // date (null-safe).
+      emailVerifyExpires: new Date(Date.now() + EMAIL_VERIFY_TTL_MS),
       faithProfile: { create: { vertical: body.vertical } },
       relationshipProfile: {
         create: { maritalStatus },

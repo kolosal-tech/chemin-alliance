@@ -3,6 +3,17 @@ import { prisma } from "@/lib/db";
 import { env } from "@/lib/env";
 
 /**
+ * Durée de validité d'un lien de vérification d'email : 7 jours.
+ *
+ * 24 h était trop court : un mail tombé en spam (DNS pas encore durci) et
+ * retrouvé le lendemain expirait, et le clic affichait « lien invalide ». 7
+ * jours laisse le temps de le sortir du spam. Source unique partagée par
+ * l'inscription, le changement d'email et le renvoi (resend) pour éviter le
+ * drift entre les trois.
+ */
+export const EMAIL_VERIFY_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
+/**
  * Vérifie un token de confirmation d'email puis redirige vers le login.
  *
  * Logique partagée par DEUX routes :
