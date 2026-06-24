@@ -32,6 +32,7 @@ export function Conversation({
   matchId,
   stage,
   other,
+  isCompanion,
   awaitingMyAccept,
   awaitingOther,
   suggestions,
@@ -45,6 +46,8 @@ export function Conversation({
     isVerified: boolean;
     photoBlurhash: string | null;
   };
+  /** Le correspondant est un Compagnon IA (badge + reponses automatiques). */
+  isCompanion?: boolean;
   awaitingMyAccept?: boolean;
   awaitingOther?: boolean;
   suggestions: string[];
@@ -211,6 +214,21 @@ export function Conversation({
           createdAt: new Date().toISOString(),
         },
       ]);
+      // Compagnon IA : la reponse automatique est renvoyee par l'API, on
+      // l'affiche immediatement comme un message recu (pas de poll a attendre).
+      if (data.companionReply) {
+        setMessages((m) => [
+          ...m,
+          {
+            id: data.companionReply.id,
+            kind: "USER",
+            mine: false,
+            content: data.companionReply.content,
+            blocked: false,
+            createdAt: data.companionReply.createdAt,
+          },
+        ]);
+      }
     }
     setDraft("");
   }
@@ -250,23 +268,48 @@ export function Conversation({
             <span className="truncate font-display text-[20px] text-night dark:text-[#ECE7DD]">
               {other.displayName}
             </span>
-            {other.isVerified && (
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 24 24"
-                aria-hidden
-                className="flex-none"
-              >
-                <path
-                  d="M12 2.5l2.4 1.7 2.9-.2 1 2.8 2.4 1.6-.8 2.8.8 2.8-2.4 1.6-1 2.8-2.9-.2L12 21.5l-2.4-1.7-2.9.2-1-2.8L3.3 15.6l.8-2.8-.8-2.8 2.4-1.6 1-2.8 2.9.2L12 2.5Z"
-                  className="fill-gold dark:fill-gold-light"
-                />
-              </svg>
+            {isCompanion ? (
+              // Profil IA : on n'affiche JAMAIS le sceau de verification humaine
+              // (trompeur). A la place, un badge clair "Compagnon IA".
+              <span className="flex flex-none items-center gap-1 rounded-full border border-[#8C7DB8]/55 bg-[#EDE9F6] px-2 py-0.5 text-[11px] font-semibold text-[#5B4F87] dark:border-gold-light/30 dark:bg-gold-light/10 dark:text-gold-light">
+                <svg
+                  width="11"
+                  height="11"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden
+                >
+                  <path
+                    d="M12 3l1.6 4.2L18 9l-4.4 1.8L12 15l-1.6-4.2L6 9l4.4-1.8L12 3Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                {t("discovery_ecosystem.companionBadge")}
+              </span>
+            ) : (
+              other.isVerified && (
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  aria-hidden
+                  className="flex-none"
+                >
+                  <path
+                    d="M12 2.5l2.4 1.7 2.9-.2 1 2.8 2.4 1.6-.8 2.8.8 2.8-2.4 1.6-1 2.8-2.9-.2L12 21.5l-2.4-1.7-2.9.2-1-2.8L3.3 15.6l.8-2.8-.8-2.8 2.4-1.6 1-2.8 2.9.2L12 2.5Z"
+                    className="fill-gold dark:fill-gold-light"
+                  />
+                </svg>
+              )
             )}
           </div>
-          <div className="mt-0.5">
+          <div className="mt-0.5 flex items-center gap-2">
             <StageBadge stage={stage} />
+            {isCompanion && (
+              <span className="text-[11px] text-warmgray dark:text-[#8B8579]">
+                {t("discovery_ecosystem.notRealPerson")}
+              </span>
+            )}
           </div>
         </div>
         <Link

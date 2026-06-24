@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { AsyncButton } from "@/components/AsyncButton";
 import { Spinner } from "@/components/Spinner";
 import { BlurhashImage } from "@/components/BlurhashImage";
@@ -36,6 +37,8 @@ type Profile = {
   } | null;
   // P6 : a désigné un Parrain/Marraine (signal de confiance "accompagné·e").
   hasSponsor?: boolean;
+  // Ecosysteme : Compagnon IA (badge clair, jamais le sceau humain).
+  kind?: string | null;
 };
 
 export function SuggestionCard({
@@ -47,6 +50,7 @@ export function SuggestionCard({
 }) {
   const t = useTranslations();
   const locale = useLocale();
+  const router = useRouter();
   const [state, setState] = useState<"idle" | "sent" | "passing" | "passed">(
     "idle",
   );
@@ -57,6 +61,16 @@ export function SuggestionCard({
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ targetUserId: profile.id }),
     });
+    // Compagnon IA : rencontre ouverte d'emblee, on entre directement dans le
+    // fil (le compagnon a depose son message d'accueil transparent).
+    const data = (await res.json().catch(() => null)) as {
+      matchId?: string;
+      companion?: boolean;
+    } | null;
+    if (res.ok && data?.companion && data.matchId) {
+      router.push(`/messages/${data.matchId}`);
+      return;
+    }
     if (res.ok || res.status === 409) setState("sent");
   }
 
@@ -133,21 +147,34 @@ export function SuggestionCard({
           {t("suggestions.photoReveal")}
         </span>
 
-        {profile.isVerified && (
-          <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full border border-sage-border bg-night/55 px-2.5 py-1 text-[13px] font-semibold text-sage-ink dark:text-sage-darkInk backdrop-blur-[2px]">
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              aria-label={t("common.verified")}
-            >
+        {profile.kind === "AI_COMPANION" ? (
+          // Profil IA : badge clair, jamais le sceau "verifie" humain (trompeur).
+          <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full border border-[#9C8FCB]/60 bg-night/55 px-2.5 py-1 text-[13px] font-semibold text-[#E7E2F2] backdrop-blur-[2px]">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
               <path
-                d="M12 2.5l2.4 1.7 2.9-.2 1 2.8 2.4 1.6-.8 2.8.8 2.8-2.4 1.6-1 2.8-2.9-.2L12 21.5l-2.4-1.7-2.9.2-1-2.8L3.3 15.6l.8-2.8-.8-2.8 2.4-1.6 1-2.8 2.9.2L12 2.5Z"
-                className="fill-sage dark:fill-sage-darkInk"
+                d="M12 3l1.6 4.2L18 9l-4.4 1.8L12 15l-1.6-4.2L6 9l4.4-1.8L12 3Z"
+                fill="currentColor"
               />
             </svg>
-            {t("common.verified")}
+            {t("discovery_ecosystem.companionBadge")}
           </span>
+        ) : (
+          profile.isVerified && (
+            <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full border border-sage-border bg-night/55 px-2.5 py-1 text-[13px] font-semibold text-sage-ink dark:text-sage-darkInk backdrop-blur-[2px]">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                aria-label={t("common.verified")}
+              >
+                <path
+                  d="M12 2.5l2.4 1.7 2.9-.2 1 2.8 2.4 1.6-.8 2.8.8 2.8-2.4 1.6-1 2.8-2.9-.2L12 21.5l-2.4-1.7-2.9.2-1-2.8L3.3 15.6l.8-2.8-.8-2.8 2.4-1.6 1-2.8 2.9.2L12 2.5Z"
+                  className="fill-sage dark:fill-sage-darkInk"
+                />
+              </svg>
+              {t("common.verified")}
+            </span>
+          )
         )}
 
         <div className="absolute inset-x-4 bottom-3.5 text-[#F6F2E9]">
@@ -177,7 +204,13 @@ export function SuggestionCard({
             </span>
             {profile.hasSponsor && (
               <span className="flex items-center gap-1 rounded-full border border-[#3F6B50]/55 bg-[#3F6B50]/30 px-2.5 py-0.5 text-[13px] font-semibold text-[#EAF0EB] backdrop-blur-[3px]">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <svg
+                  width="11"
+                  height="11"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden
+                >
                   <path
                     d="M12 3l7 3v5c0 4.2-2.8 7.6-7 9-4.2-1.4-7-4.8-7-9V6l7-3Z"
                     stroke="currentColor"

@@ -1335,6 +1335,7 @@
       "deepQuestions": "Preguntas profundas",
       "emotionalDiscovery": "Descubrimiento emocional",
       "coupleFinances": "Finanzas de la pareja"
-    }
+    },
+    "replyFallback": "Me tomo el tiempo de leerte. Puedes contarme un poco mas sobre lo que te importa?"
   }
 }

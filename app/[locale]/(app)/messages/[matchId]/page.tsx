@@ -22,6 +22,7 @@ export default async function ConversationPage({
           displayName: true,
           isVerified: true,
           photoBlurhash: true,
+          kind: true,
         },
       },
       userB: {
@@ -30,6 +31,7 @@ export default async function ConversationPage({
           displayName: true,
           isVerified: true,
           photoBlurhash: true,
+          kind: true,
         },
       },
       messages: { orderBy: { createdAt: "asc" }, take: 200 },
@@ -58,6 +60,7 @@ export default async function ConversationPage({
       matchId={match.id}
       stage={match.stage}
       other={other}
+      isCompanion={other.kind === "AI_COMPANION"}
       awaitingMyAccept={awaitingMyAccept}
       awaitingOther={awaitingOther}
       suggestions={suggestions}
