@@ -162,6 +162,109 @@ async function cohortCouple(label, email) {
   );
 }
 
+// --- Cohorte 4 : Compagnons IA (decouverte badgee + chat IA + discernement) --
+// Valide le pivot ecosysteme (P3 + P5) de bout en bout via l'API : un celibataire
+// verifie decouvre un Compagnon IA, ouvre la rencontre (auto-ACTIVE), recoit le
+// message d'accueil, envoie un message et obtient l'auto-reply, puis lance un
+// outil de discernement (le Compagnon pose une question curee). Idempotent.
+function findCompanionMatchId(listJson, companion) {
+  const arr = Array.isArray(listJson)
+    ? listJson
+    : (listJson && (listJson.matches || listJson.items)) || [];
+  for (const m of arr) {
+    const cand = [
+      m.otherId,
+      m.partnerId,
+      m.userId,
+      m.other && m.other.id,
+    ];
+    if (cand.includes(companion.id)) return m.id;
+    const names = [m.displayName, m.other && m.other.displayName];
+    if (companion.displayName && names.includes(companion.displayName)) {
+      return m.id;
+    }
+  }
+  return null;
+}
+
+async function cohortCompanion() {
+  // Celibataire homme verifie ; les Compagnons femmes (genre oppose) sont eligibles.
+  const ca = await login(ACCOUNTS.A);
+  // Profil minimum pour RECEVOIR des suggestions (ville + intention). Idempotent.
+  await api(ca, "PATCH", "/api/me", { cityApprox: "Lyon" });
+  await api(ca, "PATCH", "/api/me/relationship-profile", {
+    intentionStatement: "Avancer vers un mariage chretien, avec patience.",
+  });
+
+  const sug = await api(ca, "GET", "/api/matches/suggestions");
+  const list = Array.isArray(sug.json) ? sug.json : [];
+  const companion = list.find((s) => s.kind === "AI_COMPANION");
+  check(
+    "compagnon: visible et badge dans la decouverte",
+    !!companion,
+    companion
+      ? `${companion.displayName} (kind=${companion.kind})`
+      : `${list.length} suggestions, aucun AI_COMPANION`,
+  );
+  if (!companion) return;
+
+  // Ouvre la rencontre : 201 {companion:true, matchId} ; 409 si deja matche.
+  let mid;
+  const req = await api(ca, "POST", "/api/matches/request", {
+    targetUserId: companion.id,
+  });
+  if (req.json && req.json.matchId) mid = req.json.matchId;
+  if (!mid) {
+    const lst = await api(ca, "GET", "/api/matches/list");
+    mid = findCompanionMatchId(lst.json, companion);
+  }
+  check(
+    "compagnon: rencontre ouverte (auto-acceptee)",
+    !!mid && (req.status === 201 ? req.json.companion === true : true),
+    mid ? `${mid} (req ${req.status})` : `req ${req.status}`,
+  );
+  if (!mid) return;
+
+  // Message d'accueil transparent depose par le Compagnon (au moins 1 message recu).
+  const msgs = await api(ca, "GET", `/api/matches/${mid}/messages`);
+  const arr = Array.isArray(msgs.json) ? msgs.json : [];
+  const fromCompanion = arr.filter((m) => m.mine === false);
+  check(
+    "compagnon: message d'accueil present",
+    fromCompanion.length >= 1,
+    `${fromCompanion.length} message(s) du compagnon`,
+  );
+
+  // Envoi d'un message -> reponse automatique du Compagnon (LLM ou repli localise).
+  const sent = await api(ca, "POST", `/api/matches/${mid}/messages`, {
+    content: "Bonjour, je decouvre ton profil avec joie.",
+  });
+  const reply = sent.json && sent.json.companionReply;
+  check(
+    "compagnon: reponse IA automatique",
+    sent.status === 201 &&
+      !!reply &&
+      typeof reply.content === "string" &&
+      reply.content.length > 0,
+    reply ? `${reply.content.length} car.` : `status ${sent.status}`,
+  );
+
+  // Outil de discernement in-chat (P5) : le Compagnon pose une question curee.
+  const tool = await api(ca, "POST", `/api/matches/${mid}/companion-tool`, {
+    module: "deepQuestions",
+    index: 0,
+  });
+  const q = tool.json && tool.json.message;
+  check(
+    "compagnon: outil de discernement (question posee)",
+    tool.status === 201 &&
+      !!q &&
+      typeof q.content === "string" &&
+      q.content.length > 0,
+    q ? `${q.content.length} car.` : `status ${tool.status}`,
+  );
+}
+
 (async () => {
   console.log(`# Harnais QA bêta-testeur — ${BASE}`);
   console.log(`# ${new Date().toISOString()}\n`);
@@ -169,6 +272,11 @@ async function cohortCouple(label, email) {
     await cohortSingles();
   } catch (e) {
     check("cohorte célibataires", false, e.message);
+  }
+  try {
+    await cohortCompanion();
+  } catch (e) {
+    check("cohorte Compagnons IA", false, e.message);
   }
   try {
     await cohortCouple("couple C+D", ACCOUNTS.C);
