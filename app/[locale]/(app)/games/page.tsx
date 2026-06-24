@@ -60,7 +60,9 @@ export default async function GamesPage({
               <span
                 aria-hidden
                 className="h-11 w-11 flex-none rounded-full"
-                style={{ background: GRADIENTS[p.avatarGradient % GRADIENTS.length] }}
+                style={{
+                  background: GRADIENTS[p.avatarGradient % GRADIENTS.length],
+                }}
               />
               <div className="min-w-0 flex-1">
                 <p className="text-[16px] font-semibold text-night dark:text-[#ECE7DD]">

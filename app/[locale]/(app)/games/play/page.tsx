@@ -17,7 +17,8 @@ export default async function PlayPage({
   await requirePageUser(params.locale);
 
   const slug = searchParams?.persona;
-  const gameType = searchParams?.game === "DEEP_QUESTIONS" ? "DEEP_QUESTIONS" : "DISC";
+  const gameType =
+    searchParams?.game === "DEEP_QUESTIONS" ? "DEEP_QUESTIONS" : "DISC";
   if (!slug) notFound();
 
   const persona = await prisma.aiPersona.findUnique({ where: { slug } });

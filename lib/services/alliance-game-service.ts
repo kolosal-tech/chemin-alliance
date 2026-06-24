@@ -76,9 +76,12 @@ export function scoreDisc(codes: Array<"D" | "I" | "S" | "C">): {
 } {
   const tally = { D: 0, I: 0, S: 0, C: 0 };
   for (const c of codes) tally[c] += 1;
-  const entries = Object.entries(tally) as Array<["D" | "I" | "S" | "C", number]>;
+  const entries = Object.entries(tally) as Array<
+    ["D" | "I" | "S" | "C", number]
+  >;
   const max = Math.max(...entries.map(([, n]) => n));
-  const dominant = max > 0 ? (entries.find(([, n]) => n === max)?.[0] ?? null) : null;
+  const dominant =
+    max > 0 ? (entries.find(([, n]) => n === max)?.[0] ?? null) : null;
   return { ...tally, dominant };
 }
 
