@@ -1335,6 +1335,29 @@
       "emotionalDiscovery": "Emotional discovery",
       "coupleFinances": "Couple finances"
     },
-    "replyFallback": "I am taking the time to read you. Can you tell me a bit more about what matters to you?"
+    "replyFallback": "I am taking the time to read you. Can you tell me a bit more about what matters to you?",
+    "discernment": {
+      "deepQuestions": {
+        "q1": "What does a Christian home look like for you day to day?",
+        "q2": "How do you welcome forgiveness after being hurt?",
+        "q3": "What place do you give to extended family and community?",
+        "q4": "How do you see money and generosity in your home?",
+        "q5": "How do you keep a living faith as a couple?"
+      },
+      "emotionalDiscovery": {
+        "q1": "What truly makes you feel safe with someone?",
+        "q2": "How do you express what you feel when an emotion runs through you?",
+        "q3": "What past wound do you want to avoid reliving?",
+        "q4": "How do you know you can trust someone?",
+        "q5": "What soothes you when you go through an inner storm?"
+      },
+      "coupleFinances": {
+        "q1": "How do you picture handling a shared budget day to day?",
+        "q2": "How would you decide big expenses together?",
+        "q3": "What place do you give to saving and generosity?",
+        "q4": "How can a couple talk about money without tension?",
+        "q5": "What is a healthy, Christian relationship with money for you?"
+      }
+    }
   }
 }

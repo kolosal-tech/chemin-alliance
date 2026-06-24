@@ -14,6 +14,11 @@ import { AllianceMoment } from "@/components/AllianceMoment";
 import { AsyncButton } from "@/components/AsyncButton";
 import { Spinner } from "@/components/Spinner";
 import { useToast } from "@/components/Toast";
+import {
+  DISCERNMENT_MODULES,
+  DISCERNMENT_COUNT,
+  type DiscernmentModule,
+} from "@/lib/companions/discernment";
 
 type Msg = {
   id: string;
@@ -130,6 +135,11 @@ export function Conversation({
   const [messages, setMessages] = useState<Msg[]>(initialMessages);
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
+  // Outils de discernement in-chat (Compagnon IA) : panneau ouvert/ferme + index
+  // de progression par module (porte par le client, pas de table).
+  const [toolsOpen, setToolsOpen] = useState(false);
+  const [toolBusy, setToolBusy] = useState(false);
+  const [toolIndex, setToolIndex] = useState<Record<string, number>>({});
   // id du message dont on demande confirmation de suppression (null = aucun).
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
@@ -231,6 +241,44 @@ export function Conversation({
       }
     }
     setDraft("");
+  }
+
+  // Compagnon IA : lance un outil de discernement. Le Compagnon POSE la question
+  // curee (message du Compagnon), l'utilisateur repondra dans la saisie normale
+  // (l'auto-reply LLM reagit). L'index avance a chaque appel (boucle sur le banc).
+  async function launchTool(module: DiscernmentModule) {
+    if (toolBusy) return;
+    setToolBusy(true);
+    const idx = (toolIndex[module] ?? 0) % DISCERNMENT_COUNT[module];
+    try {
+      const res = await fetch(`/api/matches/${matchId}/companion-tool`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ module, index: idx }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.message) {
+        toast.error(t("messaging.actionFailed"));
+        return;
+      }
+      setMessages((m) => [
+        ...m,
+        {
+          id: data.message.id,
+          kind: "USER",
+          mine: false,
+          content: data.message.content,
+          blocked: false,
+          createdAt: data.message.createdAt,
+        },
+      ]);
+      setToolIndex((s) => ({ ...s, [module]: (s[module] ?? 0) + 1 }));
+      setToolsOpen(false);
+    } catch {
+      toast.error(t("messaging.actionFailed"));
+    } finally {
+      setToolBusy(false);
+    }
   }
 
   return (
@@ -575,6 +623,48 @@ export function Conversation({
           pending ? "hidden" : ""
         }`}
       >
+        {/* Compagnon IA : outils de discernement. Un appui pose une question
+            curee posee PAR le Compagnon ; l'utilisateur y repond dans la saisie
+            (l'auto-reply LLM reagit ensuite). Reutilise le registre Questions
+            profondes / Decouverte emotionnelle / Finances du couple. */}
+        {isCompanion && (
+          <div className="mb-2.5">
+            <button
+              type="button"
+              onClick={() => setToolsOpen((o) => !o)}
+              aria-expanded={toolsOpen}
+              className="flex items-center gap-1.5 rounded-full border border-[#8C7DB8]/40 bg-[#EDE9F6]/60 px-3 py-1.5 text-[13px] font-semibold text-[#5B4F87] transition-colors hover:bg-[#EDE9F6] dark:border-gold-light/25 dark:bg-gold-light/[0.07] dark:text-gold-light dark:hover:bg-gold-light/15"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path
+                  d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
+                  fill="currentColor"
+                />
+              </svg>
+              {t("discovery_ecosystem.toolsButton")}
+              <span
+                aria-hidden
+                className={`text-[11px] transition-transform ${toolsOpen ? "rotate-90" : ""}`}
+              >
+                ›
+              </span>
+            </button>
+            {toolsOpen && (
+              <div className="mt-2 flex flex-wrap gap-2">
+                {DISCERNMENT_MODULES.map((mod) => (
+                  <AsyncButton
+                    key={mod}
+                    onClick={() => launchTool(mod)}
+                    disabled={toolBusy}
+                    className="glass whitespace-nowrap rounded-[18px] px-3 py-2 text-xs font-medium text-[#3A372F] disabled:opacity-50 dark:text-[#CFCAC0]"
+                  >
+                    {t(`discovery_ecosystem.modules.${mod}`)}
+                  </AsyncButton>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
         {suggestions.length > 0 && (
           <>
             <div className="mb-2 flex items-center gap-1.5">
