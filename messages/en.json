@@ -1232,5 +1232,91 @@
         }
       }
     }
+  },
+  "alliance_lab": {
+    "title": "Alliance Lab",
+    "subtitle": "A training ground, not a real encounter.",
+    "badge": {
+      "echo": "AI Echo",
+      "trainingPartner": "Training partner",
+      "disclaimer": "AI Echo: a training partner, not a real person."
+    },
+    "waiting": {
+      "discerning": "{name} is discerning a reply...",
+      "synthesis": "The AI Pastor is preparing your synthesis..."
+    },
+    "arena": {
+      "chooseGame": "Choose your game",
+      "gameDisc": "DISC Profile",
+      "gameDeep": "Deep Questions",
+      "choosePartner": "Choose your training partner",
+      "start": "Start",
+      "yourTurn": "Your turn",
+      "personaTurn": "{name}'s turn",
+      "placeholder": "Write your answer...",
+      "send": "Send",
+      "next": "Next question",
+      "finish": "End the game",
+      "progress": "Question {current} of {total}",
+      "synthesisTitle": "Pastoral synthesis",
+      "restart": "Play again",
+      "vs": "facing"
+    },
+    "disc": {
+      "title": "DISC Profile: 5 situations",
+      "q1": {
+        "prompt": "An important decision divides your couple. Your first instinct?",
+        "D": "Decide quickly and move on, adjusting later if needed.",
+        "I": "Talk it through openly and persuade with enthusiasm.",
+        "S": "Seek calm and protect harmony above all.",
+        "C": "Take time to weigh the facts before choosing."
+      },
+      "q2": {
+        "prompt": "For the home and the budget, you see yourself rather...",
+        "D": "Setting the direction and goals, staying in charge.",
+        "I": "Bringing momentum, motivating, thinking big.",
+        "S": "Securing stability, a peaceful and reliable home.",
+        "C": "Keeping the accounts to the detail, planning everything."
+      },
+      "q3": {
+        "prompt": "At a large family gathering, you are...",
+        "D": "The one who leads and organizes.",
+        "I": "The life of the party, connecting people.",
+        "S": "The quiet support, attentive to each person.",
+        "C": "The calm observer, watching the details."
+      },
+      "q4": {
+        "prompt": "Facing a trial, your strength is...",
+        "D": "Action and determination.",
+        "I": "Hope shared with others.",
+        "S": "Patience and steadiness.",
+        "C": "Thoughtfulness and prudence."
+      },
+      "q5": {
+        "prompt": "Your spiritual life is nourished above all by...",
+        "D": "Concrete faith goals to reach.",
+        "I": "Living praise and sharing.",
+        "S": "A steady and peaceful prayer life.",
+        "C": "Deep study of the Word."
+      }
+    },
+    "deep": {
+      "title": "Deep Questions: 5 exchanges",
+      "q1": {
+        "prompt": "What does a Christian home mean to you day to day?"
+      },
+      "q2": {
+        "prompt": "How do you welcome forgiveness after a wound?"
+      },
+      "q3": {
+        "prompt": "What place do you give to extended family and community?"
+      },
+      "q4": {
+        "prompt": "How do you see money and generosity in your home?"
+      },
+      "q5": {
+        "prompt": "How do you nurture a living faith together?"
+      }
+    }
   }
 }

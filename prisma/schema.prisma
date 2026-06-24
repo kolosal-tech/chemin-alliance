@@ -161,6 +161,7 @@ model User {
   coupleMessages      CoupleMessage[]      @relation("CoupleMessageSender")
   pushSubscriptions   PushSubscription[]
   sponsor             Sponsor?             @relation("UserSponsor")
+  gameSessions        GameSession[]        // Alliance Lab (terrain d'entrainement IA)
 
   // Vivier de matching : getSuggestions filtre sur season + isVerified +
   // gender + deletedAt. Sans cet index, full scan dès quelques milliers de profils.
@@ -505,4 +506,75 @@ model Blessing {
   respondedAt   DateTime?
 
   @@index([userId, matchId])
+}
+
+// =====================================================================
+// ALLIANCE LAB (Vague 1) : terrain d'entrainement IA. Les personas sont
+// des "Echo IA" non-humains, JAMAIS injectes dans le matching reel.
+// =====================================================================
+
+enum GameType {
+  DISC
+  DEEP_QUESTIONS
+}
+
+enum GameSessionStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+/// Persona IA d'entrainement (couverture continentale). Non-humain.
+model AiPersona {
+  id             String        @id @default(cuid())
+  slug           String        @unique
+  displayName    String
+  age            Int
+  gender         String
+  vertical       FaithVertical
+  region         String
+  locale         String        @default("fr")
+  systemPrompt   String
+  bio            String?
+  avatarGradient Int           @default(0)
+  active         Boolean       @default(true)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  sessions       GameSession[]
+}
+
+/// Une partie entre un utilisateur et une persona (DISC ou Questions Profondes).
+model GameSession {
+  id          String            @id @default(cuid())
+  userId      String
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personaId   String
+  persona     AiPersona         @relation(fields: [personaId], references: [id], onDelete: Cascade)
+  gameType    GameType
+  status      GameSessionStatus @default(IN_PROGRESS)
+  locale      String            @default("fr")
+  region      String?
+  synthesis   Json?
+  createdAt   DateTime          @default(now())
+  completedAt DateTime?
+
+  answers     GameAnswer[]
+
+  @@index([userId, gameType])
+  @@index([personaId])
+}
+
+/// Une reponse a une question, cote utilisateur ET cote persona (Echo IA).
+model GameAnswer {
+  id            String      @id @default(cuid())
+  sessionId     String
+  session       GameSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  questionKey   String
+  questionOrder Int
+  userAnswer    String
+  personaAnswer String?
+  createdAt     DateTime    @default(now())
+
+  @@index([sessionId, questionOrder])
 }
