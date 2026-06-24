@@ -12,6 +12,7 @@
     "e2e:report": "node scripts/generate-summary.js",
     "seed": "tsx prisma/seed.ts",
     "seed:ai-personas": "tsx prisma/seed-ai-personas.ts",
+    "seed:ecosystem": "tsx prisma/seed-ecosystem.ts",
     "backfill:blurhash": "tsx scripts/backfill-blurhash.ts",
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev",
