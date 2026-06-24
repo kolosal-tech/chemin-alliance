@@ -21,6 +21,12 @@ const TABS = [
     icon: "M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z",
   },
   {
+    // Alliance Lab : icone fiole (terrain d'entrainement).
+    href: "/games",
+    key: "games",
+    icon: "M9 4h6l-1 6 4 8a2 2 0 0 1-2 3H8a2 2 0 0 1-2-3l4-8-1-6Z",
+  },
+  {
     href: "/devotional",
     key: "devotional",
     icon: "M4 5h6a2 2 0 0 1 2 2 2 2 0 0 1 2-2h6v13h-6a2 2 0 0 0-2 2 2 2 0 0 0-2-2H4V5Z",

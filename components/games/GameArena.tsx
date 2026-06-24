@@ -58,7 +58,11 @@ export function GameArena({
   isDisc: boolean;
   onAnswer: (q: ArenaQuestion, userAnswer: string) => Promise<string | null>;
   onFinish: (
-    pairs: Array<{ key: string; userAnswer: string; personaAnswer: string | null }>,
+    pairs: Array<{
+      key: string;
+      userAnswer: string;
+      personaAnswer: string | null;
+    }>,
   ) => Promise<string | null>;
 }) {
   const t = useTranslations("alliance_lab");
@@ -84,7 +88,10 @@ export function GameArena({
     const reply = await onAnswer(q, answer);
     setPersonaAnswer(reply);
     setWaiting(false);
-    setPairs((p) => [...p, { key: q.key, userAnswer: answer, personaAnswer: reply }]);
+    setPairs((p) => [
+      ...p,
+      { key: q.key, userAnswer: answer, personaAnswer: reply },
+    ]);
   }
 
   function next() {
@@ -189,7 +196,10 @@ export function GameArena({
             <span
               aria-hidden
               className="h-7 w-7 flex-none rounded-full"
-              style={{ background: GRADIENTS[persona.avatarGradient % GRADIENTS.length] }}
+              style={{
+                background:
+                  GRADIENTS[persona.avatarGradient % GRADIENTS.length],
+              }}
             />
             <span className="text-[14px] font-semibold text-night dark:text-[#ECE7DD]">
               {persona.displayName}

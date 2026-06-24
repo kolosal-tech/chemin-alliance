@@ -3,11 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Spinner } from "@/components/Spinner";
-import {
-  GameArena,
-  type ArenaPersona,
-  type ArenaQuestion,
-} from "./GameArena";
+import { GameArena, type ArenaPersona, type ArenaQuestion } from "./GameArena";
 
 /**
  * Coquille client d'Alliance Lab : ouvre une GameSession, puis fournit a
