@@ -10,6 +10,13 @@ const withPWA = withPWAInit({
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
   reloadOnOnline: true,
+  // Le nouveau service worker prend la main DES son installation, sans attendre
+  // la fermeture de tous les onglets/PWA : un deploy se propage des la prochaine
+  // ouverture (sinon l'ancien shell cache reste affiche, ex. un onglet retire).
+  workboxOptions: {
+    skipWaiting: true,
+    clientsClaim: true,
+  },
   fallbacks: {
     document: "/fr/offline",
   },

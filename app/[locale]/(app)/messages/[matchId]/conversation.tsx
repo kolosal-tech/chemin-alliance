@@ -303,13 +303,8 @@ export function Conversation({
               )
             )}
           </div>
-          <div className="mt-0.5 flex items-center gap-2">
+          <div className="mt-0.5">
             <StageBadge stage={stage} />
-            {isCompanion && (
-              <span className="text-[11px] text-warmgray dark:text-[#8B8579]">
-                {t("discovery_ecosystem.notRealPerson")}
-              </span>
-            )}
           </div>
         </div>
         <Link
@@ -343,6 +338,28 @@ export function Conversation({
         <ReportButton targetUserId={other.id} />
         <BlockButton targetUserId={other.id} targetName={other.displayName} />
       </header>
+
+      {/* Compagnon IA : rappel de transparence PERSISTANT, en bandeau pleine
+          largeur sous l'en-tete (jamais inline dans l'en-tete, qui deborderait
+          sur etroit). Le badge "Compagnon IA" reste, lui, dans l'en-tete. */}
+      {isCompanion && (
+        <div className="flex items-center justify-center gap-1.5 border-b border-[#8C7DB8]/25 bg-[#EDE9F6]/50 px-3 py-1.5 text-center text-[12px] text-[#5B4F87] dark:border-gold-light/15 dark:bg-gold-light/[0.06] dark:text-gold-light">
+          <svg
+            width="11"
+            height="11"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden
+            className="flex-none"
+          >
+            <path
+              d="M12 3l1.6 4.2L18 9l-4.4 1.8L12 15l-1.6-4.2L6 9l4.4-1.8L12 3Z"
+              fill="currentColor"
+            />
+          </svg>
+          {t("discovery_ecosystem.notRealPerson")}
+        </div>
+      )}
 
       <SafetyBanner matchId={matchId} />
 
