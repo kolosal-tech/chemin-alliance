@@ -1320,5 +1320,21 @@
         "prompt": "Comment nourrir une foi vivante a deux ?"
       }
     }
+  },
+  "discovery_ecosystem": {
+    "companionBadge": "Compagnon IA",
+    "badge": {
+      "accompaniment": "Profil d'accompagnement",
+      "discernment": "Compagnon de discernement",
+      "assistant": "Assistant relationnel"
+    },
+    "welcome": "Bonjour, je suis {name}. Je suis un profil d'accompagnement pilote par IA concu pour vous permettre d'explorer les outils de Chemin d'Alliance. Je ne represente pas une personne reelle.",
+    "notRealPerson": "Profil IA, pas une personne reelle.",
+    "toolsButton": "Outils de discernement",
+    "modules": {
+      "deepQuestions": "Questions profondes",
+      "emotionalDiscovery": "Decouverte emotionnelle",
+      "coupleFinances": "Finances du couple"
+    }
   }
 }

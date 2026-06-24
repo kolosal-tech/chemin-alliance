@@ -1320,5 +1320,21 @@
         "prompt": "How do you nurture a living faith together?"
       }
     }
+  },
+  "discovery_ecosystem": {
+    "companionBadge": "AI Companion",
+    "badge": {
+      "accompaniment": "Accompaniment profile",
+      "discernment": "Discernment companion",
+      "assistant": "Relational assistant"
+    },
+    "welcome": "Hello, I am {name}. I am an AI-driven accompaniment profile designed to let you explore the tools of Chemin d'Alliance. I do not represent a real person.",
+    "notRealPerson": "AI profile, not a real person.",
+    "toolsButton": "Discernment tools",
+    "modules": {
+      "deepQuestions": "Deep questions",
+      "emotionalDiscovery": "Emotional discovery",
+      "coupleFinances": "Couple finances"
+    }
   }
 }
