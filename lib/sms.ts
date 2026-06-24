@@ -54,7 +54,17 @@ export async function startVerification(to: string): Promise<boolean> {
       },
     );
     if (!res.ok) {
-      console.error(`[verify] Twilio start ${res.status}`);
+      // On logge le code d'erreur Twilio (ex. 60xxx) + message en plus du status
+      // HTTP : un 403 nu ne dit pas POURQUOI (geo-permissions, compte trial,
+      // solde, numéro non vérifié...). Le code Twilio, lui, tranche.
+      let detail = "";
+      try {
+        const e = (await res.json()) as { code?: number; message?: string };
+        detail = ` code=${e.code ?? "?"} ${e.message ?? ""}`.trimEnd();
+      } catch {
+        /* corps non-JSON : on garde juste le status */
+      }
+      console.error(`[verify] Twilio start ${res.status}${detail}`);
       return false;
     }
     return true;
@@ -84,7 +94,17 @@ export async function checkVerification(
         body: new URLSearchParams({ To: to, Code: code }).toString(),
       },
     );
-    if (!res.ok) return false;
+    if (!res.ok) {
+      let detail = "";
+      try {
+        const e = (await res.json()) as { code?: number; message?: string };
+        detail = ` code=${e.code ?? "?"} ${e.message ?? ""}`.trimEnd();
+      } catch {
+        /* corps non-JSON */
+      }
+      console.error(`[verify] Twilio check ${res.status}${detail}`);
+      return false;
+    }
     const data = (await res.json()) as { status?: string };
     return data.status === "approved";
   } catch {
