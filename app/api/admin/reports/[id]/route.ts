@@ -5,18 +5,43 @@ import { withErrors, readJsonLimited } from "@/lib/api-helpers";
 import { requireAdmin } from "@/lib/security/session";
 
 const schema = z.object({
-  status: z.enum(["REVIEWING", "RESOLVED", "DISMISSED"]),
+  action: z.enum(["REVIEWING", "RESOLVED", "DISMISSED", "BAN"]),
 });
 
 export const PATCH = withErrors(
   async (req: Request, { params }: { params: { id: string } }) => {
     await requireAdmin();
     const body = schema.parse(await readJsonLimited(req));
+
+    if (body.action === "BAN") {
+      const report = await prisma.report.findUnique({
+        where: { id: params.id },
+        select: { targetUserId: true },
+      });
+      if (!report) {
+        return NextResponse.json(
+          { ok: false, error: "NOT_FOUND" },
+          { status: 404 },
+        );
+      }
+      await prisma.$transaction([
+        prisma.user.update({
+          where: { id: report.targetUserId },
+          data: { deletedAt: new Date() },
+        }),
+        prisma.report.update({
+          where: { id: params.id },
+          data: { status: "RESOLVED", resolvedAt: new Date() },
+        }),
+      ]);
+      return NextResponse.json({ ok: true, banned: true });
+    }
+
     await prisma.report.update({
       where: { id: params.id },
       data: {
-        status: body.status,
-        resolvedAt: body.status === "REVIEWING" ? null : new Date(),
+        status: body.action,
+        resolvedAt: body.action === "REVIEWING" ? null : new Date(),
       },
     });
     return NextResponse.json({ ok: true });

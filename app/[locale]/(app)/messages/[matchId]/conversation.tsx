@@ -142,6 +142,8 @@ export function Conversation({
   const [toolIndex, setToolIndex] = useState<Record<string, number>>({});
   // id du message dont on demande confirmation de suppression (null = aucun).
   const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [icebreakerQ, setIcebreakerQ] = useState<string | null>(null);
+  const [iceBusy, setIceBusy] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
 
   // Supprimer SON message (corriger une erreur). Optimiste : on retire la bulle
@@ -278,6 +280,31 @@ export function Conversation({
       toast.error(t("messaging.actionFailed"));
     } finally {
       setToolBusy(false);
+    }
+  }
+
+  async function fetchIcebreaker() {
+    if (iceBusy) return;
+    setIceBusy(true);
+    setIcebreakerQ(null);
+    try {
+      const res = await fetch(`/api/matches/${matchId}/ice-breaker`, {
+        method: "POST",
+      });
+      if (res.status === 429) {
+        toast.error(t("messaging.icebreakerError"));
+        return;
+      }
+      const data = await res.json().catch(() => null);
+      if (data?.question) {
+        setIcebreakerQ(data.question);
+      } else {
+        toast.error(t("messaging.icebreakerError"));
+      }
+    } catch {
+      toast.error(t("messaging.icebreakerError"));
+    } finally {
+      setIceBusy(false);
     }
   }
 
@@ -635,7 +662,13 @@ export function Conversation({
               aria-expanded={toolsOpen}
               className="flex items-center gap-1.5 rounded-full border border-[#8C7DB8]/40 bg-[#EDE9F6]/60 px-3 py-1.5 text-[13px] font-semibold text-[#5B4F87] transition-colors hover:bg-[#EDE9F6] dark:border-gold-light/25 dark:bg-gold-light/[0.07] dark:text-gold-light dark:hover:bg-gold-light/15"
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
                 <path
                   d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
                   fill="currentColor"
@@ -696,6 +729,49 @@ export function Conversation({
               ))}
             </div>
           </>
+        )}
+        {!isCompanion && (
+          <div className="mb-2">
+            {icebreakerQ ? (
+              <div className="flex items-start gap-2">
+                <AsyncButton
+                  onClick={() => {
+                    send(icebreakerQ);
+                    setIcebreakerQ(null);
+                  }}
+                  className="glass min-w-0 flex-1 whitespace-normal rounded-[18px] px-3 py-2 text-left text-xs text-[#3A372F] dark:text-[#CFCAC0]"
+                >
+                  {icebreakerQ}
+                </AsyncButton>
+                <button
+                  type="button"
+                  onClick={() => setIcebreakerQ(null)}
+                  aria-label={t("common.cancel")}
+                  className="mt-1.5 flex-none text-warmgray dark:text-[#7E7A72]"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+                    <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  </svg>
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={fetchIcebreaker}
+                disabled={iceBusy}
+                className="flex items-center gap-1.5 rounded-full border border-gold/40 bg-gold/[0.08] px-3 py-1.5 text-[12px] font-medium text-gold-deep transition-colors hover:bg-gold/15 disabled:opacity-50 dark:border-gold-light/30 dark:bg-gold-light/[0.07] dark:text-gold-light"
+              >
+                {iceBusy ? (
+                  <Spinner className="h-3 w-3" />
+                ) : (
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+                    <path d="M12 3l1.6 4.2L18 9l-4.4 1.8L12 15l-1.6-4.2L6 9l4.4-1.8L12 3Z" fill="currentColor" />
+                  </svg>
+                )}
+                {iceBusy ? t("messaging.icebreakerLoading") : t("messaging.icebreakerBtn")}
+              </button>
+            )}
+          </div>
         )}
         <form
           onSubmit={(e) => {

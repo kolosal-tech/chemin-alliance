@@ -320,7 +320,10 @@
     "deleteConfirm": "Supprimer ce message ?",
     "coupleSpaceBody": "Vos échanges à deux se trouvent dans l'espace Couple.",
     "coupleSpaceCta": "Aller à l'espace Couple",
-    "sendError": "Message non envoyé. Vérifie ta connexion."
+    "sendError": "Message non envoyé. Vérifie ta connexion.",
+    "icebreakerBtn": "Suggère une question IA",
+    "icebreakerLoading": "Génération…",
+    "icebreakerError": "Impossible de générer une question"
   },
   "aiCoach": {
     "title": "Coach IA",
@@ -450,7 +453,11 @@
     "dismiss": "Classer sans suite",
     "reporter": "Signalé par",
     "target": "Profil visé",
-    "empty": "Aucun signalement ouvert."
+    "empty": "Aucun signalement ouvert.",
+    "ban": "Bannir",
+    "banConfirmTitle": "Bannir ce compte ?",
+    "banConfirmBody": "Cette action est irréversible. Le compte sera désactivé immédiatement.",
+    "banDone": "Compte banni"
   },
   "designSystem": {
     "title": "Design system",

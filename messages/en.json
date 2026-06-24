@@ -320,7 +320,10 @@
     "deleteConfirm": "Delete this message?",
     "coupleSpaceBody": "Your messages with your partner are in the Couple space.",
     "coupleSpaceCta": "Go to the Couple space",
-    "sendError": "Message not sent. Check your connection."
+    "sendError": "Message not sent. Check your connection.",
+    "icebreakerBtn": "Suggest an AI question",
+    "icebreakerLoading": "Generating…",
+    "icebreakerError": "Could not generate a question"
   },
   "aiCoach": {
     "title": "AI Coach",
@@ -450,7 +453,11 @@
     "dismiss": "Dismiss",
     "reporter": "Reported by",
     "target": "Targeted profile",
-    "empty": "No open reports."
+    "empty": "No open reports.",
+    "ban": "Ban",
+    "banConfirmTitle": "Ban this account?",
+    "banConfirmBody": "This action is irreversible. The account will be disabled immediately.",
+    "banDone": "Account banned"
   },
   "designSystem": {
     "title": "Design system",

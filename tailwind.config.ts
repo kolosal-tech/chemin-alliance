@@ -133,9 +133,15 @@ const config: Config = {
         // Alliance Lab : retournement de carte (parchemin) au moment de la
         // revelation simultanee des deux reponses.
         cardReveal: {
-          "0%": { transform: "perspective(700px) rotateY(85deg)", opacity: "0" },
+          "0%": {
+            transform: "perspective(700px) rotateY(85deg)",
+            opacity: "0",
+          },
           "60%": { opacity: "1" },
-          "100%": { transform: "perspective(700px) rotateY(0deg)", opacity: "1" },
+          "100%": {
+            transform: "perspective(700px) rotateY(0deg)",
+            opacity: "1",
+          },
         },
       },
       animation: {

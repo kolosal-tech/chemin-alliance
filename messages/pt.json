@@ -320,7 +320,10 @@
     "deleteConfirm": "Eliminar esta mensagem?",
     "coupleSpaceBody": "As vossas mensagens a dois estão no espaço Casal.",
     "coupleSpaceCta": "Ir para o espaço Casal",
-    "sendError": "Mensagem não enviada. Verifica a tua ligação."
+    "sendError": "Mensagem não enviada. Verifica a tua ligação.",
+    "icebreakerBtn": "Sugere uma pergunta IA",
+    "icebreakerLoading": "A gerar…",
+    "icebreakerError": "Não foi possível gerar uma pergunta"
   },
   "aiCoach": {
     "title": "Coach IA",
@@ -450,7 +453,11 @@
     "dismiss": "Arquivar",
     "reporter": "Denunciado por",
     "target": "Perfil visado",
-    "empty": "Nenhuma denúncia aberta."
+    "empty": "Nenhuma denúncia aberta.",
+    "ban": "Banir",
+    "banConfirmTitle": "Banir esta conta?",
+    "banConfirmBody": "Esta ação é irreversível. A conta será desativada imediatamente.",
+    "banDone": "Conta banida"
   },
   "designSystem": {
     "title": "Design system",

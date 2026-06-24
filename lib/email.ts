@@ -396,6 +396,88 @@ function blessingHtml(
   </div></body></html>`;
 }
 
+// --- Notification : demande de mise en relation acceptée ---
+
+const MATCH_ACCEPTED_SUBJECTS: Record<Locale, (name: string) => string> = {
+  fr: (n) => `${n} a accepté ta demande - Chemin d'Alliance`,
+  en: (n) => `${n} accepted your request - Chemin d'Alliance`,
+  es: (n) => `${n} aceptó tu solicitud - Chemin d'Alliance`,
+  pt: (n) => `${n} aceitou o teu pedido - Chemin d'Alliance`,
+};
+
+const MATCH_ACCEPTED_BODIES: Record<
+  Locale,
+  { title: string; body: (n: string) => string; cta: string }
+> = {
+  fr: {
+    title: "Une rencontre commence",
+    body: (n) =>
+      `${n} a accepté ta demande de mise en relation. Vous pouvez maintenant commencer à vous découvrir, à votre rythme.`,
+    cta: "Ouvrir la conversation",
+  },
+  en: {
+    title: "A meeting begins",
+    body: (n) =>
+      `${n} has accepted your connection request. You can now start getting to know each other, at your own pace.`,
+    cta: "Open the conversation",
+  },
+  es: {
+    title: "Un encuentro comienza",
+    body: (n) =>
+      `${n} ha aceptado tu solicitud de contacto. Podéis empezar a conoceros ahora, a vuestro ritmo.`,
+    cta: "Abrir la conversación",
+  },
+  pt: {
+    title: "Um encontro começa",
+    body: (n) =>
+      `${n} aceitou o teu pedido de ligação. Podem começar agora a conhecer-se, ao vosso ritmo.`,
+    cta: "Abrir a conversa",
+  },
+};
+
+function matchAcceptedHtml(
+  acceptorName: string,
+  matchId: string,
+  locale: Locale,
+): string {
+  const t = MATCH_ACCEPTED_BODIES[locale] ?? MATCH_ACCEPTED_BODIES.fr;
+  const link = `${env.APP_URL}/${locale}/messages/${matchId}`;
+  return `<!doctype html><html><body style="margin:0;background:#F7F5F0;font-family:Georgia,serif;">
+  <div style="max-width:520px;margin:0 auto;padding:40px 24px;">
+    <div style="font-family:monospace;font-size:11px;letter-spacing:.16em;color:#9A7B2E;text-transform:uppercase;">
+      &mdash;&mdash; Chemin d'Alliance
+    </div>
+    <div style="background:#131D33;border-radius:18px;padding:36px 32px;margin-top:18px;">
+      <h1 style="font-weight:400;font-size:28px;line-height:1.2;color:#F4F1EA;margin:0;">${t.title}</h1>
+      <p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#A6AEC0;margin:18px 0 28px;">${t.body(acceptorName)}</p>
+      <a href="${link}" style="display:inline-block;background:#C9A84C;color:#131D33;font-family:Helvetica,Arial,sans-serif;font-weight:600;font-size:15px;padding:14px 28px;border-radius:12px;text-decoration:none;">${t.cta}</a>
+    </div>
+  </div></body></html>`;
+}
+
+/** Notifie le demandeur que sa demande de mise en relation a été acceptée. */
+export async function sendMatchAcceptedEmail(
+  to: string,
+  acceptorName: string,
+  matchId: string,
+  locale: Locale = "fr",
+): Promise<void> {
+  const subject = (
+    MATCH_ACCEPTED_SUBJECTS[locale] ?? MATCH_ACCEPTED_SUBJECTS.fr
+  )(acceptorName);
+  if (env.RESEND_API_KEY) {
+    const ok = await sendViaResend(
+      to,
+      subject,
+      matchAcceptedHtml(acceptorName, matchId, locale),
+    );
+    if (ok) return;
+  }
+  console.info(
+    `\n[email] Match accepté pour ${to} (accepteur ${acceptorName}, matchId ${matchId})\n`,
+  );
+}
+
 /** Email au Parrain/Marraine : demande de bénédiction avec lien magique. */
 export async function sendBlessingRequestEmail(
   to: string,

@@ -112,4 +112,6 @@ export const LIMITS = {
   coupleJoin: { limit: 10, windowMs: 60 * 60_000 },
   // Marquer l'onboarding fait (Phase 2) : action idempotente, peu fréquente.
   onboarding: { limit: 10, windowMs: 60 * 60_000 },
+  // Ice-breaker IA : génération de question personnalisée (LLM = coûteux).
+  icebreaker: { limit: 8, windowMs: 60 * 60_000 },
 } as const;

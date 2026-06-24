@@ -5,6 +5,7 @@ import { requireUser } from "@/lib/security/session";
 import { requireMatchMember } from "@/lib/alliance";
 import { sendPushToUser } from "@/lib/push";
 import { requestAcceptedNotification } from "@/lib/push-messages";
+import { sendMatchAcceptedEmail } from "@/lib/email";
 
 // web-push (via lib/push) requiert le runtime Node.
 export const runtime = "nodejs";
@@ -29,14 +30,24 @@ export const POST = withErrors(
         try {
           const requester = await prisma.user.findUnique({
             where: { id: match.requestedById },
-            select: { locale: true },
+            select: { locale: true, email: true },
           });
           await sendPushToUser(
             match.requestedById,
             requestAcceptedNotification(requester?.locale, match.id),
           );
+          if (requester?.email) {
+            await sendMatchAcceptedEmail(
+              requester.email,
+              user.displayName ?? "",
+              match.id,
+              (requester.locale ?? "fr") as Parameters<
+                typeof sendMatchAcceptedEmail
+              >[3],
+            );
+          }
         } catch (err) {
-          console.error("[push] notif acceptation échouée", err);
+          console.error("[notify] notif acceptation échouée", err);
         }
       }
     }
