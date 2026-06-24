@@ -115,10 +115,14 @@ export async function generatePastoralSynthesis(args: {
 
   const user = `${kind}\n\nVoici les echanges de la partie :\n${transcript}\n\nRedige une synthese pastorale en 3 courts paragraphes : 1) une force ou un point d'accord, 2) un sujet a approfondir ensemble avec douceur, 3) une invitation concrete a en parler. Adapte le ton et les references aux codes culturels indiques.`;
 
+  // step "dialogue" (analyse de compatibilite / croisement des visions) plutot
+  // qu'"accompaniment" : meilleur fit semantique ET routage fiable (gemini en
+  // standard, sonnet en premium). Le modele d'accompagnement par defaut
+  // (deepseek) timeoutait souvent sur ce type de synthese.
   return callLLM({
     system,
     user,
-    step: "accompaniment",
+    step: "dialogue",
     tier: premium ? "premium" : "optimal",
     locale,
     maxTokens: 600,
