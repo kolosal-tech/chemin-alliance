@@ -1335,6 +1335,29 @@
       "emotionalDiscovery": "Decouverte emotionnelle",
       "coupleFinances": "Finances du couple"
     },
-    "replyFallback": "Je prends le temps de te lire. Peux-tu m'en dire un peu plus sur ce qui compte pour toi ?"
+    "replyFallback": "Je prends le temps de te lire. Peux-tu m'en dire un peu plus sur ce qui compte pour toi ?",
+    "discernment": {
+      "deepQuestions": {
+        "q1": "Que signifie pour toi un foyer chretien au quotidien ?",
+        "q2": "Comment accueilles-tu le pardon apres une blessure ?",
+        "q3": "Quelle place donnes-tu a la famille elargie et a la communaute ?",
+        "q4": "Comment vois-tu l'argent et la generosite dans ton foyer ?",
+        "q5": "Comment nourrir une foi vivante a deux ?"
+      },
+      "emotionalDiscovery": {
+        "q1": "Qu'est-ce qui te fait te sentir vraiment en securite avec quelqu'un ?",
+        "q2": "Comment exprimes-tu ce que tu ressens quand une emotion te traverse ?",
+        "q3": "Quelle blessure du passe veux-tu eviter de revivre ?",
+        "q4": "A quoi reconnais-tu que tu peux faire confiance a quelqu'un ?",
+        "q5": "Qu'est-ce qui t'apaise quand tu traverses une tempete interieure ?"
+      },
+      "coupleFinances": {
+        "q1": "Comment imagines-tu gerer un budget commun au quotidien ?",
+        "q2": "Pour toi, comment decider ensemble des grandes depenses ?",
+        "q3": "Quelle place donnes-tu a l'epargne et a la generosite ?",
+        "q4": "Comment parler d'argent sans tension dans le couple ?",
+        "q5": "Qu'est-ce qu'un rapport sain et chretien a l'argent pour toi ?"
+      }
+    }
   }
 }

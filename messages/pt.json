@@ -1335,6 +1335,29 @@
       "emotionalDiscovery": "Descoberta emocional",
       "coupleFinances": "Financas do casal"
     },
-    "replyFallback": "Estou a dar-me o tempo de te ler. Podes contar-me um pouco mais sobre o que te importa?"
+    "replyFallback": "Estou a dar-me o tempo de te ler. Podes contar-me um pouco mais sobre o que te importa?",
+    "discernment": {
+      "deepQuestions": {
+        "q1": "O que significa para ti um lar cristao no dia a dia?",
+        "q2": "Como acolhes o perdao depois de uma ferida?",
+        "q3": "Que lugar das a familia alargada e a comunidade?",
+        "q4": "Como ves o dinheiro e a generosidade no teu lar?",
+        "q5": "Como alimentar uma fe viva a dois?"
+      },
+      "emotionalDiscovery": {
+        "q1": "O que te faz sentir verdadeiramente seguro com alguem?",
+        "q2": "Como expressas o que sentes quando uma emocao te atravessa?",
+        "q3": "Que ferida do passado queres evitar reviver?",
+        "q4": "Como sabes que podes confiar em alguem?",
+        "q5": "O que te acalma quando atravessas uma tempestade interior?"
+      },
+      "coupleFinances": {
+        "q1": "Como imaginas gerir um orcamento comum no dia a dia?",
+        "q2": "Como decidir juntos as grandes despesas?",
+        "q3": "Que lugar das a poupanca e a generosidade?",
+        "q4": "Como falar de dinheiro sem tensao no casal?",
+        "q5": "O que e para ti uma relacao sa e crista com o dinheiro?"
+      }
+    }
   }
 }
