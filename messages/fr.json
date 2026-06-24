@@ -1261,7 +1261,8 @@
       "progress": "Question {current} sur {total}",
       "synthesisTitle": "Synthese pastorale",
       "restart": "Rejouer",
-      "vs": "face a"
+      "vs": "face a",
+      "sealed": "Reponse scellee"
     },
     "disc": {
       "title": "Profil DISC : 5 situations",

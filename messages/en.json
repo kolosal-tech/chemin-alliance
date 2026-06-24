@@ -1261,7 +1261,8 @@
       "progress": "Question {current} of {total}",
       "synthesisTitle": "Pastoral synthesis",
       "restart": "Play again",
-      "vs": "facing"
+      "vs": "facing",
+      "sealed": "Answer sealed"
     },
     "disc": {
       "title": "DISC Profile: 5 situations",

@@ -129,6 +129,18 @@ const config: Config = {
       letterSpacing: {
         label: ".16em",
       },
+      keyframes: {
+        // Alliance Lab : retournement de carte (parchemin) au moment de la
+        // revelation simultanee des deux reponses.
+        cardReveal: {
+          "0%": { transform: "perspective(700px) rotateY(85deg)", opacity: "0" },
+          "60%": { opacity: "1" },
+          "100%": { transform: "perspective(700px) rotateY(0deg)", opacity: "1" },
+        },
+      },
+      animation: {
+        cardReveal: "cardReveal 0.55s ease-out both",
+      },
     },
   },
   plugins: [],

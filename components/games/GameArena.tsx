@@ -46,6 +46,35 @@ function Parchment({
   );
 }
 
+/** Face scellee (carte retournee) pendant que les deux reponses se preparent. */
+function SealedFace({ label, busy }: { label: string; busy?: boolean }) {
+  return (
+    <div className="flex flex-1 flex-col items-center justify-center gap-2 py-6 text-warmgray dark:text-[#8B8579]">
+      {busy ? (
+        <Spinner className="h-5 w-5" />
+      ) : (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <rect
+            x="5"
+            y="10.5"
+            width="14"
+            height="9.5"
+            rx="2"
+            stroke="currentColor"
+            strokeWidth="1.8"
+          />
+          <path
+            d="M8 10.5V8a4 4 0 0 1 8 0v2.5"
+            stroke="currentColor"
+            strokeWidth="1.8"
+          />
+        </svg>
+      )}
+      <span className="text-[14px]">{label}</span>
+    </div>
+  );
+}
+
 export function GameArena({
   persona,
   questions,
@@ -71,6 +100,9 @@ export function GameArena({
   const [userAnswer, setUserAnswer] = useState<string | null>(null);
   const [personaAnswer, setPersonaAnswer] = useState<string | null>(null);
   const [waiting, setWaiting] = useState(false);
+  // Les deux cartes restent scellees (face cachee) tant que `revealed` est faux ;
+  // une fois les DEUX reponses pretes, elles se retournent SIMULTANEMENT.
+  const [revealed, setRevealed] = useState(false);
   const [pairs, setPairs] = useState<
     Array<{ key: string; userAnswer: string; personaAnswer: string | null }>
   >([]);
@@ -80,14 +112,16 @@ export function GameArena({
   const q = questions[index];
   const total = questions.length;
   const isLast = index === total - 1;
+  const sealed = userAnswer !== null && !revealed; // ta reponse posee, on attend
 
   async function submit(answer: string) {
     if (!answer.trim() || waiting) return;
-    setUserAnswer(answer);
+    setUserAnswer(answer); // scellee, pas encore revelee
     setWaiting(true);
     const reply = await onAnswer(q, answer);
     setPersonaAnswer(reply);
     setWaiting(false);
+    setRevealed(true); // retournement simultane des deux cartes
     setPairs((p) => [
       ...p,
       { key: q.key, userAnswer: answer, personaAnswer: reply },
@@ -97,6 +131,7 @@ export function GameArena({
   function next() {
     setUserAnswer(null);
     setPersonaAnswer(null);
+    setRevealed(false);
     setText("");
     setIndex((i) => i + 1);
   }
@@ -147,17 +182,20 @@ export function GameArena({
         {q.prompt}
       </p>
 
-      {/* Double parchemin : empile en mobile (390px), face-a-face en lg */}
+      {/* Double parchemin : empile en mobile (390px), face-a-face en lg.
+          Les deux cartes se retournent SIMULTANEMENT a la revelation. */}
       <div className="flex flex-col gap-3.5 lg:flex-row lg:items-stretch">
         <Parchment tone="user">
           <span className="lbl mb-2 text-[11px] text-warmgray dark:text-[#9A958B]">
             {t("arena.yourTurn")}
           </span>
 
-          {userAnswer ? (
-            <p className="font-display text-[16px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
+          {revealed ? (
+            <p className="animate-cardReveal origin-center font-display text-[16px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
               {userAnswer}
             </p>
+          ) : sealed ? (
+            <SealedFace label={t("arena.sealed")} />
           ) : isDisc && q.options ? (
             <div className="flex flex-col gap-2">
               {(Object.keys(q.options) as DiscCode[]).map((code) => (
@@ -209,15 +247,21 @@ export function GameArena({
             </span>
           </div>
 
-          {waiting ? (
-            <p className="flex items-center gap-2 text-[15px] text-warmgray dark:text-[#9A958B]">
-              <Spinner className="h-4 w-4" />
-              {t("waiting.discerning", { name: persona.displayName })}
-            </p>
-          ) : personaAnswer ? (
-            <p className="font-display text-[16px] leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
-              {personaAnswer}
-            </p>
+          {revealed ? (
+            personaAnswer ? (
+              <p className="animate-cardReveal origin-center font-display text-[16px] leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
+                {personaAnswer}
+              </p>
+            ) : (
+              <p className="animate-cardReveal origin-center text-[15px] text-warmgray/70 dark:text-[#8B8579]">
+                ...
+              </p>
+            )
+          ) : sealed ? (
+            <SealedFace
+              busy
+              label={t("waiting.discerning", { name: persona.displayName })}
+            />
           ) : (
             <p className="text-[15px] text-warmgray/70 dark:text-[#8B8579]">
               {t("arena.personaTurn", { name: persona.displayName })}
@@ -226,7 +270,7 @@ export function GameArena({
         </Parchment>
       </div>
 
-      {personaAnswer && !waiting && (
+      {revealed && !waiting && (
         <div className="mt-4 flex justify-end">
           {isLast ? (
             <AsyncButton
