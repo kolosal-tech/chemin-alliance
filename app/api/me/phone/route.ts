@@ -58,8 +58,13 @@ export const POST = withErrors(async (req: Request) => {
   });
 
   if (smsEnabled()) {
-    // Twilio Verify génère et envoie le code lui-même.
-    await startVerification(phone);
+    // Twilio Verify génère et envoie le code lui-même. S'il REFUSE l'envoi
+    // (numéro hors geo-permissions Twilio, compte encore en trial, solde
+    // épuisé...), startVerification renvoie false : on remonte un 502 au lieu
+    // de répondre « sent: true ». Sinon l'utilisateur passe à l'écran « saisis
+    // le code » pour un SMS qui n'est jamais parti = « ça ne marche plus ».
+    const started = await startVerification(phone);
+    if (!started) return jsonError(502, "SMS_SEND_FAILED");
   } else {
     // Repli dev : code auto-géré, stocké haché, loggé côté serveur.
     const code = generateCode();

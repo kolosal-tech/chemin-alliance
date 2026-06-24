@@ -385,7 +385,8 @@
     "verify": "Verificar",
     "change": "Mudar de número",
     "invalidPhone": "Número inválido (formato internacional, ex. +225…).",
-    "invalidCode": "Código incorreto ou expirado."
+    "invalidCode": "Código incorreto ou expirado.",
+    "sendFailed": "Não foi possível enviar o SMS agora. Tenta novamente daqui a alguns minutos."
   },
   "premium": {
     "kicker": "Apoiar a missão",

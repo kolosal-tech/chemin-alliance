@@ -45,8 +45,15 @@ export function PhoneVerify() {
       body: JSON.stringify({ phone }),
     });
     setBusy(false);
-    if (res.ok) setStep("sent");
-    else setError(t("invalidPhone"));
+    if (res.ok) {
+      setStep("sent");
+    } else if (res.status === 502) {
+      // Twilio a refusé l'envoi (geo/trial/solde) : ce n'est PAS un numéro mal
+      // formé, on le dit clairement au lieu de faire croire à un code parti.
+      setError(t("sendFailed"));
+    } else {
+      setError(t("invalidPhone"));
+    }
   }
 
   async function verify() {
