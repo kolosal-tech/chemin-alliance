@@ -97,8 +97,17 @@ export async function sendPushToUser(
       return;
     }
     const code = (r.reason as { statusCode?: number })?.statusCode;
-    // 404 = endpoint disparu, 410 = abonnement révoqué -> purge.
-    if (code === 404 || code === 410) expired.push(subs[i].id);
+    // Purge des abonnements DÉFINITIVEMENT morts (sinon ils restent en base et
+    // chaque envoi futur échoue en silence - profil typique du « ça marchait,
+    // puis plus aucune notif ») :
+    //  - 404 : endpoint disparu ;
+    //  - 410 : abonnement révoqué côté device ;
+    //  - 403 : « VAPID credentials mismatch ». La paire VAPID du serveur a changé
+    //    (rotation de clé) : cet abonnement ne pourra PLUS JAMAIS recevoir. On le
+    //    purge pour que le ré-opt-in (Réglages > Notifications) reparte propre.
+    // On NE purge PAS sur 400 (payload, notre faute, transitoire) ni 401 (auth
+    // serveur, GLOBAL) : ces codes ne doivent pas effacer des abonnements valides.
+    if (code === 404 || code === 410 || code === 403) expired.push(subs[i].id);
     else console.error("[push] envoi échoué", code ?? r.reason);
   });
 
