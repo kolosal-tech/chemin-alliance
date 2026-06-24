@@ -13,5 +13,13 @@
  * d'onboarding + la modale « profil incomplet ».
  */
 export function isProfileGateEnabled(): boolean {
-  return process.env.NEXT_PUBLIC_PHASE2_GATE_PROFILE === "true";
+  // DESACTIVE (decision fondateur, 24/06). Quand ce gate etait ON (via la
+  // variable Vercel NEXT_PUBLIC_PHASE2_GATE_PROFILE="true"), getSuggestions
+  // renvoyait une decouverte VIDE a tout utilisateur pas 100 % complet +
+  // onboarde - Compagnons IA inclus. Cela annulait l'effet cold-start des
+  // Compagnons : un nouvel inscrit voyait une page vide au lieu d'un vivier
+  // vivant. On force donc le gate OFF ici, independamment de la variable
+  // d'environnement. Pour le reactiver un jour, remettre :
+  //   return process.env.NEXT_PUBLIC_PHASE2_GATE_PROFILE === "true";
+  return false;
 }
