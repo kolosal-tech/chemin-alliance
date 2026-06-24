@@ -1232,5 +1232,91 @@
         }
       }
     }
+  },
+  "alliance_lab": {
+    "title": "Alliance Lab",
+    "subtitle": "Un terrain d'entrainement, pas une vraie rencontre.",
+    "badge": {
+      "echo": "Echo IA",
+      "trainingPartner": "Partenaire d'entrainement",
+      "disclaimer": "Echo IA : partenaire d'entrainement, pas une personne reelle."
+    },
+    "waiting": {
+      "discerning": "{name} discerne sa reponse...",
+      "synthesis": "Le Pasteur IA prepare votre synthese..."
+    },
+    "arena": {
+      "chooseGame": "Choisis ton jeu",
+      "gameDisc": "Profil DISC",
+      "gameDeep": "Questions Profondes",
+      "choosePartner": "Choisis ton partenaire d'entrainement",
+      "start": "Commencer",
+      "yourTurn": "A toi",
+      "personaTurn": "Au tour de {name}",
+      "placeholder": "Ecris ta reponse...",
+      "send": "Envoyer",
+      "next": "Question suivante",
+      "finish": "Terminer la partie",
+      "progress": "Question {current} sur {total}",
+      "synthesisTitle": "Synthese pastorale",
+      "restart": "Rejouer",
+      "vs": "face a"
+    },
+    "disc": {
+      "title": "Profil DISC : 5 situations",
+      "q1": {
+        "prompt": "Une decision importante divise votre couple. Ton premier reflexe ?",
+        "D": "Trancher vite et avancer, quitte a ajuster ensuite.",
+        "I": "En parler ouvertement et convaincre avec enthousiasme.",
+        "S": "Chercher l'apaisement, preserver l'harmonie avant tout.",
+        "C": "Prendre le temps d'analyser les faits avant de choisir."
+      },
+      "q2": {
+        "prompt": "Pour le foyer et le budget, tu te vois plutot...",
+        "D": "Fixer le cap et les objectifs, garder la main.",
+        "I": "Donner de l'elan, motiver, voir grand.",
+        "S": "Assurer la stabilite, un foyer paisible et fiable.",
+        "C": "Tenir les comptes au detail pres, tout planifier."
+      },
+      "q3": {
+        "prompt": "Lors d'un grand rassemblement familial, tu es...",
+        "D": "Celui ou celle qui mene et organise.",
+        "I": "L'ame de la fete, qui relie les gens.",
+        "S": "Le soutien discret, attentif a chacun.",
+        "C": "L'observateur pose, qui veille aux details."
+      },
+      "q4": {
+        "prompt": "Face a une epreuve, ta force est...",
+        "D": "L'action et la determination.",
+        "I": "L'esperance communiquee aux autres.",
+        "S": "La patience et la constance.",
+        "C": "La reflexion et la prudence."
+      },
+      "q5": {
+        "prompt": "Ta vie spirituelle se nourrit surtout par...",
+        "D": "Des objectifs de foi concrets a atteindre.",
+        "I": "La louange vivante et le partage.",
+        "S": "Une priere reguliere et paisible.",
+        "C": "L'etude approfondie de la Parole."
+      }
+    },
+    "deep": {
+      "title": "Questions Profondes : 5 echanges",
+      "q1": {
+        "prompt": "Que signifie pour toi un foyer chretien au quotidien ?"
+      },
+      "q2": {
+        "prompt": "Comment accueilles-tu le pardon apres une blessure ?"
+      },
+      "q3": {
+        "prompt": "Quelle place donnes-tu a la famille elargie et a la communaute ?"
+      },
+      "q4": {
+        "prompt": "Comment vois-tu l'argent et la generosite dans ton foyer ?"
+      },
+      "q5": {
+        "prompt": "Comment nourrir une foi vivante a deux ?"
+      }
+    }
   }
 }

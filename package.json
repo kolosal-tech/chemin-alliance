@@ -11,6 +11,7 @@
     "e2e": "playwright test",
     "e2e:report": "node scripts/generate-summary.js",
     "seed": "tsx prisma/seed.ts",
+    "seed:ai-personas": "tsx prisma/seed-ai-personas.ts",
     "backfill:blurhash": "tsx scripts/backfill-blurhash.ts",
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev",

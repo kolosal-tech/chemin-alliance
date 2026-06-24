@@ -1232,5 +1232,91 @@
         }
       }
     }
+  },
+  "alliance_lab": {
+    "title": "Alliance Lab",
+    "subtitle": "Um terreno de treino, nao um encontro real.",
+    "badge": {
+      "echo": "Eco IA",
+      "trainingPartner": "Parceiro de treino",
+      "disclaimer": "Eco IA: um parceiro de treino, nao uma pessoa real."
+    },
+    "waiting": {
+      "discerning": "{name} esta a discernir a sua resposta...",
+      "synthesis": "O Pastor IA esta a preparar a vossa sintese..."
+    },
+    "arena": {
+      "chooseGame": "Escolhe o teu jogo",
+      "gameDisc": "Perfil DISC",
+      "gameDeep": "Perguntas Profundas",
+      "choosePartner": "Escolhe o teu parceiro de treino",
+      "start": "Comecar",
+      "yourTurn": "A tua vez",
+      "personaTurn": "Vez de {name}",
+      "placeholder": "Escreve a tua resposta...",
+      "send": "Enviar",
+      "next": "Proxima pergunta",
+      "finish": "Terminar a partida",
+      "progress": "Pergunta {current} de {total}",
+      "synthesisTitle": "Sintese pastoral",
+      "restart": "Jogar de novo",
+      "vs": "frente a"
+    },
+    "disc": {
+      "title": "Perfil DISC: 5 situacoes",
+      "q1": {
+        "prompt": "Uma decisao importante divide o casal. O teu primeiro instinto?",
+        "D": "Decidir depressa e avancar, ajustando depois se preciso.",
+        "I": "Falar abertamente e convencer com entusiasmo.",
+        "S": "Procurar a calma e preservar a harmonia acima de tudo.",
+        "C": "Levar o teu tempo a analisar os factos antes de escolher."
+      },
+      "q2": {
+        "prompt": "Para o lar e o orcamento, ves-te mais a...",
+        "D": "Definir o rumo e as metas, mantendo o comando.",
+        "I": "Dar impulso, motivar, pensar em grande.",
+        "S": "Garantir a estabilidade, um lar tranquilo e fiavel.",
+        "C": "Manter as contas ao detalhe, planeando tudo."
+      },
+      "q3": {
+        "prompt": "Num grande encontro familiar, es...",
+        "D": "Quem lidera e organiza.",
+        "I": "A alma da festa, que une as pessoas.",
+        "S": "O apoio discreto, atento a cada um.",
+        "C": "O observador sereno, atento aos detalhes."
+      },
+      "q4": {
+        "prompt": "Perante uma provacao, a tua forca e...",
+        "D": "A acao e a determinacao.",
+        "I": "A esperanca partilhada com os outros.",
+        "S": "A paciencia e a constancia.",
+        "C": "A reflexao e a prudencia."
+      },
+      "q5": {
+        "prompt": "A tua vida espiritual nutre-se sobretudo de...",
+        "D": "Metas de fe concretas a alcancar.",
+        "I": "O louvor vivo e a partilha.",
+        "S": "Uma oracao constante e serena.",
+        "C": "O estudo profundo da Palavra."
+      }
+    },
+    "deep": {
+      "title": "Perguntas Profundas: 5 trocas",
+      "q1": {
+        "prompt": "O que significa para ti um lar cristao no dia a dia?"
+      },
+      "q2": {
+        "prompt": "Como acolhes o perdao depois de uma ferida?"
+      },
+      "q3": {
+        "prompt": "Que lugar das a familia alargada e a comunidade?"
+      },
+      "q4": {
+        "prompt": "Como ves o dinheiro e a generosidade no teu lar?"
+      },
+      "q5": {
+        "prompt": "Como cultivar uma fe viva a dois?"
+      }
+    }
   }
 }
