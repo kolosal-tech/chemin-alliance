@@ -1335,6 +1335,7 @@
       "deepQuestions": "Deep questions",
       "emotionalDiscovery": "Emotional discovery",
       "coupleFinances": "Couple finances"
-    }
+    },
+    "replyFallback": "I am taking the time to read you. Can you tell me a bit more about what matters to you?"
   }
 }

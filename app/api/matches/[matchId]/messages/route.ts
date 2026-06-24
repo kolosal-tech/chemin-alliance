@@ -16,6 +16,9 @@ import { analyzeRisk } from "@/lib/agents/watchman";
 import { isBlockedBetween } from "@/lib/blocks";
 import { sendPushToUser } from "@/lib/push";
 import { newMessageNotification } from "@/lib/push-messages";
+import { generateCompanionReply } from "@/lib/companions/reply";
+import { getTranslations } from "next-intl/server";
+import type { LlmTurn } from "@/lib/llm/gateway";
 
 // web-push (via lib/push) requiert le runtime Node.
 export const runtime = "nodejs";
@@ -174,6 +177,85 @@ export const POST = withErrors(
       where: { id: match.id },
       data: { updatedAt: new Date() },
     });
+
+    // Compagnon IA : le destinataire est un profil d'accompagnement pilote par
+    // IA (jamais un humain). On genere une reponse immediate et on la persiste
+    // comme un message du compagnon, puis on la renvoie au client pour affichage
+    // direct. Aucun push (l'IA n'a pas d'appareil ; l'utilisateur est actif).
+    const otherUser = await prisma.user.findUnique({
+      where: { id: otherId },
+      select: {
+        kind: true,
+        aiCompanionMeta: { select: { systemPrompt: true, active: true } },
+      },
+    });
+    if (otherUser?.kind === "AI_COMPANION") {
+      let companionReply: {
+        id: string;
+        content: string;
+        createdAt: string;
+      } | null = null;
+      if (otherUser.aiCompanionMeta?.active) {
+        // Historique recent (hors message courant + hors bloques), du plus
+        // ancien au plus recent, pour la continuite de la conversation.
+        const prior = await prisma.message.findMany({
+          where: {
+            matchId: match.id,
+            kind: "USER",
+            moderationStatus: { not: "BLOCKED" },
+            id: { not: message.id },
+          },
+          orderBy: { createdAt: "desc" },
+          take: 20,
+          select: { senderId: true, contentEncrypted: true },
+        });
+        const history: LlmTurn[] = prior
+          .reverse()
+          .map((h) => ({
+            role: (h.senderId === otherId ? "assistant" : "user") as
+              | "assistant"
+              | "user",
+            content: decryptOptional(h.contentEncrypted) ?? "",
+          }))
+          .filter((h) => h.content.length > 0);
+
+        let replyText = await generateCompanionReply({
+          systemPrompt: otherUser.aiCompanionMeta.systemPrompt,
+          locale,
+          userMessage: content,
+          history,
+        });
+        // Repli localise si tous les modeles echouent : jamais de silence.
+        if (!replyText) {
+          const tr = await getTranslations({
+            locale,
+            namespace: "discovery_ecosystem",
+          });
+          replyText = tr("replyFallback");
+        }
+        const reply = await prisma.message.create({
+          data: {
+            matchId: match.id,
+            senderId: otherId,
+            contentEncrypted: encryptField(replyText),
+          },
+        });
+        await prisma.match.update({
+          where: { id: match.id },
+          data: { updatedAt: new Date() },
+        });
+        companionReply = {
+          id: reply.id,
+          content: replyText,
+          createdAt: reply.createdAt.toISOString(),
+        };
+      }
+      return NextResponse.json(
+        { blocked: false, messageId: message.id, companionReply },
+        { status: 201 },
+      );
+    }
+
     // Notification push best-effort au destinataire (jamais bloquant).
     // Le corps ne révèle jamais le contenu (chiffré) : seul l'expéditeur.
     try {

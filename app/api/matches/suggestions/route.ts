@@ -21,6 +21,7 @@ export const GET = withErrors(async () => {
       displayName: s.displayName,
       age: s.age,
       isVerified: s.isVerified,
+      kind: s.kind,
       photoBlurred: s.photoBlurredByDefault,
       vertical: s.faithProfile?.vertical ?? null,
       denomination: s.faithProfile?.denomination ?? null,

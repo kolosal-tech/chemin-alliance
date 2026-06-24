@@ -258,6 +258,8 @@ export default async function SuggestionsPage({
                   axes: compatibilityTopics(user, s).axes,
                   // P6 : signal de confiance "accompagné·e" (a un Parrain/Marraine).
                   hasSponsor: s.sponsor != null,
+                  // Ecosysteme : Compagnon IA (badge clair dans la carte).
+                  kind: s.kind,
                 }}
               />
             ))}
