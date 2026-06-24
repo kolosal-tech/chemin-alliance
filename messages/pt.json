@@ -1320,5 +1320,21 @@
         "prompt": "Como cultivar uma fe viva a dois?"
       }
     }
+  },
+  "discovery_ecosystem": {
+    "companionBadge": "Companheiro IA",
+    "badge": {
+      "accompaniment": "Perfil de acompanhamento",
+      "discernment": "Companheiro de discernimento",
+      "assistant": "Assistente relacional"
+    },
+    "welcome": "Ola, sou {name}. Sou um perfil de acompanhamento conduzido por IA concebido para te permitir explorar as ferramentas de Chemin d'Alliance. Nao represento uma pessoa real.",
+    "notRealPerson": "Perfil IA, nao uma pessoa real.",
+    "toolsButton": "Ferramentas de discernimento",
+    "modules": {
+      "deepQuestions": "Perguntas profundas",
+      "emotionalDiscovery": "Descoberta emocional",
+      "coupleFinances": "Financas do casal"
+    }
   }
 }

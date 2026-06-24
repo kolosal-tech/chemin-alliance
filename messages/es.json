@@ -1320,5 +1320,21 @@
         "prompt": "Como cultivar una fe viva en pareja?"
       }
     }
+  },
+  "discovery_ecosystem": {
+    "companionBadge": "Companero IA",
+    "badge": {
+      "accompaniment": "Perfil de acompanamiento",
+      "discernment": "Companero de discernimiento",
+      "assistant": "Asistente relacional"
+    },
+    "welcome": "Hola, soy {name}. Soy un perfil de acompanamiento impulsado por IA disenado para que explores las herramientas de Chemin d'Alliance. No represento a una persona real.",
+    "notRealPerson": "Perfil IA, no una persona real.",
+    "toolsButton": "Herramientas de discernimiento",
+    "modules": {
+      "deepQuestions": "Preguntas profundas",
+      "emotionalDiscovery": "Descubrimiento emocional",
+      "coupleFinances": "Finanzas de la pareja"
+    }
   }
 }

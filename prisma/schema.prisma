@@ -111,6 +111,9 @@ model User {
   age                   Int
   gender                String?
   role                  UserRole  @default(USER)
+  // Profil humain (defaut) ou Compagnon IA badge, vivant nativement dans la
+  // Decouverte. Les Compagnons ne sont jamais comptes comme un vrai match.
+  kind                  ProfileKind @default(HUMAN)
   locale                String    @default("fr")
   rulesetId             String    @default("christian_evangelical_default")
   season                LifeSeason @default(JOURNEY)
@@ -162,6 +165,7 @@ model User {
   pushSubscriptions   PushSubscription[]
   sponsor             Sponsor?             @relation("UserSponsor")
   gameSessions        GameSession[]        // Alliance Lab (terrain d'entrainement IA)
+  aiCompanionMeta     AiCompanionMeta?     // present si kind == AI_COMPANION
 
   // Vivier de matching : getSuggestions filtre sur season + isVerified +
   // gender + deletedAt. Sans cet index, full scan dès quelques milliers de profils.
@@ -577,4 +581,28 @@ model GameAnswer {
   createdAt     DateTime    @default(now())
 
   @@index([sessionId, questionOrder])
+}
+
+// =====================================================================
+// ECOSYSTEME ORGANIQUE : profils Compagnons IA badges, vivant nativement
+// dans la Decouverte et la messagerie (cold start). Toujours transparents,
+// jamais presentes comme de vraies personnes, jamais un vrai match.
+// =====================================================================
+
+enum ProfileKind {
+  HUMAN
+  AI_COMPANION
+}
+
+/// Configuration d'un Compagnon IA (1:1 avec un User dont kind == AI_COMPANION).
+model AiCompanionMeta {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  systemPrompt String                       // posture + ancrage culturel
+  langAnchor   String                       // ancre bilingue (langue du 1er message)
+  temperament  String                       // "warm" | "analytical" | "expressive" | "reserved"...
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
