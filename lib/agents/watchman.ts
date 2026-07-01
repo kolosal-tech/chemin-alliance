@@ -19,7 +19,7 @@ export type RiskSignal =
   | "off_platform_push"
   | "sob_story";
 
-export type Severity = "none" | "medium" | "high";
+type Severity = "none" | "medium" | "high";
 
 // Sévérité par signal. "high" = tromperie/extraction financière caractérisée ;
 // "medium" = pression ou trope à confirmer par un humain.

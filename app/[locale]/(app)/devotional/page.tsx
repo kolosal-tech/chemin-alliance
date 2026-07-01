@@ -4,11 +4,12 @@ import { getDailyDevotion, isSameUtcDay } from "@/lib/devotional";
 import type { Locale } from "@/lib/core-engine";
 import { DevotionalClient } from "./devotional-client";
 
-export default async function DevotionalPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function DevotionalPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const user = await requirePageUser(params.locale);
   const now = new Date();

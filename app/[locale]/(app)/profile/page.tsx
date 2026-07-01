@@ -14,13 +14,15 @@ import {
 import { PhotoHeader } from "./photo-header";
 import { LogoutButton } from "./logout-button";
 
-export default async function ProfilePage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function ProfilePage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations();
+  const tAllianceLab = await getTranslations("alliance_lab");
   const user = await requirePageUser(params.locale);
   const faith = user.faithProfile;
   const rel = user.relationshipProfile;
@@ -247,6 +249,23 @@ export default async function ProfilePage({
             </div>
           </>
         )}
+
+        <Link
+          href="/games"
+          className="mb-6 flex items-center justify-between gap-3 rounded-cardlg border border-sand-200 bg-surface px-4 py-3.5 dark:border-anthracite-600 dark:bg-anthracite-800"
+        >
+          <div className="min-w-0">
+            <div className="text-sm font-semibold text-night dark:text-[#ECE7DD]">
+              {tAllianceLab("title")}
+            </div>
+            <div className="truncate text-xs text-sand-600 dark:text-[#7E7A72]">
+              {tAllianceLab("subtitle")}
+            </div>
+          </div>
+          <span aria-hidden className="text-warmgray dark:text-[#9A958B]">
+            {"→"}
+          </span>
+        </Link>
 
         <LogoutButton />
       </div>

@@ -5,11 +5,12 @@ import { MarketingHeader } from "@/components/marketing/MarketingHeader";
 import { MarketingFooter } from "@/components/marketing/Sections";
 import { SacredMotif } from "@/components/SacredMotif";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const t = await getTranslations({
     locale: params.locale,
     namespace: "pages.mission",
@@ -28,11 +29,12 @@ const partners: { id: string; name: string }[] = [
   { id: "veillee", name: "Veillée" },
 ];
 
-export default async function MissionPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function MissionPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations("pages.mission");
 

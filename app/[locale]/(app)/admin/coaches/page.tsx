@@ -7,11 +7,12 @@ import { CoachAdmin } from "./coach-admin";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminCoachesPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function AdminCoachesPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const user = await getSessionUser();
   if (!user || user.role !== "ADMIN") notFound();

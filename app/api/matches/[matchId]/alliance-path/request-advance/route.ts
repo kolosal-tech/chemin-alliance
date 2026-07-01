@@ -2,7 +2,11 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
-import { requireMatchMember, buildActionContext, nextStage } from "@/lib/alliance";
+import {
+  requireMatchMember,
+  buildActionContext,
+  nextStage,
+} from "@/lib/alliance";
 import { validateAction, type Locale } from "@/lib/core-engine";
 
 /**
@@ -11,9 +15,12 @@ import { validateAction, type Locale } from "@/lib/core-engine";
  * 2e appelant (l'autre) -> required_checks via moteur, puis transition.
  */
 export const POST = withErrors(
-  async (_req: Request, { params }: { params: { matchId: string } }) => {
+  async (
+    _req: Request,
+    { params }: { params: Promise<{ matchId: string }> },
+  ) => {
     const user = await requireUser();
-    const match = await requireMatchMember(params.matchId, user.id);
+    const match = await requireMatchMember((await params).matchId, user.id);
     const target = nextStage(match.stage);
     if (!target) return jsonError(409, "NO_NEXT_STAGE");
 

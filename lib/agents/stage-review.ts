@@ -7,7 +7,7 @@ import { completeText } from "./llm";
  * construit uniquement à partir de SES réponses et de la couverture des
  * thèmes (jamais le contenu des réponses de l'autre).
  */
-export type StageReview = {
+type StageReview = {
   alignedThemes: string[]; // thèmes où les deux ont répondu
   openThemes: string[]; // thèmes où un seul a répondu
   myHighlights: Array<{ questionId: string; excerpt: string }>;

@@ -8,10 +8,11 @@ import { requireUser } from "@/lib/security/session";
 const schema = z.object({ slotStart: z.string().datetime() });
 
 export const POST = withErrors(
-  async (req: Request, { params }: { params: { id: string } }) => {
+  async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
     const user = await requireUser();
+    const { id } = await params;
     const { slotStart } = schema.parse(await readJsonLimited(req));
-    const coach = await prisma.coach.findUnique({ where: { id: params.id } });
+    const coach = await prisma.coach.findUnique({ where: { id } });
     if (!coach) return jsonError(404, "NOT_FOUND");
 
     try {

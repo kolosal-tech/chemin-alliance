@@ -10,9 +10,12 @@ const schema = z.object({ message: z.string().min(1).max(1000) });
 
 /** Sortie relationnelle élégante : clôture digne + dernier message respectueux. */
 export const POST = withErrors(
-  async (req: Request, { params }: { params: { matchId: string } }) => {
+  async (
+    req: Request,
+    { params }: { params: Promise<{ matchId: string }> },
+  ) => {
     const user = await requireUser();
-    const match = await requireMatchMember(params.matchId, user.id);
+    const match = await requireMatchMember((await params).matchId, user.id);
     // Déjà clôturé (ex: l'autre a clos entre-temps) : idempotent, ne réécrit rien.
     if (match.status === "CLOSED") {
       return NextResponse.json({ ok: true, closed: true });

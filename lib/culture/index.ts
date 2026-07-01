@@ -8,7 +8,7 @@
 // d'office ; il n'ouvre ce sujet que s'il est pertinent, puis aide la personne
 // à discerner ce qui est compatible avec la foi à partir de ce qu'elle partage.
 
-export type CultureRegion = {
+type CultureRegion = {
   key: string;
   label: string;
   countries: string[]; // formes en minuscules pour la résolution
@@ -190,6 +190,23 @@ export const CULTURE_REGIONS: CultureRegion[] = [
   },
 ];
 
+/** Échappe les caractères spéciaux regex d'un token pour matching littéral. */
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+// Cache des regex à bornes de mot par token, pour éviter de recompiler à
+// chaque appel de resolveRegion() (potentiellement appelé souvent).
+const tokenRegexCache = new Map<string, RegExp>();
+function tokenBoundaryRegex(token: string): RegExp {
+  let re = tokenRegexCache.get(token);
+  if (!re) {
+    re = new RegExp(`\\b${escapeRegExp(token)}\\b`, "u");
+    tokenRegexCache.set(token, re);
+  }
+  return re;
+}
+
 /** Résout un pays/texte libre vers une région connue (ou null). */
 export function resolveRegion(country?: string | null): CultureRegion | null {
   if (!country) return null;
@@ -198,11 +215,14 @@ export function resolveRegion(country?: string | null): CultureRegion | null {
   // On retient le token le PLUS LONG present dans la saisie : un pays specifique
   // (« guinee equatoriale », « guinee-bissau ») l'emporte ainsi sur un token plus
   // court d'une autre region (« guinee »), evitant les collisions de sous-chaines.
+  // Chaque token est borné par \b (limite de mot) pour éviter les faux positifs
+  // sur un texte libre où le token n'est qu'une sous-chaîne d'un autre mot
+  // (ex. "mali" ne doit pas matcher dans "malicieux").
   let best: CultureRegion | null = null;
   let bestLen = 0;
   for (const r of CULTURE_REGIONS) {
     for (const token of r.countries) {
-      if (token.length > bestLen && c.includes(token)) {
+      if (token.length > bestLen && tokenBoundaryRegex(token).test(c)) {
         best = r;
         bestLen = token.length;
       }

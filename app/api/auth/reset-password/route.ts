@@ -47,6 +47,10 @@ export const POST = withErrors(async (req: Request) => {
       passwordHash: await hashPassword(body.password),
       passwordResetToken: null,
       passwordResetExpires: null,
+      // Reset via token = compte potentiellement compromis : on tue TOUTE session
+      // résiduelle (jeton volé). L'utilisateur n'est pas connecté ici -> rien à
+      // re-signer, il se reconnectera avec son nouveau mot de passe.
+      sessionVersion: { increment: 1 },
     },
   });
   return NextResponse.json({ ok: true });

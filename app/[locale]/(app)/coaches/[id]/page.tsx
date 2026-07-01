@@ -6,11 +6,12 @@ import { BookingPanel } from "./booking-panel";
 import { CopilotPanel } from "./copilot-panel";
 import { getSessionUser } from "@/lib/security/session";
 
-export default async function CoachDetailPage({
-  params,
-}: {
-  params: { locale: string; id: string };
-}) {
+export default async function CoachDetailPage(
+  props: {
+    params: Promise<{ locale: string; id: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations("coaches");
   const tc = await getTranslations("common");

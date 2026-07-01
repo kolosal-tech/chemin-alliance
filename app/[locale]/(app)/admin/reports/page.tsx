@@ -6,11 +6,12 @@ import { getSessionUser } from "@/lib/security/session";
 import { Link } from "@/i18n/navigation";
 import { ReportActions } from "./report-actions";
 
-export default async function AdminReportsPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function AdminReportsPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const user = await getSessionUser();
   if (!user || user.role !== "ADMIN") notFound();

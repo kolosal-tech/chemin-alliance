@@ -75,6 +75,74 @@ npx prisma migrate resolve --applied 0013_onboarding_done
 ```
 Vérif : `SELECT column_name FROM information_schema.columns WHERE table_name='User' AND column_name='onboardingDoneAt';` (1 ligne).
 
+## 0015_missing_fk_indexes (index manquants sur FK Booking.userId / CoupleMessage.senderId)
+Index additifs purs (aucune colonne modifiée, pas de dialog RLS attendu). SQL Editor :
+```sql
+CREATE INDEX IF NOT EXISTS "Booking_userId_idx" ON "Booking"("userId");
+CREATE INDEX IF NOT EXISTS "CoupleMessage_senderId_idx" ON "CoupleMessage"("senderId");
+```
+Puis marquer appliqué (DATABASE_URL = prod, URL directe 5432) :
+```bash
+npx prisma migrate resolve --applied 0015_missing_fk_indexes
+```
+Vérif : `SELECT indexname FROM pg_indexes WHERE indexname IN ('Booking_userId_idx', 'CoupleMessage_senderId_idx');` (2 lignes).
+
+## 0016_session_version (revocation des sessions JWT sur changement/reset de MDP)
+Colonne additive NOT NULL avec DEFAULT 0 (retro-compatible, pas de dialog RLS attendu).
+À appliquer AVANT/au déploiement du code : sans elle, login / getSessionUser /
+`/api/me/password` / `/reset-password` renvoient P2022 (colonne `sessionVersion` absente).
+SQL Editor Supabase (idempotent) :
+```sql
+ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "sessionVersion" INTEGER NOT NULL DEFAULT 0;
+```
+Puis marquer appliqué (DATABASE_URL = prod, URL directe 5432) :
+```bash
+npx prisma migrate resolve --applied 0016_session_version
+```
+Vérif : `SELECT column_name FROM information_schema.columns WHERE table_name='User' AND column_name='sessionVersion';` (1 ligne).
+
+## 0017_query_indexes (index adaptés aux requêtes réelles — risque de dérive à l'échelle)
+Index additifs purs (aucune colonne modifiée, pas de dialog RLS attendu). Remplace
+l'index User de la migration 0009 par un ordre de colonnes qui reflète les filtres
+réellement TOUJOURS présents dans `getSuggestions` (deletedAt, season, isVerified
+avant gender, optionnel) ; ajoute des index pour la file de modération (Report),
+la liste des matchs (Match), la dédup anti-spam des bénédictions (Blessing) et les
+requêtes d'Espace Couple (CoupleSpace). Aucun de ces points n'est un bug aujourd'hui :
+prépare la montée en charge. SQL Editor Supabase (idempotent) :
+```sql
+DROP INDEX IF EXISTS "User_season_isVerified_gender_deletedAt_idx";
+CREATE INDEX IF NOT EXISTS "User_deletedAt_season_isVerified_gender_idx"
+  ON "User"("deletedAt", "season", "isVerified", "gender");
+
+CREATE INDEX IF NOT EXISTS "Report_status_createdAt_idx" ON "Report"("status", "createdAt");
+
+CREATE INDEX IF NOT EXISTS "Match_userAId_updatedAt_idx" ON "Match"("userAId", "updatedAt");
+CREATE INDEX IF NOT EXISTS "Match_userBId_updatedAt_idx" ON "Match"("userBId", "updatedAt");
+
+DROP INDEX IF EXISTS "Blessing_userId_matchId_idx";
+CREATE INDEX IF NOT EXISTS "Blessing_userId_matchId_status_idx"
+  ON "Blessing"("userId", "matchId", "status");
+
+CREATE INDEX IF NOT EXISTS "CoupleSpace_userAId_status_idx" ON "CoupleSpace"("userAId", "status");
+CREATE INDEX IF NOT EXISTS "CoupleSpace_userBId_status_idx" ON "CoupleSpace"("userBId", "status");
+```
+Puis marquer appliqué (DATABASE_URL = prod, URL directe 5432) :
+```bash
+npx prisma migrate resolve --applied 0017_query_indexes
+```
+Vérif :
+```sql
+SELECT indexname FROM pg_indexes WHERE indexname IN (
+  'User_deletedAt_season_isVerified_gender_idx',
+  'Report_status_createdAt_idx',
+  'Match_userAId_updatedAt_idx',
+  'Match_userBId_updatedAt_idx',
+  'Blessing_userId_matchId_status_idx',
+  'CoupleSpace_userAId_status_idx',
+  'CoupleSpace_userBId_status_idx'
+);   -- doit renvoyer 7 lignes
+```
+
 ## Futures migrations
 Le build Vercel n'exécute pas `migrate deploy`. Tant que ce n'est pas automatisé
 (step release `prisma migrate deploy` sur URL directe), appliquer chaque nouvelle

@@ -114,4 +114,9 @@ export const LIMITS = {
   onboarding: { limit: 10, windowMs: 60 * 60_000 },
   // Ice-breaker IA : génération de question personnalisée (LLM = coûteux).
   icebreaker: { limit: 8, windowMs: 60 * 60_000 },
+  // Export RGPD (portabilité) : requête coûteuse (multiples lectures + dechiffrement).
+  export: { limit: 3, windowMs: 60 * 60_000 },
+  // Lookup par token non authentifié (lien magique) : freine l'énumération/brute-force,
+  // en cohérence avec LIMITS.auth.
+  tokenLookup: { limit: 10, windowMs: 15 * 60_000 },
 } as const;

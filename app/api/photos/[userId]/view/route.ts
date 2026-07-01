@@ -21,9 +21,12 @@ import { blurredVariantPath, signedPhotoUrl } from "@/lib/storage";
 export const runtime = "nodejs";
 
 export const GET = withErrors(
-  async (_req: Request, { params }: { params: { userId: string } }) => {
+  async (
+    _req: Request,
+    { params }: { params: Promise<{ userId: string }> },
+  ) => {
     const viewer = await requireUser();
-    const targetId = params.userId;
+    const targetId = (await params).userId;
     const isSelf = targetId === viewer.id;
 
     // Stade de la relation viewer↔cible (match ACTIF uniquement).

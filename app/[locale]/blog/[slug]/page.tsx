@@ -18,11 +18,12 @@ export function generateStaticParams() {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: string; slug: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string; slug: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const post = getPost(params.slug);
   if (!post) return {};
   const c = localizedContent(post, params.locale);
@@ -44,11 +45,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function BlogPostPage({
-  params,
-}: {
-  params: { locale: string; slug: string };
-}) {
+export default async function BlogPostPage(
+  props: {
+    params: Promise<{ locale: string; slug: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const post = getPost(params.slug);
   if (!post) notFound();

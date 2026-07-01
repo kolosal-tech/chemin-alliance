@@ -10,11 +10,12 @@ import { ReviewsSection } from "@/components/product/ReviewsSection";
 import { SafetyBlock } from "@/components/product/SafetyBlock";
 import { FiltersDrawer } from "@/components/product/FiltersDrawer";
 
-export default async function DesignSystemPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function DesignSystemPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations("designSystem");
   const tv = await getTranslations("visibility");

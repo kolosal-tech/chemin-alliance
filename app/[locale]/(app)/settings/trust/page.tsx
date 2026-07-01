@@ -3,11 +3,12 @@ import { Link } from "@/i18n/navigation";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { TrustBadge } from "@/components/TrustBadge";
 
-export default async function TrustPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function TrustPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations();
   const user = await requirePageUser(params.locale);

@@ -384,6 +384,8 @@
     "verified": "Número verificado",
     "comingSoon": "Verificação por SMS disponível em breve.",
     "sendCode": "Receber um código",
+    "phoneInputLabel": "Número de telefone",
+    "codeInputLabel": "Código de verificação recebido por SMS",
     "sentTo": "Código enviado para {phone}. Introduz abaixo.",
     "verify": "Verificar",
     "change": "Mudar de número",

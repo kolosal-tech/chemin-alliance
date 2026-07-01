@@ -7,7 +7,7 @@ import {
   readJsonLimited,
   withErrors,
 } from "@/lib/api-helpers";
-import { rateLimit } from "@/lib/security/rate-limit";
+import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import { statusForDecision } from "@/lib/sponsor";
 import { encryptField } from "@/lib/security/crypto";
 
@@ -17,9 +17,17 @@ export const runtime = "nodejs";
 // Ne révèle que le prénom du filleul·e (qui l'a choisi) ; aucune donnée de
 // l'autre partie du match.
 export const GET = withErrors(
-  async (_req: Request, { params }: { params: { token: string } }) => {
+  async (req: Request, { params }: { params: Promise<{ token: string }> }) => {
+    const rl = await rateLimit(
+      `blessing-lookup:${clientIp(req)}`,
+      LIMITS.tokenLookup.limit,
+      LIMITS.tokenLookup.windowMs,
+    );
+    if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
+
+    const { token } = await params;
     const b = await prisma.blessing.findUnique({
-      where: { token: params.token },
+      where: { token },
       include: {
         sponsor: { include: { user: { select: { displayName: true } } } },
       },
@@ -39,13 +47,14 @@ const schema = z.object({
 });
 
 export const POST = withErrors(
-  async (req: Request, { params }: { params: { token: string } }) => {
+  async (req: Request, { params }: { params: Promise<{ token: string }> }) => {
     const rl = await rateLimit(`blessing-respond:${clientIp(req)}`, 20, 60_000);
     if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
+    const { token } = await params;
     const { decision, note } = schema.parse(await readJsonLimited(req));
     const b = await prisma.blessing.findUnique({
-      where: { token: params.token },
+      where: { token },
     });
     if (!b) return jsonError(404, "NOT_FOUND");
     if (b.status !== "PENDING") return jsonError(409, "ALREADY_ANSWERED");

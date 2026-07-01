@@ -3,7 +3,7 @@
  * implicite (`now` injecté) : entièrement testable et rejouable.
  */
 
-export type PurgePlan = {
+type PurgePlan = {
   /** Supprimer les vérifications téléphone expirées avant cette date. */
   phoneBefore: Date;
   /** Nullifier les tokens email/MDP expirés avant cette date. */

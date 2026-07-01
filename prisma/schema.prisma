@@ -8,7 +8,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider          = "postgresql"
   url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
@@ -104,41 +104,46 @@ enum ConsentType {
 }
 
 model User {
-  id                    String    @id @default(cuid())
-  email                 String    @unique
+  id                    String      @id @default(cuid())
+  email                 String      @unique
   passwordHash          String
   displayName           String
   age                   Int
   gender                String?
-  role                  UserRole  @default(USER)
+  role                  UserRole    @default(USER)
   // Profil humain (defaut) ou Compagnon IA badge, vivant nativement dans la
   // Decouverte. Les Compagnons ne sont jamais comptes comme un vrai match.
   kind                  ProfileKind @default(HUMAN)
-  locale                String    @default("fr")
-  rulesetId             String    @default("christian_evangelical_default")
-  season                LifeSeason @default(JOURNEY)
-  isVerified            Boolean   @default(false)
-  emailVerifyToken      String?   @unique
+  locale                String      @default("fr")
+  rulesetId             String      @default("christian_evangelical_default")
+  season                LifeSeason  @default(JOURNEY)
+  isVerified            Boolean     @default(false)
+  emailVerifyToken      String?     @unique
   emailVerifyExpires    DateTime?
-  passwordResetToken    String?   @unique
+  passwordResetToken    String?     @unique
   passwordResetExpires  DateTime?
   photoUrl              String?
-  photoBlurredByDefault Boolean   @default(true)
+  photoBlurredByDefault Boolean     @default(true)
   photoBlurhash         String?
 
-  cityApprox            String?
-  country               String?
-  phone                 String?
-  phoneVerified         Boolean   @default(false)
-  stripeCustomerId      String?   @unique
-  subscriptionStatus    String?
-  lastDevotionDate      DateTime?
-  currentStreak         Int       @default(0)
-  longestStreak         Int       @default(0)
-  onboardingDoneAt      DateTime?
-  deletedAt             DateTime?
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
+  cityApprox         String?
+  country            String?
+  phone              String?
+  phoneVerified      Boolean   @default(false)
+  stripeCustomerId   String?   @unique
+  subscriptionStatus String?
+  lastDevotionDate   DateTime?
+  currentStreak      Int       @default(0)
+  longestStreak      Int       @default(0)
+  onboardingDoneAt   DateTime?
+  // Revocation des sessions JWT : incremente a chaque changement/reset de mot de
+  // passe. Le claim `sv` du jeton doit correspondre a cette valeur (verifie dans
+  // getSessionUser), sinon la session est consideree invalide. Rend les jetons
+  // deja emis (7j de validite) revocables sans blacklist cote serveur.
+  sessionVersion     Int       @default(0)
+  deletedAt          DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 
   faithProfile        FaithProfile?
   relationshipProfile RelationshipProfile?
@@ -164,12 +169,14 @@ model User {
   coupleMessages      CoupleMessage[]      @relation("CoupleMessageSender")
   pushSubscriptions   PushSubscription[]
   sponsor             Sponsor?             @relation("UserSponsor")
-  gameSessions        GameSession[]        // Alliance Lab (terrain d'entrainement IA)
-  aiCompanionMeta     AiCompanionMeta?     // present si kind == AI_COMPANION
+  gameSessions        GameSession[] // Alliance Lab (terrain d'entrainement IA)
+  aiCompanionMeta     AiCompanionMeta? // present si kind == AI_COMPANION
 
-  // Vivier de matching : getSuggestions filtre sur season + isVerified +
-  // gender + deletedAt. Sans cet index, full scan dès quelques milliers de profils.
-  @@index([season, isVerified, gender, deletedAt])
+  // Vivier de matching : getSuggestions (lib/matching.ts) filtre TOUJOURS sur
+  // deletedAt + season + isVerified ; gender est optionnel (spread conditionnel,
+  // absent quand me.gender est null). Colonnes toujours filtrées en tête pour
+  // que Postgres restreigne le vivier avant le filtre optionnel.
+  @@index([deletedAt, season, isVerified, gender])
 }
 
 // Blocage user-à-user - GRATUIT À VIE (doctrine, lib/payments/entitlements).
@@ -238,6 +245,13 @@ model CoupleSpace {
 
   agentInsights AgentInsight[]
   messages      CoupleMessage[]
+
+  // Requêtes app/api/couple/**/*.ts : findFirst OR(userAId, userBId) + status
+  // (route.ts, season/route.ts), et userBId + status (messages/route.ts).
+  // userAId/userBId sont déjà @unique (index implicite par colonne) mais ne
+  // couvrent pas le filtre status combiné.
+  @@index([userAId, status])
+  @@index([userBId, status])
 }
 
 // Messagerie privée entre les deux conjoints d'un Espace Couple. Indépendante du
@@ -324,6 +338,10 @@ model Match {
   @@index([userBId])
   @@index([userAId, lastReadAtUserA])
   @@index([userBId, lastReadAtUserB])
+  // Liste des matchs (app/api/matches/list/route.ts) : OR(userAId, userBId)
+  // trié par updatedAt desc. Couvre chaque branche du OR avec le tri.
+  @@index([userAId, updatedAt])
+  @@index([userBId, updatedAt])
 }
 
 model Message {
@@ -378,6 +396,10 @@ model Report {
   resolvedAt   DateTime?
 
   @@index([targetUserId, status])
+  // File de modération (app/api/admin/reports/route.ts) : filtre status IN
+  // [OPEN, REVIEWING] SANS targetUserId, trié par createdAt desc. L'index
+  // ci-dessus (targetUserId en tête) ne peut pas servir cette requête.
+  @@index([status, createdAt])
 }
 
 model Coach {
@@ -411,19 +433,19 @@ model Booking {
 // signaux de vigilance, résumés coach). Toujours soumis à un VisibilityLevel
 // et révocables - jamais exposés à l'autre membre.
 model AgentInsight {
-  id         String          @id @default(cuid())
-  userId     String?
-  user       User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  matchId    String?
-  match      Match?          @relation(fields: [matchId], references: [id], onDelete: Cascade)
-  agentId    String
-  kind       String
+  id            String          @id @default(cuid())
+  userId        String?
+  user          User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matchId       String?
+  match         Match?          @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  agentId       String
+  kind          String
   coupleSpaceId String?
-  coupleSpace   CoupleSpace? @relation(fields: [coupleSpaceId], references: [id], onDelete: Cascade)
-  dataJson   Json
-  visibility VisibilityLevel @default(PRIVATE)
-  createdAt  DateTime        @default(now())
-  revokedAt  DateTime?
+  coupleSpace   CoupleSpace?    @relation(fields: [coupleSpaceId], references: [id], onDelete: Cascade)
+  dataJson      Json
+  visibility    VisibilityLevel @default(PRIVATE)
+  createdAt     DateTime        @default(now())
+  revokedAt     DateTime?
 
   @@index([userId, agentId])
   @@index([matchId, agentId])
@@ -509,7 +531,10 @@ model Blessing {
   createdAt     DateTime       @default(now())
   respondedAt   DateTime?
 
-  @@index([userId, matchId])
+  // Dédup anti-spam (app/api/matches/[matchId]/blessing/route.ts) :
+  // findFirst({ userId, matchId, status: "PENDING" }). Étendu pour couvrir
+  // le filtre status sans lookup supplémentaire.
+  @@index([userId, matchId, status])
 }
 
 // =====================================================================
@@ -545,7 +570,7 @@ model AiPersona {
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 
-  sessions       GameSession[]
+  sessions GameSession[]
 }
 
 /// Une partie entre un utilisateur et une persona (DISC ou Questions Profondes).
@@ -563,7 +588,7 @@ model GameSession {
   createdAt   DateTime          @default(now())
   completedAt DateTime?
 
-  answers     GameAnswer[]
+  answers GameAnswer[]
 
   @@index([userId, gameType])
   @@index([personaId])
@@ -599,9 +624,9 @@ model AiCompanionMeta {
   id           String   @id @default(cuid())
   userId       String   @unique
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  systemPrompt String                       // posture + ancrage culturel
-  langAnchor   String                       // ancre bilingue (langue du 1er message)
-  temperament  String                       // "warm" | "analytical" | "expressive" | "reserved"...
+  systemPrompt String // posture + ancrage culturel
+  langAnchor   String // ancre bilingue (langue du 1er message)
+  temperament  String // "warm" | "analytical" | "expressive" | "reserved"...
   active       Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

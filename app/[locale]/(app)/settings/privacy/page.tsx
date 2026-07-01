@@ -2,11 +2,12 @@ import { setRequestLocale } from "next-intl/server";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { PrivacyPanel } from "./privacy-panel";
 
-export default async function PrivacyPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function PrivacyPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const user = await requirePageUser(params.locale);
   const ps = user.privacySettings;

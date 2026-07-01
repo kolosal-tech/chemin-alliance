@@ -28,10 +28,19 @@ export async function markMatchAsRead(
   }
 }
 
+// Plafond de lignes chargées pour le comptage des non-lus : cette fonction
+// est sondée fréquemment côté client (badge de navigation), donc on borne
+// strictement le volume au lieu de charger un nombre illimité de messages.
+// Un utilisateur avec autant de messages non lus d'un coup dépasse de toute
+// façon largement ce qu'un badge peut afficher utilement.
+const UNREAD_SCAN_LIMIT = 500;
+
 /**
  * Nombre de messages non lus par conversation (seulement celles avec > 0).
- * Deux requêtes au total (pas de N+1) : les matchs, puis tous les messages
- * pertinents agrégés en mémoire selon le lastReadAt propre à chaque match.
+ * Deux requêtes au total (pas de N+1) : les matchs, puis les messages
+ * pertinents les plus récents (plafonnés à UNREAD_SCAN_LIMIT, triés par
+ * date décroissante grâce à l'index [matchId, createdAt]) agrégés en
+ * mémoire selon le lastReadAt propre à chaque match.
  */
 export async function unreadByMatch(
   userId: string,
@@ -66,6 +75,8 @@ export async function unreadByMatch(
       senderId: { not: userId },
     },
     select: { matchId: true, createdAt: true },
+    orderBy: { createdAt: "desc" },
+    take: UNREAD_SCAN_LIMIT,
   });
 
   const result: Record<string, number> = {};

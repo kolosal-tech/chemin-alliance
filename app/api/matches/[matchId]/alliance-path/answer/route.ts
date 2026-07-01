@@ -12,9 +12,12 @@ const schema = z.object({
 });
 
 export const POST = withErrors(
-  async (req: Request, { params }: { params: { matchId: string } }) => {
+  async (
+    req: Request,
+    { params }: { params: Promise<{ matchId: string }> },
+  ) => {
     const user = await requireUser();
-    const match = await requireMatchMember(params.matchId, user.id);
+    const match = await requireMatchMember((await params).matchId, user.id);
     if (match.stage === "CLOSED") return jsonError(409, "MATCH_CLOSED");
     const body = schema.parse(await readJsonLimited(req));
 

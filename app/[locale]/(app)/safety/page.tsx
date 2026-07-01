@@ -4,11 +4,12 @@ import { requirePageUser } from "@/lib/security/page-auth";
 const RED_FLAGS = ["money", "urgency", "offplatform", "identity", "sobstory", "pressure"] as const;
 const STEPS = ["never", "slow", "video", "tools", "coach"] as const;
 
-export default async function SafetyPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function SafetyPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   await requirePageUser(params.locale);
   const t = await getTranslations("antiScam");

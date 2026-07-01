@@ -7,11 +7,12 @@ import { MemberAvatar } from "@/components/MemberAvatar";
 import { silenceDetected } from "@/lib/agents/exit-helper";
 import { unreadByMatch } from "@/lib/unread";
 
-export default async function MessagesListPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function MessagesListPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations();
   const user = await requirePageUser(params.locale);
@@ -51,7 +52,7 @@ export default async function MessagesListPage({
             // Espace couple (fiancés/mariés/parents) : la messagerie à deux vit
             // dans l'onglet Couple, pas ici (qui ne liste que les rencontres).
             // On évite la fausse impression de bug en orientant vers le bon endroit.
-            <div className="rounded-card border border-sand-200 bg-surface p-5 dark:border-anthracite-600 dark:bg-anthracite-800">
+            (<div className="rounded-card border border-sand-200 bg-surface p-5 dark:border-anthracite-600 dark:bg-anthracite-800">
               <p className="text-sm text-warmgray dark:text-[#9A958B]">
                 {t("messaging.coupleSpaceBody")}
               </p>
@@ -61,7 +62,7 @@ export default async function MessagesListPage({
               >
                 {t("messaging.coupleSpaceCta")}
               </Link>
-            </div>
+            </div>)
           ) : (
             <p className="rounded-card border border-sand-200 bg-surface p-5 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
               {t("messaging.noConversations")}

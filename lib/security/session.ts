@@ -9,7 +9,7 @@ import { SESSION_COOKIE, verifySession } from "@/lib/security/jwt";
  * et la page rendent en parallèle et appelaient chacun cette fonction.
  */
 export const getSessionUser = cache(async () => {
-  const token = cookies().get(SESSION_COOKIE)?.value;
+  const token = (await cookies()).get(SESSION_COOKIE)?.value;
   if (!token) return null;
   const payload = await verifySession(token);
   if (!payload) return null;
@@ -23,6 +23,10 @@ export const getSessionUser = cache(async () => {
   });
   // Compte soft-supprimé (RGPD) : session invalide.
   if (user?.deletedAt) return null;
+  // Session révoquée : le jeton porte une version antérieure à celle en DB
+  // (mot de passe changé/réinitialisé depuis l'émission du jeton). On refuse
+  // même si le JWT est cryptographiquement valide et non expiré.
+  if (user && payload.sessionVersion !== user.sessionVersion) return null;
   return user;
 });
 

@@ -31,7 +31,10 @@ const schema = z.object({
  * un Compagnon IA. Aucune table : la question est un simple Message.
  */
 export const POST = withErrors(
-  async (req: Request, { params }: { params: { matchId: string } }) => {
+  async (
+    req: Request,
+    { params }: { params: Promise<{ matchId: string }> },
+  ) => {
     const user = await requireUser();
     if (!user.isVerified) return jsonError(403, "EMAIL_NOT_VERIFIED");
     const rl = await rateLimit(
@@ -41,7 +44,7 @@ export const POST = withErrors(
     );
     if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
-    const match = await requireMatchMember(params.matchId, user.id);
+    const match = await requireMatchMember((await params).matchId, user.id);
     const otherId = match.userAId === user.id ? match.userBId : match.userAId;
 
     const otherUser = await prisma.user.findUnique({

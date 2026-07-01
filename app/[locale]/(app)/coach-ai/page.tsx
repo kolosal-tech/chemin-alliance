@@ -4,11 +4,12 @@ import { requirePageUser } from "@/lib/security/page-auth";
 import { decryptOptional } from "@/lib/security/crypto";
 import { CoachChat } from "./coach-chat";
 
-export default async function CoachAiPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function CoachAiPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const user = await requirePageUser(params.locale);
   // Email non verifie : l'IA payante reste fermee (cf. audit ticket 1). La

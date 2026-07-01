@@ -78,7 +78,11 @@ export const POST = withErrors(async (req: Request) => {
         },
       }),
     ]);
-    console.info(`\n[sms dev - non envoyé] ${phone} code: ${code}\n`);
+    // Garde explicite : ce code ne doit JAMAIS atterrir dans des logs de prod
+    // (Vercel logs, drains...), même si `smsEnabled()` était mal configuré.
+    if (process.env.NODE_ENV !== "production") {
+      console.info(`\n[sms dev - non envoyé] ${phone} code: ${code}\n`);
+    }
   }
 
   return NextResponse.json({ sent: true, smsConfigured: smsEnabled() });

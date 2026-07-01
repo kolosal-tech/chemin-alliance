@@ -11,9 +11,12 @@ import { sendMatchAcceptedEmail } from "@/lib/email";
 export const runtime = "nodejs";
 
 export const POST = withErrors(
-  async (_req: Request, { params }: { params: { matchId: string } }) => {
+  async (
+    _req: Request,
+    { params }: { params: Promise<{ matchId: string }> },
+  ) => {
     const user = await requireUser();
-    const match = await requireMatchMember(params.matchId, user.id);
+    const match = await requireMatchMember((await params).matchId, user.id);
     if (match.status === "PENDING") {
       // Consentement mutuel : le demandeur connu ne peut pas s'auto-accepter.
       // Un ancien match sans demandeur (legacy, requestedById null) reste

@@ -94,20 +94,11 @@ export function RegisterForm() {
 
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-2">
-      <aside className="relative hidden overflow-hidden bg-night p-14 lg:flex lg:flex-col lg:justify-between">
-        <SacredMotif variant="olive" className="right-[-70px] top-[60px]" />
-        <div className="flex items-center gap-2.5">
-          <span aria-hidden className="inline-block h-px w-[22px] bg-gold" />
-          <span className="lbl text-[12px] text-gold">{tc("appName")}</span>
-        </div>
-        <h2 className="max-w-[16ch] font-display text-[49px] font-normal leading-[1.15] text-[#F4F1EA]">
-          {tc("tagline")}
-        </h2>
-        <div className="dark max-w-md">
-          <AllianceThread current={1} />
-        </div>
-      </aside>
-      <main className="relative mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center overflow-hidden px-7 py-10 pb-[calc(env(safe-area-inset-bottom)+32px)] safe-top">
+      {/* Le vrai <h1> sémantique de la page (formulaire, ci-dessous) doit
+          précéder le <h2> décoratif de l'aside dans le DOM. On garde le
+          rendu visuel identique (aside à gauche, formulaire à droite en
+          desktop) via lg:order-*. */}
+      <main className="relative order-2 mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center overflow-hidden px-7 py-10 pb-[calc(env(safe-area-inset-bottom)+32px)] safe-top lg:order-2">
         <SacredMotif variant="olive" className="right-[-110px] top-[-30px]" />
         <h1 className="font-display text-[29px] text-night dark:text-[#ECE7DD] sm:text-[36px]">
           {t("registerTitle")}
@@ -316,6 +307,19 @@ export function RegisterForm() {
           </Link>
         </p>
       </main>
+      <aside className="relative order-1 hidden overflow-hidden bg-night p-14 lg:order-1 lg:flex lg:flex-col lg:justify-between">
+        <SacredMotif variant="olive" className="right-[-70px] top-[60px]" />
+        <div className="flex items-center gap-2.5">
+          <span aria-hidden className="inline-block h-px w-[22px] bg-gold" />
+          <span className="lbl text-[12px] text-gold">{tc("appName")}</span>
+        </div>
+        <h2 className="max-w-[16ch] font-display text-[49px] font-normal leading-[1.15] text-[#F4F1EA]">
+          {tc("tagline")}
+        </h2>
+        <div className="dark max-w-md">
+          <AllianceThread current={1} />
+        </div>
+      </aside>
     </div>
   );
 }

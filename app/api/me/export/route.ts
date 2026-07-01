@@ -1,12 +1,20 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { withErrors } from "@/lib/api-helpers";
+import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { decryptOptional } from "@/lib/security/crypto";
+import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 
 /** RGPD - droit à la portabilité : export JSON complet et lisible. */
 export const GET = withErrors(async () => {
   const user = await requireUser();
+  const rl = await rateLimit(
+    `export:${user.id}`,
+    LIMITS.export.limit,
+    LIMITS.export.windowMs,
+  );
+  if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
+
   const [consents, matches, messages, answers, bookings, reports] =
     await Promise.all([
       prisma.consent.findMany({ where: { userId: user.id } }),
@@ -16,7 +24,12 @@ export const GET = withErrors(async () => {
       }),
       prisma.message.findMany({
         where: { senderId: user.id },
-        select: { matchId: true, contentEncrypted: true, createdAt: true, moderationStatus: true },
+        select: {
+          matchId: true,
+          contentEncrypted: true,
+          createdAt: true,
+          moderationStatus: true,
+        },
       }),
       prisma.allianceAnswer.findMany({ where: { userId: user.id } }),
       prisma.booking.findMany({ where: { userId: user.id } }),
@@ -66,7 +79,8 @@ export const GET = withErrors(async () => {
   return new NextResponse(JSON.stringify(data, null, 2), {
     headers: {
       "content-type": "application/json",
-      "content-disposition": 'attachment; filename="chemin-alliance-export.json"',
+      "content-disposition":
+        'attachment; filename="chemin-alliance-export.json"',
     },
   });
 });

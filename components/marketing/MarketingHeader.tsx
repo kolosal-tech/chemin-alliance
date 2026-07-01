@@ -76,6 +76,7 @@ export function MarketingHeader() {
             type="button"
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
+            aria-controls="mobile-nav-panel"
             aria-label={open ? t("close") : t("menu")}
             className="flex h-10 w-10 items-center justify-center rounded-btn text-night md:hidden dark:text-[#ECE7DD]"
           >
@@ -108,7 +109,10 @@ export function MarketingHeader() {
 
       {/* Panneau mobile */}
       {open && (
-        <div className="border-t border-sand-300/70 bg-canvas px-5 py-4 md:hidden dark:border-anthracite-700/70 dark:bg-anthracite-900">
+        <div
+          id="mobile-nav-panel"
+          className="border-t border-sand-300/70 bg-canvas px-5 py-4 md:hidden dark:border-anthracite-700/70 dark:bg-anthracite-900"
+        >
           <div className="flex flex-col gap-1">
             {navLinks.map((l) => (
               <a

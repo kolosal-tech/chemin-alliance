@@ -35,7 +35,11 @@ export const POST = withErrors(async (req: Request) => {
     return jsonError(401, "INVALID_CREDENTIALS");
   }
 
-  const token = await signSession({ sub: user.id, role: user.role });
+  const token = await signSession({
+    sub: user.id,
+    role: user.role,
+    sessionVersion: user.sessionVersion,
+  });
   const res = NextResponse.json({ ok: true, locale: user.locale });
   res.cookies.set(SESSION_COOKIE, token, sessionCookieOptions());
   return res;

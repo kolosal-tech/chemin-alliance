@@ -5,13 +5,18 @@ import { BottomNav } from "@/components/BottomNav";
 import { SacredMotif } from "@/components/SacredMotif";
 import { VerifyBanner } from "@/components/VerifyBanner";
 
-export default async function AppLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: { locale: string };
-}) {
+export default async function AppLayout(
+  props: {
+    children: React.ReactNode;
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   setRequestLocale(params.locale);
   const user = await getSessionUser();
   if (!user) redirect({ href: "/login", locale: params.locale });

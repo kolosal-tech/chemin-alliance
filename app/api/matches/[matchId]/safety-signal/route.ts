@@ -7,7 +7,10 @@ import { getSafetySignalForMatch } from "@/lib/safety-signals";
 
 // Signal de sécurité (anti-arnaque) pour une conversation, réservé aux membres.
 export const GET = withErrors(
-  async (_req: Request, { params }: { params: { matchId: string } }) => {
+  async (
+    _req: Request,
+    { params }: { params: Promise<{ matchId: string }> },
+  ) => {
     const user = await requireUser();
     const rl = await rateLimit(
       `safety:${user.id}`,
@@ -15,7 +18,8 @@ export const GET = withErrors(
       LIMITS.safetySignal.windowMs,
     );
     if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
-    await requireMatchMember(params.matchId, user.id);
-    return NextResponse.json(await getSafetySignalForMatch(params.matchId));
+    const { matchId } = await params;
+    await requireMatchMember(matchId, user.id);
+    return NextResponse.json(await getSafetySignalForMatch(matchId));
   },
 );

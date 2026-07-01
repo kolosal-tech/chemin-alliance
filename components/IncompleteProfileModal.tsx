@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Icon } from "@/components/marketing/icons";
@@ -19,6 +19,7 @@ export function IncompleteProfileModal({
   const t = useTranslations("phase2.modal");
   const [open, setOpen] = useState(true);
   const titleId = useId();
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -27,6 +28,43 @@ export function IncompleteProfileModal({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  // Focus initial dans la modale + piège Tab/Shift+Tab + restauration du
+  // focus au démontage. La gestion d'Echap reste dans l'effet ci-dessus
+  // (ne pas dupliquer) ; celui-ci ne gère que Tab.
+  useEffect(() => {
+    if (!open) return;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const node = ref.current;
+    const getFocusable = () =>
+      Array.from(
+        node?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
+      );
+    getFocusable()[0]?.focus();
+
+    function onKey(e: KeyboardEvent) {
+      if (e.key !== "Tab") return;
+      const items = getFocusable();
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      previouslyFocused?.focus();
+    };
+  }, [open]);
 
   if (!open) return null;
 
@@ -40,7 +78,10 @@ export function IncompleteProfileModal({
         if (e.target === e.currentTarget) setOpen(false);
       }}
     >
-      <div className="w-full max-w-sm rounded-cardlg border border-sand-200 bg-surface p-6 shadow-phone dark:border-anthracite-600 dark:bg-anthracite-800">
+      <div
+        ref={ref}
+        className="w-full max-w-sm rounded-cardlg border border-sand-200 bg-surface p-6 shadow-phone dark:border-anthracite-600 dark:bg-anthracite-800"
+      >
         <div className="flex items-start gap-4">
           <span
             aria-hidden

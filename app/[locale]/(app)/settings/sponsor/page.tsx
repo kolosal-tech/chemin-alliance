@@ -3,11 +3,12 @@ import { requirePageUser } from "@/lib/security/page-auth";
 import { prisma } from "@/lib/db";
 import { SponsorPanel } from "./sponsor-panel";
 
-export default async function SponsorPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function SponsorPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const user = await requirePageUser(params.locale);
   const s = await prisma.sponsor.findUnique({ where: { userId: user.id } });

@@ -6,11 +6,12 @@ import { decryptOptional } from "@/lib/security/crypto";
 import { getStageQuestions, type Locale } from "@/lib/core-engine";
 import { Conversation } from "./conversation";
 
-export default async function ConversationPage({
-  params,
-}: {
-  params: { locale: string; matchId: string };
-}) {
+export default async function ConversationPage(
+  props: {
+    params: Promise<{ locale: string; matchId: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const user = await requirePageUser(params.locale);
   const match = await prisma.match.findUnique({

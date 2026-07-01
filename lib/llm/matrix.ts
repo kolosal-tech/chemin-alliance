@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { env } from "@/lib/env";
 
 // Matrice de modèles par ÉTAPE du parcours × PALIER d'abonnement, via OpenRouter.
@@ -50,16 +51,43 @@ const DOC_MATRIX: Matrix = {
   },
 };
 
+// Schéma de validation de LLM_MATRIX_JSON (surcharge optionnelle de la
+// matrice). Une étape/palier peut être omis (le fallback DOC_MATRIX/proven
+// s'applique), mais la FORME de ce qui est fourni doit être correcte : un
+// Record<Step, Record<Tier, string[]>>, avec des slugs de modèles non vides.
+const stepEnum = z.enum(["discovery", "dialogue", "accompaniment", "safety"]);
+const tierEnum = z.enum(["standard", "optimal", "premium"]);
+// partialRecord (et non record) : une surcharge peut ne fournir qu'un
+// sous-ensemble des étapes/paliers - le reste retombe sur DOC_MATRIX/proven.
+const matrixSchema = z.partialRecord(
+  stepEnum,
+  z.partialRecord(tierEnum, z.array(z.string().min(1))),
+);
+
 function loadMatrix(): Matrix {
   const raw = process.env.LLM_MATRIX_JSON;
-  if (raw) {
-    try {
-      return JSON.parse(raw) as Matrix;
-    } catch {
-      // JSON invalide -> matrice par défaut.
-    }
+  if (!raw) return DOC_MATRIX;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (err) {
+    console.error(
+      "[llm/matrix] LLM_MATRIX_JSON n'est pas un JSON valide, repli sur la matrice par défaut.",
+      err,
+    );
+    return DOC_MATRIX;
   }
-  return DOC_MATRIX;
+  const result = matrixSchema.safeParse(parsed);
+  if (!result.success) {
+    console.error(
+      "[llm/matrix] LLM_MATRIX_JSON a une forme invalide (attendu Record<Step, Record<Tier, string[]>>), repli sur la matrice par défaut :",
+      result.error.issues
+        .map((i) => `${i.path.join(".") || "<racine>"}: ${i.message}`)
+        .join("; "),
+    );
+    return DOC_MATRIX;
+  }
+  return result.data as Matrix;
 }
 
 const MATRIX = loadMatrix();

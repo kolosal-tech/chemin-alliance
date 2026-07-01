@@ -9,10 +9,14 @@ export const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 jours
 export type SessionPayload = {
   sub: string; // user id
   role: "USER" | "ADMIN";
+  // Version de session (User.sessionVersion). Doit correspondre à la valeur en DB
+  // (vérifié dans getSessionUser) sinon la session est révoquée. Incrémentée à
+  // chaque changement/reset de mot de passe pour tuer les jetons déjà émis.
+  sessionVersion: number;
 };
 
 export async function signSession(payload: SessionPayload): Promise<string> {
-  return new SignJWT({ role: payload.role })
+  return new SignJWT({ role: payload.role, sv: payload.sessionVersion })
     .setProtectedHeader({ alg: "HS256" })
     .setSubject(payload.sub)
     .setIssuer(ISSUER)
@@ -27,9 +31,13 @@ export async function verifySession(
   try {
     const { payload } = await jwtVerify(token, SECRET, { issuer: ISSUER });
     if (typeof payload.sub !== "string") return null;
+    // Jetons émis avant l'introduction du claim `sv` n'ont pas cette valeur :
+    // on les traite comme sessionVersion 0 (== défaut DB) pour rester tolérant.
+    const sv = Number(payload.sv);
     return {
       sub: payload.sub,
       role: payload.role === "ADMIN" ? "ADMIN" : "USER",
+      sessionVersion: Number.isFinite(sv) ? sv : 0,
     };
   } catch {
     return null;

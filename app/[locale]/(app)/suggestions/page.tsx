@@ -25,18 +25,19 @@ import { parseFilters, matchesFilters, activeFilterCount } from "@/lib/filters";
 import { FiltersDrawer } from "@/components/product/FiltersDrawer";
 import { SafetyBlock } from "@/components/product/SafetyBlock";
 
-export default async function SuggestionsPage({
-  params,
-  searchParams,
-}: {
-  params: { locale: string };
-  searchParams?: {
-    ageMin?: string;
-    ageMax?: string;
-    verified?: string;
-    children?: string;
-  };
-}) {
+export default async function SuggestionsPage(
+  props: {
+    params: Promise<{ locale: string }>;
+    searchParams?: Promise<{
+      ageMin?: string;
+      ageMax?: string;
+      verified?: string;
+      children?: string;
+    }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations();
   const user = await requirePageUser(params.locale);
@@ -152,15 +153,14 @@ export default async function SuggestionsPage({
           </span>
         </div>
       </header>
-
       {!onboardingDone && !hasPortrait ? (
         // Bilan de maturité (« recto-verso ») : affiché une fois tant que le
         // portrait n'existe pas. Une fois l'entretien fait (portrait présent),
         // on n'invite plus à « commencer ton bilan » même si onboardingDoneAt
         // n'a pas été posé - sinon l'utilisateur croit devoir tout recommencer.
-        <div className="mt-4">
+        (<div className="mt-4">
           <OnboardingIntroCard />
-        </div>
+        </div>)
       ) : gateActive ? (
         <div className="mt-4">
           <OnboardingProgress completion={completion} />
@@ -224,10 +224,10 @@ export default async function SuggestionsPage({
               // !isVerified). P3 : on montre un aperçu de silhouettes (vivier
               // vivant) + la vraie cause avec CTA de renvoi, plutôt que le
               // générique "pas de suggestion aujourd'hui".
-              <div className="flex flex-col gap-3 lg:col-span-3">
+              (<div className="flex flex-col gap-3 lg:col-span-3">
                 <DiscoveryPreview teasers={discoveryPreview} />
                 <SuggestionsVerifyNotice />
-              </div>
+              </div>)
             ) : (
               <p className="rounded-card border border-sand-200 bg-surface p-5 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B] lg:col-span-3">
                 {t("suggestions.empty")}

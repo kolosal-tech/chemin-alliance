@@ -2,11 +2,12 @@ import { setRequestLocale } from "next-intl/server";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { NotificationsPanel } from "./notifications-panel";
 
-export default async function NotificationsPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function NotificationsPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   await requirePageUser(params.locale);
   // Push dormant tant que la paire VAPID n'est pas configurée côté serveur.

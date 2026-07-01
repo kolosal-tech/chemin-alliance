@@ -6,10 +6,14 @@ import { markMatchAsRead } from "@/lib/unread";
 
 // Marque la conversation comme lue pour l'utilisateur courant.
 export const POST = withErrors(
-  async (_req: Request, { params }: { params: { matchId: string } }) => {
+  async (
+    _req: Request,
+    { params }: { params: Promise<{ matchId: string }> },
+  ) => {
     const user = await requireUser();
-    await requireMatchMember(params.matchId, user.id);
-    await markMatchAsRead(params.matchId, user.id);
+    const { matchId } = await params;
+    await requireMatchMember(matchId, user.id);
+    await markMatchAsRead(matchId, user.id);
     return NextResponse.json({ ok: true });
   },
 );

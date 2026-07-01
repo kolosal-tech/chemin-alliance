@@ -14,7 +14,7 @@ import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 export const DELETE = withErrors(
   async (
     _req: Request,
-    { params }: { params: { matchId: string; messageId: string } },
+    { params }: { params: Promise<{ matchId: string; messageId: string }> },
   ) => {
     const user = await requireUser();
     const rl = await rateLimit(
@@ -24,15 +24,16 @@ export const DELETE = withErrors(
     );
     if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
+    const { matchId, messageId } = await params;
     // Vérifie l'appartenance à la conversation (404/403 sinon).
-    await requireMatchMember(params.matchId, user.id);
+    await requireMatchMember(matchId, user.id);
 
     const msg = await prisma.message.findUnique({
-      where: { id: params.messageId },
+      where: { id: messageId },
       select: { id: true, matchId: true, senderId: true },
     });
     // On n'efface que SON message, et seulement dans CETTE conversation.
-    if (!msg || msg.matchId !== params.matchId || msg.senderId !== user.id) {
+    if (!msg || msg.matchId !== matchId || msg.senderId !== user.id) {
       return jsonError(404, "NOT_FOUND");
     }
 

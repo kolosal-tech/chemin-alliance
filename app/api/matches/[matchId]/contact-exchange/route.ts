@@ -8,9 +8,12 @@ import { validateAction, type Locale } from "@/lib/core-engine";
 
 /** Demande officielle d'échange - gouvernée par le moteur doctrinal. */
 export const POST = withErrors(
-  async (req: Request, { params }: { params: { matchId: string } }) => {
+  async (
+    req: Request,
+    { params }: { params: Promise<{ matchId: string }> },
+  ) => {
     const user = await requireUser();
-    const match = await requireMatchMember(params.matchId, user.id);
+    const match = await requireMatchMember((await params).matchId, user.id);
     const ctx = await buildActionContext(
       match,
       user.id,
@@ -45,9 +48,12 @@ export const POST = withErrors(
 const respondSchema = z.object({ accept: z.boolean() });
 
 export const PATCH = withErrors(
-  async (req: Request, { params }: { params: { matchId: string } }) => {
+  async (
+    req: Request,
+    { params }: { params: Promise<{ matchId: string }> },
+  ) => {
     const user = await requireUser();
-    const match = await requireMatchMember(params.matchId, user.id);
+    const match = await requireMatchMember((await params).matchId, user.id);
     if (match.contactExchange !== "REQUESTED") {
       return jsonError(409, "NO_PENDING_REQUEST");
     }

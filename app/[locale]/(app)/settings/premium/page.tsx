@@ -9,13 +9,14 @@ export const dynamic = "force-dynamic";
 
 const FEATURES = ["discovery", "report", "ai", "calls"] as const;
 
-export default async function PremiumPage({
-  params,
-  searchParams,
-}: {
-  params: { locale: string };
-  searchParams: { status?: string };
-}) {
+export default async function PremiumPage(
+  props: {
+    params: Promise<{ locale: string }>;
+    searchParams: Promise<{ status?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   setRequestLocale(params.locale);
   const user = await requirePageUser(params.locale);
   const t = await getTranslations("premium");

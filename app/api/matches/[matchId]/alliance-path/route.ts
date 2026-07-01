@@ -7,9 +7,12 @@ import { compatibilityTopics } from "@/lib/matching";
 import { getStageQuestions, type Locale } from "@/lib/core-engine";
 
 export const GET = withErrors(
-  async (_req: Request, { params }: { params: { matchId: string } }) => {
+  async (
+    _req: Request,
+    { params }: { params: Promise<{ matchId: string }> },
+  ) => {
     const user = await requireUser();
-    const match = await requireMatchMember(params.matchId, user.id);
+    const match = await requireMatchMember((await params).matchId, user.id);
     const otherId = match.userAId === user.id ? match.userBId : match.userAId;
     const locale = (user.locale ?? "fr") as Locale;
 
@@ -46,7 +49,8 @@ export const GET = withErrors(
       contactExchange: match.contactExchange,
       advanceRequestedByMe: match.advanceRequestedBy === user.id,
       advanceRequestedByOther:
-        match.advanceRequestedBy != null && match.advanceRequestedBy !== user.id,
+        match.advanceRequestedBy != null &&
+        match.advanceRequestedBy !== user.id,
       sinceDays: Math.max(
         0,
         Math.floor((Date.now() - match.updatedAt.getTime()) / 86_400_000),

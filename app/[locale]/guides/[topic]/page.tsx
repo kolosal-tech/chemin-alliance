@@ -23,11 +23,12 @@ export function generateStaticParams() {
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: string; topic: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string; topic: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const topic = getGuideTopic(params.topic);
   if (!topic) return {};
   const t = await getTranslations({
@@ -50,11 +51,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function GuideDetailPage({
-  params,
-}: {
-  params: { locale: string; topic: string };
-}) {
+export default async function GuideDetailPage(
+  props: {
+    params: Promise<{ locale: string; topic: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const topic = getGuideTopic(params.topic);
   const article = guideContent[params.topic];

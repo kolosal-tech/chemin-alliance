@@ -53,6 +53,28 @@ describe("culture - résolution pays → région", () => {
     expect(resolveRegion("")).toBeNull();
     expect(resolveRegion("Atlantide")).toBeNull();
   });
+
+  it("bornes de mot : pas de faux positif sur une sous-chaîne dans un autre mot", () => {
+    // "mali" est un token (Afrique de l'Ouest) mais ne doit pas matcher comme
+    // simple sous-chaîne à l'intérieur d'un autre mot en texte libre.
+    expect(resolveRegion("Je suis malicieuse de nature")).toBeNull();
+    expect(resolveRegion("Un texte malintentionné")).toBeNull();
+    // "inde" (Asie) ne doit pas matcher dans "independant".
+    expect(resolveRegion("Je veux rester indépendante")).toBeNull();
+    // "congo" (Afrique centrale) ne doit pas matcher dans "congolais" seul si
+    // le token exact n'est pas présent comme mot - mais le mot lui-même doit
+    // toujours matcher en tant que token isolé.
+    expect(resolveRegion("Congo")?.key).toBe("afrique_centrale");
+  });
+
+  it("bornes de mot : le token reste détecté comme mot isolé dans une phrase libre", () => {
+    expect(resolveRegion("Je viens du Mali, une belle région")?.key).toBe(
+      "afrique_ouest",
+    );
+    expect(
+      resolveRegion("Originaire de Côte d'Ivoire, arrivée en France")?.key,
+    ).toBe("afrique_ouest");
+  });
 });
 
 describe("culture - guidance pour le prompt", () => {

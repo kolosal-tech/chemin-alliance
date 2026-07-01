@@ -5,9 +5,10 @@ import { requireAdmin } from "@/lib/security/session";
 
 // Retrait d'un accompagnateur humain (admin uniquement).
 export const DELETE = withErrors(
-  async (_req: Request, { params }: { params: { id: string } }) => {
+  async (_req: Request, { params }: { params: Promise<{ id: string }> }) => {
     await requireAdmin();
-    await prisma.coach.delete({ where: { id: params.id } });
+    const { id } = await params;
+    await prisma.coach.delete({ where: { id } });
     return NextResponse.json({ ok: true, deleted: true });
   },
 );

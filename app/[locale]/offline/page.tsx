@@ -1,10 +1,11 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
-export default async function OfflinePage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function OfflinePage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations("common");
   return (

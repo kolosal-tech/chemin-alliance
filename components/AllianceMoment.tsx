@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 
 /**
@@ -19,9 +20,61 @@ export function AllianceMoment({
 }) {
   const t = useTranslations("messaging");
   const initial = (name.trim()[0] ?? "✦").toUpperCase();
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Handlers gardés en ref : l'effet focus/piège ne doit dépendre que du
+  // montage du composant (pas de prop `open`, ce composant est monté/démonté
+  // par l'appelant). Une nouvelle identité de callback à chaque rendu parent
+  // ne doit pas relancer l'effet ni voler le focus.
+  const onContinueRef = useRef(onContinue);
+  onContinueRef.current = onContinue;
+  const onLaterRef = useRef(onLater);
+  onLaterRef.current = onLater;
+
+  useEffect(() => {
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const node = ref.current;
+    const getFocusable = () =>
+      Array.from(
+        node?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
+      );
+    getFocusable()[0]?.focus();
+
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        // Pas de bouton "annuler" garanti (onLater optionnel) : Echap ferme
+        // via onLater si présent, sinon via onContinue (seul chemin de
+        // fermeture toujours disponible).
+        (onLaterRef.current ?? onContinueRef.current)();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const items = getFocusable();
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      previouslyFocused?.focus();
+    };
+  }, []);
 
   return (
     <div
+      ref={ref}
       role="dialog"
       aria-modal="true"
       aria-label={t("momentLabel")}

@@ -4,11 +4,12 @@ export const dynamic = "force-dynamic";
 import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/db";
 
-export default async function CoachesPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function CoachesPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations("coaches");
   const coaches = await prisma.coach.findMany({

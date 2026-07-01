@@ -5,11 +5,12 @@ import { SacredMotif } from "@/components/SacredMotif";
 import type { Locale } from "@/lib/core-engine";
 import { Link } from "@/i18n/navigation";
 
-export default async function RebuildingPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function RebuildingPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   await requirePageUser(params.locale);
   const t = await getTranslations("agents.rebuild");

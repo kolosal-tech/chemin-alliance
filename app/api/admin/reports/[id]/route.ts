@@ -9,13 +9,14 @@ const schema = z.object({
 });
 
 export const PATCH = withErrors(
-  async (req: Request, { params }: { params: { id: string } }) => {
+  async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
     await requireAdmin();
+    const { id } = await params;
     const body = schema.parse(await readJsonLimited(req));
 
     if (body.action === "BAN") {
       const report = await prisma.report.findUnique({
-        where: { id: params.id },
+        where: { id },
         select: { targetUserId: true },
       });
       if (!report) {
@@ -30,7 +31,7 @@ export const PATCH = withErrors(
           data: { deletedAt: new Date() },
         }),
         prisma.report.update({
-          where: { id: params.id },
+          where: { id },
           data: { status: "RESOLVED", resolvedAt: new Date() },
         }),
       ]);
@@ -38,7 +39,7 @@ export const PATCH = withErrors(
     }
 
     await prisma.report.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         status: body.action,
         resolvedAt: body.action === "REVIEWING" ? null : new Date(),

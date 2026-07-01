@@ -23,9 +23,8 @@ export function TrustBadge({
       : t("badge.phone");
   const sz =
     size === "sm" ? "text-[12px] px-1.5 py-0.5" : "text-[13px] px-2 py-0.5";
-  const tone = both
-    ? "bg-sage-surface text-sage-ink dark:bg-sage-darkSurface dark:text-sage-darkInk"
-    : "bg-sage-surface text-sage-ink dark:bg-sage-darkSurface dark:text-sage-darkInk";
+  const tone =
+    "bg-sage-surface text-sage-ink dark:bg-sage-darkSurface dark:text-sage-darkInk";
   return (
     <span
       title={label}

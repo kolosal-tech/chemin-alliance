@@ -14,7 +14,10 @@ export const runtime = "nodejs";
 // avant d'avancer dans une mise en relation. Garde : membre du match + parrain
 // désigné. Email avec lien magique. Non bloquant (advisory).
 export const POST = withErrors(
-  async (req: Request, { params }: { params: { matchId: string } }) => {
+  async (
+    req: Request,
+    { params }: { params: Promise<{ matchId: string }> },
+  ) => {
     const user = await requireUser();
     const rl = await rateLimit(
       `blessing:${user.id}`,
@@ -23,8 +26,9 @@ export const POST = withErrors(
     );
     if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
+    const { matchId } = await params;
     const match = await prisma.match.findUnique({
-      where: { id: params.matchId },
+      where: { id: matchId },
     });
     if (!match || (match.userAId !== user.id && match.userBId !== user.id)) {
       return jsonError(404, "NOT_FOUND");

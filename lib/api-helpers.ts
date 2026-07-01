@@ -42,8 +42,31 @@ export function withErrors<T extends unknown[]>(
   };
 }
 
+/**
+ * Extrait l'IP client pour les cles de rate-limit.
+ *
+ * On prefere "x-real-ip" quand il est present (identique a "x-forwarded-for"
+ * sur Vercel, mais peut differer derriere d'autres proxys/CDN qui le posent
+ * de facon fiable). En repli sur "x-forwarded-for", on prend le DERNIER
+ * segment de la liste : c'est celui ajoute par le proxy de confiance le plus
+ * proche de nous, jamais le premier segment qui peut etre injecte par le
+ * client lui-meme (`X-Forwarded-For: 1.2.3.4` arbitraire dans la requete).
+ * Sur Vercel, ce header est de toute facon reecrit a l'edge (IP externe non
+ * transmise), donc ce choix est surtout une defense en profondeur si l'app
+ * tourne un jour derriere un autre proxy/CDN qui, lui, concatene.
+ */
 export function clientIp(req: Request): string {
-  return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
+  const real = req.headers.get("x-real-ip");
+  if (real) return real.trim();
+  const xff = req.headers.get("x-forwarded-for");
+  if (xff) {
+    const parts = xff
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (parts.length > 0) return parts[parts.length - 1];
+  }
+  return "local";
 }
 
 /** Plafond par defaut des bodies JSON (64 Kio) - large devant tous les caps metier. */

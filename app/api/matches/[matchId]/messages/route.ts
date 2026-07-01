@@ -24,9 +24,12 @@ import type { LlmTurn } from "@/lib/llm/gateway";
 export const runtime = "nodejs";
 
 export const GET = withErrors(
-  async (_req: Request, { params }: { params: { matchId: string } }) => {
+  async (
+    _req: Request,
+    { params }: { params: Promise<{ matchId: string }> },
+  ) => {
     const user = await requireUser();
-    const match = await requireMatchMember(params.matchId, user.id);
+    const match = await requireMatchMember((await params).matchId, user.id);
     const messages = await prisma.message.findMany({
       where: { matchId: match.id },
       orderBy: { createdAt: "asc" },
@@ -62,7 +65,10 @@ const schema = z.object({ content: z.string().min(1).max(4000) });
  *    message SYSTÈME éducatif (texte du moteur, jamais une erreur technique).
  */
 export const POST = withErrors(
-  async (req: Request, { params }: { params: { matchId: string } }) => {
+  async (
+    req: Request,
+    { params }: { params: Promise<{ matchId: string }> },
+  ) => {
     const user = await requireUser();
     if (!user.isVerified) return jsonError(403, "EMAIL_NOT_VERIFIED");
     const rl = await rateLimit(
@@ -72,7 +78,7 @@ export const POST = withErrors(
     );
     if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
-    const match = await requireMatchMember(params.matchId, user.id);
+    const match = await requireMatchMember((await params).matchId, user.id);
     // Blocage (gratuit à vie) : tout échange est coupé dans les deux sens.
     const otherId = match.userAId === user.id ? match.userBId : match.userAId;
     if (await isBlockedBetween(user.id, otherId)) {

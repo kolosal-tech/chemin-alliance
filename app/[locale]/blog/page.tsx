@@ -18,11 +18,12 @@ import {
 /** Articles par page (la pagination ne s'affiche qu'au-delà de ce seuil). */
 const PAGE_SIZE = 6;
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const t = await getTranslations({
     locale: params.locale,
     namespace: "pages.blog",
@@ -38,13 +39,14 @@ export async function generateMetadata({
   };
 }
 
-export default async function BlogIndexPage({
-  params,
-  searchParams,
-}: {
-  params: { locale: string };
-  searchParams?: { cat?: string; page?: string };
-}) {
+export default async function BlogIndexPage(
+  props: {
+    params: Promise<{ locale: string }>;
+    searchParams?: Promise<{ cat?: string; page?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations("pages.blog");
   const format = await getFormatter();

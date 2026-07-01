@@ -20,7 +20,7 @@ export function silenceDetected(
   return days >= GHOSTING_THRESHOLD_DAYS;
 }
 
-export type ExitReason = "no_alignment" | "different_visions" | "need_pause" | "other";
+type ExitReason = "no_alignment" | "different_visions" | "need_pause" | "other";
 
 const SYSTEM = `Tu aides à rédiger un message de clôture de relation, digne et respectueux,
 dans un contexte chrétien de discernement vers le mariage.

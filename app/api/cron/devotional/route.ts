@@ -31,9 +31,13 @@ export const GET = withErrors(async (req: Request) => {
     });
     if (users.length === 0) break;
     total += users.length;
-    for (const u of users) {
-      sent += await sendPushToUser(u.id, devotionPushPayload(u.locale));
-    }
+    const results = await Promise.allSettled(
+      users.map((u) => sendPushToUser(u.id, devotionPushPayload(u.locale))),
+    );
+    sent += results.reduce(
+      (acc, r) => acc + (r.status === "fulfilled" ? r.value : 0),
+      0,
+    );
     if (users.length < PAGE) break;
     skip += PAGE;
   }

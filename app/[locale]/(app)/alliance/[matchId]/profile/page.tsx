@@ -21,11 +21,12 @@ const STEP_STAGE: Record<number, string> = {
   3: "DISCERNMENT",
 };
 
-export default async function MatchProfilePage({
-  params,
-}: {
-  params: { locale: string; matchId: string };
-}) {
+export default async function MatchProfilePage(
+  props: {
+    params: Promise<{ locale: string; matchId: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations();
   const user = await requirePageUser(params.locale);

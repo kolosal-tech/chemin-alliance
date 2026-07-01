@@ -7,11 +7,12 @@ import type { Locale } from "@/lib/core-engine";
 
 export const dynamic = "force-dynamic";
 
-export default async function CurriculumPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function CurriculumPage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const user = await requirePageUser(params.locale);
   const locale = params.locale as Locale;

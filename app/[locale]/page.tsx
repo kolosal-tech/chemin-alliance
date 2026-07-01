@@ -14,11 +14,12 @@ import {
 import { LazyTestimonials } from "@/components/marketing/LazyTestimonials";
 import { InstallPrompt } from "@/components/InstallPrompt";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const t = await getTranslations({ locale: params.locale, namespace: "home" });
   const tc = await getTranslations({
     locale: params.locale,
@@ -40,11 +41,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function HomePage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function HomePage(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations("home.testimonials");
 

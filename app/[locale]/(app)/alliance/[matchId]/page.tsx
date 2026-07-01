@@ -20,11 +20,12 @@ const STAGE_NUM: Record<string, number> = {
   CLOSED: 6,
 };
 
-export default async function AlliancePage({
-  params,
-}: {
-  params: { locale: string; matchId: string };
-}) {
+export default async function AlliancePage(
+  props: {
+    params: Promise<{ locale: string; matchId: string }>;
+  }
+) {
+  const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations();
   const user = await requirePageUser(params.locale);

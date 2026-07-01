@@ -6,6 +6,11 @@ import { requireUser } from "@/lib/security/session";
 import { hashPassword, verifyPassword } from "@/lib/security/password";
 import { passwordField } from "@/lib/security/password-validation";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
+import {
+  SESSION_COOKIE,
+  sessionCookieOptions,
+  signSession,
+} from "@/lib/security/jwt";
 import { audit } from "@/lib/audit";
 
 const schema = z.object({
@@ -13,8 +18,10 @@ const schema = z.object({
   newPassword: passwordField,
 });
 
-// Changer son mot de passe (authentifié). La session reste valide : le nouveau
-// MDP ne sera requis qu'à la prochaine connexion.
+// Changer son mot de passe (authentifié). Révoque TOUTES les sessions existantes
+// (incrément de sessionVersion) : les jetons émis avant ce changement — y compris
+// une session volée — deviennent invalides. La session COURANTE (l'utilisateur qui
+// change volontairement son MDP) est re-signée ci-dessous avec la nouvelle version.
 export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
   const rl = await rateLimit(
@@ -33,10 +40,23 @@ export const POST = withErrors(async (req: Request) => {
   if (await verifyPassword(user.passwordHash, newPassword)) {
     return jsonError(400, "SAME_PASSWORD");
   }
-  await prisma.user.update({
+  const updated = await prisma.user.update({
     where: { id: user.id },
-    data: { passwordHash: await hashPassword(newPassword) },
+    data: {
+      passwordHash: await hashPassword(newPassword),
+      // Révoque les sessions déjà émises (blacklist implicite via getSessionUser).
+      sessionVersion: { increment: 1 },
+    },
+    select: { role: true, sessionVersion: true },
   });
   audit("password.change", user.id);
-  return NextResponse.json({ ok: true });
+  // On garde l'utilisateur courant connecté : nouveau jeton avec la version à jour.
+  const token = await signSession({
+    sub: user.id,
+    role: updated.role,
+    sessionVersion: updated.sessionVersion,
+  });
+  const res = NextResponse.json({ ok: true });
+  res.cookies.set(SESSION_COOKIE, token, sessionCookieOptions());
+  return res;
 });

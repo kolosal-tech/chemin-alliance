@@ -59,13 +59,12 @@ function applyRegime(
   });
 }
 
-export default function LegalPage({
-  params,
-  searchParams,
-}: {
-  params: { locale: string; doc: string };
-  searchParams?: { region?: string };
+export default async function LegalPage(props: {
+  params: Promise<{ locale: string; doc: string }>;
+  searchParams?: Promise<{ region?: string }>;
 }) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   setRequestLocale(params.locale);
   if (
     params.doc !== "terms" &&
@@ -81,7 +80,7 @@ export default function LegalPage({
   const isPrivacy = params.doc === "privacy";
   const regime: Regime = isPrivacy
     ? (asRegime(searchParams?.region) ??
-      regimeFromIso(headers().get("x-vercel-ip-country")))
+      regimeFromIso((await headers()).get("x-vercel-ip-country")))
     : "eu";
   const sections = isPrivacy
     ? applyRegime(doc.sections, regimeOverrides(regime, locale))

@@ -79,6 +79,11 @@ export const DELETE = withErrors(async () => {
     prisma.agentInsight.deleteMany({ where: { userId: user.id } }),
     prisma.report.deleteMany({ where: { reporterId: user.id } }),
     prisma.pushSubscription.deleteMany({ where: { userId: user.id } }),
+    prisma.coachMessage.deleteMany({ where: { userId: user.id } }),
+    prisma.sponsor.deleteMany({ where: { userId: user.id } }),
+    prisma.phoneVerification.deleteMany({ where: { userId: user.id } }),
+    prisma.gameSession.deleteMany({ where: { userId: user.id } }),
+    prisma.blessing.deleteMany({ where: { userId: user.id } }),
     prisma.user.update({
       where: { id: user.id },
       data: {

@@ -14,7 +14,7 @@ import { completeText } from "./llm";
  * GUARDRAIL ABSOLU : violence/abus/coercition -> orientation professionnelle
  * immédiate (DANGER_RE), jamais « restez et priez ».
  */
-export type Season = "ENGAGED" | "MARRIED" | "PARENTS";
+type Season = "ENGAGED" | "MARRIED" | "PARENTS";
 
 export const CHECKIN_QUESTIONS: Record<
   Season,
@@ -228,7 +228,7 @@ export const checkinSchema = z.object({
   ),
 });
 
-export type GuardianGuidance = {
+type GuardianGuidance = {
   danger: boolean;
   rituals: string[]; // rituels déclenchés (déterministe)
   word: string | null; // mot personnalisé LLM
