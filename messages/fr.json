@@ -1242,93 +1242,6 @@
       }
     }
   },
-  "alliance_lab": {
-    "title": "Alliance Lab",
-    "subtitle": "Un terrain d'entrainement, pas une vraie rencontre.",
-    "badge": {
-      "echo": "Echo IA",
-      "trainingPartner": "Partenaire d'entrainement",
-      "disclaimer": "Echo IA : partenaire d'entrainement, pas une personne reelle."
-    },
-    "waiting": {
-      "discerning": "{name} discerne sa reponse...",
-      "synthesis": "Le Pasteur IA prepare votre synthese..."
-    },
-    "arena": {
-      "chooseGame": "Choisis ton jeu",
-      "gameDisc": "Profil DISC",
-      "gameDeep": "Questions Profondes",
-      "choosePartner": "Choisis ton partenaire d'entrainement",
-      "start": "Commencer",
-      "yourTurn": "A toi",
-      "personaTurn": "Au tour de {name}",
-      "placeholder": "Ecris ta reponse...",
-      "send": "Envoyer",
-      "next": "Question suivante",
-      "finish": "Terminer la partie",
-      "progress": "Question {current} sur {total}",
-      "synthesisTitle": "Synthese pastorale",
-      "restart": "Rejouer",
-      "vs": "face a",
-      "sealed": "Reponse scellee"
-    },
-    "disc": {
-      "title": "Profil DISC : 5 situations",
-      "q1": {
-        "prompt": "Une decision importante divise votre couple. Ton premier reflexe ?",
-        "D": "Trancher vite et avancer, quitte a ajuster ensuite.",
-        "I": "En parler ouvertement et convaincre avec enthousiasme.",
-        "S": "Chercher l'apaisement, preserver l'harmonie avant tout.",
-        "C": "Prendre le temps d'analyser les faits avant de choisir."
-      },
-      "q2": {
-        "prompt": "Pour le foyer et le budget, tu te vois plutot...",
-        "D": "Fixer le cap et les objectifs, garder la main.",
-        "I": "Donner de l'elan, motiver, voir grand.",
-        "S": "Assurer la stabilite, un foyer paisible et fiable.",
-        "C": "Tenir les comptes au detail pres, tout planifier."
-      },
-      "q3": {
-        "prompt": "Lors d'un grand rassemblement familial, tu es...",
-        "D": "Celui ou celle qui mene et organise.",
-        "I": "L'ame de la fete, qui relie les gens.",
-        "S": "Le soutien discret, attentif a chacun.",
-        "C": "L'observateur pose, qui veille aux details."
-      },
-      "q4": {
-        "prompt": "Face a une epreuve, ta force est...",
-        "D": "L'action et la determination.",
-        "I": "L'esperance communiquee aux autres.",
-        "S": "La patience et la constance.",
-        "C": "La reflexion et la prudence."
-      },
-      "q5": {
-        "prompt": "Ta vie spirituelle se nourrit surtout par...",
-        "D": "Des objectifs de foi concrets a atteindre.",
-        "I": "La louange vivante et le partage.",
-        "S": "Une priere reguliere et paisible.",
-        "C": "L'etude approfondie de la Parole."
-      }
-    },
-    "deep": {
-      "title": "Questions Profondes : 5 echanges",
-      "q1": {
-        "prompt": "Que signifie pour toi un foyer chretien au quotidien ?"
-      },
-      "q2": {
-        "prompt": "Comment accueilles-tu le pardon apres une blessure ?"
-      },
-      "q3": {
-        "prompt": "Quelle place donnes-tu a la famille elargie et a la communaute ?"
-      },
-      "q4": {
-        "prompt": "Comment vois-tu l'argent et la generosite dans ton foyer ?"
-      },
-      "q5": {
-        "prompt": "Comment nourrir une foi vivante a deux ?"
-      }
-    }
-  },
   "discovery_ecosystem": {
     "companionBadge": "Compagnon IA",
     "badge": {
@@ -1367,6 +1280,62 @@
         "q4": "Comment parler d'argent sans tension dans le couple ?",
         "q5": "Qu'est-ce qu'un rapport sain et chretien a l'argent pour toi ?"
       }
+    }
+  },
+  "couple_game": {
+    "questions": {
+      "q1": "Quel est le repas qui te rappelle le plus ton enfance ?",
+      "q2": "Qu'est-ce qui te fait rire sans que tu puisses vraiment l'expliquer ?",
+      "q3": "Quelle petite habitude chez l'autre te touche le plus ?",
+      "q4": "Quel souvenir de vacances reviens-tu volontiers visiter dans ta mémoire ?",
+      "q5": "Quelle chanson te ramène instantanément à un moment précis de ta vie ?",
+      "q6": "Quelle qualité de tes parents espères-tu avoir reçue en héritage ?",
+      "q7": "À quoi ressemblerait une journée parfaite, du réveil au coucher ?",
+      "q8": "Quel rêve d'enfant portes-tu encore un peu aujourd'hui ?",
+      "q9": "Si on pouvait vivre un an n'importe où dans le monde, où irais-tu ?",
+      "q10": "Quel projet, même lointain, aimerais-tu qu'on construise ensemble un jour ?",
+      "q11": "Qu'est-ce qui te donne le sentiment d'être vraiment chez toi quelque part ?",
+      "q12": "Quel geste tout simple te fait sentir aimé·e au quotidien ?",
+      "q13": "Comment aimes-tu te ressourcer après une journée difficile ?",
+      "q14": "Quel petit rituel du quotidien voudrais-tu qu'on garde toute la vie ?",
+      "q15": "Qu'est-ce qui compte le plus pour toi dans une amitié durable ?",
+      "q16": "Quelle valeur aimerais-tu transmettre en priorité si tu avais des enfants ?",
+      "q17": "Qu'est-ce que le pardon veut dire pour toi, concrètement ?",
+      "q18": "Quel moment simple de ta vie t'a appris quelque chose sur la patience ?",
+      "q19": "Comment sais-tu que Dieu t'a parlé, même discrètement, dans ta semaine ?",
+      "q20": "Quel verset ou quelle prière t'accompagne souvent sans que tu y penses ?",
+      "q21": "Qu'est-ce qui nourrit ta foi le plus simplement, au jour le jour ?",
+      "q22": "Quelle petite victoire récente mérite d'être fêtée ensemble ?",
+      "q23": "Qu'est-ce qui t'aide à te sentir en confiance quand tu partages tes doutes ?",
+      "q24": "Si tu devais décrire notre relation en une image ou une scène, laquelle choisirais-tu ?"
+    },
+    "ui": {
+      "title": "Le jeu des questions",
+      "subtitle": "Une question à la fois, pour mieux se découvrir ou se retrouver.",
+      "play": "Jouer",
+      "newRound": "Nouvelle manche",
+      "modeShared": "Question partagée",
+      "modeGuess": "Devine ma réponse",
+      "modeSharedHint": "Vous répondez chacun·e honnêtement. Les réponses restent secrètes jusqu'à ce que vous ayez tou·te·s les deux répondu.",
+      "modeGuessHint": "L'un·e répond honnêtement, l'autre devine sa réponse. Le résultat dira si vous êtes proches !",
+      "yourAnswer": "Ta réponse",
+      "yourGuess": "Ta suggestion",
+      "answerPlaceholder": "Écris ta réponse ici...",
+      "guessPlaceholder": "Que penses-tu que l'autre a répondu ?",
+      "submit": "Envoyer",
+      "waitingOther": "En attente de l'autre...",
+      "sealed": "Réponse scellée jusqu'à la révélation.",
+      "revealTitle": "Révélation",
+      "youLabel": "Toi",
+      "otherLabel": "L'autre",
+      "guessResultClose": "Vous êtes proches !",
+      "guessResultDifferent": "À rapprocher, une belle occasion d'en parler.",
+      "empty": "Aucune manche pour le moment. Lance le jeu pour commencer.",
+      "aiGenerated": "Question générée par l'IA",
+      "loadError": "Impossible de charger le jeu. Réessaie.",
+      "createError": "Impossible de lancer la manche. Réessaie.",
+      "submitError": "Impossible d'envoyer ta réponse. Réessaie.",
+      "revealedToast": "Révélation ! Découvre les réponses."
     }
   }
 }

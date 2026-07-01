@@ -1242,93 +1242,6 @@
       }
     }
   },
-  "alliance_lab": {
-    "title": "Alliance Lab",
-    "subtitle": "A training ground, not a real encounter.",
-    "badge": {
-      "echo": "AI Echo",
-      "trainingPartner": "Training partner",
-      "disclaimer": "AI Echo: a training partner, not a real person."
-    },
-    "waiting": {
-      "discerning": "{name} is discerning a reply...",
-      "synthesis": "The AI Pastor is preparing your synthesis..."
-    },
-    "arena": {
-      "chooseGame": "Choose your game",
-      "gameDisc": "DISC Profile",
-      "gameDeep": "Deep Questions",
-      "choosePartner": "Choose your training partner",
-      "start": "Start",
-      "yourTurn": "Your turn",
-      "personaTurn": "{name}'s turn",
-      "placeholder": "Write your answer...",
-      "send": "Send",
-      "next": "Next question",
-      "finish": "End the game",
-      "progress": "Question {current} of {total}",
-      "synthesisTitle": "Pastoral synthesis",
-      "restart": "Play again",
-      "vs": "facing",
-      "sealed": "Answer sealed"
-    },
-    "disc": {
-      "title": "DISC Profile: 5 situations",
-      "q1": {
-        "prompt": "An important decision divides your couple. Your first instinct?",
-        "D": "Decide quickly and move on, adjusting later if needed.",
-        "I": "Talk it through openly and persuade with enthusiasm.",
-        "S": "Seek calm and protect harmony above all.",
-        "C": "Take time to weigh the facts before choosing."
-      },
-      "q2": {
-        "prompt": "For the home and the budget, you see yourself rather...",
-        "D": "Setting the direction and goals, staying in charge.",
-        "I": "Bringing momentum, motivating, thinking big.",
-        "S": "Securing stability, a peaceful and reliable home.",
-        "C": "Keeping the accounts to the detail, planning everything."
-      },
-      "q3": {
-        "prompt": "At a large family gathering, you are...",
-        "D": "The one who leads and organizes.",
-        "I": "The life of the party, connecting people.",
-        "S": "The quiet support, attentive to each person.",
-        "C": "The calm observer, watching the details."
-      },
-      "q4": {
-        "prompt": "Facing a trial, your strength is...",
-        "D": "Action and determination.",
-        "I": "Hope shared with others.",
-        "S": "Patience and steadiness.",
-        "C": "Thoughtfulness and prudence."
-      },
-      "q5": {
-        "prompt": "Your spiritual life is nourished above all by...",
-        "D": "Concrete faith goals to reach.",
-        "I": "Living praise and sharing.",
-        "S": "A steady and peaceful prayer life.",
-        "C": "Deep study of the Word."
-      }
-    },
-    "deep": {
-      "title": "Deep Questions: 5 exchanges",
-      "q1": {
-        "prompt": "What does a Christian home mean to you day to day?"
-      },
-      "q2": {
-        "prompt": "How do you welcome forgiveness after a wound?"
-      },
-      "q3": {
-        "prompt": "What place do you give to extended family and community?"
-      },
-      "q4": {
-        "prompt": "How do you see money and generosity in your home?"
-      },
-      "q5": {
-        "prompt": "How do you nurture a living faith together?"
-      }
-    }
-  },
   "discovery_ecosystem": {
     "companionBadge": "AI Companion",
     "badge": {
@@ -1367,6 +1280,62 @@
         "q4": "How can a couple talk about money without tension?",
         "q5": "What is a healthy, Christian relationship with money for you?"
       }
+    }
+  },
+  "couple_game": {
+    "questions": {
+      "q1": "What meal reminds you most of your childhood?",
+      "q2": "What makes you laugh without you ever being able to explain why?",
+      "q3": "What small habit of the other person touches you the most?",
+      "q4": "Which vacation memory do you find yourself revisiting most often?",
+      "q5": "What song instantly brings you back to a specific moment in your life?",
+      "q6": "What quality of your parents do you hope you inherited?",
+      "q7": "What would a perfect day look like, from waking up to falling asleep?",
+      "q8": "What childhood dream do you still carry a little today?",
+      "q9": "If we could live a year anywhere in the world, where would you go?",
+      "q10": "What project, even a distant one, would you love for us to build together someday?",
+      "q11": "What makes you feel truly at home somewhere?",
+      "q12": "What simple gesture makes you feel loved day to day?",
+      "q13": "How do you like to recharge after a hard day?",
+      "q14": "What small everyday ritual would you want us to keep for life?",
+      "q15": "What matters most to you in a lasting friendship?",
+      "q16": "What value would you want to pass on first if you had children?",
+      "q17": "What does forgiveness mean to you, in practical terms?",
+      "q18": "What simple moment in your life taught you something about patience?",
+      "q19": "How do you know God has spoken to you, even quietly, this week?",
+      "q20": "What verse or prayer often stays with you without you even thinking about it?",
+      "q21": "What nourishes your faith most simply, day by day?",
+      "q22": "What recent small win deserves to be celebrated together?",
+      "q23": "What helps you feel safe when you share your doubts?",
+      "q24": "If you had to describe our relationship with one image or scene, what would it be?"
+    },
+    "ui": {
+      "title": "The question game",
+      "subtitle": "One question at a time, to discover or rediscover each other.",
+      "play": "Play",
+      "newRound": "New round",
+      "modeShared": "Shared question",
+      "modeGuess": "Guess my answer",
+      "modeSharedHint": "You each answer honestly. Answers stay sealed until you've both answered.",
+      "modeGuessHint": "One of you answers honestly, the other guesses. The reveal will tell you how close you were!",
+      "yourAnswer": "Your answer",
+      "yourGuess": "Your guess",
+      "answerPlaceholder": "Write your answer here...",
+      "guessPlaceholder": "What do you think the other person answered?",
+      "submit": "Send",
+      "waitingOther": "Waiting for the other person...",
+      "sealed": "Answer sealed until the reveal.",
+      "revealTitle": "Reveal",
+      "youLabel": "You",
+      "otherLabel": "The other",
+      "guessResultClose": "You're a close match!",
+      "guessResultDifferent": "Worth talking about, a good opportunity to connect.",
+      "empty": "No round yet. Start the game to begin.",
+      "aiGenerated": "AI-generated question",
+      "loadError": "Could not load the game. Try again.",
+      "createError": "Could not start the round. Try again.",
+      "submitError": "Could not send your answer. Try again.",
+      "revealedToast": "Reveal! Check out the answers."
     }
   }
 }

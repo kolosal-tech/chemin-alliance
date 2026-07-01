@@ -72,6 +72,32 @@ export function requestAcceptedNotification(
   };
 }
 
+/**
+ * Jeu des questions : la manche vient d'être révélée (l'autre a répondu).
+ * Neutre : ne révèle ni la question ni les réponses, seulement l'invitation à
+ * ouvrir la surface pour voir le résultat. La cible dépend de la surface :
+ * fil du match (`match`) ou espace couple (`couple`).
+ */
+export function gameRevealNotification(
+  rawLocale: string | null | undefined,
+  surface: { kind: "match"; matchId: string } | { kind: "couple" },
+): PushPayload {
+  const l = loc(rawLocale);
+  const body = {
+    fr: "Le résultat du jeu des questions est prêt",
+    en: "Your question game result is ready",
+    es: "El resultado del juego de preguntas está listo",
+    pt: "O resultado do jogo de perguntas está pronto",
+  }[l];
+  const url =
+    surface.kind === "match"
+      ? `/${l}/messages/${surface.matchId}`
+      : `/${l}/couple`;
+  const tag =
+    surface.kind === "match" ? `game-${surface.matchId}` : "game-couple";
+  return { title: APP_NAME, body, url, tag };
+}
+
 /** Rappel du dévotionnel du jour (cron quotidien). Neutre, zéro PII. */
 export function devotionPushPayload(
   rawLocale: string | null | undefined,

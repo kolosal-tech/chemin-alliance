@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
 import {
@@ -15,12 +15,6 @@ export * from "./types";
 
 const RULESETS_DIR = join(process.cwd(), "rulesets");
 const cache = new Map<string, Ruleset>();
-
-export function listRulesetIds(): string[] {
-  return readdirSync(RULESETS_DIR)
-    .filter((f) => f.endsWith(".yaml"))
-    .map((f) => f.replace(/\.yaml$/, ""));
-}
 
 export function loadRuleset(id: string): Ruleset {
   const cached = cache.get(id);
@@ -63,14 +57,6 @@ function message(
 export function getAllowedActions(stage: string, rulesetId: string): string[] {
   const ruleset = loadRuleset(rulesetId);
   return ruleset.stages[normalizeStage(stage)]?.allowed_actions ?? [];
-}
-
-export function getForbiddenActions(
-  stage: string,
-  rulesetId: string,
-): string[] {
-  const ruleset = loadRuleset(rulesetId);
-  return ruleset.stages[normalizeStage(stage)]?.forbidden_actions ?? [];
 }
 
 export function getClergyRoles(rulesetId: string): string[] {

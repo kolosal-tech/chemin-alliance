@@ -169,8 +169,9 @@ model User {
   coupleMessages      CoupleMessage[]      @relation("CoupleMessageSender")
   pushSubscriptions   PushSubscription[]
   sponsor             Sponsor?             @relation("UserSponsor")
-  gameSessions        GameSession[] // Alliance Lab (terrain d'entrainement IA)
   aiCompanionMeta     AiCompanionMeta? // present si kind == AI_COMPANION
+  initiatedGameRounds GameRound[]          @relation("GameRoundInitiator")
+  gameRoundAnswers    GameRoundAnswer[]    @relation("GameRoundAnswerUser")
 
   // Vivier de matching : getSuggestions (lib/matching.ts) filtre TOUJOURS sur
   // deletedAt + season + isVerified ; gender est optionnel (spread conditionnel,
@@ -245,6 +246,7 @@ model CoupleSpace {
 
   agentInsights AgentInsight[]
   messages      CoupleMessage[]
+  gameRounds    GameRound[]
 
   // Requêtes app/api/couple/**/*.ts : findFirst OR(userAId, userBId) + status
   // (route.ts, season/route.ts), et userBId + status (messages/route.ts).
@@ -333,6 +335,7 @@ model Match {
   messages        Message[]
   allianceAnswers AllianceAnswer[]
   agentInsights   AgentInsight[]
+  gameRounds      GameRound[]
 
   @@unique([userAId, userBId])
   @@index([userBId])
@@ -538,77 +541,6 @@ model Blessing {
 }
 
 // =====================================================================
-// ALLIANCE LAB (Vague 1) : terrain d'entrainement IA. Les personas sont
-// des "Echo IA" non-humains, JAMAIS injectes dans le matching reel.
-// =====================================================================
-
-enum GameType {
-  DISC
-  DEEP_QUESTIONS
-}
-
-enum GameSessionStatus {
-  IN_PROGRESS
-  COMPLETED
-  ABANDONED
-}
-
-/// Persona IA d'entrainement (couverture continentale). Non-humain.
-model AiPersona {
-  id             String        @id @default(cuid())
-  slug           String        @unique
-  displayName    String
-  age            Int
-  gender         String
-  vertical       FaithVertical
-  region         String
-  locale         String        @default("fr")
-  systemPrompt   String
-  bio            String?
-  avatarGradient Int           @default(0)
-  active         Boolean       @default(true)
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-
-  sessions GameSession[]
-}
-
-/// Une partie entre un utilisateur et une persona (DISC ou Questions Profondes).
-model GameSession {
-  id          String            @id @default(cuid())
-  userId      String
-  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  personaId   String
-  persona     AiPersona         @relation(fields: [personaId], references: [id], onDelete: Cascade)
-  gameType    GameType
-  status      GameSessionStatus @default(IN_PROGRESS)
-  locale      String            @default("fr")
-  region      String?
-  synthesis   Json?
-  createdAt   DateTime          @default(now())
-  completedAt DateTime?
-
-  answers GameAnswer[]
-
-  @@index([userId, gameType])
-  @@index([personaId])
-}
-
-/// Une reponse a une question, cote utilisateur ET cote persona (Echo IA).
-model GameAnswer {
-  id            String      @id @default(cuid())
-  sessionId     String
-  session       GameSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  questionKey   String
-  questionOrder Int
-  userAnswer    String
-  personaAnswer String?
-  createdAt     DateTime    @default(now())
-
-  @@index([sessionId, questionOrder])
-}
-
-// =====================================================================
 // ECOSYSTEME ORGANIQUE : profils Compagnons IA badges, vivant nativement
 // dans la Decouverte et la messagerie (cold start). Toujours transparents,
 // jamais presentes comme de vraies personnes, jamais un vrai match.
@@ -630,4 +562,64 @@ model AiCompanionMeta {
   active       Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+// ── Jeu de couple/match (construction C, hybride, SANS FIN) ──────────────────
+// Deux modes de manche : SHARED (les deux répondent honnêtement, scellé jusqu'à
+// ce que les deux aient répondu) et GUESS (l'initiateur répond honnêtement,
+// l'autre devine ; verdict simple au reveal). Une manche = un GameRound
+// polymorphe rattaché SOIT à un Match SOIT à un Espace Couple (exactement un des
+// deux non-null). Le contenu chiffré (answerEncrypted/guessEncrypted) n'est
+// JAMAIS renvoyé à l'autre joueur tant que status != REVEALED (filtré côté API).
+enum GameMode {
+  SHARED
+  GUESS
+}
+
+enum GameRoundStatus {
+  OPEN
+  REVEALED
+}
+
+// Une manche du jeu. Surface polymorphe : matchId XOR coupleSpaceId (exactement
+// un non-null). questionKey pointe la banque i18n curatée ; questionText n'est
+// rempli que si la question a été générée par l'IA (banque épuisée). Au reveal,
+// le backend poste un message (Message SYSTEM pour un match, CoupleMessage pour
+// un couple) et stocke son id dans resultMessageId.
+model GameRound {
+  id              String          @id @default(cuid())
+  matchId         String?
+  match           Match?          @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  coupleSpaceId   String?
+  coupleSpace     CoupleSpace?    @relation(fields: [coupleSpaceId], references: [id], onDelete: Cascade)
+  mode            GameMode
+  questionKey     String? // clé i18n de la banque curatée
+  questionText    String? // rempli seulement si question générée par IA
+  initiatorId     String
+  initiator       User            @relation("GameRoundInitiator", fields: [initiatorId], references: [id], onDelete: Cascade)
+  status          GameRoundStatus @default(OPEN)
+  resultMessageId String? // id du Message / CoupleMessage posté au reveal
+  createdAt       DateTime        @default(now())
+  revealedAt      DateTime?
+
+  answers GameRoundAnswer[]
+
+  @@index([matchId, createdAt])
+  @@index([coupleSpaceId, createdAt])
+}
+
+// Réponse d'un joueur pour une manche. answerEncrypted = sa réponse HONNÊTE
+// (chiffrée). guessEncrypted = ce que ce joueur DEVINE de la réponse de l'autre
+// (mode GUESS uniquement, chiffré). Une ligne par (round, user).
+model GameRoundAnswer {
+  id              String    @id @default(cuid())
+  roundId         String
+  round           GameRound @relation(fields: [roundId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User      @relation("GameRoundAnswerUser", fields: [userId], references: [id], onDelete: Cascade)
+  answerEncrypted String? // réponse honnête chiffrée
+  guessEncrypted  String? // devinette chiffrée (mode GUESS)
+  createdAt       DateTime  @default(now())
+
+  @@unique([roundId, userId])
 }

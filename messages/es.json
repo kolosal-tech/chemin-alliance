@@ -1242,93 +1242,6 @@
       }
     }
   },
-  "alliance_lab": {
-    "title": "Alliance Lab",
-    "subtitle": "Un terreno de entrenamiento, no un encuentro real.",
-    "badge": {
-      "echo": "Eco IA",
-      "trainingPartner": "Companero de entrenamiento",
-      "disclaimer": "Eco IA: un companero de entrenamiento, no una persona real."
-    },
-    "waiting": {
-      "discerning": "{name} esta discerniendo su respuesta...",
-      "synthesis": "El Pastor IA esta preparando tu sintesis..."
-    },
-    "arena": {
-      "chooseGame": "Elige tu juego",
-      "gameDisc": "Perfil DISC",
-      "gameDeep": "Preguntas Profundas",
-      "choosePartner": "Elige tu companero de entrenamiento",
-      "start": "Empezar",
-      "yourTurn": "Tu turno",
-      "personaTurn": "Turno de {name}",
-      "placeholder": "Escribe tu respuesta...",
-      "send": "Enviar",
-      "next": "Siguiente pregunta",
-      "finish": "Terminar la partida",
-      "progress": "Pregunta {current} de {total}",
-      "synthesisTitle": "Sintesis pastoral",
-      "restart": "Jugar de nuevo",
-      "vs": "frente a",
-      "sealed": "Respuesta sellada"
-    },
-    "disc": {
-      "title": "Perfil DISC: 5 situaciones",
-      "q1": {
-        "prompt": "Una decision importante divide a la pareja. Tu primer instinto?",
-        "D": "Decidir rapido y avanzar, ajustando despues si hace falta.",
-        "I": "Hablarlo abiertamente y convencer con entusiasmo.",
-        "S": "Buscar la calma y preservar la armonia ante todo.",
-        "C": "Tomarte el tiempo de analizar los hechos antes de elegir."
-      },
-      "q2": {
-        "prompt": "Para el hogar y el presupuesto, te ves mas bien...",
-        "D": "Fijando el rumbo y las metas, llevando el mando.",
-        "I": "Dando impulso, motivando, pensando en grande.",
-        "S": "Asegurando la estabilidad, un hogar tranquilo y fiable.",
-        "C": "Llevando las cuentas al detalle, planificandolo todo."
-      },
-      "q3": {
-        "prompt": "En una gran reunion familiar, eres...",
-        "D": "Quien dirige y organiza.",
-        "I": "El alma de la fiesta, que une a la gente.",
-        "S": "El apoyo discreto, atento a cada persona.",
-        "C": "El observador sereno, atento a los detalles."
-      },
-      "q4": {
-        "prompt": "Ante una prueba, tu fuerza es...",
-        "D": "La accion y la determinacion.",
-        "I": "La esperanza compartida con los demas.",
-        "S": "La paciencia y la constancia.",
-        "C": "La reflexion y la prudencia."
-      },
-      "q5": {
-        "prompt": "Tu vida espiritual se nutre sobre todo de...",
-        "D": "Metas de fe concretas por alcanzar.",
-        "I": "La alabanza viva y el compartir.",
-        "S": "Una oracion constante y serena.",
-        "C": "El estudio profundo de la Palabra."
-      }
-    },
-    "deep": {
-      "title": "Preguntas Profundas: 5 intercambios",
-      "q1": {
-        "prompt": "Que significa para ti un hogar cristiano en el dia a dia?"
-      },
-      "q2": {
-        "prompt": "Como acoges el perdon despues de una herida?"
-      },
-      "q3": {
-        "prompt": "Que lugar das a la familia extensa y a la comunidad?"
-      },
-      "q4": {
-        "prompt": "Como ves el dinero y la generosidad en tu hogar?"
-      },
-      "q5": {
-        "prompt": "Como cultivar una fe viva en pareja?"
-      }
-    }
-  },
   "discovery_ecosystem": {
     "companionBadge": "Companero IA",
     "badge": {
@@ -1367,6 +1280,62 @@
         "q4": "Como hablar de dinero sin tension en la pareja?",
         "q5": "Que es para ti una relacion sana y cristiana con el dinero?"
       }
+    }
+  },
+  "couple_game": {
+    "questions": {
+      "q1": "¿Qué comida te recuerda más a tu infancia?",
+      "q2": "¿Qué te hace reír sin que puedas explicar realmente por qué?",
+      "q3": "¿Qué pequeño hábito del otro te conmueve más?",
+      "q4": "¿Qué recuerdo de vacaciones vuelves a visitar con gusto en tu memoria?",
+      "q5": "¿Qué canción te lleva al instante a un momento concreto de tu vida?",
+      "q6": "¿Qué cualidad de tus padres esperas haber heredado?",
+      "q7": "¿Cómo sería un día perfecto, desde que te despiertas hasta que te acuestas?",
+      "q8": "¿Qué sueño de infancia sigues llevando un poco contigo hoy?",
+      "q9": "Si pudiéramos vivir un año en cualquier lugar del mundo, ¿adónde irías?",
+      "q10": "¿Qué proyecto, aunque sea lejano, te gustaría que construyéramos juntos algún día?",
+      "q11": "¿Qué te hace sentir realmente en casa en algún lugar?",
+      "q12": "¿Qué gesto sencillo te hace sentir amado o amada en el día a día?",
+      "q13": "¿Cómo te gusta recargar energías después de un día difícil?",
+      "q14": "¿Qué pequeño ritual cotidiano te gustaría que conserváramos toda la vida?",
+      "q15": "¿Qué es lo más importante para ti en una amistad duradera?",
+      "q16": "¿Qué valor te gustaría transmitir primero si tuvieras hijos?",
+      "q17": "¿Qué significa el perdón para ti, en la práctica?",
+      "q18": "¿Qué momento sencillo de tu vida te enseñó algo sobre la paciencia?",
+      "q19": "¿Cómo sabes que Dios te ha hablado, aunque sea discretamente, esta semana?",
+      "q20": "¿Qué versículo o qué oración te acompaña a menudo sin que lo pienses?",
+      "q21": "¿Qué nutre tu fe de la forma más sencilla, día a día?",
+      "q22": "¿Qué pequeña victoria reciente merece celebrarse juntos?",
+      "q23": "¿Qué te ayuda a sentirte en confianza cuando compartes tus dudas?",
+      "q24": "Si tuvieras que describir nuestra relación con una imagen o una escena, ¿cuál elegirías?"
+    },
+    "ui": {
+      "title": "El juego de las preguntas",
+      "subtitle": "Una pregunta a la vez, para descubrirse o reencontrarse.",
+      "play": "Jugar",
+      "newRound": "Nueva ronda",
+      "modeShared": "Pregunta compartida",
+      "modeGuess": "Adivina mi respuesta",
+      "modeSharedHint": "Cada uno responde con sinceridad. Las respuestas quedan selladas hasta que ambos hayan respondido.",
+      "modeGuessHint": "Uno responde con sinceridad, el otro adivina. ¡El resultado dirá si estuvieron cerca!",
+      "yourAnswer": "Tu respuesta",
+      "yourGuess": "Tu suposición",
+      "answerPlaceholder": "Escribe tu respuesta aquí...",
+      "guessPlaceholder": "¿Qué crees que respondió el otro?",
+      "submit": "Enviar",
+      "waitingOther": "Esperando al otro...",
+      "sealed": "Respuesta sellada hasta la revelación.",
+      "revealTitle": "Revelación",
+      "youLabel": "Tú",
+      "otherLabel": "El otro",
+      "guessResultClose": "¡Están cerca!",
+      "guessResultDifferent": "Vale la pena hablarlo, una buena ocasión para conectar.",
+      "empty": "Todavía no hay ninguna ronda. Inicia el juego para comenzar.",
+      "aiGenerated": "Pregunta generada por IA",
+      "loadError": "No se pudo cargar el juego. Inténtalo de nuevo.",
+      "createError": "No se pudo iniciar la ronda. Inténtalo de nuevo.",
+      "submitError": "No se pudo enviar tu respuesta. Inténtalo de nuevo.",
+      "revealedToast": "¡Revelación! Descubre las respuestas."
     }
   }
 }

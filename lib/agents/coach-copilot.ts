@@ -9,7 +9,7 @@ import { completeText } from "./llm";
  * N'inclut JAMAIS le contenu des messages privés : étape, thèmes couverts,
  * sujets à approfondir, durée. Visibilité COACH_ONLY, révocable.
  */
-export type CopilotSummaryInput = {
+type CopilotSummaryInput = {
   stage: AllianceStage;
   sinceDays: number;
   coveredThemes: string[];
@@ -22,19 +22,41 @@ export function deterministicSummary(
   locale: Locale,
 ): string {
   const L: Record<Locale, [string, string, string, string, string]> = {
-    fr: ["Étape actuelle", "depuis", "jours", "Thèmes déjà travaillés", "Sujets à approfondir en séance"],
-    en: ["Current stage", "for", "days", "Themes already worked on", "Topics to deepen in session"],
-    es: ["Etapa actual", "desde hace", "días", "Temas ya trabajados", "Temas a profundizar en sesión"],
-    pt: ["Etapa atual", "há", "dias", "Temas já trabalhados", "Temas a aprofundar em sessão"],
+    fr: [
+      "Étape actuelle",
+      "depuis",
+      "jours",
+      "Thèmes déjà travaillés",
+      "Sujets à approfondir en séance",
+    ],
+    en: [
+      "Current stage",
+      "for",
+      "days",
+      "Themes already worked on",
+      "Topics to deepen in session",
+    ],
+    es: [
+      "Etapa actual",
+      "desde hace",
+      "días",
+      "Temas ya trabajados",
+      "Temas a profundizar en sesión",
+    ],
+    pt: [
+      "Etapa atual",
+      "há",
+      "dias",
+      "Temas já trabalhados",
+      "Temas a aprofundar em sessão",
+    ],
   };
   const [stageL, sinceL, daysL, coveredL, openL] = L[locale];
   return [
     `${stageL}: ${input.stage} (${sinceL} ${input.sinceDays} ${daysL})`,
     `${coveredL}: ${input.coveredThemes.join(", ") || "-"}`,
     `${openL}: ${input.openThemes.join(", ") || "-"}`,
-    input.compatibility
-      .map((c) => `• ${c.key}: ${c.status}`)
-      .join("\n"),
+    input.compatibility.map((c) => `• ${c.key}: ${c.status}`).join("\n"),
   ].join("\n\n");
 }
 

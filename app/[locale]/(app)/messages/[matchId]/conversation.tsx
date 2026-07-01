@@ -14,6 +14,7 @@ import { AllianceMoment } from "@/components/AllianceMoment";
 import { AsyncButton } from "@/components/AsyncButton";
 import { Spinner } from "@/components/Spinner";
 import { useToast } from "@/components/Toast";
+import { GamePanel } from "@/components/game/GamePanel";
 import {
   DISCERNMENT_MODULES,
   DISCERNMENT_COUNT,
@@ -38,6 +39,7 @@ export function Conversation({
   stage,
   other,
   isCompanion,
+  currentUserId,
   awaitingMyAccept,
   awaitingOther,
   suggestions,
@@ -53,6 +55,8 @@ export function Conversation({
   };
   /** Le correspondant est un Compagnon IA (badge + reponses automatiques). */
   isCompanion?: boolean;
+  /** id du user courant (auteur du fil) — nécessaire pour le Jeu (rôle initiateur/autre). */
+  currentUserId: string;
   awaitingMyAccept?: boolean;
   awaitingOther?: boolean;
   suggestions: string[];
@@ -482,6 +486,20 @@ export function Conversation({
         </p>
       )}
 
+      {/* Jeu des questions — réservé aux fils HUMAIN-HUMAIN (les Compagnons IA
+          gardent leurs "Outils de discernement" existants ; pas de double
+          surface). Masqué tant que le match est PENDING (personne n'a encore
+          accepté la mise en relation). */}
+      {!isCompanion && !pending && (
+        <div className="mx-3 mt-3">
+          <GamePanel
+            surface="match"
+            apiBase={`/api/matches/${matchId}/game`}
+            currentUserId={currentUserId}
+          />
+        </div>
+      )}
+
       {/* Messages - verre liquide. min-h-0 indispensable : sans lui, flex-1
           ne se contraint pas, la colonne déborde et le bloc de saisie collant
           recouvre les derniers messages. */}
@@ -749,8 +767,19 @@ export function Conversation({
                   aria-label={t("common.cancel")}
                   className="mt-1.5 flex-none text-warmgray dark:text-[#7E7A72]"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
-                    <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden
+                  >
+                    <path
+                      d="M18 6 6 18M6 6l12 12"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 </button>
               </div>
@@ -764,11 +793,22 @@ export function Conversation({
                 {iceBusy ? (
                   <Spinner className="h-3 w-3" />
                 ) : (
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
-                    <path d="M12 3l1.6 4.2L18 9l-4.4 1.8L12 15l-1.6-4.2L6 9l4.4-1.8L12 3Z" fill="currentColor" />
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden
+                  >
+                    <path
+                      d="M12 3l1.6 4.2L18 9l-4.4 1.8L12 15l-1.6-4.2L6 9l4.4-1.8L12 3Z"
+                      fill="currentColor"
+                    />
                   </svg>
                 )}
-                {iceBusy ? t("messaging.icebreakerLoading") : t("messaging.icebreakerBtn")}
+                {iceBusy
+                  ? t("messaging.icebreakerLoading")
+                  : t("messaging.icebreakerBtn")}
               </button>
             )}
           </div>

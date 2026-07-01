@@ -14,6 +14,7 @@ import { AsyncButton } from "@/components/AsyncButton";
 import { Spinner } from "@/components/Spinner";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useToast } from "@/components/Toast";
+import { GamePanel } from "@/components/game/GamePanel";
 
 type CoupleData = {
   space: {
@@ -32,7 +33,7 @@ type CoupleData = {
   programs?: Array<{ id: string; title: string; body: string }>;
 };
 
-export function CoupleHome() {
+export function CoupleHome({ currentUserId }: { currentUserId: string }) {
   const t = useTranslations("couple");
   const ta = useTranslations("agents");
   const tc = useTranslations("common");
@@ -570,6 +571,13 @@ export function CoupleHome() {
           </button>
         </form>
       </section>
+
+      {/* Jeu des questions — à côté de la messagerie privée du couple. */}
+      <GamePanel
+        surface="couple"
+        apiBase="/api/couple/game"
+        currentUserId={currentUserId}
+      />
 
       {/* Check-in du Gardien */}
       <section className="mt-5 rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">

@@ -143,6 +143,115 @@ SELECT indexname FROM pg_indexes WHERE indexname IN (
 );   -- doit renvoyer 7 lignes
 ```
 
+## 0018_drop_alliance_lab (⚠️ MIGRATION DESTRUCTIVE — suppression du module Alliance Lab)
+
+> **AVERTISSEMENT — PERTE DE DONNÉES IRRÉVERSIBLE.** Cette migration `DROP` les
+> tables `AiPersona`, `GameSession`, `GameAnswer` et les types `GameType` /
+> `GameSessionStatus`. **Toutes les parties et personas d'entraînement sont
+> définitivement perdues.** Elle est à appliquer **manuellement et volontairement**,
+> **JAMAIS en routine** ni automatiquement au déploiement. Elle ne touche **pas** aux
+> Compagnons IA (`AiCompanionMeta`), qui sont un module distinct et vivant.
+
+Le module « Alliance Lab » (jeu solo contre personas IA) est retiré du produit.
+Avant d'exécuter : **faire un snapshot Supabase** (cf. Étape 0) — c'est irréversible.
+
+DDL à exécuter (SQL Editor Supabase, idempotent, ordre des dépendances) :
+```sql
+DROP TABLE IF EXISTS "GameAnswer" CASCADE;
+DROP TABLE IF EXISTS "GameSession" CASCADE;
+DROP TABLE IF EXISTS "AiPersona" CASCADE;
+DROP TYPE IF EXISTS "GameSessionStatus";
+DROP TYPE IF EXISTS "GameType";
+```
+Puis marquer appliqué (DATABASE_URL = prod, URL directe 5432) :
+```bash
+npx prisma migrate resolve --applied 0018_drop_alliance_lab
+```
+Vérif (doit renvoyer 0 ligne) :
+```sql
+SELECT tablename FROM pg_tables
+  WHERE tablename IN ('AiPersona', 'GameSession', 'GameAnswer');
+SELECT typname FROM pg_type
+  WHERE typname IN ('GameType', 'GameSessionStatus');
+```
+
+## 0019_couple_game (jeu de couple/match — 2 tables polymorphes, additif pur)
+Deux nouvelles tables (`GameRound`, `GameRoundAnswer`) et deux nouveaux types
+(`GameMode`, `GameRoundStatus`) pour le jeu de couple/match (construction C,
+hybride, SANS FIN). Aucune table/colonne existante modifiée. À appliquer
+AVANT/au déploiement du code : sans elles, les endpoints `/api/matches/[id]/game`
+et `/api/couple/game` renvoient P2021 (table absente). SQL Editor Supabase
+(idempotent) :
+```sql
+DO $$ BEGIN
+  CREATE TYPE "GameMode" AS ENUM ('SHARED', 'GUESS');
+EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+DO $$ BEGIN
+  CREATE TYPE "GameRoundStatus" AS ENUM ('OPEN', 'REVEALED');
+EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+CREATE TABLE IF NOT EXISTS "GameRound" (
+    "id" TEXT NOT NULL,
+    "matchId" TEXT,
+    "coupleSpaceId" TEXT,
+    "mode" "GameMode" NOT NULL,
+    "questionKey" TEXT,
+    "questionText" TEXT,
+    "initiatorId" TEXT NOT NULL,
+    "status" "GameRoundStatus" NOT NULL DEFAULT 'OPEN',
+    "resultMessageId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "revealedAt" TIMESTAMP(3),
+    CONSTRAINT "GameRound_pkey" PRIMARY KEY ("id")
+);
+
+CREATE TABLE IF NOT EXISTS "GameRoundAnswer" (
+    "id" TEXT NOT NULL,
+    "roundId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "answerEncrypted" TEXT,
+    "guessEncrypted" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "GameRoundAnswer_pkey" PRIMARY KEY ("id")
+);
+
+CREATE INDEX IF NOT EXISTS "GameRound_matchId_createdAt_idx" ON "GameRound"("matchId", "createdAt");
+CREATE INDEX IF NOT EXISTS "GameRound_coupleSpaceId_createdAt_idx" ON "GameRound"("coupleSpaceId", "createdAt");
+CREATE UNIQUE INDEX IF NOT EXISTS "GameRoundAnswer_roundId_userId_key" ON "GameRoundAnswer"("roundId", "userId");
+
+DO $$ BEGIN
+  ALTER TABLE "GameRound" ADD CONSTRAINT "GameRound_matchId_fkey" FOREIGN KEY ("matchId") REFERENCES "Match"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+DO $$ BEGIN
+  ALTER TABLE "GameRound" ADD CONSTRAINT "GameRound_coupleSpaceId_fkey" FOREIGN KEY ("coupleSpaceId") REFERENCES "CoupleSpace"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+DO $$ BEGIN
+  ALTER TABLE "GameRound" ADD CONSTRAINT "GameRound_initiatorId_fkey" FOREIGN KEY ("initiatorId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+DO $$ BEGIN
+  ALTER TABLE "GameRoundAnswer" ADD CONSTRAINT "GameRoundAnswer_roundId_fkey" FOREIGN KEY ("roundId") REFERENCES "GameRound"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+DO $$ BEGIN
+  ALTER TABLE "GameRoundAnswer" ADD CONSTRAINT "GameRoundAnswer_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+EXCEPTION WHEN duplicate_object THEN null; END $$;
+```
+Puis marquer appliqué (DATABASE_URL = prod, URL directe 5432) :
+```bash
+npx prisma migrate resolve --applied 0019_couple_game
+```
+Vérif (doit renvoyer 2 lignes pour les tables, 2 pour les types) :
+```sql
+SELECT tablename FROM pg_tables
+  WHERE tablename IN ('GameRound', 'GameRoundAnswer');
+SELECT typname FROM pg_type
+  WHERE typname IN ('GameMode', 'GameRoundStatus');
+```
+
 ## Futures migrations
 Le build Vercel n'exécute pas `migrate deploy`. Tant que ce n'est pas automatisé
 (step release `prisma migrate deploy` sur URL directe), appliquer chaque nouvelle

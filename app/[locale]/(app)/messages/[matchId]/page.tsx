@@ -6,11 +6,9 @@ import { decryptOptional } from "@/lib/security/crypto";
 import { getStageQuestions, type Locale } from "@/lib/core-engine";
 import { Conversation } from "./conversation";
 
-export default async function ConversationPage(
-  props: {
-    params: Promise<{ locale: string; matchId: string }>;
-  }
-) {
+export default async function ConversationPage(props: {
+  params: Promise<{ locale: string; matchId: string }>;
+}) {
   const params = await props.params;
   setRequestLocale(params.locale);
   const user = await requirePageUser(params.locale);
@@ -62,6 +60,7 @@ export default async function ConversationPage(
       stage={match.stage}
       other={other}
       isCompanion={other.kind === "AI_COMPANION"}
+      currentUserId={user.id}
       awaitingMyAccept={awaitingMyAccept}
       awaitingOther={awaitingOther}
       suggestions={suggestions}
