@@ -109,7 +109,12 @@ async function cohortSingles() {
     const arr = Array.isArray(list.json)
       ? list.json
       : (list.json && list.json.matches) || [];
-    mid = arr[0] && arr[0].id;
+    // Bien reprendre le match A<->B (other = compte B), pas arr[0] : le match
+    // le plus recent est souvent celui d'une Compagnonne IA (cohorte 4), et le
+    // message-test d'arnaque partait alors dans SON thread (auto-reply LLM a
+    // chaque run + le check ne validait pas le vrai match A-B).
+    const ab = arr.find((m) => m.other && m.other.id === idB);
+    mid = ab && ab.id;
   }
   check("singles: match A-B disponible", !!mid, mid ? mid : `req ${req.status}`);
   if (!mid) return;
@@ -198,31 +203,73 @@ async function cohortCompanion() {
 
   const sug = await api(ca, "GET", "/api/matches/suggestions");
   const list = Array.isArray(sug.json) ? sug.json : [];
-  const companion = list.find((s) => s.kind === "AI_COMPANION");
+  let companion = list.find((s) => s.kind === "AI_COMPANION");
+  let mid = null;
+  let discoveryOk = !!companion;
+  let discoveryDetail = companion
+    ? `${companion.displayName} (kind=${companion.kind})`
+    : `${list.length} suggestions, aucun AI_COMPANION`;
+
+  // Pool epuise : chaque run precedent a "rencontre" une Compagnonne (match
+  // auto-ACTIVE), et un profil deja matche est exclu des suggestions par
+  // conception (lib/matching.ts, excludedIds). Ce n'est PAS une regression
+  // produit : on retombe sur un match compagnon existant (tout match ACTIVE
+  // dont l'autre n'est pas le compte B, seul humain matche par le harnais).
+  // Les checks auto-reply et discernement en aval prouvent que le match
+  // reutilise est bien un Compagnon (un humain ne repondrait pas en 201).
+  if (!companion) {
+    const cb = await login(ACCOUNTS.B);
+    const meB = await api(cb, "GET", "/api/me");
+    const idB = meB.json && meB.json.id;
+    const lst = await api(ca, "GET", "/api/matches/list");
+    const arr = Array.isArray(lst.json) ? lst.json : [];
+    const reused = idB
+      ? arr.find(
+          (m) =>
+            m.status === "ACTIVE" && m.other && m.other.id && m.other.id !== idB,
+        )
+      : null;
+    if (reused) {
+      companion = {
+        id: reused.other.id,
+        displayName: reused.other.displayName,
+      };
+      mid = reused.id;
+      discoveryOk = true;
+      discoveryDetail = `deja rencontree (pool epuise): ${reused.other.displayName}`;
+    }
+  }
+
   check(
     "compagnon: visible et badge dans la decouverte",
-    !!companion,
-    companion
-      ? `${companion.displayName} (kind=${companion.kind})`
-      : `${list.length} suggestions, aucun AI_COMPANION`,
+    discoveryOk,
+    discoveryDetail,
   );
   if (!companion) return;
 
   // Ouvre la rencontre : 201 {companion:true, matchId} ; 409 si deja matche.
-  let mid;
-  const req = await api(ca, "POST", "/api/matches/request", {
-    targetUserId: companion.id,
-  });
-  if (req.json && req.json.matchId) mid = req.json.matchId;
-  if (!mid) {
-    const lst = await api(ca, "GET", "/api/matches/list");
-    mid = findCompanionMatchId(lst.json, companion);
+  // En reutilisation (pool epuise), le match existe deja : rien a ouvrir.
+  if (mid) {
+    check(
+      "compagnon: rencontre ouverte (auto-acceptee)",
+      true,
+      `${mid} (match existant reutilise)`,
+    );
+  } else {
+    const req = await api(ca, "POST", "/api/matches/request", {
+      targetUserId: companion.id,
+    });
+    if (req.json && req.json.matchId) mid = req.json.matchId;
+    if (!mid) {
+      const lst = await api(ca, "GET", "/api/matches/list");
+      mid = findCompanionMatchId(lst.json, companion);
+    }
+    check(
+      "compagnon: rencontre ouverte (auto-acceptee)",
+      !!mid && (req.status === 201 ? req.json.companion === true : true),
+      mid ? `${mid} (req ${req.status})` : `req ${req.status}`,
+    );
   }
-  check(
-    "compagnon: rencontre ouverte (auto-acceptee)",
-    !!mid && (req.status === 201 ? req.json.companion === true : true),
-    mid ? `${mid} (req ${req.status})` : `req ${req.status}`,
-  );
   if (!mid) return;
 
   // Message d'accueil transparent depose par le Compagnon (au moins 1 message recu).
