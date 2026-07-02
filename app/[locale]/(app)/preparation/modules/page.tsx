@@ -1,17 +1,14 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { requirePageUser } from "@/lib/security/page-auth";
-import { prisma } from "@/lib/db";
 import { Link } from "@/i18n/navigation";
 import { getCurriculum } from "@/lib/curriculum";
 import type { Locale } from "@/lib/core-engine";
 
 export const dynamic = "force-dynamic";
 
-export default async function CurriculumPage(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function CurriculumPage(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
   setRequestLocale(params.locale);
   const user = await requirePageUser(params.locale);
@@ -19,10 +16,9 @@ export default async function CurriculumPage(
   const t = await getTranslations("curriculum");
   const ts = await getTranslations("stages");
 
-  const faith = await prisma.faithProfile.findUnique({
-    where: { userId: user.id },
-    select: { vertical: true },
-  });
+  // requirePageUser fournit déjà faithProfile (chargé par getSessionUser) :
+  // pas besoin de le recharger.
+  const faith = user.faithProfile;
   const modules = getCurriculum(locale, faith?.vertical ?? null);
 
   return (

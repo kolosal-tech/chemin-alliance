@@ -20,6 +20,23 @@ const STAGE_NUM: Record<string, number> = {
   CLOSED: 6,
 };
 
+// Champs des deux membres réellement utilisés ici : displayName (JSX) +
+// tout ce que lit compatibilityTopics (lib/matching.ts). Jamais de champ
+// *Encrypted - confidentialité par défaut.
+const MEMBER_SELECT = {
+  displayName: true,
+  cityApprox: true,
+  faithProfile: { select: { vertical: true } },
+  relationshipProfile: {
+    select: {
+      intentionStatement: true,
+      wantsChildren: true,
+      hasChildren: true,
+      acceptsChildren: true,
+    },
+  },
+} as const;
+
 export default async function AlliancePage(
   props: {
     params: Promise<{ locale: string; matchId: string }>;
@@ -28,15 +45,27 @@ export default async function AlliancePage(
   const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations();
-  const user = await requirePageUser(params.locale);
-  const match = await prisma.match.findUnique({
-    where: { id: params.matchId },
-    include: {
-      userA: { include: { faithProfile: true, relationshipProfile: true } },
-      userB: { include: { faithProfile: true, relationshipProfile: true } },
-      allianceAnswers: true,
-    },
-  });
+  // requirePageUser (session) et le chargement du Match ne dépendent pas l'un
+  // de l'autre (le `where` du Match ne porte que sur matchId) → parallélisés.
+  const [user, match] = await Promise.all([
+    requirePageUser(params.locale),
+    prisma.match.findUnique({
+      where: { id: params.matchId },
+      select: {
+        id: true,
+        userAId: true,
+        userBId: true,
+        stage: true,
+        contactExchange: true,
+        updatedAt: true,
+        allianceAnswers: true,
+        // Champs limités à ceux consommés par compatibilityTopics (lib/matching.ts)
+        // et le JSX de cette page (displayName) - jamais les *Encrypted.
+        userA: { select: MEMBER_SELECT },
+        userB: { select: MEMBER_SELECT },
+      },
+    }),
+  ]);
   if (!match || (match.userAId !== user.id && match.userBId !== user.id)) {
     notFound();
   }

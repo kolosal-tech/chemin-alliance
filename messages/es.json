@@ -416,6 +416,14 @@
     "confirmCta": "Continuar al pago",
     "checkoutError": "No se puede abrir el pago ahora mismo. Inténtalo de nuevo en un momento."
   },
+  "vault": {
+    "lock": "Guardado en la caja fuerte",
+    "unlock": "Visible según el camino",
+    "lockedHint": "Esta información nunca se comparte, sea cual sea la etapa.",
+    "error": "No se pudo guardar. Inténtalo de nuevo.",
+    "lockedToast": "Dato guardado en la caja fuerte",
+    "unlockedToast": "Dato visible de nuevo según el camino"
+  },
   "privacy": {
     "title": "Confidencialidad",
     "antiMalaiseTitle": "Filtro Anti-Incomodidad Local",

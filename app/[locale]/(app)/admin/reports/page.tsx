@@ -6,11 +6,9 @@ import { getSessionUser } from "@/lib/security/session";
 import { Link } from "@/i18n/navigation";
 import { ReportActions } from "./report-actions";
 
-export default async function AdminReportsPage(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function AdminReportsPage(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
   setRequestLocale(params.locale);
   const user = await getSessionUser();
@@ -18,27 +16,38 @@ export default async function AdminReportsPage(
   const t = await getTranslations("admin");
 
   const ta = await getTranslations("agents.watch");
-  const signals = await prisma.agentInsight.findMany({
-    where: { agentId: "watchman", revokedAt: null },
-    orderBy: { createdAt: "desc" },
-    take: 30,
-    include: { user: { select: { displayName: true } } },
-  });
+  // Deux lectures indépendantes → en parallèle plutôt qu'en série.
+  const [signals, reports] = await Promise.all([
+    prisma.agentInsight.findMany({
+      where: { agentId: "watchman", revokedAt: null },
+      orderBy: { createdAt: "desc" },
+      take: 30,
+      include: { user: { select: { displayName: true } } },
+    }),
+    // File de modération bornée à 100 (au lieu d'illimité) : borne raisonnable
+    // pour une page admin, évite de charger tous les signalements ouverts sans
+    // limite si leur nombre venait à grossir.
+    prisma.report.findMany({
+      where: { status: { in: ["OPEN", "REVIEWING"] } },
+      orderBy: { createdAt: "desc" },
+      take: 100,
+      include: {
+        reporter: { select: { displayName: true } },
+        target: { select: { displayName: true } },
+      },
+    }),
+  ]);
   // Sévérité d'abord : les signaux "high" (arnaque/argent) remontent en tête.
   const sevRank: Record<string, number> = { high: 0, medium: 1, none: 2 };
   signals.sort(
     (a, b) =>
-      (sevRank[openInsight<{ severity?: string }>(a.dataJson)?.severity ?? "none"] ?? 2) -
-      (sevRank[openInsight<{ severity?: string }>(b.dataJson)?.severity ?? "none"] ?? 2),
+      (sevRank[
+        openInsight<{ severity?: string }>(a.dataJson)?.severity ?? "none"
+      ] ?? 2) -
+      (sevRank[
+        openInsight<{ severity?: string }>(b.dataJson)?.severity ?? "none"
+      ] ?? 2),
   );
-  const reports = await prisma.report.findMany({
-    where: { status: { in: ["OPEN", "REVIEWING"] } },
-    orderBy: { createdAt: "desc" },
-    include: {
-      reporter: { select: { displayName: true } },
-      target: { select: { displayName: true } },
-    },
-  });
 
   return (
     <main className="px-3 pt-6 safe-top lg:mx-auto lg:max-w-2xl">

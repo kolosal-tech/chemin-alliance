@@ -416,6 +416,14 @@
     "confirmCta": "Continuar para o pagamento",
     "checkoutError": "Não foi possível abrir o pagamento agora. Tenta novamente daqui a pouco."
   },
+  "vault": {
+    "lock": "Trancado no cofre",
+    "unlock": "Visível ao longo do percurso",
+    "lockedHint": "Esta informação nunca é partilhada, seja qual for a etapa.",
+    "error": "Não foi possível guardar. Tente novamente.",
+    "lockedToast": "Dado trancado no cofre",
+    "unlockedToast": "Dado novamente visível ao longo do percurso"
+  },
   "privacy": {
     "title": "Confidencialidade",
     "antiMalaiseTitle": "Filtro Anti-Desconforto Local",

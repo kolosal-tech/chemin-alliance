@@ -21,6 +21,43 @@ const STEP_STAGE: Record<number, string> = {
   3: "DISCERNMENT",
 };
 
+// Champs du membre "other" réellement consommés par buildMatchProfileView
+// (lib/match-profile.ts) + le JSX direct de cette page. On ne sait pas encore,
+// au moment de la requête, si userA ou userB sera "other" (dépend de user.id,
+// chargé en parallèle) : les deux membres reçoivent donc le même select
+// symétrique. Aucun champ *Encrypted non utilisé n'est chargé.
+const MEMBER_SELECT = {
+  id: true,
+  displayName: true,
+  age: true,
+  cityApprox: true,
+  photoBlurhash: true,
+  isVerified: true,
+  phoneVerified: true,
+  sponsor: { select: { relation: true } },
+  faithProfile: {
+    select: {
+      testimonyEncrypted: true,
+      testimonyVisibility: true,
+      localChurchEncrypted: true,
+      localChurchVisibility: true,
+    },
+  },
+  relationshipProfile: {
+    select: {
+      intentionStatement: true,
+      intentionVisibility: true,
+      hasChildren: true,
+      childrenVisibility: true,
+      familyVisionEncrypted: true,
+      familyVisionVisibility: true,
+      interests: true,
+      personality: true,
+      aspirations: true,
+    },
+  },
+} as const;
+
 export default async function MatchProfilePage(
   props: {
     params: Promise<{ locale: string; matchId: string }>;
@@ -29,27 +66,22 @@ export default async function MatchProfilePage(
   const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations();
-  const user = await requirePageUser(params.locale);
-
-  const match = await prisma.match.findUnique({
-    where: { id: params.matchId },
-    include: {
-      userA: {
-        include: {
-          faithProfile: true,
-          relationshipProfile: true,
-          sponsor: { select: { relation: true } },
-        },
+  // requirePageUser (session) et le chargement du Match ne dépendent pas l'un
+  // de l'autre (le `where` du Match ne porte que sur matchId) → parallélisés.
+  const [user, match] = await Promise.all([
+    requirePageUser(params.locale),
+    prisma.match.findUnique({
+      where: { id: params.matchId },
+      select: {
+        id: true,
+        userAId: true,
+        userBId: true,
+        stage: true,
+        userA: { select: MEMBER_SELECT },
+        userB: { select: MEMBER_SELECT },
       },
-      userB: {
-        include: {
-          faithProfile: true,
-          relationshipProfile: true,
-          sponsor: { select: { relation: true } },
-        },
-      },
-    },
-  });
+    }),
+  ]);
   if (!match || (match.userAId !== user.id && match.userBId !== user.id)) {
     notFound();
   }
@@ -60,7 +92,8 @@ export default async function MatchProfilePage(
     { matched: true, stage: match.stage },
   );
 
-  // Ma demande de bénédiction pour CE match (la plus récente).
+  // Ma demande de bénédiction pour CE match (la plus récente) : dépend de
+  // match.id (résultat de la requête ci-dessus) → reste APRÈS, non parallélisé.
   const myBlessing = await prisma.blessing.findFirst({
     where: { userId: user.id, matchId: match.id },
     orderBy: { createdAt: "desc" },

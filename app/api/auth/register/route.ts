@@ -105,6 +105,10 @@ export const POST = withErrors(async (req: Request) => {
     select: { id: true, email: true },
   });
 
-  await sendVerificationEmail(user.email, token, body.locale);
+  // Non bloquant : la latence du fournisseur email ne doit pas retarder la
+  // réponse 201. Rien après ne dépend du résultat de l'envoi.
+  void sendVerificationEmail(user.email, token, body.locale).catch((err) =>
+    console.error("[register] verification email", err),
+  );
   return NextResponse.json({ ok: true, userId: user.id }, { status: 201 });
 });

@@ -4,16 +4,23 @@ export const dynamic = "force-dynamic";
 import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/db";
 
-export default async function CoachesPage(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function CoachesPage(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations("coaches");
+  // Select ciblé : uniquement les champs affichés par le JSX ci-dessous.
   const coaches = await prisma.coach.findMany({
     orderBy: { ratingAvg: "desc" },
+    select: {
+      id: true,
+      displayName: true,
+      certified: true,
+      specialties: true,
+      pricePerSessionEUR: true,
+      ratingAvg: true,
+    },
   });
 
   return (

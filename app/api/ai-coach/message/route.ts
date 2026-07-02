@@ -38,15 +38,31 @@ export const POST = withErrors(async (req: Request) => {
   // plafond pour un abonné actif (un payant ne doit pas être bridé comme un
   // gratuit). Sinon, compteur atomique en DB.
   const isPremium = user.subscriptionStatus === "active";
+  const day = new Date();
+  day.setUTCHours(0, 0, 0, 0);
+
+  // Perf : ces trois lectures/écritures sont indépendantes (aucune ne dépend
+  // du résultat d'une autre) — on les lance en parallèle plutôt qu'en série.
+  const [usage, match, priorRows] = await Promise.all([
+    isPremium
+      ? Promise.resolve(null)
+      : prisma.aiCoachUsage.upsert({
+          where: { userId_day: { userId: user.id, day } },
+          create: { userId: user.id, day, count: 1 },
+          update: { count: { increment: 1 } },
+        }),
+    body.matchId
+      ? prisma.match.findUnique({ where: { id: body.matchId } })
+      : Promise.resolve(null),
+    prisma.coachMessage.findMany({
+      where: { userId: user.id, mode: body.mode, guardrail: false },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+    }),
+  ]);
+
   let remaining: number | null = null;
-  if (!isPremium) {
-    const day = new Date();
-    day.setUTCHours(0, 0, 0, 0);
-    const usage = await prisma.aiCoachUsage.upsert({
-      where: { userId_day: { userId: user.id, day } },
-      create: { userId: user.id, day, count: 1 },
-      update: { count: { increment: 1 } },
-    });
+  if (!isPremium && usage) {
     if (usage.count > DAILY_FREE_LIMIT) {
       return NextResponse.json(
         { quotaExceeded: true, limit: DAILY_FREE_LIMIT },
@@ -57,23 +73,13 @@ export const POST = withErrors(async (req: Request) => {
   }
 
   let stage = null;
-  if (body.matchId) {
-    const match = await prisma.match.findUnique({
-      where: { id: body.matchId },
-    });
-    if (match && (match.userAId === user.id || match.userBId === user.id)) {
-      stage = match.stage;
-    }
+  if (match && (match.userAId === user.id || match.userBId === user.id)) {
+    stage = match.stage;
   }
 
   // Memoire de conversation : on renvoie les derniers tours au modele pour une
   // continuite naturelle (le coach ne "redemarre" plus a chaque message). On
   // exclut les tours garde-fous (redirection coach humain) du contexte renvoye.
-  const priorRows = await prisma.coachMessage.findMany({
-    where: { userId: user.id, mode: body.mode, guardrail: false },
-    orderBy: { createdAt: "desc" },
-    take: 10,
-  });
   const history = priorRows
     .reverse()
     .map((r) => ({

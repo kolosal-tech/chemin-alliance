@@ -416,6 +416,14 @@
     "confirmCta": "Continue to payment",
     "checkoutError": "Can't open checkout right now. Please try again shortly."
   },
+  "vault": {
+    "lock": "Locked in the vault",
+    "unlock": "Visible along the journey",
+    "lockedHint": "This information is never shared, whatever the stage.",
+    "error": "Could not save. Please try again.",
+    "lockedToast": "Locked in the vault",
+    "unlockedToast": "Visible again along the journey"
+  },
   "privacy": {
     "title": "Privacy",
     "antiMalaiseTitle": "Local Comfort Filter",

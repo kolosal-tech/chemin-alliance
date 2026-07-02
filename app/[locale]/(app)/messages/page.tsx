@@ -7,39 +7,41 @@ import { MemberAvatar } from "@/components/MemberAvatar";
 import { silenceDetected } from "@/lib/agents/exit-helper";
 import { unreadByMatch } from "@/lib/unread";
 
-export default async function MessagesListPage(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function MessagesListPage(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations();
   const user = await requirePageUser(params.locale);
-  const matches = await prisma.match.findMany({
-    where: {
-      OR: [{ userAId: user.id }, { userBId: user.id }],
-      status: { not: "CLOSED" },
-    },
-    include: {
-      userA: { select: { id: true, displayName: true, photoBlurhash: true } },
-      userB: { select: { id: true, displayName: true, photoBlurhash: true } },
-      messages: {
-        where: { kind: "USER" },
-        orderBy: { createdAt: "desc" },
-        take: 6,
-        select: { senderId: true, createdAt: true },
+  // Trois lectures indépendantes (liste des matchs, compteur de non-lus,
+  // compteur de conversations closes) : en parallèle plutôt qu'en série.
+  const [matches, unread, closedCount] = await Promise.all([
+    prisma.match.findMany({
+      where: {
+        OR: [{ userAId: user.id }, { userBId: user.id }],
+        status: { not: "CLOSED" },
       },
-    },
-    orderBy: { updatedAt: "desc" },
-  });
-  const unread = await unreadByMatch(user.id);
-  const closedCount = await prisma.match.count({
-    where: {
-      OR: [{ userAId: user.id }, { userBId: user.id }],
-      status: "CLOSED",
-    },
-  });
+      include: {
+        userA: { select: { id: true, displayName: true, photoBlurhash: true } },
+        userB: { select: { id: true, displayName: true, photoBlurhash: true } },
+        messages: {
+          where: { kind: "USER" },
+          orderBy: { createdAt: "desc" },
+          take: 6,
+          select: { senderId: true, createdAt: true },
+        },
+      },
+      orderBy: { updatedAt: "desc" },
+    }),
+    unreadByMatch(user.id),
+    prisma.match.count({
+      where: {
+        OR: [{ userAId: user.id }, { userBId: user.id }],
+        status: "CLOSED",
+      },
+    }),
+  ]);
 
   return (
     <main className="px-3 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
@@ -52,7 +54,7 @@ export default async function MessagesListPage(
             // Espace couple (fiancés/mariés/parents) : la messagerie à deux vit
             // dans l'onglet Couple, pas ici (qui ne liste que les rencontres).
             // On évite la fausse impression de bug en orientant vers le bon endroit.
-            (<div className="rounded-card border border-sand-200 bg-surface p-5 dark:border-anthracite-600 dark:bg-anthracite-800">
+            <div className="rounded-card border border-sand-200 bg-surface p-5 dark:border-anthracite-600 dark:bg-anthracite-800">
               <p className="text-sm text-warmgray dark:text-[#9A958B]">
                 {t("messaging.coupleSpaceBody")}
               </p>
@@ -62,7 +64,7 @@ export default async function MessagesListPage(
               >
                 {t("messaging.coupleSpaceCta")}
               </Link>
-            </div>)
+            </div>
           ) : (
             <p className="rounded-card border border-sand-200 bg-surface p-5 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B]">
               {t("messaging.noConversations")}

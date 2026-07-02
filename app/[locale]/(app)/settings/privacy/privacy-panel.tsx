@@ -12,6 +12,8 @@ import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { Switch } from "@/components/Switch";
 import { LogoutButton } from "@/components/LogoutButton";
 import { useToast } from "@/components/Toast";
+import { VaultToggle } from "@/components/VaultToggle";
+import type { VaultField } from "@/app/actions/vault";
 import type { VisibilityLevel } from "@prisma/client";
 
 const LEVEL_SEGMENTS: Record<string, { filled: number; cls: string }> = {
@@ -73,12 +75,18 @@ export function PrivacyPanel({
     }
   }
 
-  const fields = [
+  // `vault` = champ verrouillable au coffre-fort (photo et legalName ont des
+  // niveaux fixes côté serveur, pas de toggle).
+  const fields: { key: string; label: string; vault?: VaultField }[] = [
     { key: "photo", label: t("privacy.fieldPhoto") },
     { key: "legalName", label: t("privacy.fieldLegalName") },
-    { key: "church", label: t("privacy.fieldChurch") },
-    { key: "testimony", label: t("privacy.fieldTestimony") },
-    { key: "children", label: t("privacy.fieldChildren") },
+    { key: "church", label: t("privacy.fieldChurch"), vault: "church" },
+    {
+      key: "testimony",
+      label: t("privacy.fieldTestimony"),
+      vault: "testimony",
+    },
+    { key: "children", label: t("privacy.fieldChildren"), vault: "children" },
   ];
 
   return (
@@ -274,6 +282,9 @@ export function PrivacyPanel({
                   />
                 ))}
               </div>
+              {f.vault && (
+                <VaultToggle field={f.vault} locked={level === "PRIVATE"} />
+              )}
             </div>
           );
         })}

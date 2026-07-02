@@ -14,9 +14,39 @@ import {
 } from "@/lib/profile-completion";
 import type { MaturityResult, MaturityAxis } from "@/lib/maturity";
 
-type Candidate = User & {
-  faithProfile: FaithProfile | null;
-  relationshipProfile: RelationshipProfile | null;
+// Sous-ensemble structurel de User + relations strictement suffisant pour le
+// pipeline de suggestions (scoring, filtre anti-malaise, JSX de la page
+// Suggestions et de la route API /api/matches/suggestions). Remplace l'ancien
+// `User & {...}` complet : évite de charger passwordHash, tokens et champs
+// *Encrypted jamais consommés ici. Les champs *Encrypted conservés (ex.
+// familyVisionEncrypted) ne servent qu'à un test d'existence (`!!`), jamais
+// exposés en clair.
+type Candidate = {
+  id: string;
+  displayName: string;
+  age: number;
+  isVerified: boolean;
+  photoBlurhash: string | null;
+  photoBlurredByDefault: boolean;
+  kind: User["kind"];
+  cityApprox: string | null;
+  country: string | null;
+  updatedAt: Date;
+  faithProfile: Pick<
+    FaithProfile,
+    "vertical" | "denomination" | "engagementFrequency"
+  > | null;
+  relationshipProfile: Pick<
+    RelationshipProfile,
+    | "intentionStatement"
+    | "maritalStatus"
+    | "hasChildren"
+    | "wantsChildren"
+    | "acceptsChildren"
+    | "familyVisionEncrypted"
+    | "intentionVisibility"
+  > | null;
+  privacySettings: Pick<PrivacySettings, "antiMalaiseEnabled"> | null;
   // P6 : présence d'un Parrain/Marraine (signal de confiance). Optionnel pour
   // rester compatible avec Me (qui n'inclut pas le sponsor).
   sponsor?: { relation: string } | null;
@@ -146,10 +176,39 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
       relationshipProfile: { is: { intentionStatement: { not: null } } },
       ...(oppositeGender ? { gender: oppositeGender } : {}),
     },
-    include: {
-      faithProfile: true,
-      relationshipProfile: true,
-      privacySettings: true,
+    // Select ciblé (au lieu d'un include complet) : évite de remonter
+    // passwordHash, tokens et champs *Encrypted jamais consommés par le
+    // scoring, le filtre anti-malaise ou l'affichage (cf. type Candidate).
+    select: {
+      id: true,
+      displayName: true,
+      age: true,
+      isVerified: true,
+      photoBlurhash: true,
+      photoBlurredByDefault: true,
+      kind: true,
+      cityApprox: true,
+      country: true,
+      updatedAt: true,
+      faithProfile: {
+        select: {
+          vertical: true,
+          denomination: true,
+          engagementFrequency: true,
+        },
+      },
+      relationshipProfile: {
+        select: {
+          intentionStatement: true,
+          maritalStatus: true,
+          hasChildren: true,
+          wantsChildren: true,
+          acceptsChildren: true,
+          familyVisionEncrypted: true,
+          intentionVisibility: true,
+        },
+      },
+      privacySettings: { select: { antiMalaiseEnabled: true } },
       // P6 : signal de confiance "accompagné·e" (a un Parrain/Marraine).
       sponsor: { select: { relation: true } },
     },
@@ -381,11 +440,29 @@ function dailyJitter(meId: string, candId: string, now: number): number {
   return ((h >>> 0) % 1000) / 1000;
 }
 
+// Sous-ensemble structurel de Candidate strictement suffisant pour
+// compatibilityTopics (et childAxis) : permet d'appeler ces fonctions depuis
+// des requêtes Prisma en `select` ciblé (sans les champs *Encrypted), tout en
+// restant compatible avec les appelants qui passent un Candidate/Me complet.
+export type CompatibilityInput = {
+  cityApprox: string | null;
+  faithProfile: { vertical: FaithProfile["vertical"] } | null;
+  relationshipProfile: {
+    intentionStatement: string | null;
+    wantsChildren: boolean | null;
+    hasChildren: boolean;
+    acceptsChildren: boolean | null;
+  } | null;
+};
+
 /**
  * Carte de compatibilité = "sujets à approfondir", jamais un score affiché.
  * Axes 0..1 utilisés par le radar (sobre).
  */
-export function compatibilityTopics(a: Candidate, b: Candidate) {
+export function compatibilityTopics(
+  a: CompatibilityInput,
+  b: CompatibilityInput,
+) {
   const axes = {
     faith: a.faithProfile?.vertical === b.faithProfile?.vertical ? 0.95 : 0.55,
     children: childAxis(a.relationshipProfile, b.relationshipProfile),
@@ -409,8 +486,8 @@ export function compatibilityTopics(a: Candidate, b: Candidate) {
 }
 
 function childAxis(
-  a: RelationshipProfile | null,
-  b: RelationshipProfile | null,
+  a: CompatibilityInput["relationshipProfile"],
+  b: CompatibilityInput["relationshipProfile"],
 ): number {
   if (!a || !b) return 0.5;
   if (a.wantsChildren != null && a.wantsChildren === b.wantsChildren)

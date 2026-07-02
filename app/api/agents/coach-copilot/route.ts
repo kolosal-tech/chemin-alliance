@@ -30,6 +30,13 @@ export const POST = withErrors(async (req: Request) => {
   const match = await requireMatchMember(matchId, user.id);
   const otherId = match.userAId === user.id ? match.userBId : match.userAId;
 
+  // Perf : le findMany ne dépend que de match.id (déjà connu) et non du
+  // résultat du bloc consentement — on le démarre en parallèle et on
+  // l'attend seulement une fois nécessaire, sans changer l'ordre des checks.
+  const answersPromise = prisma.allianceAnswer.findMany({
+    where: { matchId: match.id },
+  });
+
   const mine = await prisma.consent.findFirst({
     where: { userId: user.id, type: "COUPLE_COACH_SHARING", revokedAt: null },
   });
@@ -42,12 +49,14 @@ export const POST = withErrors(async (req: Request) => {
     where: { userId: otherId, type: "COUPLE_COACH_SHARING", revokedAt: null },
   });
   if (!other) {
+    // On attend quand même la promesse déjà lancée pour éviter un rejet non
+    // intercepté ; son résultat est inutilisé sur ce chemin (comportement
+    // observable inchangé).
+    await answersPromise.catch(() => undefined);
     return NextResponse.json({ bothConsented: false, summary: null });
   }
 
-  const answers = await prisma.allianceAnswer.findMany({
-    where: { matchId: match.id },
-  });
+  const answers = await answersPromise;
   const ruleset = loadRuleset(user.rulesetId);
   const themes: Record<string, string> = {};
   for (const st of Object.values(ruleset.stages)) {

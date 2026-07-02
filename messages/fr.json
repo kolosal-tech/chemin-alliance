@@ -416,6 +416,14 @@
     "confirmCta": "Continuer vers le paiement",
     "checkoutError": "Impossible d'ouvrir le paiement pour le moment. Réessaie dans un instant."
   },
+  "vault": {
+    "lock": "Verrouillé au coffre-fort",
+    "unlock": "Visible selon le parcours",
+    "lockedHint": "Cette donnée n'est jamais partagée, quel que soit l'avancement.",
+    "error": "Impossible d'enregistrer. Réessayez.",
+    "lockedToast": "Donnée verrouillée au coffre-fort",
+    "unlockedToast": "Donnée à nouveau visible selon le parcours"
+  },
   "privacy": {
     "title": "Confidentialité",
     "antiMalaiseTitle": "Filtre Anti-Malaise Local",

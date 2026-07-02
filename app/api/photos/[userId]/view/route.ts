@@ -29,19 +29,28 @@ export const GET = withErrors(
     const targetId = (await params).userId;
     const isSelf = targetId === viewer.id;
 
-    // Stade de la relation viewer↔cible (match ACTIF uniquement).
-    const match = isSelf
-      ? null
-      : await prisma.match.findFirst({
-          where: {
-            status: "ACTIVE",
-            OR: [
-              { userAId: viewer.id, userBId: targetId },
-              { userAId: targetId, userBId: viewer.id },
-            ],
-          },
-          select: { stage: true },
-        });
+    // Stade de la relation viewer↔cible (match ACTIF uniquement) et photo de
+    // la cible : deux lectures indépendantes (aucune ne dépend du résultat de
+    // l'autre) → en parallèle. Les checks/early-returns restent dans le même
+    // ordre qu'avant, une fois les deux résolues.
+    const [match, target] = await Promise.all([
+      isSelf
+        ? Promise.resolve(null)
+        : prisma.match.findFirst({
+            where: {
+              status: "ACTIVE",
+              OR: [
+                { userAId: viewer.id, userBId: targetId },
+                { userAId: targetId, userBId: viewer.id },
+              ],
+            },
+            select: { stage: true },
+          }),
+      prisma.user.findUnique({
+        where: { id: targetId },
+        select: { photoUrl: true },
+      }),
+    ]);
 
     const ctx = { matched: !!match, stage: match?.stage ?? null };
     const showFull = isSelf || canSeeField("AFTER_DISCERNMENT", ctx);
@@ -51,10 +60,6 @@ export const GET = withErrors(
     // la photo) : le client garde la silhouette BlurHash.
     if (!showFull && !showBlurred) return jsonError(403, "FORBIDDEN");
 
-    const target = await prisma.user.findUnique({
-      where: { id: targetId },
-      select: { photoUrl: true },
-    });
     if (!target?.photoUrl) return jsonError(404, "NO_PHOTO");
 
     let signed: string | null;
