@@ -37,11 +37,9 @@ const MEMBER_SELECT = {
   },
 } as const;
 
-export default async function AlliancePage(
-  props: {
-    params: Promise<{ locale: string; matchId: string }>;
-  }
-) {
+export default async function AlliancePage(props: {
+  params: Promise<{ locale: string; matchId: string }>;
+}) {
   const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations();
