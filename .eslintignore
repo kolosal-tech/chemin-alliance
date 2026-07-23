@@ -1,0 +1,6 @@
+.next/
+node_modules/
+test-results/
+coverage/
+next-env.d.ts
+public/*.js

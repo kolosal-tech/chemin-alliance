@@ -105,9 +105,9 @@ export function RegisterForm() {
         </h1>
         <form onSubmit={submit} className="mt-7 flex flex-col gap-4">
           <fieldset className="flex flex-col gap-1.5">
-            <span className="lbl text-[12px] text-sand-600 dark:text-[#9A958B]">
+            <legend className="lbl text-[12px] text-sand-600 dark:text-[#9A958B]">
               {t("intentTitle")}
-            </span>
+            </legend>
             <div className="grid grid-cols-1 gap-2">
               <label className={intentCard}>
                 <input
@@ -262,6 +262,7 @@ export function RegisterForm() {
             <input
               name="consentSensitive"
               type="checkbox"
+              required
               className="mt-0.5 h-4 w-4 accent-[#1A2744]"
             />
             <span>{t("consentSensitive")}</span>
@@ -270,11 +271,12 @@ export function RegisterForm() {
             <input
               name="consentTerms"
               type="checkbox"
+              required
               className="mt-0.5 h-4 w-4 accent-[#1A2744]"
             />
             <span>{t("consentTerms")}</span>
           </label>
-          <p className="text-[14px] text-sand-500 dark:text-[#65625B]">
+          <p className="text-[14px] text-sand-500 dark:text-[#9A958B]">
             <Link href="/legal/terms" className="underline">
               {tl("terms")}
             </Link>

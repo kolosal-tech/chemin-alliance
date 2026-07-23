@@ -2,13 +2,15 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { prisma } from "@/lib/db";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { decryptOptional } from "@/lib/security/crypto";
+import {
+  aiCoachConsentDto,
+  getActiveAiCoachConsent,
+} from "@/lib/ai-coach/consent";
 import { CoachChat } from "./coach-chat";
 
-export default async function CoachAiPage(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function CoachAiPage(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
   setRequestLocale(params.locale);
   const user = await requirePageUser(params.locale);
@@ -26,11 +28,14 @@ export default async function CoachAiPage(
     );
   }
   // Historique persistant (déchiffré) - restitué au rechargement de la page.
-  const rows = await prisma.coachMessage.findMany({
-    where: { userId: user.id },
-    orderBy: { createdAt: "asc" },
-    take: 200,
-  });
+  const [rows, activeConsent] = await Promise.all([
+    prisma.coachMessage.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: "asc" },
+      take: 200,
+    }),
+    getActiveAiCoachConsent(user.id),
+  ]);
   const initialEntries = rows.map((r) => ({
     id: r.id,
     role: r.role === "coach" ? ("coach" as const) : ("user" as const),
@@ -40,5 +45,10 @@ export default async function CoachAiPage(
     // Horodatage persistant : restitué au rechargement (comme la messagerie couple).
     createdAt: r.createdAt.toISOString(),
   }));
-  return <CoachChat initialEntries={initialEntries} />;
+  return (
+    <CoachChat
+      initialEntries={initialEntries}
+      initialConsent={aiCoachConsentDto(activeConsent)}
+    />
+  );
 }

@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 import { randomBytes } from "node:crypto";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { withErrors, readJsonLimited } from "@/lib/api-helpers";
-import { requireUser } from "@/lib/security/session";
+import { jsonError, withErrors, readJsonLimited } from "@/lib/api-helpers";
+import { requireAuthenticatedUser, requireUser } from "@/lib/security/session";
 import { hashPassword } from "@/lib/security/password";
 import { decryptOptional } from "@/lib/security/crypto";
-import { photoProxyUrl } from "@/lib/storage";
+import { deleteProfilePhotoObjects, photoProxyUrl } from "@/lib/storage";
 import { SESSION_COOKIE } from "@/lib/security/jwt";
+import { eraseAccountData } from "@/lib/account-deletion";
+import { eraseLinkedStripeCustomer } from "@/lib/payments/stripe-erasure";
 
 export const GET = withErrors(async () => {
   const user = await requireUser();
@@ -62,42 +64,28 @@ export const PATCH = withErrors(async (req: Request) => {
   return NextResponse.json({ ok: true });
 });
 
-// RGPD (art.17) - effacement par ANONYMISATION : on purge toutes les données
-// personnelles et sensibles, mais on conserve le User anonymisé afin de ne PAS
-// détruire le Match et la conversation du partenaire (données de tiers). Le
-// compte devient inutilisable (mot de passe aléatoire, session invalidée) et
-// invisible (exclu du matching, deletedAt posé).
+// RGPD (art.17) - effacement immédiat des données propres au membre et
+// pseudonymisation de la ligne User nécessaire à la préservation des données
+// appartenant à des tiers. Stripe puis le stockage objet sont purgés AVANT la
+// pseudonymisation : aucun succès fictif si une donnée externe reste liée.
 export const DELETE = withErrors(async () => {
-  const user = await requireUser();
+  const user = await requireAuthenticatedUser();
+  try {
+    // Stripe en premier : la suppression du Customer annule les abonnements.
+    // Un retry reste sûr si une étape locale échoue ensuite.
+    await eraseLinkedStripeCustomer(user.stripeCustomerId);
+  } catch (err) {
+    console.error(
+      "[account-deletion] suppression Stripe incomplète",
+      err instanceof Error ? err.name : "UnknownError",
+    );
+    return jsonError(502, "ACCOUNT_DELETION_INCOMPLETE");
+  }
+  if (!(await deleteProfilePhotoObjects(user.photoUrl))) {
+    return jsonError(502, "ACCOUNT_DELETION_INCOMPLETE");
+  }
   const anonHash = await hashPassword(randomBytes(24).toString("hex"));
-  await prisma.$transaction([
-    prisma.faithProfile.deleteMany({ where: { userId: user.id } }),
-    prisma.relationshipProfile.deleteMany({ where: { userId: user.id } }),
-    prisma.consent.deleteMany({ where: { userId: user.id } }),
-    prisma.booking.deleteMany({ where: { userId: user.id } }),
-    prisma.aiCoachUsage.deleteMany({ where: { userId: user.id } }),
-    prisma.agentInsight.deleteMany({ where: { userId: user.id } }),
-    prisma.report.deleteMany({ where: { reporterId: user.id } }),
-    prisma.pushSubscription.deleteMany({ where: { userId: user.id } }),
-    prisma.coachMessage.deleteMany({ where: { userId: user.id } }),
-    prisma.sponsor.deleteMany({ where: { userId: user.id } }),
-    prisma.phoneVerification.deleteMany({ where: { userId: user.id } }),
-    prisma.blessing.deleteMany({ where: { userId: user.id } }),
-    prisma.user.update({
-      where: { id: user.id },
-      data: {
-        deletedAt: new Date(),
-        email: `deleted-${user.id}@deleted.invalid`,
-        displayName: "Membre retiré",
-        passwordHash: anonHash,
-        photoUrl: null,
-        cityApprox: null,
-        country: null,
-        isVerified: false,
-        emailVerifyToken: null,
-      },
-    }),
-  ]);
+  await eraseAccountData(user.id, anonHash);
   const res = NextResponse.json({ ok: true, deleted: true });
   res.cookies.set(SESSION_COOKIE, "", { maxAge: 0, path: "/" });
   return res;

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
+import { blockUserAndCloseMatches } from "@/lib/blocks";
 import { requireUser } from "@/lib/security/session";
 
 // Blocage user-à-user - GRATUIT À VIE, jamais derrière un paywall, aucune
@@ -31,13 +32,7 @@ export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
   const { targetUserId } = schema.parse(await readJsonLimited(req));
   if (targetUserId === user.id) return jsonError(400, "CANNOT_BLOCK_SELF");
-  await prisma.block.upsert({
-    where: {
-      blockerId_blockedId: { blockerId: user.id, blockedId: targetUserId },
-    },
-    create: { blockerId: user.id, blockedId: targetUserId },
-    update: {},
-  });
+  await blockUserAndCloseMatches(user.id, targetUserId);
   return NextResponse.json({ ok: true, blocked: true });
 });
 

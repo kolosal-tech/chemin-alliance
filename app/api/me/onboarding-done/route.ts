@@ -1,9 +1,14 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
+import {
+  jsonError,
+  readOptionalJsonLimited,
+  withErrors,
+} from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
+import { sealInsight } from "@/lib/agent-insight";
 
 export const runtime = "nodejs";
 
@@ -36,7 +41,7 @@ export const POST = withErrors(async (req: Request) => {
   );
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
-  const body = schema.parse(await readJsonLimited(req).catch(() => ({})));
+  const body = schema.parse((await readOptionalJsonLimited(req)) ?? {});
 
   if (!user.onboardingDoneAt) {
     await prisma.user.update({
@@ -45,9 +50,9 @@ export const POST = withErrors(async (req: Request) => {
     });
   }
 
-  // P1 : persiste le bilan de maturité (exploitable par le matching). Stocké en
-  // AgentInsight (dataJson) - zéro migration. On révoque l'ancien pour ne garder
-  // que le plus récent (idempotent sur re-soumission).
+  // P1 : persiste le bilan de maturité (exploitable par le matching). Le JSON
+  // sensible est chiffré dans AgentInsight, comme les autres portraits agents.
+  // On révoque l'ancien pour ne garder que le plus récent.
   if (body.maturity && Object.keys(body.maturity).length > 0) {
     await prisma.agentInsight.updateMany({
       where: { userId: user.id, agentId: "maturity", revokedAt: null },
@@ -58,7 +63,7 @@ export const POST = withErrors(async (req: Request) => {
         userId: user.id,
         agentId: "maturity",
         kind: "BILAN",
-        dataJson: body.maturity,
+        dataJson: sealInsight(body.maturity),
         visibility: "PRIVATE",
       },
     });

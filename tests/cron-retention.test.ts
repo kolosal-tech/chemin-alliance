@@ -8,13 +8,17 @@ import {
 const day = (s: string) => new Date(s + "T12:00:00Z"); // midi UTC
 
 describe("retention - logique pure", () => {
-  it("buildPurgePlan : bornes déterministes (tokens=now, aiCoach=now-90j)", () => {
+  it("buildPurgePlan : bornes déterministes (tokens=now, IA=90j, signalements=365j)", () => {
     const now = day("2026-06-18");
     const p = buildPurgePlan(now);
     expect(p.phoneBefore.getTime()).toBe(now.getTime());
     expect(p.tokenBefore.getTime()).toBe(now.getTime());
     expect(p.aiCoachBefore.getTime()).toBe(
       now.getTime() - 90 * 24 * 60 * 60 * 1000,
+    );
+    expect(p.aiCoachTransferBefore.getTime()).toBe(now.getTime());
+    expect(p.reportBefore.getTime()).toBe(
+      now.getTime() - 365 * 24 * 60 * 60 * 1000,
     );
   });
 

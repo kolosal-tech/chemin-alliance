@@ -16,10 +16,22 @@ type Entry = {
   createdAt?: string;
 };
 
+type ConsentState = {
+  active: boolean;
+  type: "AI_COACH_INTERACTION";
+  version: string;
+  purpose: string;
+  recipient: string;
+  recipientSummary: string;
+  grantedAt: string | null;
+};
+
 export function CoachChat({
   initialEntries = [],
+  initialConsent,
 }: {
   initialEntries?: Entry[];
+  initialConsent: ConsentState;
 }) {
   const t = useTranslations();
   const locale = useLocale();
@@ -31,6 +43,13 @@ export function CoachChat({
   const [remaining, setRemaining] = useState<number | null>(null);
   const [mode, setMode] = useState<"individual" | "couple">("individual");
   const [error, setError] = useState<string | null>(null);
+  const [consent, setConsent] = useState<ConsentState>(initialConsent);
+  const [consentBusy, setConsentBusy] = useState(false);
+  const [consentError, setConsentError] = useState<string | null>(null);
+  const recipientSummary =
+    consent.recipientSummary === "LOCAL_ONLY"
+      ? t("aiCoach.consentRecipientLocal")
+      : consent.recipientSummary;
   // Dernière question dont l'envoi a échoué : permet « Réessayer » sans
   // ré-ajouter une bulle utilisateur en double.
   const [lastQ, setLastQ] = useState<string | null>(null);
@@ -39,8 +58,12 @@ export function CoachChat({
   // commence à répondre : la dernière bulle reste toujours visible.
   const bottomRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
+    // Sans consentement actif, la carte d'information doit rester le premier
+    // contenu visible, même lorsqu'un historique existe déjà. L'auto-scroll
+    // ne reprend qu'après un accord explicite.
+    if (!consent.active) return;
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [entries, busy]);
+  }, [entries, busy, consent.active]);
 
   // Horodatage minimal HH:MM dans la locale de l'utilisateur.
   const fmtTime = (iso?: string) => {
@@ -51,7 +74,51 @@ export function CoachChat({
       : d.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
   };
 
-  async function send(q: string) {
+  async function changeConsent(action: "grant" | "revoke") {
+    setConsentBusy(true);
+    setConsentError(null);
+    try {
+      const res = await fetch("/api/me/consents/ai-coach", {
+        method: action === "grant" ? "POST" : "DELETE",
+        // Corps volontairement absent : le clic de consentement n'envoie
+        // aucune question, aucun historique et aucune donnée de profil.
+        // Un retrait peut attendre la fin d'un transfert déjà engagé afin que
+        // DELETE 200 soit une vraie barrière linéarisable côté serveur.
+        signal: AbortSignal.timeout(action === "revoke" ? 45_000 : 15_000),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data) {
+        setConsentError(t("aiCoach.consentActionError"));
+        return;
+      }
+      if (action === "grant" && data.active === true) {
+        setConsent(data as ConsentState);
+        setError(null);
+        setLastQ(null);
+      } else if (action === "revoke") {
+        setConsent((current) => ({
+          ...current,
+          active: false,
+          grantedAt: null,
+        }));
+        setDraft("");
+        setLastQ(null);
+        setError(null);
+      } else {
+        setConsentError(t("aiCoach.consentActionError"));
+      }
+    } catch {
+      setConsentError(t("aiCoach.consentActionError"));
+    } finally {
+      setConsentBusy(false);
+    }
+  }
+
+  async function send(q: string, optimisticId?: string) {
+    if (!consent.active) {
+      setError(t("aiCoach.consentRequired"));
+      return;
+    }
     setError(null);
     setLastQ(q);
     setBusy(true);
@@ -65,6 +132,23 @@ export function CoachChat({
         signal: AbortSignal.timeout(30_000),
       });
       const data = await res.json().catch(() => null);
+      if (res.status === 403 && data?.error === "AI_COACH_CONSENT_REQUIRED") {
+        // L'état du serveur prime toujours sur l'UI (autre onglet, retrait ou
+        // changement de version entre le rendu et l'envoi).
+        setConsent((current) => ({
+          ...current,
+          active: false,
+          grantedAt: null,
+        }));
+        if (optimisticId) {
+          setEntries((current) =>
+            current.filter((entry) => entry.id !== optimisticId),
+          );
+        }
+        setLastQ(null);
+        setError(t("aiCoach.consentRequired"));
+        return;
+      }
       if (!res.ok || !data) {
         setError(t("aiCoach.error"));
         return;
@@ -101,11 +185,12 @@ export function CoachChat({
   function ask(e: React.FormEvent) {
     e.preventDefault();
     const q = draft.trim();
-    if (!q || busy) return;
+    if (!q || busy || !consent.active) return;
+    const optimisticId = crypto.randomUUID();
     setEntries((s) => [
       ...s,
       {
-        id: crypto.randomUUID(),
+        id: optimisticId,
         role: "user",
         text: q,
         mode,
@@ -113,7 +198,7 @@ export function CoachChat({
       },
     ]);
     setDraft("");
-    void send(q);
+    void send(q, optimisticId);
   }
 
   return (
@@ -139,7 +224,7 @@ export function CoachChat({
             <div className="font-display text-lg text-night dark:text-[#ECE7DD]">
               {t("aiCoach.title")}
             </div>
-            <div className="text-[13px] text-sand-600 dark:text-[#7E7A72]">
+            <div className="text-[13px] text-sand-600 dark:text-[#8F8A80]">
               {t("aiCoach.subtitle")}
             </div>
           </div>
@@ -156,7 +241,7 @@ export function CoachChat({
             className={`flex-1 rounded-[8px] py-1.5 text-[15px] font-semibold ${
               mode === "individual"
                 ? "bg-surface text-night shadow-sm dark:bg-anthracite-600 dark:text-[#ECE7DD]"
-                : "text-sand-600 dark:text-[#7E7A72]"
+                : "text-sand-600 dark:text-[#8F8A80]"
             }`}
           >
             {t("aiCoach.modeIndividual")}
@@ -169,14 +254,129 @@ export function CoachChat({
             className={`flex-1 rounded-[8px] py-1.5 text-[15px] font-medium ${
               mode === "couple"
                 ? "bg-surface text-night shadow-sm dark:bg-anthracite-600 dark:text-[#ECE7DD]"
-                : "text-sand-600 dark:text-[#7E7A72]"
+                : "text-sand-600 dark:text-[#8F8A80]"
             }`}
           >
             {t("aiCoach.modeCouple")}{" "}
             <span className="text-[11px]">· {t("aiCoach.modeCoupleHint")}</span>
           </button>
         </div>
+        {mode === "couple" && (
+          <p
+            role="note"
+            className="mt-2 text-[12px] leading-snug text-sand-600 dark:text-[#9A958B]"
+          >
+            {t("aiCoach.modeCouplePrivacy")}
+          </p>
+        )}
       </header>
+
+      {/* Le consentement reste hors du journal live : son texte statique n'est
+          pas annoncé comme un nouveau message. Sans accord, il devient la zone
+          prioritaire et scrollable du petit écran, sans être masqué par
+          l'historique. */}
+      <div
+        className={`z-20 px-3 pt-3 ${
+          consent.active
+            ? "max-h-[42vh] flex-none overflow-y-auto supports-[height:100dvh]:max-h-[42dvh]"
+            : "max-h-[55vh] flex-none overflow-y-auto supports-[height:100dvh]:max-h-[55dvh]"
+        }`}
+      >
+        <section
+          data-testid="ai-coach-consent-card"
+          aria-labelledby="ai-coach-consent-title"
+          className="rounded-[13px] border border-gold/40 bg-[#FBF6E9] px-3.5 py-3.5 text-night dark:border-gold/30 dark:bg-anthracite-800 dark:text-[#ECE7DD]"
+        >
+          <div className="flex flex-col items-start gap-2 sm:flex-row sm:justify-between sm:gap-3">
+            <div>
+              <h2
+                id="ai-coach-consent-title"
+                className="text-[16px] font-semibold"
+              >
+                {t("aiCoach.consentTitle")}
+              </h2>
+              <p className="mt-1 text-[13px] font-medium text-sand-600 dark:text-[#B7B1A7]">
+                {consent.active
+                  ? t("aiCoach.consentActive")
+                  : t("aiCoach.consentInactive")}
+              </p>
+            </div>
+            <span
+              data-testid="ai-coach-consent-version"
+              className="max-w-full break-all rounded-lg border border-current/20 px-2 py-1 text-[11px] font-semibold leading-relaxed"
+            >
+              {t("aiCoach.consentVersion", { version: consent.version })}
+            </span>
+          </div>
+
+          {consent.active ? (
+            <details className="mt-2 text-[13px]">
+              <summary className="cursor-pointer font-semibold underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+                {t("aiCoach.consentDetails")}
+              </summary>
+              <ul className="mt-2 list-disc space-y-1.5 pl-5 leading-relaxed text-[#3E392F] dark:text-[#CFCAC0]">
+                <li>{t("aiCoach.consentPurpose")}</li>
+                <li>{t("aiCoach.consentData")}</li>
+                <li className="break-words [overflow-wrap:anywhere]">
+                  {t("aiCoach.consentRecipient", {
+                    recipients: recipientSummary,
+                  })}
+                </li>
+                <li>{t("aiCoach.consentNoDataOnGrant")}</li>
+                <li>{t("aiCoach.consentWithdrawal")}</li>
+              </ul>
+            </details>
+          ) : (
+            <ul className="mt-3 list-disc space-y-1.5 pl-5 text-[13px] leading-relaxed text-[#3E392F] dark:text-[#CFCAC0]">
+              <li>{t("aiCoach.consentPurpose")}</li>
+              <li>{t("aiCoach.consentData")}</li>
+              <li className="break-words [overflow-wrap:anywhere]">
+                {t("aiCoach.consentRecipient", {
+                  recipients: recipientSummary,
+                })}
+              </li>
+              <li>{t("aiCoach.consentNoDataOnGrant")}</li>
+              <li>{t("aiCoach.consentWithdrawal")}</li>
+            </ul>
+          )}
+
+          {consent.active && consent.grantedAt && (
+            <p className="mt-2 text-[12px] text-sand-600 dark:text-[#A7A197]">
+              {t("aiCoach.consentGrantedAt", {
+                date: new Date(consent.grantedAt).toLocaleDateString(locale),
+              })}
+            </p>
+          )}
+          <button
+            type="button"
+            data-testid={
+              consent.active
+                ? "ai-coach-consent-revoke"
+                : "ai-coach-consent-grant"
+            }
+            disabled={consentBusy}
+            onClick={() =>
+              void changeConsent(consent.active ? "revoke" : "grant")
+            }
+            className={`mt-3 w-full rounded-[10px] px-3 py-2.5 text-[15px] font-semibold disabled:opacity-50 ${
+              consent.active
+                ? "border border-danger/40 bg-transparent text-danger dark:text-[#E59B91]"
+                : "bg-night text-cream dark:bg-gold-light dark:text-anthracite-900"
+            }`}
+          >
+            {consentBusy
+              ? t("aiCoach.consentSaving")
+              : consent.active
+                ? t("aiCoach.consentRevoke")
+                : t("aiCoach.consentGrant")}
+          </button>
+          {consentError && (
+            <p role="alert" className="mt-2 text-[13px] text-danger">
+              {consentError}
+            </p>
+          )}
+        </section>
+      </div>
 
       {/* min-h-0 contraint le scroller ; [&>*]:shrink-0 empêche les bulles de
           se comprimer (sinon, contenu > hauteur => flex-shrink écrase et coupe
@@ -236,7 +436,7 @@ export function CoachChat({
                   </p>
                 </div>
                 {fmtTime(e.createdAt) && (
-                  <span className="mt-1 px-1 text-right text-[12px] text-sand-500 dark:text-[#65625B]">
+                  <span className="mt-1 px-1 text-right text-[12px] text-sand-500 dark:text-[#9A958B]">
                     {fmtTime(e.createdAt)}
                   </span>
                 )}
@@ -306,7 +506,7 @@ export function CoachChat({
                   </div>
                 </div>
                 {fmtTime(e.createdAt) && (
-                  <span className="ml-[36px] mt-1 px-1 text-[12px] text-sand-500 dark:text-[#65625B]">
+                  <span className="ml-[36px] mt-1 px-1 text-[12px] text-sand-500 dark:text-[#9A958B]">
                     {fmtTime(e.createdAt)}
                   </span>
                 )}
@@ -352,7 +552,7 @@ export function CoachChat({
             <p className="text-[15px] leading-normal text-danger dark:text-[#E59B91]">
               {error}
             </p>
-            {lastQ && (
+            {lastQ && consent.active && (
               <button
                 type="button"
                 onClick={() => void send(lastQ)}
@@ -377,7 +577,7 @@ export function CoachChat({
           remaining <= 2 && (
             <p
               role="status"
-              className="text-center text-[14px] text-sand-600 dark:text-[#7E7A72]"
+              className="text-center text-[14px] text-sand-600 dark:text-[#8F8A80]"
             >
               {t("aiCoach.quotaRemaining", { remaining })}
             </p>
@@ -387,21 +587,32 @@ export function CoachChat({
         <div ref={bottomRef} aria-hidden />
       </div>
 
-      <div className="glass z-30 border-t border-sand-200/50 px-3.5 pb-[calc(env(safe-area-inset-bottom)+88px)] lg:pb-4 pt-3 dark:border-anthracite-600/50">
+      <div className="glass z-30 flex-none border-t border-sand-200/50 px-3.5 pb-[calc(env(safe-area-inset-bottom)+88px)] pt-3 dark:border-anthracite-600/50 lg:pb-4">
         <form
           onSubmit={ask}
           className="glass flex items-center gap-2 rounded-[24px] border border-sand-300 py-1.5 pl-4 pr-1.5 dark:border-anthracite-600 dark:bg-anthracite-800/80"
         >
           <input
+            data-testid="ai-coach-input"
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
-            placeholder={t("aiCoach.placeholder")}
-            aria-label={t("aiCoach.placeholder")}
-            className="flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-sand-500 dark:text-[#ECE7DD] dark:placeholder:text-[#65625B]"
+            placeholder={
+              consent.active
+                ? t("aiCoach.placeholder")
+                : t("aiCoach.consentInputDisabled")
+            }
+            aria-label={
+              consent.active
+                ? t("aiCoach.placeholder")
+                : t("aiCoach.consentInputDisabled")
+            }
+            disabled={!consent.active || consentBusy}
+            className="flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-sand-500 dark:text-[#ECE7DD] dark:placeholder:text-[#9A958B]"
           />
           <button
             type="submit"
-            disabled={busy || !draft.trim()}
+            data-testid="ai-coach-send"
+            disabled={busy || consentBusy || !consent.active || !draft.trim()}
             aria-label={t("messaging.send")}
             className="flex h-10 w-10 items-center justify-center rounded-full bg-navy disabled:opacity-50 dark:bg-gold-light"
           >

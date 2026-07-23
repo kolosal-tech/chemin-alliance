@@ -5,11 +5,9 @@ import { MarketingHeader } from "@/components/marketing/MarketingHeader";
 import { MarketingFooter } from "@/components/marketing/Sections";
 import { SacredMotif } from "@/components/SacredMotif";
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
   const params = await props.params;
   const t = await getTranslations({
     locale: params.locale,
@@ -29,11 +27,9 @@ const partners: { id: string; name: string }[] = [
   { id: "veillee", name: "Veillée" },
 ];
 
-export default async function MissionPage(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function MissionPage(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations("pages.mission");
@@ -73,7 +69,7 @@ export default async function MissionPage(
         {/* Partenaires placeholders */}
         <section className="border-y border-sand-300/60 bg-cream/60 dark:border-anthracite-700 dark:bg-anthracite-850/60">
           <div className="mx-auto max-w-5xl px-5 py-12 text-center sm:px-6">
-            <p className="lbl text-[12px] text-sand-600 dark:text-[#7E7A72]">
+            <p className="lbl text-[12px] text-sand-600 dark:text-[#8F8A80]">
               {t("partnersKicker")}
             </p>
             <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-12 gap-y-4">

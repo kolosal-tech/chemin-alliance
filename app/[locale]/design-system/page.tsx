@@ -10,11 +10,9 @@ import { ReviewsSection } from "@/components/product/ReviewsSection";
 import { SafetyBlock } from "@/components/product/SafetyBlock";
 import { FiltersDrawer } from "@/components/product/FiltersDrawer";
 
-export default async function DesignSystemPage(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function DesignSystemPage(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations("designSystem");
@@ -62,7 +60,7 @@ export default async function DesignSystemPage(
             </button>
             <button
               disabled
-              className="cursor-not-allowed rounded-btn bg-sand-400/60 px-5 py-3 text-sm font-semibold text-sand-500 dark:bg-anthracite-600 dark:text-[#65625B]"
+              className="cursor-not-allowed rounded-btn bg-sand-400/60 px-5 py-3 text-sm font-semibold text-sand-500 dark:bg-anthracite-600 dark:text-[#9A958B]"
             >
               Disabled
             </button>
@@ -124,7 +122,7 @@ export default async function DesignSystemPage(
         {/* Cadenas */}
         <section className={card}>
           <span className={label}>{t("locks")}</span>
-          <p className="mb-4 text-xs text-sand-500 dark:text-[#65625B]">
+          <p className="mb-4 text-xs text-sand-500 dark:text-[#9A958B]">
             {tv("explain")}
           </p>
           <div className="flex flex-wrap gap-2.5">

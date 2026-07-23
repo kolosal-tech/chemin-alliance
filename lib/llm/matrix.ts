@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { safeErrorDetails } from "@/lib/security/safe-error";
 import { env } from "@/lib/env";
 
 // Matrice de modèles par ÉTAPE du parcours × PALIER d'abonnement, via OpenRouter.
@@ -57,11 +58,24 @@ const DOC_MATRIX: Matrix = {
 // Record<Step, Record<Tier, string[]>>, avec des slugs de modèles non vides.
 const stepEnum = z.enum(["discovery", "dialogue", "accompaniment", "safety"]);
 const tierEnum = z.enum(["standard", "optimal", "premium"]);
+const openRouterModelSlugSchema = z
+  .string()
+  .trim()
+  .min(3)
+  .max(160)
+  .regex(
+    /^(?!sk-|key-|secret-|token-)[a-z0-9][a-z0-9._-]{0,47}\/[a-z0-9][a-z0-9._:+-]{0,110}$/,
+    "slug OpenRouter attendu sous la forme publisher/model",
+  );
+
+export function isValidOpenRouterModelSlug(value: string): boolean {
+  return openRouterModelSlugSchema.safeParse(value).success;
+}
 // partialRecord (et non record) : une surcharge peut ne fournir qu'un
 // sous-ensemble des étapes/paliers - le reste retombe sur DOC_MATRIX/proven.
 const matrixSchema = z.partialRecord(
   stepEnum,
-  z.partialRecord(tierEnum, z.array(z.string().min(1))),
+  z.partialRecord(tierEnum, z.array(openRouterModelSlugSchema)),
 );
 
 function loadMatrix(): Matrix {
@@ -73,7 +87,7 @@ function loadMatrix(): Matrix {
   } catch (err) {
     console.error(
       "[llm/matrix] LLM_MATRIX_JSON n'est pas un JSON valide, repli sur la matrice par défaut.",
-      err,
+      safeErrorDetails(err),
     );
     return DOC_MATRIX;
   }
@@ -87,10 +101,26 @@ function loadMatrix(): Matrix {
     );
     return DOC_MATRIX;
   }
-  return result.data as Matrix;
+  const override = result.data;
+  return {
+    discovery: { ...DOC_MATRIX.discovery, ...override.discovery },
+    dialogue: { ...DOC_MATRIX.dialogue, ...override.dialogue },
+    accompaniment: {
+      ...DOC_MATRIX.accompaniment,
+      ...override.accompaniment,
+    },
+    safety: { ...DOC_MATRIX.safety, ...override.safety },
+  };
 }
 
 const MATRIX = loadMatrix();
+const ALL_STEPS: readonly Step[] = [
+  "discovery",
+  "dialogue",
+  "accompaniment",
+  "safety",
+];
+const ALL_TIERS: readonly Tier[] = ["standard", "optimal", "premium"];
 
 /**
  * Liste ordonnée des modèles à essayer pour (étape, palier).
@@ -98,11 +128,28 @@ const MATRIX = loadMatrix();
  * réponse même si un modèle du document est indisponible chez OpenRouter.
  */
 export function resolveModels(step: Step, tier: Tier): string[] {
-  const proven = env.OPENROUTER_MODEL;
+  const provenResult = openRouterModelSlugSchema.safeParse(
+    env.OPENROUTER_MODEL,
+  );
+  const proven = provenResult.success ? provenResult.data : null;
   const list = MATRIX?.[step]?.[tier] ?? [];
-  return [...list, proven].filter(
+  return [...list, ...(proven ? [proven] : [])].filter(
     (m, i, a) => Boolean(m) && a.indexOf(m) === i,
   );
+}
+
+/**
+ * Ensemble exact de tous les modèles susceptibles de recevoir une requête via
+ * OpenRouter avec la configuration chargée par ce processus.
+ */
+export function resolveAllOpenRouterModels(): string[] {
+  return [
+    ...new Set(
+      ALL_STEPS.flatMap((step) =>
+        ALL_TIERS.flatMap((tier) => resolveModels(step, tier)),
+      ),
+    ),
+  ].sort((left, right) => left.localeCompare(right));
 }
 
 /**

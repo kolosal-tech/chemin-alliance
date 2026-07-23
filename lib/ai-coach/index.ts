@@ -6,8 +6,9 @@ import { loadRuleset, type Locale } from "@/lib/core-engine";
 import { culturalGuidance } from "@/lib/culture";
 import { fallbackResponse } from "./fallback";
 import {
+  classifyCoachSafetyTopic,
   guardrailResponse,
-  isSensitiveTopic,
+  isUnsafeCoachOutput,
   SYSTEM_PROMPT,
 } from "./guardrails";
 
@@ -16,7 +17,7 @@ export const DAILY_FREE_LIMIT = 5;
 export type CoachReply = {
   text: string;
   guardrail: boolean;
-  provider: "anthropic" | "openrouter" | "openai" | "fallback";
+  provider: "anthropic" | "openrouter" | "openai" | "fallback" | "guardrail";
 };
 
 // Registre de langage : maîtrise biblique/religieuse + sensibilité
@@ -88,8 +89,19 @@ export async function askCoach(
     history?: Array<{ role: "user" | "assistant"; content: string }>;
   },
 ): Promise<CoachReply> {
-  if (isSensitiveTopic(question)) {
-    return { ...guardrailResponse(opts.locale), provider: aiProvider };
+  const safetyContext = [
+    ...(opts.history ?? [])
+      .filter((turn) => turn.role === "user")
+      .slice(-3)
+      .map((turn) => turn.content),
+    question,
+  ].join("\n");
+  const safetyTopic = classifyCoachSafetyTopic(safetyContext);
+  if (safetyTopic) {
+    return {
+      ...guardrailResponse(opts.locale, safetyTopic, opts.country),
+      provider: "guardrail",
+    };
   }
 
   const system = systemPrompt(
@@ -111,7 +123,15 @@ export async function askCoach(
     locale: opts.locale,
     history: opts.history,
   });
-  if (text) return { text, guardrail: false, provider: aiProvider };
+  if (text) {
+    if (isUnsafeCoachOutput(text)) {
+      return {
+        ...guardrailResponse(opts.locale, "spiritual_authority", opts.country),
+        provider: "guardrail",
+      };
+    }
+    return { text, guardrail: false, provider: aiProvider };
+  }
 
   return {
     text: fallbackResponse(question, opts.stage, opts.locale),

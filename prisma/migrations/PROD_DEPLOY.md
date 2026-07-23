@@ -1,258 +1,242 @@
-# Déploiement prod (Supabase) — migrations 0004 & 0005
+# Déployer les migrations en production
 
-Deux natures différentes :
-- **0004_consolidate_schema** = capture de dérive. Les objets EXISTENT DÉJÀ en prod
-  (ajoutés via db push). → on ne ré-exécute pas, on **marque appliqué** (resolve).
-- **0005_engaged_season** = vrai changement neuf (`ENGAGED` n'existe PAS encore en
-  prod). → il faut **réellement l'exécuter**, puis le marquer appliqué.
+Ce runbook est la procédure canonique pour l’arbre `0001` à `0025`. Les notes
+présentes dans un dossier de migration décrivent son contexte historique ; elles
+ne remplacent pas cette procédure.
 
-## Étape 0 — Sauvegarde
-Faire un snapshot de la base Supabase avant toute opération.
+## Principes non négociables
 
-## Voie A — la plus simple (tu es déjà dans le dashboard Supabase)
-1. SQL Editor → exécuter :
-   ```sql
-   ALTER TYPE "LifeSeason" ADD VALUE IF NOT EXISTS 'ENGAGED';
-   ```
-2. En local, avec DATABASE_URL pointant la prod (URL directe port 5432, pas le pooler) :
-   ```bash
-   npx prisma migrate resolve --applied 0001_init
-   npx prisma migrate resolve --applied 0002_agents
-   npx prisma migrate resolve --applied 0003_couple_seasons
-   npx prisma migrate resolve --applied 0004_consolidate_schema
-   npx prisma migrate resolve --applied 0005_engaged_season
-   npx prisma migrate status   # => "Database schema is up to date"
-   ```
+- Utiliser une URL PostgreSQL **directe**, jamais un pooler transactionnel.
+- Faire un snapshot restaurable et vérifier la restauration avant le DDL.
+- Ne jamais exécuter `prisma migrate resolve --applied` pour contourner une
+  erreur. Cette commande n’est acceptable que pour l’ancienne base ayant connu
+  `db push`, après comparaison objet par objet et approbation explicite.
+- Ne jamais exécuter `pnpm seed` contre la production.
+- Lire chaque migration en attente. `0018_drop_alliance_lab` détruit des tables
+  et exige une décision métier et une sauvegarde dédiées.
+- Déployer migration et code de `0024_blessing_token_hardening` dans une fenêtre
+  coordonnée : l’ancienne version lit `token`, la nouvelle lit `tokenHash`.
+- Appliquer `0025_ai_coach_consent` avant le code qui active le Coach IA
+  interactif : aucune ligne existante ne doit être transformée en consentement.
 
-## Voie B — tout par migrate (sans toucher au SQL Editor)
-Avec DATABASE_URL = prod (URL directe port 5432) :
+## 1. Préparer
+
 ```bash
-# 1) marquer l'historique déjà présent (0001..0004) SANS exécuter le DDL
-npx prisma migrate resolve --applied 0001_init
-npx prisma migrate resolve --applied 0002_agents
-npx prisma migrate resolve --applied 0003_couple_seasons
-npx prisma migrate resolve --applied 0004_consolidate_schema
-# 2) exécuter réellement la seule migration nouvelle (0005 = ADD VALUE ENGAGED)
-npx prisma migrate deploy
-npx prisma migrate status   # => "Database schema is up to date"
+pnpm install --frozen-lockfile
+pnpm exec prisma generate
+pnpm exec prisma validate
+pnpm exec prisma migrate status
 ```
-⚠️ NE PAS lancer `migrate deploy` AVANT d'avoir resolved 0001..0004 :
-il tenterait de rejouer le DDL de 0004 (objets déjà existants) → échec "already exists".
 
-## Vérifs post-déploiement
-```sql
--- la valeur enum est bien là :
-SELECT unnest(enum_range(NULL::"LifeSeason"));   -- doit inclure ENGAGED
-```
-Puis tester une inscription "Nous sommes déjà fiancés" sur le site.
+Conserver la sortie de `migrate status` dans le ticket de déploiement. Vérifier
+que `DATABASE_URL` cible bien le projet et l’environnement attendus, sans
+afficher ses identifiants dans les journaux.
 
-## Migration 0006 — passwordResetToken / passwordResetExpires (reset MDP)
-Vrai changement neuf (colonnes nullables additives). À appliquer AVANT/au déploiement
-du code reset-password, sinon les routes `/api/auth/forgot-password` et
-`/reset-password` renvoient P2022 (colonne absente).
+Créer ensuite :
 
-SQL Editor Supabase (idempotent, ne casse pas si déjà appliqué) :
-```sql
-ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "passwordResetToken" TEXT;
-ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "passwordResetExpires" TIMESTAMP(3);
-CREATE UNIQUE INDEX IF NOT EXISTS "User_passwordResetToken_key" ON "User"("passwordResetToken");
-```
-Puis marquer appliqué (DATABASE_URL = prod, URL directe 5432) :
+1. un snapshot de la base ;
+2. un export des métadonnées `_prisma_migrations` ;
+3. un plan de retour à la version précédente du code ;
+4. une fenêtre de maintenance si `0018`, `0022`, `0023` ou `0024` est en attente.
+
+## 2. Cas d’une base neuve
+
+Sur une base vide :
+
 ```bash
-npx prisma migrate resolve --applied 0006_password_reset
-npx prisma migrate status   # => up to date
+pnpm exec prisma migrate deploy
+pnpm exec prisma migrate status
 ```
-Vérif : `SELECT column_name FROM information_schema.columns WHERE table_name='User' AND column_name LIKE 'passwordReset%';` (2 lignes).
 
-## 0013_onboarding_done (Phase 2 — flag onboarding persistant)
-Colonne additive nullable (pas de dialog RLS attendu, `ALTER`). SQL Editor :
-```sql
-ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "onboardingDoneAt" TIMESTAMP(3);
-```
-Puis marquer appliqué (DATABASE_URL = prod, URL directe 5432) :
+Toutes les migrations doivent être appliquées jusqu’à
+`0025_ai_coach_consent`. Ne marquer aucune migration manuellement.
+
+## 3. Cas de l’ancienne production issue de `db push`
+
+La migration `0004_consolidate_schema` a été créée pour capturer une dérive
+historique. Si et seulement si cette production contient déjà exactement les
+objets `0001` à `0004` :
+
+1. comparer le schéma réel au SQL de chaque migration ;
+2. joindre les preuves au ticket ;
+3. faire approuver l’alignement ;
+4. utiliser `prisma migrate resolve --applied` uniquement pour les migrations
+   dont chaque objet est déjà présent et compatible.
+
+Au moindre doute, arrêter le déploiement. Ne pas improviser de SQL idempotent
+dans le dashboard et ne pas marquer une migration partiellement appliquée.
+
+## 4. Revue des migrations sensibles
+
+### `0018_drop_alliance_lab`
+
+Cette migration supprime définitivement `AiPersona`, `GameSession`,
+`GameAnswer`, `GameType` et `GameSessionStatus`. Elle ne doit être exécutée
+qu’après validation explicite que ces données ne sont plus requises et après
+test de restauration du snapshot.
+
+### `0020_photo_blurhash`
+
+La colonne est additive. Après le déploiement, si des photos historiques
+existent et que Supabase Storage est configuré :
+
 ```bash
-npx prisma migrate resolve --applied 0013_onboarding_done
+pnpm backfill:blurhash
 ```
-Vérif : `SELECT column_name FROM information_schema.columns WHERE table_name='User' AND column_name='onboardingDoneAt';` (1 ligne).
 
-## 0015_missing_fk_indexes (index manquants sur FK Booking.userId / CoupleMessage.senderId)
-Index additifs purs (aucune colonne modifiée, pas de dialog RLS attendu). SQL Editor :
-```sql
-CREATE INDEX IF NOT EXISTS "Booking_userId_idx" ON "Booking"("userId");
-CREATE INDEX IF NOT EXISTS "CoupleMessage_senderId_idx" ON "CoupleMessage"("senderId");
-```
-Puis marquer appliqué (DATABASE_URL = prod, URL directe 5432) :
+Le script est idempotent mais best-effort par photo. Contrôler son nombre
+d’échecs avant de clore le déploiement.
+
+### Chiffrement `AgentInsight`
+
+Le backfill est en lecture seule par défaut :
+
 ```bash
-npx prisma migrate resolve --applied 0015_missing_fk_indexes
+pnpm backfill:agent-insights
+pnpm backfill:agent-insights -- --apply
+pnpm backfill:agent-insights
 ```
-Vérif : `SELECT indexname FROM pg_indexes WHERE indexname IN ('Booking_userId_idx', 'CoupleMessage_senderId_idx');` (2 lignes).
 
-## 0016_session_version (revocation des sessions JWT sur changement/reset de MDP)
-Colonne additive NOT NULL avec DEFAULT 0 (retro-compatible, pas de dialog RLS attendu).
-À appliquer AVANT/au déploiement du code : sans elle, login / getSessionUser /
-`/api/me/password` / `/reset-password` renvoient P2022 (colonne `sessionVersion` absente).
-SQL Editor Supabase (idempotent) :
-```sql
-ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "sessionVersion" INTEGER NOT NULL DEFAULT 0;
-```
-Puis marquer appliqué (DATABASE_URL = prod, URL directe 5432) :
+Le dernier passage doit indiquer `legacy=0`. Le script ne journalise aucun
+contenu.
+
+### `0022_alliance_answer_encryption`
+
+Suivre [la procédure dédiée](../../docs/security/alliance-answer-encryption.md).
+Après arrêt de toutes les anciennes instances :
+
 ```bash
-npx prisma migrate resolve --applied 0016_session_version
+pnpm exec tsx scripts/backfill-alliance-answers.ts
 ```
-Vérif : `SELECT column_name FROM information_schema.columns WHERE table_name='User' AND column_name='sessionVersion';` (1 ligne).
 
-## 0017_query_indexes (index adaptés aux requêtes réelles — risque de dérive à l'échelle)
-Index additifs purs (aucune colonne modifiée, pas de dialog RLS attendu). Remplace
-l'index User de la migration 0009 par un ordre de colonnes qui reflète les filtres
-réellement TOUJOURS présents dans `getSuggestions` (deletedAt, season, isVerified
-avant gender, optionnel) ; ajoute des index pour la file de modération (Report),
-la liste des matchs (Match), la dédup anti-spam des bénédictions (Blessing) et les
-requêtes d'Espace Couple (CoupleSpace). Aucun de ces points n'est un bug aujourd'hui :
-prépare la montée en charge. SQL Editor Supabase (idempotent) :
+La sortie finale doit contenir `legacyRemaining=0 missingAnswer=0`.
+
+### `0023_couple_space_integrity`
+
+La migration est fail-closed : elle refuse les couples incohérents au lieu de
+les fusionner ou supprimer. Les anciens codes d’invitation en clair sont
+invalidés. Voir
+[le runbook d’intégrité](../../docs/security/couple-space-integrity.md).
+
+### `0024_blessing_token_hardening`
+
+La migration refuse les liens orphelins, invalide tous les anciens bearers,
+supprime les demandes `PENDING` héritées et retire la colonne `token` en clair.
+Les décisions déjà rendues sont conservées. Déployer le nouveau code dans la
+même fenêtre. Voir
+[le cycle de sécurité des liens](../../docs/security/blessing-links.md).
+
+### `0025_ai_coach_consent`
+
+La migration ajoute le type `AI_COACH_INTERACTION`, les colonnes nullable
+`version`, `purpose` et `recipient`, puis la table
+`AiCoachTransferLease`. Elle ne contient volontairement aucun `INSERT`,
+`UPDATE` ni backfill : les consentements historiques restent incomplets et ne
+peuvent pas autoriser un appel fournisseur.
+
+`ALTER TABLE`, la création de la table de baux et des quatre index ne sont pas
+`CONCURRENTLY` et
+peuvent attendre un verrou sur `Consent`. Mesurer la taille de cette table,
+observer les transactions longues et choisir une fenêtre à faible trafic. Ne
+pas transformer manuellement ces index en `CONCURRENTLY` dans le fichier déjà
+versionné : cela modifierait la somme de contrôle Prisma et demande un plan de
+migration séparé.
+
+Déployer la migration avant le nouveau code. La version applicative courante
+utilise `ai-coach-interactive-2026-07-23.v3` et enregistre comme `recipient` une
+empreinte `sha256:` du fournisseur, des modèles, des opérateurs d'inférence et
+de la politique de routage. `OPENROUTER_ALLOWED_PROVIDERS` est obligatoire avec
+OpenRouter. Tout ancien accord, y compris une ligne `v1` ou `v2`, doit donc être
+présenté comme inactif et recueilli à nouveau dans l'interface.
+
+Après application, vérifier :
+
 ```sql
-DROP INDEX IF EXISTS "User_season_isVerified_gender_deletedAt_idx";
-CREATE INDEX IF NOT EXISTS "User_deletedAt_season_isVerified_gender_idx"
-  ON "User"("deletedAt", "season", "isVerified", "gender");
-
-CREATE INDEX IF NOT EXISTS "Report_status_createdAt_idx" ON "Report"("status", "createdAt");
-
-CREATE INDEX IF NOT EXISTS "Match_userAId_updatedAt_idx" ON "Match"("userAId", "updatedAt");
-CREATE INDEX IF NOT EXISTS "Match_userBId_updatedAt_idx" ON "Match"("userBId", "updatedAt");
-
-DROP INDEX IF EXISTS "Blessing_userId_matchId_idx";
-CREATE INDEX IF NOT EXISTS "Blessing_userId_matchId_status_idx"
-  ON "Blessing"("userId", "matchId", "status");
-
-CREATE INDEX IF NOT EXISTS "CoupleSpace_userAId_status_idx" ON "CoupleSpace"("userAId", "status");
-CREATE INDEX IF NOT EXISTS "CoupleSpace_userBId_status_idx" ON "CoupleSpace"("userBId", "status");
+SELECT COUNT(*) AS implicit_ai_coach_consents
+FROM "Consent"
+WHERE "type" = 'AI_COACH_INTERACTION';
 ```
-Puis marquer appliqué (DATABASE_URL = prod, URL directe 5432) :
+
+Sur une production qui n'a pas encore exposé ce recueil, le résultat attendu
+est `0`. Ne jamais insérer ou compléter ces lignes manuellement ; chaque membre
+doit utiliser l'interface versionnée.
+
+Après le premier accord de recette, vérifier sans journaliser l'identifiant du
+membre :
+
+```sql
+SELECT "version", "purpose",
+       left("recipient", 7) AS recipient_prefix,
+       ("revokedAt" IS NULL) AS active
+FROM "Consent"
+WHERE "type" = 'AI_COACH_INTERACTION'
+ORDER BY "grantedAt" DESC
+LIMIT 5;
+```
+
+La ligne courante doit porter la version `v3`, la finalité
+`INTERACTIVE_DISCERNMENT_SUPPORT`, le préfixe `sha256:` et être active. Après
+retrait, aucune ligne de cette finalité ne doit rester active. Une ligne
+technique révoquée portant `AI_COACH_REVOCATION_BARRIER` est alors attendue :
+elle est unique par membre au niveau applicatif et rafraîchie lors des retraits
+suivants afin d'empêcher un recueil concurrent antérieur de dépasser la
+barrière.
+
+Pendant un appel de recette, un bail `AiCoachTransferLease` doit être visible,
+puis disparaître à la fin de la réponse. Il expire au plus tard après
+20 secondes. Un retrait concurrent doit répondre seulement après disparition
+ou expiration des baux admis avant sa révocation, sans conserver de transaction
+ouverte pendant cette attente.
+
+## 5. Appliquer
+
+Après approbation des points précédents :
+
 ```bash
-npx prisma migrate resolve --applied 0017_query_indexes
-```
-Vérif :
-```sql
-SELECT indexname FROM pg_indexes WHERE indexname IN (
-  'User_deletedAt_season_isVerified_gender_idx',
-  'Report_status_createdAt_idx',
-  'Match_userAId_updatedAt_idx',
-  'Match_userBId_updatedAt_idx',
-  'Blessing_userId_matchId_status_idx',
-  'CoupleSpace_userAId_status_idx',
-  'CoupleSpace_userBId_status_idx'
-);   -- doit renvoyer 7 lignes
+pnpm exec prisma migrate deploy
+pnpm exec prisma migrate status
 ```
 
-## 0018_drop_alliance_lab (⚠️ MIGRATION DESTRUCTIVE — suppression du module Alliance Lab)
+Ne pas déployer le code si `migrate deploy` ou `migrate status` échoue. Ne pas
+utiliser `resolve` comme réparation automatique.
 
-> **AVERTISSEMENT — PERTE DE DONNÉES IRRÉVERSIBLE.** Cette migration `DROP` les
-> tables `AiPersona`, `GameSession`, `GameAnswer` et les types `GameType` /
-> `GameSessionStatus`. **Toutes les parties et personas d'entraînement sont
-> définitivement perdues.** Elle est à appliquer **manuellement et volontairement**,
-> **JAMAIS en routine** ni automatiquement au déploiement. Elle ne touche **pas** aux
-> Compagnons IA (`AiCompanionMeta`), qui sont un module distinct et vivant.
+## 6. Vérifier
 
-Le module « Alliance Lab » (jeu solo contre personas IA) est retiré du produit.
-Avant d'exécuter : **faire un snapshot Supabase** (cf. Étape 0) — c'est irréversible.
+Avec les variables de l’environnement de production :
 
-DDL à exécuter (SQL Editor Supabase, idempotent, ordre des dépendances) :
-```sql
-DROP TABLE IF EXISTS "GameAnswer" CASCADE;
-DROP TABLE IF EXISTS "GameSession" CASCADE;
-DROP TABLE IF EXISTS "AiPersona" CASCADE;
-DROP TYPE IF EXISTS "GameSessionStatus";
-DROP TYPE IF EXISTS "GameType";
-```
-Puis marquer appliqué (DATABASE_URL = prod, URL directe 5432) :
 ```bash
-npx prisma migrate resolve --applied 0018_drop_alliance_lab
-```
-Vérif (doit renvoyer 0 ligne) :
-```sql
-SELECT tablename FROM pg_tables
-  WHERE tablename IN ('AiPersona', 'GameSession', 'GameAnswer');
-SELECT typname FROM pg_type
-  WHERE typname IN ('GameType', 'GameSessionStatus');
+pnpm exec prisma validate
+pnpm exec prisma generate
+pnpm exec tsc --noEmit
+pnpm lint
+pnpm test
 ```
 
-## 0019_couple_game (jeu de couple/match — 2 tables polymorphes, additif pur)
-Deux nouvelles tables (`GameRound`, `GameRoundAnswer`) et deux nouveaux types
-(`GameMode`, `GameRoundStatus`) pour le jeu de couple/match (construction C,
-hybride, SANS FIN). Aucune table/colonne existante modifiée. À appliquer
-AVANT/au déploiement du code : sans elles, les endpoints `/api/matches/[id]/game`
-et `/api/couple/game` renvoient P2021 (table absente). SQL Editor Supabase
-(idempotent) :
-```sql
-DO $$ BEGIN
-  CREATE TYPE "GameMode" AS ENUM ('SHARED', 'GUESS');
-EXCEPTION WHEN duplicate_object THEN null; END $$;
+Puis vérifier sans données réelles dans les journaux :
 
-DO $$ BEGIN
-  CREATE TYPE "GameRoundStatus" AS ENUM ('OPEN', 'REVEALED');
-EXCEPTION WHEN duplicate_object THEN null; END $$;
+- authentification et renvoi d’email ;
+- suggestions d’un compte vérifié ;
+- blocage et signalement ;
+- lecture/envoi de message ;
+- export et suppression depuis un compte de recette ;
+- Coach IA fermé avant consentement, ouvert après recueil exact, puis fermé à
+  nouveau immédiatement après retrait sans suppression du compte ;
+- checkout Stripe en mode test et réception du webhook signé ;
+- absence de cache privé dans le service worker ;
+- en-têtes CSP, HSTS et `no-store` sur les routes sensibles.
 
-CREATE TABLE IF NOT EXISTS "GameRound" (
-    "id" TEXT NOT NULL,
-    "matchId" TEXT,
-    "coupleSpaceId" TEXT,
-    "mode" "GameMode" NOT NULL,
-    "questionKey" TEXT,
-    "questionText" TEXT,
-    "initiatorId" TEXT NOT NULL,
-    "status" "GameRoundStatus" NOT NULL DEFAULT 'OPEN',
-    "resultMessageId" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "revealedAt" TIMESTAMP(3),
-    CONSTRAINT "GameRound_pkey" PRIMARY KEY ("id")
-);
+Les scripts `validate-couple-space-*` et `validate-account-deletion` sont
+réservés à une base locale jetable. Leurs garde-fous refusent ou doivent refuser
+une base distante ; ne jamais les pointer vers la production.
 
-CREATE TABLE IF NOT EXISTS "GameRoundAnswer" (
-    "id" TEXT NOT NULL,
-    "roundId" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    "answerEncrypted" TEXT,
-    "guessEncrypted" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "GameRoundAnswer_pkey" PRIMARY KEY ("id")
-);
+## Retour arrière
 
-CREATE INDEX IF NOT EXISTS "GameRound_matchId_createdAt_idx" ON "GameRound"("matchId", "createdAt");
-CREATE INDEX IF NOT EXISTS "GameRound_coupleSpaceId_createdAt_idx" ON "GameRound"("coupleSpaceId", "createdAt");
-CREATE UNIQUE INDEX IF NOT EXISTS "GameRoundAnswer_roundId_userId_key" ON "GameRoundAnswer"("roundId", "userId");
+Prisma ne génère pas de down migration automatique. Si une migration de données
+ou destructive doit être annulée :
 
-DO $$ BEGIN
-  ALTER TABLE "GameRound" ADD CONSTRAINT "GameRound_matchId_fkey" FOREIGN KEY ("matchId") REFERENCES "Match"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-EXCEPTION WHEN duplicate_object THEN null; END $$;
+1. arrêter le trafic ;
+2. restaurer le snapshot testé ;
+3. redéployer la version de code compatible avec ce snapshot ;
+4. vérifier `_prisma_migrations` et les parcours critiques avant réouverture.
 
-DO $$ BEGIN
-  ALTER TABLE "GameRound" ADD CONSTRAINT "GameRound_coupleSpaceId_fkey" FOREIGN KEY ("coupleSpaceId") REFERENCES "CoupleSpace"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-EXCEPTION WHEN duplicate_object THEN null; END $$;
-
-DO $$ BEGIN
-  ALTER TABLE "GameRound" ADD CONSTRAINT "GameRound_initiatorId_fkey" FOREIGN KEY ("initiatorId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-EXCEPTION WHEN duplicate_object THEN null; END $$;
-
-DO $$ BEGIN
-  ALTER TABLE "GameRoundAnswer" ADD CONSTRAINT "GameRoundAnswer_roundId_fkey" FOREIGN KEY ("roundId") REFERENCES "GameRound"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-EXCEPTION WHEN duplicate_object THEN null; END $$;
-
-DO $$ BEGIN
-  ALTER TABLE "GameRoundAnswer" ADD CONSTRAINT "GameRoundAnswer_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-EXCEPTION WHEN duplicate_object THEN null; END $$;
-```
-Puis marquer appliqué (DATABASE_URL = prod, URL directe 5432) :
-```bash
-npx prisma migrate resolve --applied 0019_couple_game
-```
-Vérif (doit renvoyer 2 lignes pour les tables, 2 pour les types) :
-```sql
-SELECT tablename FROM pg_tables
-  WHERE tablename IN ('GameRound', 'GameRoundAnswer');
-SELECT typname FROM pg_type
-  WHERE typname IN ('GameMode', 'GameRoundStatus');
-```
-
-## Futures migrations
-Le build Vercel n'exécute pas `migrate deploy`. Tant que ce n'est pas automatisé
-(step release `prisma migrate deploy` sur URL directe), appliquer chaque nouvelle
-migration manuellement avant/juste après le déploiement du code.
+Un simple rollback du code est insuffisant après `0022` ou `0024`.

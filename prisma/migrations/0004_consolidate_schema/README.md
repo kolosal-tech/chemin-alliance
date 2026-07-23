@@ -1,4 +1,10 @@
-# 0004_consolidate_schema — procédure de déploiement
+# 0004_consolidate_schema — contexte historique
+
+> Ce document décrit uniquement la consolidation historique `0004`. Il ne
+> constitue plus une procédure de déploiement globale. Pour l’arbre actuel,
+> suivre [`../PROD_DEPLOY.md`](../PROD_DEPLOY.md). Ne jamais reprendre les
+> commandes `migrate resolve` ci-dessous sans preuve que la cible est bien
+> l’ancienne base synchronisée par `db push`.
 
 Cette migration **consolide** la dérive accumulée : le schéma avait évolué via
 `prisma db push` sans migrations correspondantes. Elle ajoute (par rapport à
@@ -10,11 +16,13 @@ stripeCustomerId, subscriptionStatus`) + index unique `stripeCustomerId`,
 Le SQL **n'est pas idempotent** (pas de `IF NOT EXISTS`). Selon la cible :
 
 ## Environnement NEUF (base vierge)
+
 ```bash
 npx prisma migrate deploy   # joue 0001→0004 dans l'ordre, schéma identique au schema.prisma
 ```
 
 ## PRODUCTION EXISTANTE (déjà synchronisée via db push)
+
 Tous les objets existent déjà : **ne PAS lancer `migrate deploy`** (échec
 "already exists" → migration `failed` → déploiements bloqués).
 
@@ -39,10 +47,12 @@ Tous les objets existent déjà : **ne PAS lancer `migrate deploy`** (échec
 4. Contrôle : `npx prisma migrate status` → « Database schema is up to date ».
 
 ## Migrations FUTURES (important)
+
 Le build Vercel (`prisma generate && next build`) **n'applique aucune migration**.
 Après cette consolidation, choisir une stratégie pour les prochaines migrations :
+
 - soit un step release `prisma migrate deploy` (utiliser une URL **directe**
   port 5432, pas le pooler pgbouncer) ;
 - soit `migrate deploy` manuel en CI avant chaque release.
-Sinon, une future migration laissera l'app avec un client Prisma attendant des
-colonnes absentes → erreurs runtime P2022.
+  Sinon, une future migration laissera l'app avec un client Prisma attendant des
+  colonnes absentes → erreurs runtime P2022.

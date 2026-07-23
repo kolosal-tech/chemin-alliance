@@ -1,6 +1,8 @@
-import type { AllianceStage, Match } from "@prisma/client";
+import { Prisma, type AllianceStage, type Match } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { getStageQuestions, type ActionContext } from "@/lib/core-engine";
+import { unblockedMatchWhere } from "@/lib/blocks";
+import { activeSensitiveDataConsentPairWhere } from "@/lib/sensitive-data-consent";
 
 /**
  * Construit le contexte factuel pour validateAction à partir de la DB.
@@ -14,10 +16,12 @@ export async function buildActionContext(
 ): Promise<ActionContext> {
   const otherId = match.userAId === userId ? match.userBId : match.userAId;
 
-  const [activeReports, dialogueAnswers, stageAnswers] = await Promise.all([
+  const [qualifiedReports, dialogueAnswers, stageAnswers] = await Promise.all([
     prisma.report.count({
       where: {
-        status: { in: ["OPEN", "REVIEWING"] },
+        // OPEN = déclaration non qualifiée. Seule une revue humaine explicite
+        // peut déclencher le veto de sûreté sur la progression.
+        status: "REVIEWING",
         targetUserId: { in: [userId, otherId] },
       },
     }),
@@ -37,7 +41,7 @@ export async function buildActionContext(
 
   return {
     locale,
-    hasActiveReport: activeReports > 0,
+    hasActiveReport: qualifiedReports > 0,
     mutualConsent,
     dialogueAnswersCount: dialogueAnswers,
     stageAnswersCount: stageAnswers,
@@ -61,11 +65,93 @@ export function nextStage(stage: AllianceStage): AllianceStage | null {
   return STAGE_SEQUENCE[i + 1];
 }
 
-export async function requireMatchMember(matchId: string, userId: string) {
-  const match = await prisma.match.findUnique({ where: { id: matchId } });
-  if (!match) throw Object.assign(new Error("NOT_FOUND"), { status: 404 });
-  if (match.userAId !== userId && match.userBId !== userId) {
-    throw Object.assign(new Error("FORBIDDEN"), { status: 403 });
-  }
-  return match;
+function matchAccessWhere(
+  matchId: string,
+  userId: string,
+  status: "ACTIVE" | "PENDING" | { in: Array<"ACTIVE" | "PENDING"> },
+): Prisma.MatchWhereInput {
+  return {
+    AND: [
+      { id: matchId, status },
+      activeSensitiveDataConsentPairWhere,
+      unblockedMatchWhere(userId),
+    ],
+  };
+}
+
+export function activeMatchMemberWhere(
+  matchId: string,
+  userId: string,
+): Prisma.MatchWhereInput {
+  return matchAccessWhere(matchId, userId, "ACTIVE");
+}
+
+export function pendingMatchDecisionWhere(
+  matchId: string,
+  userId: string,
+): Prisma.MatchWhereInput {
+  return matchAccessWhere(matchId, userId, "PENDING");
+}
+
+export function pendingMatchDecisionsWhere(
+  userId: string,
+): Prisma.MatchWhereInput {
+  return {
+    AND: [
+      { status: "PENDING" },
+      activeSensitiveDataConsentPairWhere,
+      unblockedMatchWhere(userId),
+    ],
+  };
+}
+
+function matchNotAccessible(): never {
+  // 404 plutôt que 403 : ne révèle ni l'existence du match, ni son état, ni
+  // l'identité de la personne ayant éventuellement bloqué l'appelant.
+  throw Object.assign(new Error("NOT_FOUND"), { status: 404 });
+}
+
+/** Frontière par défaut de toute lecture ou interaction sensible. */
+export async function requireActiveMatchMember(
+  matchId: string,
+  userId: string,
+) {
+  const match = await prisma.match.findFirst({
+    where: activeMatchMemberWhere(matchId, userId),
+  });
+  return match ?? matchNotAccessible();
+}
+
+/** Lecture minimale réservée aux routes d'acceptation/refus d'une demande. */
+export async function requirePendingMatchDecisionMember(
+  matchId: string,
+  userId: string,
+) {
+  const match = await prisma.match.findFirst({
+    where: pendingMatchDecisionWhere(matchId, userId),
+    select: {
+      id: true,
+      status: true,
+      requestedById: true,
+    },
+  });
+  return match ?? matchNotAccessible();
+}
+
+/** Seule exception mixte : clôturer une relation ACTIVE ou refuser PENDING. */
+export async function requireClosableMatchMember(
+  matchId: string,
+  userId: string,
+) {
+  const match = await prisma.match.findFirst({
+    where: matchAccessWhere(matchId, userId, {
+      in: ["ACTIVE", "PENDING"],
+    }),
+    select: {
+      id: true,
+      status: true,
+      requestedById: true,
+    },
+  });
+  return match ?? matchNotAccessible();
 }

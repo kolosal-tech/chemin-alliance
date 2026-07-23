@@ -1,13 +1,14 @@
 /**
- * Prix segmenté par région - diaspora vs Afrique francophone (zone XOF).
+ * Catalogue tarifaire expérimental - diaspora vs Afrique francophone (zone XOF).
  *
  * Constat marché : 9,99 €/mois ≈ 6 560 XOF ≈ ~15 % du SMIC burkinabè. Inadapté
- * en masse locale. On propose donc un palier local fortement réduit (2 000 XOF/
- * mois) encaissé en Mobile Money via Flutterwave, tandis que la diaspora/CB
- * reste sur Stripe à 9,99 €.
+ * en masse locale. Les valeurs ci-dessous modélisent un futur palier local et
+ * servent aux tests produit ; elles ne sont pas proposées à l'achat.
  *
- * Cette logique est PURE (testable) : la sélection du rail de paiement réel se
- * fait en aval (route checkout) selon `offer.provider`.
+ * Cette logique est PURE et DORMANTE. Aucune route checkout ni aucun webhook
+ * ne consomme actuellement `priceOffer`; la facturation active reste Stripe et
+ * son montant réel vient du Price configuré. Ne pas afficher ces valeurs avant
+ * d'avoir branché et audité toute la réconciliation Flutterwave.
  */
 
 export type PriceProvider = "stripe" | "flutterwave";
@@ -67,7 +68,7 @@ const LOCAL_XOF = Number(process.env.PREMIUM_PRICE_XOF) || 2000;
 const DIASPORA_EUR = Number(process.env.PREMIUM_PRICE_EUR) || 9.99;
 
 /**
- * Offre Premium adaptée au pays de l'utilisateur.
+ * Offre de catalogue envisagée selon le pays de l'utilisateur.
  * - Zone XOF (UEMOA) -> Mobile Money via Flutterwave, 2 000 XOF/mois.
  * - Ailleurs / inconnu -> Stripe (CB), 9,99 €/mois.
  */

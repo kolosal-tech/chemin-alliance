@@ -35,10 +35,11 @@ export const POST = withErrors(async () => {
       emailVerifyExpires: new Date(Date.now() + EMAIL_VERIFY_TTL_MS),
     },
   });
-  await sendVerificationEmail(
+  const delivered = await sendVerificationEmail(
     user.email,
     token,
     (user.locale ?? "fr") as Locale,
   );
+  if (!delivered) return jsonError(502, "EMAIL_FAILED");
   return NextResponse.json({ ok: true });
 });

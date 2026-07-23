@@ -2,7 +2,6 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SacredMotif } from "@/components/SacredMotif";
 import {
-  pressLogos,
   whyUs,
   journeySteps,
   values,
@@ -44,32 +43,6 @@ function SectionHeading({
         </p>
       )}
     </div>
-  );
-}
-
-/* --------------------------------------------------------------- */
-/* PressLogos - « On parle de nous » (wordmarks fictifs).           */
-/* --------------------------------------------------------------- */
-export async function PressLogos() {
-  const t = await getTranslations("home.press");
-  return (
-    <section className="border-b border-sand-300/50 dark:border-anthracite-800">
-      <div className="mx-auto max-w-6xl px-5 py-10 sm:px-6">
-        <p className="lbl mb-6 text-center text-[12px] text-sand-600 dark:text-[#7E7A72]">
-          {t("kicker")}
-        </p>
-        <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 sm:gap-x-14">
-          {pressLogos.map((p) => (
-            <li
-              key={p.id}
-              className="font-display text-lg italic text-sand-600/80 grayscale transition hover:text-night hover:grayscale-0 sm:text-xl dark:text-[#8A857B] dark:hover:text-[#ECE7DD]"
-            >
-              {p.name}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
   );
 }
 
@@ -333,7 +306,7 @@ export async function MarketingFooter() {
 
           {footerNav.map((col) => (
             <div key={col.section}>
-              <p className="lbl mb-4 text-[12px] text-sand-600 dark:text-[#7E7A72]">
+              <p className="lbl mb-4 text-[12px] text-sand-600 dark:text-[#8F8A80]">
                 {t(`sections.${col.section}`)}
               </p>
               <ul className="flex flex-col gap-3">
@@ -347,7 +320,7 @@ export async function MarketingFooter() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-sand-300/70 pt-6 text-[16px] text-sand-600 sm:flex-row sm:items-center sm:justify-between dark:border-anthracite-700 dark:text-[#7E7A72]">
+        <div className="mt-12 flex flex-col gap-3 border-t border-sand-300/70 pt-6 text-[16px] text-sand-600 sm:flex-row sm:items-center sm:justify-between dark:border-anthracite-700 dark:text-[#8F8A80]">
           <p>
             © {year} Chemin d&apos;Alliance. {t("rights")}
           </p>

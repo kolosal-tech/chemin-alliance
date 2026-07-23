@@ -1,242 +1,308 @@
-# Chemin d'Alliance
+# Chemin d’Alliance
 
-Plateforme web de rencontre chrétienne premium (protestante évangélique + catholique) -
-**une infrastructure de discernement et d'accompagnement vers le mariage**, pas une app de dating.
+Chemin d’Alliance est une plateforme chrétienne de discernement et
+d’accompagnement vers le mariage, pas une application de swipe.
 
-Monolithe **Next.js 14** (App Router, TypeScript strict) · **PostgreSQL + Prisma** ·
-**PWA installable** (iOS/Android) · 4 langues (**fr** par défaut, en, es, pt).
+Socle actuel :
 
----
+- Next.js 15.5.21, App Router, React 18 et TypeScript strict ;
+- PostgreSQL et Prisma 6 ;
+- PWA installable, quatre langues : français, anglais, espagnol et portugais ;
+- authentification Argon2id et JWT révocable en cookie
+  `httpOnly`/`Secure`/`SameSite` ;
+- chiffrement applicatif AES-256-GCM des contenus sensibles.
+
+## État fonctionnel honnête
+
+Fonctionnel et protégé côté serveur :
+
+- inscription, vérification email, session et réinitialisation du mot de passe ;
+- suggestions progressives, demandes bilatérales, messagerie et étapes
+  d’Alliance ;
+- blocage, signalement, anti-partage prématuré de coordonnées et modération ;
+- export RGPD, suppression/pseudonymisation du compte et gestion des
+  consentements disponibles ;
+- Espace Couple, saisons bilatérales, invitations liées à l’email et jeux ;
+- liens Parrain/Marraine hachés, expirants et à réponse unique ;
+- coach IA explicite avec garde-fous, fallback local et historique chiffré ;
+- abonnement Stripe lorsque les trois paramètres checkout sont configurés.
+
+Indisponible volontairement :
+
+- marketplace, réservation et vérification publique de coachs humains ;
+- Copilote Coach, tant qu’un consentement scoped
+  relation/destinataire/finalité/version n’est pas persisté ;
+- Mobile Money Flutterwave : les primitives et le catalogue XOF sont dormants,
+  mais aucune route de souscription ni réconciliation d’entitlement n’est
+  branchée ;
+- appels audio/vidéo internes et publication des binaires App Store/Play Store.
+
+Ces surfaces répondent explicitement `503` ou restent masquées ; elles ne sont
+pas présentées comme livrées.
 
 ## Prérequis
 
-- Node.js ≥ 20, pnpm ≥ 9
-- Une base PostgreSQL - au choix :
-  - **local sans Docker** : `pnpm prisma dev` (Prisma Postgres local, fourni)
-  - Neon / Supabase (prod et dev distant)
+- Node.js 20 ou plus récent ;
+- pnpm 9 ou plus récent ;
+- PostgreSQL, via `pnpm prisma dev`, Neon, Supabase ou une autre offre
+  compatible.
 
-## Lancer en local - 5 commandes
+## Lancer en local
 
 ```bash
 pnpm install
-cp .env.example .env        # puis renseigner les 3 variables (voir ci-dessous)
-pnpm prisma dev             # terminal séparé : Postgres local sans Docker
-pnpm prisma migrate deploy && pnpm seed
-pnpm dev                    # http://localhost:3000
+cp .env.example .env
+pnpm prisma dev
+pnpm exec prisma migrate deploy
+pnpm seed
+pnpm dev
 ```
 
-Génération des secrets :
+`pnpm prisma dev` tourne dans un terminal séparé et affiche l’URL locale. Le
+proxy local peut nécessiter `pgbouncer=true`. Une création de migration avec
+`prisma migrate dev` exige une `SHADOW_DATABASE_URL` distincte, directe et
+réservée au développement ; ne jamais utiliser une base partagée ou de
+production comme shadow database.
+
+Secrets locaux :
 
 ```bash
-openssl rand -base64 48   # JWT_SECRET
-openssl rand -hex 32      # ENCRYPTION_KEY (AES-256-GCM)
+openssl rand -base64 48
+openssl rand -hex 32
 ```
 
-> **Note `prisma dev`** : copier la `DATABASE_URL` affichée au démarrage dans `.env`
-> et lui ajouter `&pgbouncer=true` (le proxy local ne supporte pas les prepared
-> statements persistants). Sur Neon/Supabase, `pgbouncer=true` n'est nécessaire
-> que si vous passez par leur pooler (port 6543 chez Supabase).
->
-> **Note migrations** : sur le serveur Postgres local de `prisma dev`, utilisez
-> `pnpm prisma migrate deploy` (le flux shadow-database de `migrate dev` n'y est
-> pas supporté). Sur Neon/Supabase, `pnpm prisma migrate dev` fonctionne
-> normalement pour créer de nouvelles migrations.
+Le premier résultat convient à `JWT_SECRET`, le second à `ENCRYPTION_KEY`.
 
-## Comptes de démo (`pnpm seed`)
+## Configuration de production
 
-Mot de passe commun : **`Alliance2026!`**
+La production refuse de démarrer avec une configuration essentielle absente ou
+faible. Variables minimales :
 
-| Email | Profil |
-|---|---|
-| `elodie@demo.chemin-alliance.app` | Évangélique, 32 ans - match en **Discernement** avec Jonathan (conversation avec blocage de coordonnées de démo) |
-| `jonathan@demo.chemin-alliance.app` | Évangélique, 34 ans |
-| `marie-claire@demo.chemin-alliance.app` | Catholique, veuve, 1 enfant |
-| `david@demo.chemin-alliance.app` | Évangélique, divorcé |
-| `sarah@demo.chemin-alliance.app` | Pentecôtiste, parent célibataire - match en **Dialogue** avec David |
-| `emmanuel@demo.chemin-alliance.app` | Catholique, veuf |
-| `admin@chemin-alliance.app` | **Admin** - accès `/fr/admin/reports` |
+| Variable                                             | Rôle                                         |
+| ---------------------------------------------------- | -------------------------------------------- |
+| `DATABASE_URL`                                       | URL PostgreSQL de l’application              |
+| `JWT_SECRET`                                         | signature des sessions et HMAC internes      |
+| `ENCRYPTION_KEY`                                     | clé AES-256-GCM, 64 caractères hexadécimaux  |
+| `APP_URL`                                            | origine HTTPS publique, sans chemin          |
+| `RESEND_API_KEY`, `EMAIL_FROM`                       | vérification email et emails transactionnels |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | rate-limit distribué atomique                |
+| `CRON_SECRET`                                        | authentification des purges quotidiennes     |
 
-Vérification email : en développement, le lien de vérification est **loggé dans la
-console du serveur** (`[email] Lien de vérification…`). Les comptes seed sont déjà vérifiés.
+Upstash est fail-closed en production : une absence ou une panne refuse les
+actions protégées. Le repli mémoire borné n’existe qu’en développement et test.
+Resend est intégré ; `EMAIL_FROM` doit utiliser un domaine vérifié. Aucun lien
+secret n’est journalisé hors développement explicite.
 
-Pages utiles : `/fr` (onboarding) · `/fr/design-system` (design system vivant, clair+sombre) ·
-`/fr/settings/privacy` (anti-malaise, export RGPD, suppression).
+Groupes optionnels :
 
-## Scripts
+- IA : `AI_PROVIDER` et la clé correspondante
+  (`ANTHROPIC_API_KEY`, `OPENROUTER_API_KEY` ou `OPENAI_API_KEY`) ;
+- Stripe : `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`,
+  `STRIPE_PRICE_PREMIUM`, et éventuellement `STRIPE_PUBLISHABLE_KEY` ;
+- photos : `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`,
+  `SUPABASE_PHOTO_BUCKET` ;
+- SMS : `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`,
+  `TWILIO_VERIFY_SERVICE_SID` ;
+- push : `WEB_PUSH_EMAIL`, `WEB_PUSH_PRIVATE_KEY`,
+  `NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY`.
 
-| Commande | Effet |
-|---|---|
-| `pnpm dev` | Développement (PWA désactivée en dev) |
-| `pnpm build && pnpm start` | Production locale |
-| `pnpm test` | Vitest - moteur doctrinal + blocage coordonnées (26 tests) |
-| `pnpm lint` / `pnpm tsc --noEmit` | Lint / typecheck strict |
-| `pnpm seed` | Peuple la démo |
-| `pnpm prisma migrate deploy` | Applique les migrations |
+Les groupes doivent être complets. Sans Supabase, l’upload photo reste masqué.
+Sans Twilio, la vérification téléphone est indisponible en production. Sans
+Stripe complet, aucun nouveau paiement n’est ouvert.
 
----
+Avant toute mise en production, suivre le
+[runbook de migrations](prisma/migrations/PROD_DEPLOY.md). Ne jamais exécuter
+`pnpm seed` contre la production.
 
-## Déployer en prod (Vercel + Neon) - ~10 minutes
+## Commandes de qualité et d’exploitation
 
-1. **Créer la base** sur [neon.tech](https://neon.tech) → copier la `DATABASE_URL`
-   (avec `?sslmode=require`).
-2. **Appliquer les migrations + seed** depuis votre machine :
-   ```bash
-   DATABASE_URL="postgres://...neon..." pnpm prisma migrate deploy
-   DATABASE_URL="postgres://...neon..." ENCRYPTION_KEY=<votre_clef> pnpm seed   # optionnel
-   ```
-3. **Importer le repo sur Vercel** (framework auto-détecté : Next.js).
-4. **Variables d'environnement Vercel** : `DATABASE_URL`, `JWT_SECRET`,
-   `ENCRYPTION_KEY`, `APP_URL` (= URL du déploiement), et en option
-   `ANTHROPIC_API_KEY` pour activer le vrai coach IA.
-5. **Deploy.** La PWA est servie immédiatement : installable depuis Safari iOS
-   (« Sur l'écran d'accueil ») et Chrome Android (« Installer l'application »).
+| Commande                                             | Effet                                          |
+| ---------------------------------------------------- | ---------------------------------------------- |
+| `pnpm test`                                          | suite Vitest complète                          |
+| `pnpm lint`                                          | ESLint, zéro avertissement autorisé            |
+| `pnpm exec tsc --noEmit`                             | typage strict                                  |
+| `pnpm build`                                         | client Prisma et build Next de production      |
+| `pnpm e2e`                                           | parcours Playwright                            |
+| `pnpm test:e2e-fixtures`                             | fixtures E2E sur base locale jetable           |
+| `pnpm test:account-deletion-db`                      | effacement sur base locale jetable             |
+| `pnpm test:ai-consent-db`                            | courses accord/retrait sur base locale jetable |
+| `pnpm test:sensitive-consent-db`                     | retrait sensible sur PostgreSQL jetable        |
+| `pnpm exec prisma validate`                          | validation du schéma                           |
+| `pnpm exec prisma migrate deploy`                    | migrations pending                             |
+| `pnpm backfill:agent-insights`                       | détection dry-run des insights historiques     |
+| `pnpm backfill:agent-insights -- --apply`            | chiffrement explicite des insights             |
+| `pnpm exec tsx scripts/backfill-alliance-answers.ts` | chiffrement des réponses Alliance historiques  |
+| `pnpm backfill:blurhash`                             | variantes floutées des photos historiques      |
 
-Supabase fonctionne à l'identique (utiliser la connection string « Direct »
-port 5432 pour les migrations ; si vous utilisez le pooler 6543, ajoutez `?pgbouncer=true`).
+`prisma format` est une commande mutante : l’exécuter séparément, puis relire
+son diff. Les scripts d’intégration Espace Couple et suppression de compte sont
+réservés à un schéma local jetable.
 
-### Checklist sécurité avant prod
-
-- [ ] `JWT_SECRET` et `ENCRYPTION_KEY` régénérés (jamais ceux du dev), stockés uniquement dans Vercel
-- [ ] `DATABASE_URL` avec SSL (`sslmode=require`)
-- [ ] `APP_URL` en https - les cookies passent en `Secure`
-- [ ] Brancher un fournisseur d'email réel dans `lib/email.ts` (Resend/Postmark/SES)
-- [ ] Rate-limiting : brancher Upstash/Redis dans `lib/security/rate-limit.ts` si multi-régions
-- [ ] Vérifier les en-têtes (CSP, HSTS, X-Frame-Options) sur le déploiement : `curl -I https://…`
-- [ ] Staging : poser `STAGING=1` pour ajouter `X-Robots-Tag: noindex`
-- [ ] RGPD : DPIA recommandée (données religieuses = art. 9), registre des traitements, référent désigné
-
----
-
-## Mobile iOS + Android
-
-**v1 = PWA installable** (livrée) : manifest complet (icônes 192/512 + maskable,
-`display: standalone`, portrait, thème `#131D33`), service worker Workbox avec
-page hors-ligne (`/fr/offline`), méta `apple-mobile-web-app-*`, safe-areas
-respectées, cibles tactiles ≥ 44 px.
-
-**Binaires de store** (chemin câblé, non publié) : l'enveloppe Capacitor charge
-la PWA déployée (`capacitor.config.ts`, `server.url`).
-
-```bash
-export CAP_SERVER_URL="https://votre-domaine.app"
-pnpm cap add ios && pnpm cap add android   # génère ios/ et android/
-pnpm cap open ios                          # Xcode : signer puis archiver
-pnpm cap open android                      # Android Studio : générer l'AAB signé
-```
-
-La soumission App Store / Play Store demande des comptes développeurs payants et
-une review - hors « déploiement en un clic ». Évolution possible : app React
-Native/Expo partageant `/lib`.
-
----
+Le gate CI navigateur prépare ses fixtures après `pnpm seed`, exécute les
+30 scénarios métier sous Chromium et répète 9 contrôles visuels/authentifiés
+non destructifs sous Firefox et WebKit : **48 exécutions** sur le bundle de
+production. Il refuse le rapport si un scénario manque, est ignoré, inattendu
+ou flaky. Les options
+`E2E_LOCAL_MEMORY_RATE_LIMIT` et `E2E_LOCAL_INSECURE_COOKIE` sont enfermées par
+CI + fixtures gérées + URL loopback et ne doivent jamais être utilisées contre
+une cible distante.
 
 ## Architecture
 
-```
+```text
 app/
-  [locale]/            # fr · en · es · pt - routing next-intl
-    page.tsx           # Onboarding 3 slides
-    login/ register/ offline/ design-system/
-    (app)/             # Authentifié (garde par page + layout)
-      suggestions/ profile/ messages/[matchId]/ alliance/[matchId]/
-      coach-ai/ coaches/[id]/ settings/privacy/ admin/reports/
-  api/                 # Route handlers (REST)
+  [locale]/                 pages publiques et espace authentifié
+  api/                      routes REST
+components/                 primitives et interfaces produit
 lib/
-  core-engine/         # ⭐ Moteur doctrinal : charge les YAML, validateAction()
-  moderation/          # Détection coordonnées (regex multilingues)
-  ai-coach/            # Guardrails + fallback scripté + branchement LLM
-  security/            # AES-256-GCM, Argon2id, JWT (jose), rate-limit, sessions
-  payments/            # Interface PaymentProvider (stub - voir ci-dessous)
-rulesets/              # christian_evangelical_default.yaml · christian_catholic_default.yaml
-messages/              # fr.json · en.json · es.json · pt.json
-prisma/                # schema + migrations + seed
+  agents/                   assistants déterministes et garde-fous
+  ai-coach/                 interaction IA explicitement déclenchée
+  core-engine/              règles doctrinales YAML
+  payments/                 Stripe, entitlements et rails dormants
+  security/                 session, chiffrement, origine, rate-limit
+prisma/
+  migrations/               historique DDL canonique
+  schema.prisma
+rulesets/                   règles évangélique et catholique
+worker/                     service worker PWA
 ```
 
-**Règle d'or** : la messagerie, l'échange de coordonnées et les transitions
-d'étape passent par `validateAction()` du moteur doctrinal. La doctrine vit dans
-les YAML - jamais dans le code UI. Le message éducatif de blocage (4 langues)
-vient du ruleset.
+### Invariants de sécurité
 
-### Les 7 agents intelligents (`lib/agents/`)
+- Toute autorisation est décidée côté serveur et échoue fermé.
+- Un espace de match sensible exige un match `ACTIVE`, l’appartenance et
+  l’absence de blocage.
+- Une demande `PENDING` ne divulgue pas encore le profil privé du demandeur.
+- Un blocage ferme les matchs concernés et coupe messages, jeux, agents,
+  photos et liens de bénédiction.
+- Les transitions d’Alliance et de saison Couple utilisent consentement
+  bilatéral, CAS et transactions sérialisables.
+- Le service worker met API, navigations et RSC en `NetworkOnly` ; seuls les
+  assets statiques sont mis en cache.
+- Les uploads sont décodés puis réencodés, bornés en taille et en pixels, et
+  leurs métadonnées sont supprimées.
+- Les états Premium proviennent uniquement d’un webhook Stripe signé et
+  réconcilié avec le client, le Price et le mode test/live attendus.
 
-Tous gouvernés par les mêmes lois : ne jamais décider à la place de la personne,
-ne jamais affirmer une volonté divine, escalader vers l'humain sur le sensible.
-Chaque agent a un **fallback déterministe** - l'app complète tourne sans LLM.
+### Données et confidentialité
 
-| Agent | Rôle | Où |
-|---|---|---|
-| Compagnon de Préparation | Entretien d'accueil → Portrait (5 dimensions qualitatives, jamais un score) → chemin de croissance ou orientation humaine. Consentement RGPD explicite, révocable. | `/preparation` |
-| Veilleur | Signaux de risque dans les messages (argent, manipulation spirituelle, pression) → dossier modération humaine, jamais bloquant seul | messagerie → `/admin/reports` |
-| Facilitateur de Dialogue | Thèmes jamais abordés par le couple + questions du ruleset | vue Alliance |
-| Bilan d'Étape | Relecture privée (ses propres réponses uniquement) | vue Alliance |
-| Sortie Digne | Détection de silence asymétrique (7 j) + brouillon de clôture respectueux | messages + sortie élégante |
-| Reconstruction | Chemin en 4 pas + mot de consolation après clôture | `/rebuilding` |
-| Copilote du Coach | Note de séance factuelle - uniquement si les DEUX consentent (COUPLE_COACH_SHARING), jamais le contenu des messages, COACH_ONLY | page coach |
+Les messages, réponses Alliance, notes de coach et insights sensibles sont
+chiffrés au repos. Il ne s’agit pas d’E2EE : le serveur doit pouvoir appliquer
+les règles de sécurité et de modération.
 
-Stockage : table `AgentInsight` (visibilité, révocation `revokedAt`). Le portrait
-est effaçable à tout moment (`DELETE /api/agents/preparation`).
+L’export expose un indicateur `export.complete`, les collections tronquées et
+les problèmes d’intégrité rencontrés. Chaque collection est bornée à 2 000
+éléments dans l’export automatique ; une demande complète peut nécessiter le
+support.
 
-### Saisons de vie & Espace Couple (post-mariage)
+La suppression efface les données propres et les objets de stockage, supprime
+le Customer Stripe lorsque présent, puis pseudonymise la ligne de compte.
+Certaines données de tiers, signalements ou traces légalement nécessaires
+peuvent être conservées sous forme minimisée.
 
-Le chemin ne s'arrête pas au mariage. Saisons : `JOURNEY` (rencontre) →
-`MARRIED` (premières années) → `PARENTS`. En saison mariée : **matching
-totalement désactivé** (invisible dans les deux sens), premier onglet remplacé
-par « Couple ».
+Documentation ciblée :
 
-- **Entrées** : depuis un match en Engagement/Préparation (« Nous nous sommes
-  mariés », confirmé par le conjoint - le match se clôt) ou par **code
-  d'invitation** `ALLIANCE-XXXXXX` pour les couples déjà mariés hors plateforme.
-- **Agent 8 - Gardien du Couple** : check-ins hebdomadaires par saison
-  (réponses **privées**, jamais visibles du conjoint), rituels concrets
-  déterministes (temps à deux, charge partagée, tendresse, sujet évité),
-  mot personnalisé LLM. **Guardrail absolu** : violence/abus détecté dans une
-  note → orientation professionnelle immédiate (3919 en France), aucun rituel,
-  escalade COACH_ONLY - prime sur tout appel LLM.
-- **Parcours de saison** (4 langues) : 6 premiers mois, finances, belle-famille ;
-  arrivée d'un enfant, rester un couple, transmettre la foi.
-- **Espace Confidence** : coach IA privé (même le conjoint n'y accède pas)
-  + coachs humains vérifiés.
+- [chiffrement des réponses Alliance](docs/security/alliance-answer-encryption.md) ;
+- [intégrité de l’Espace Couple](docs/security/couple-space-integrity.md) ;
+- [cycle des liens de bénédiction](docs/security/blessing-links.md) ;
+- [journal d’audit administratif](docs/security/admin-audit.md).
 
-### Coach IA
+## IA et accompagnement
 
-- Sans clé API : **mode fallback déterministe** (réponses guidées par étape, 4 langues) - la prod tourne sans dépendance payante.
-- Avec une clé : `ANTHROPIC_API_KEY` (Claude direct), **`OPENROUTER_API_KEY`**
-  (n'importe quel modèle via OpenRouter - choisir avec `OPENROUTER_MODEL`,
-  défaut `anthropic/claude-haiku-4.5`) ou `OPENAI_API_KEY` (gpt-4o-mini).
-  Même system prompt à garde-fous spirituels dans les trois cas ; toute panne
-  LLM retombe silencieusement sur le fallback scripté.
-- Dans tous les cas : bandeau de transparence, jamais d'affirmation de volonté
-  divine, redirection vers coach humain sur sujet sensible, quota 5 questions/jour (DB).
+Les fonctions de fond (ice-breaker, bilan, Gardien, sortie et reconstruction)
+utilisent des contenus locaux déterministes et n’envoient pas les profils ou
+notes à un fournisseur LLM.
 
-### Paiements
+Seul le coach IA explicitement sollicité peut appeler le fournisseur configuré.
+Il exige auparavant le consentement autonome `AI_COACH_INTERACTION`, versionné
+et lié à une empreinte serveur du fournisseur, des modèles, des opérateurs
+d’inférence et de la politique de routage. Le recueil ne transmet aucune
+donnée ; l’appel ne devient possible qu’après une question distincte. Avec
+OpenRouter, `OPENROUTER_ALLOWED_PROVIDERS` est obligatoire : la passerelle
+envoie cette allowlist exacte dans `provider.only`, désactive les fallbacks,
+refuse la collecte et exige les endpoints ZDR. Tout changement de modèle,
+d’opérateur ou de politique impose un nouvel accord.
 
-`lib/payments/provider.ts` expose `PaymentProvider` avec une implémentation
-factice. Brancher Stripe = implémenter `StripePaymentProvider`
-(`checkout.sessions.create` + webhook `constructEvent`) sans toucher aux appelants.
-Règle non négociable : blocage, signalement, suppression de compte et
-confidentialité ne passent **jamais** derrière un paywall.
+L’admission consentement + quota est commitée dans une transaction courte, puis
+le réseau s’exécute hors transaction sous un bail technique de 20 secondes et
+une échéance globale de 15 secondes. Le retrait révoque d’abord l’autorisation,
+puis attend hors connexion DB les seuls transferts déjà admis. Après sa réponse
+`200`, aucune nouvelle transmission ne peut commencer sans nouvel accord.
 
----
+Avant envoi, les coordonnées détectées sont expurgées. Le contexte comprend la
+question, l’historique récent, l’étape, la langue, la tradition doctrinale et un
+contexte culturel dérivé du pays. Sans fournisseur, un fallback local répond
+sans destinataire IA externe.
 
-## Décisions & hypothèses
+Quota : cinq questions par jour pour le compte gratuit, réservé avant le départ
+réseau et jamais remboursé après un timeout ; abonnement actif sans quota
+quotidien. Deux rate-limits distincts bornent l’identité et l’adresse IP.
+`OPENROUTER_MODEL` est un dernier recours après la matrice étape/palier.
 
-- **Auth maison** (Argon2id via `@node-rs/argon2` + JWT `jose` en cookie httpOnly/Secure/SameSite=Lax, 7 j) plutôt que NextAuth : moins de surface, déploiement Vercel sans config supplémentaire.
-- **Prisma 6** (générateur `prisma-client-js` stable). Prisma 7 changeait le générateur et exigeait des driver adapters.
-- **Sans Docker ni Postgres local**, `pnpm prisma dev` fournit un Postgres local ; quirks documentés (pgbouncer, migrate deploy).
-- **Anti-Malaise Local v1** : exclusion même ville approximative + même dénomination (proxy raisonnable sans géolocalisation fine). Le rayon est stocké et l'algorithme est isolé dans `lib/matching.ts` pour brancher une vraie géo plus tard. La raison d'exclusion n'est jamais exposée.
-- **Messages chiffrés au repos** (AES-256-GCM applicatif), comme témoignage, église locale et vision familiale. Pas de E2EE en v1 (la modération des coordonnées doit lire le contenu côté serveur).
-- **Avancement d'étape à double consentement** : le premier demande, le second confirme ; les `required_checks` du ruleset sont évalués à la confirmation. Un signalement actif bloque.
-- **Messages bloqués** : stockés `BLOCKED`, visibles uniquement par l'expéditeur (barrés), accompagnés d'un message SYSTÈME éducatif issu du moteur - jamais une erreur technique.
-- **Rate-limit en mémoire** (fenêtre glissante) : suffisant en v1 single-region ; interface prête pour Redis.
-- **Email transactionnel** : lien de vérification loggé en dev ; interface `lib/email.ts` stable pour brancher Resend/SES en prod.
-- **Capacitor** en mode « remote wrapper » (charge la PWA déployée) : l'app Next.js est SSR full-stack, pas exportable en statique.
-- **Stubs propres documentés** : Stripe réel, stores iOS/Android (publication), appels audio/vidéo internes, vertical multi-religions supplémentaires, espace église - hors périmètre v1, aucune erreur à l'exécution.
-- **Husky non installé** (chaîne CI conseillée : `pnpm lint && pnpm tsc --noEmit && pnpm test`).
+Le périmètre, la concurrence retrait/appel et les limites d’expurgation sont
+documentés dans le
+[cycle de vie des données](docs/security/privacy-data-lifecycle.md).
 
-## Tests
+Le Gardien du Couple produit un mot déterministe. En cas de contenu évoquant un
+danger, il affiche des ressources professionnelles et pose un drapeau privé ;
+aucune alerte humaine opérationnelle n’est envoyée automatiquement.
 
-`pnpm test` - 26 tests Vitest, dont les tests d'intégration exigés :
-moteur doctrinal (blocage téléphone en Découverte, message éducatif localisé,
-checks d'avancement, ruleset invalide/path traversal) et détection de
-coordonnées (`+33…`, `06 12 34 56 78`, emails, `@handle`, « zéro six »,
-WhatsApp/Insta, liens - et **Jean 3:16 n'est pas bloqué**).
+## Espace Couple et Parrain/Marraine
+
+Les saisons suivent `ENGAGED -> MARRIED -> PARENTS`. Le premier membre demande
+la transition, le second la confirme. Un utilisateur ne peut appartenir qu’à
+un espace ; les contraintes PostgreSQL protègent aussi les écritures hors API.
+
+Une invitation externe a la forme `ALLIANCE-XXXXXXXXXXXX`, possède 60 bits
+d’entropie, est stockée sous HMAC, liée à l’email vérifié, expire après 72
+heures et est consommée atomiquement.
+
+Un lien de bénédiction utilise 256 bits aléatoires. Seul son SHA-256 est stocké ;
+il expire après 72 heures, devient inutilisable après réponse et est révoqué
+lors d’un blocage, d’une clôture ou d’un changement de sponsor.
+
+## Paiements
+
+Stripe Checkout, le portail client et le webhook signé sont implémentés. Un
+nouveau checkout n’est proposé que si secret, Price et webhook sont tous
+configurés. Le montant exact, la devise et la périodicité sont affichés par
+Stripe avant confirmation ; l’interface ne les invente pas.
+
+Premium livre actuellement :
+
+- les échanges quotidiens illimités avec le coach IA ;
+- le soutien au développement et à l’entretien du service.
+
+Blocage, signalement, sortie, export, suppression et contrôles de
+confidentialité restent gratuits à vie.
+
+## PWA et mobile
+
+La PWA comprend manifest, icônes, safe areas et page hors ligne. Les réponses
+authentifiées ne sont jamais mises en cache. Le wrapper Capacitor charge la PWA
+distante, mais aucun binaire de store n’est publié dans ce dépôt.
+
+```bash
+export CAP_SERVER_URL="https://votre-domaine.example"
+pnpm cap add ios
+pnpm cap add android
+```
+
+La validation réelle Safari iOS, clavier logiciel, installation PWA et stores
+reste une étape manuelle sur appareils.
+
+## Comptes de démonstration
+
+Après `pnpm seed`, le mot de passe partagé est `Alliance2026!`.
+
+| Email                                   | Profil                              |
+| --------------------------------------- | ----------------------------------- |
+| `elodie@demo.chemin-alliance.app`       | compte vérifié, match avec Jonathan |
+| `jonathan@demo.chemin-alliance.app`     | compte vérifié                      |
+| `marie-claire@demo.chemin-alliance.app` | profil catholique                   |
+| `david@demo.chemin-alliance.app`        | profil évangélique                  |
+| `sarah@demo.chemin-alliance.app`        | match avec David                    |
+| `emmanuel@demo.chemin-alliance.app`     | profil catholique                   |
+| `admin@chemin-alliance.app`             | administration des signalements     |
+
+Ces identifiants sont exclusivement destinés au développement et à la recette.

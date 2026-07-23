@@ -120,7 +120,7 @@ export default async function ProfilePage(props: {
                 <div className="text-sm font-medium text-ink dark:text-[#ECE7DD]">
                   {faith.ministry}
                 </div>
-                <div className="text-xs text-sand-600 dark:text-[#7E7A72]">
+                <div className="text-xs text-sand-600 dark:text-[#8F8A80]">
                   {t("profile.ministry")} ·{" "}
                   {t("profile.engagement", {
                     frequency: faith.engagementFrequency
@@ -141,7 +141,7 @@ export default async function ProfilePage(props: {
               <div className="text-sm font-medium text-ink dark:text-[#ECE7DD]">
                 {t("profile.localChurch")}
               </div>
-              <div className="text-xs text-sand-600 dark:text-[#7E7A72]">
+              <div className="text-xs text-sand-600 dark:text-[#8F8A80]">
                 {t("profile.localChurchMasked", {
                   region: user.cityApprox ?? "-",
                 })}
@@ -192,7 +192,7 @@ export default async function ProfilePage(props: {
                 : t(`profile.${statusKey(rel?.maritalStatus)}`)}
               {rel?.acceptsChildren ? ` · ${t("profile.acceptsChildren")}` : ""}
             </div>
-            <div className="text-xs text-sand-600 dark:text-[#7E7A72]">
+            <div className="text-xs text-sand-600 dark:text-[#8F8A80]">
               {t("profile.faithEducation")}
             </div>
           </div>

@@ -3,6 +3,11 @@ import { prisma } from "@/lib/db";
 import { requireUser } from "@/lib/security/session";
 import { canSeeField } from "@/lib/visibility";
 import { blurredVariantPath, signedPhotoUrl } from "@/lib/storage";
+import { unblockedMatchWhere } from "@/lib/blocks";
+import {
+  activeSensitiveDataConsentPairWhere,
+  activeSensitiveDataConsentUserWhere,
+} from "@/lib/sensitive-data-consent";
 
 /**
  * Proxy AUTORISÉ de la photo d'un AUTRE membre - cœur du pipeline sécurisé.
@@ -29,30 +34,34 @@ export const GET = withErrors(
     const targetId = (await params).userId;
     const isSelf = targetId === viewer.id;
 
-    // Stade de la relation viewer↔cible (match ACTIF uniquement) et photo de
-    // la cible : deux lectures indépendantes (aucune ne dépend du résultat de
-    // l'autre) → en parallèle. Les checks/early-returns restent dans le même
-    // ordre qu'avant, une fois les deux résolues.
-    const [match, target] = await Promise.all([
-      isSelf
-        ? Promise.resolve(null)
-        : prisma.match.findFirst({
-            where: {
-              status: "ACTIVE",
-              OR: [
-                { userAId: viewer.id, userBId: targetId },
-                { userAId: targetId, userBId: viewer.id },
-              ],
-            },
-            select: { stage: true },
-          }),
-      prisma.user.findUnique({
-        where: { id: targetId },
-        select: { photoUrl: true },
-      }),
-    ]);
+    // Pour autrui, l'autorisation ACTIVE + non bloquée est résolue avant de
+    // lire le chemin de stockage de la photo.
+    const match = isSelf
+      ? null
+      : await prisma.match.findFirst({
+          where: {
+            AND: [
+              unblockedMatchWhere(viewer.id),
+              activeSensitiveDataConsentPairWhere,
+              {
+                status: "ACTIVE",
+                OR: [
+                  { userAId: viewer.id, userBId: targetId },
+                  { userAId: targetId, userBId: viewer.id },
+                ],
+              },
+            ],
+          },
+          select: { stage: true },
+        });
+    if (!isSelf && !match) return jsonError(403, "FORBIDDEN");
 
-    const ctx = { matched: !!match, stage: match?.stage ?? null };
+    const target = await prisma.user.findFirst({
+      where: { id: targetId, ...activeSensitiveDataConsentUserWhere },
+      select: { photoUrl: true },
+    });
+
+    const ctx = { matched: Boolean(match), stage: match?.stage ?? null };
     const showFull = isSelf || canSeeField("AFTER_DISCERNMENT", ctx);
     const showBlurred = !showFull && !isSelf && canSeeField("AFTER_MATCH", ctx);
 

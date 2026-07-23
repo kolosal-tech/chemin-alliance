@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { requireUser } from "@/lib/security/session";
+import { safeErrorDetails } from "@/lib/security/safe-error";
 
 // Les 3 champs "verrouillables" au coffre-fort : chacun vit sur un modèle
 // différent (FaithProfile ou RelationshipProfile), voir DEFAULT_LEVEL ci-dessous.
@@ -87,7 +88,7 @@ export async function setVaultLock(
     ) {
       return { ok: false, error: "PROFILE_NOT_FOUND" };
     }
-    console.error("[vault] setVaultLock", err);
+    console.error("[vault] setVaultLock", safeErrorDetails(err));
     return { ok: false, error: "INTERNAL_ERROR" };
   }
 

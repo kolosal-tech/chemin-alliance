@@ -85,7 +85,7 @@ export async function ProfileShowcase({
                 />
               </svg>
             )}
-            <span className="text-[16px] text-sand-600 dark:text-[#7E7A72]">
+            <span className="text-[16px] text-sand-600 dark:text-[#8F8A80]">
               · {age}
             </span>
           </div>

@@ -16,22 +16,32 @@ export const GET = withErrors(async (req: Request) => {
   requireCronAuth(req);
   const plan = buildPurgePlan(new Date());
 
-  const [phone, emailTok, pwdTok, aiCoach] = await prisma.$transaction([
-    prisma.phoneVerification.deleteMany({
-      where: { expiresAt: { lt: plan.phoneBefore } },
-    }),
-    prisma.user.updateMany({
-      where: { isVerified: true, emailVerifyExpires: { lt: plan.tokenBefore } },
-      data: { emailVerifyToken: null, emailVerifyExpires: null },
-    }),
-    prisma.user.updateMany({
-      where: { passwordResetExpires: { lt: plan.tokenBefore } },
-      data: { passwordResetToken: null, passwordResetExpires: null },
-    }),
-    prisma.aiCoachUsage.deleteMany({
-      where: { day: { lt: plan.aiCoachBefore } },
-    }),
-  ]);
+  const [phone, emailTok, pwdTok, aiCoach, aiCoachTransfers, reports] =
+    await prisma.$transaction([
+      prisma.phoneVerification.deleteMany({
+        where: { expiresAt: { lt: plan.phoneBefore } },
+      }),
+      prisma.user.updateMany({
+        where: {
+          isVerified: true,
+          emailVerifyExpires: { lt: plan.tokenBefore },
+        },
+        data: { emailVerifyToken: null, emailVerifyExpires: null },
+      }),
+      prisma.user.updateMany({
+        where: { passwordResetExpires: { lt: plan.tokenBefore } },
+        data: { passwordResetToken: null, passwordResetExpires: null },
+      }),
+      prisma.aiCoachUsage.deleteMany({
+        where: { day: { lt: plan.aiCoachBefore } },
+      }),
+      prisma.aiCoachTransferLease.deleteMany({
+        where: { expiresAt: { lte: plan.aiCoachTransferBefore } },
+      }),
+      prisma.report.deleteMany({
+        where: { createdAt: { lt: plan.reportBefore } },
+      }),
+    ]);
 
   return NextResponse.json({
     ok: true,
@@ -40,6 +50,8 @@ export const GET = withErrors(async (req: Request) => {
       emailTokens: emailTok.count,
       passwordResetTokens: pwdTok.count,
       aiCoachUsage: aiCoach.count,
+      aiCoachTransferLeases: aiCoachTransfers.count,
+      reports: reports.count,
     },
   });
 });

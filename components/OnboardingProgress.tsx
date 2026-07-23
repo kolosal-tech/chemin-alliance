@@ -70,7 +70,7 @@ export function OnboardingProgress({
             <span className="font-display text-3xl font-medium text-night dark:text-[#ECE7DD]">
               {percent}%
             </span>
-            <span className="lbl text-[11px] text-sand-600 dark:text-[#7E7A72]">
+            <span className="lbl text-[11px] text-sand-600 dark:text-[#8F8A80]">
               {t("percentLabel")}
             </span>
           </div>

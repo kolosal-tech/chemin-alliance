@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
-import { requireMatchMember } from "@/lib/alliance";
+import { requireActiveMatchMember } from "@/lib/alliance";
 import { rateLimit } from "@/lib/security/rate-limit";
 import { draftExitMessage } from "@/lib/agents/exit-helper";
 import type { Locale } from "@/lib/core-engine";
@@ -18,7 +18,7 @@ export const POST = withErrors(async (req: Request) => {
   const rl = await rateLimit(`exit:${user.id}`, 6, 60 * 60_000);
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
   const body = schema.parse(await readJsonLimited(req));
-  await requireMatchMember(body.matchId, user.id);
+  await requireActiveMatchMember(body.matchId, user.id);
   const draft = await draftExitMessage(
     body.reason,
     body.note,

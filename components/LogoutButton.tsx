@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { AsyncButton } from "@/components/AsyncButton";
+import { clearPrivatePwaCaches } from "@/lib/pwa-cache";
 
 /**
  * Bouton « Se déconnecter ».
@@ -18,6 +19,7 @@ export function LogoutButton() {
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
+    await clearPrivatePwaCaches();
     router.push("/login");
     router.refresh();
   }

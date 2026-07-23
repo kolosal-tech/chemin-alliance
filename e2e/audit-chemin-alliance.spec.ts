@@ -23,6 +23,7 @@ import { test, expect, type Page, type Locator } from "@playwright/test";
 
 const LOCALE = process.env.LOCALE ?? "fr";
 const PASSWORD = process.env.DEMO_PASSWORD ?? "Alliance2026!";
+const MANAGED_FIXTURES = process.env.E2E_MANAGED_FIXTURES === "1";
 const MOBILE = { width: 390, height: 844 };
 
 // Chaines FR reelles utilisees comme ancres de selection (messages/fr.json).
@@ -92,6 +93,7 @@ async function highlight(locator: Locator, ms = 1000): Promise<void> {
 }
 
 async function login(page: Page, email: string): Promise<void> {
+  await page.setExtraHTTPHeaders({ "x-forwarded-for": "203.0.113.10" });
   await page.setViewportSize(MOBILE); // redimensionnement mobile explicite (brief)
   await page.goto(`/${LOCALE}/login`);
   await page.fill('input[name="email"]', email);
@@ -167,7 +169,28 @@ test.describe("Audit Chemin d'Alliance - Matrice des 4 profils (mobile 390x844)"
   test("Watchman - message d'arnaque -> banniere de vigilance", async ({
     page,
   }) => {
-    const matchId = process.env.MATCH_ID;
+    let matchId = process.env.MATCH_ID;
+    if (!matchId && MANAGED_FIXTURES) {
+      const { PrismaClient } = await import("@prisma/client");
+      const prisma = new PrismaClient();
+      try {
+        const watchmanEmail = env("WATCHMAN_EMAIL", SCENARIOS[0].email);
+        const match = await prisma.match.findFirst({
+          where: {
+            status: "ACTIVE",
+            OR: [
+              { userA: { email: watchmanEmail } },
+              { userB: { email: watchmanEmail } },
+            ],
+          },
+          orderBy: { createdAt: "desc" },
+          select: { id: true },
+        });
+        matchId = match?.id;
+      } finally {
+        await prisma.$disconnect();
+      }
+    }
     test.skip(
       !matchId,
       "Definir MATCH_ID=<id d'un match avec conversation ouverte> pour ce test.",
@@ -185,11 +208,20 @@ test.describe("Audit Chemin d'Alliance - Matrice des 4 profils (mobile 390x844)"
       "Envoie-moi 500 euros par Western Union, c'est une urgence",
       "On finit ca par virement bitcoin sur mon wallet crypto",
     ];
+    const sendButton = page.locator('form button[type="submit"]').last();
     for (const bait of baits) {
       await input.fill(bait);
       await highlight(input);
-      await page.locator('form button[type="submit"]').last().click();
-      await page.waitForTimeout(900);
+      await expect(sendButton).toBeEnabled();
+      const sent = page.waitForResponse(
+        (response) =>
+          response.request().method() === "POST" &&
+          response.url().includes(`/api/matches/${matchId}/messages`),
+      );
+      await sendButton.click();
+      const response = await sent;
+      expect(response.ok()).toBeTruthy();
+      await expect(input).toHaveValue("");
     }
 
     // La banniere fetch /safety-signal au montage : recharger apres persistance.
@@ -229,10 +261,14 @@ test.describe("Audit Chemin d'Alliance - Matrice des 4 profils (mobile 390x844)"
     const subscribe = page
       .getByRole("button", { name: new RegExp(SUBSCRIBE_CTA) })
       .first();
-    test.skip(
-      (await subscribe.count()) === 0,
-      "Bouton d'abonnement absent (Stripe non active sur cette cible) - rien a auditer.",
-    );
+    if ((await subscribe.count()) === 0) {
+      // État local/CI attendu sans fournisseur : l'interface doit être honnête,
+      // sans bouton mort ni fausse promesse de paiement disponible.
+      await expect(
+        page.getByText(/bientôt disponible|coming soon|próximamente|em breve/i),
+      ).toBeVisible();
+      return;
+    }
 
     // 2) On bloque toute navigation reelle vers Stripe : la session s'ouvre,
     //    mais on n'entre jamais dans le paiement.
@@ -254,10 +290,10 @@ test.describe("Audit Chemin d'Alliance - Matrice des 4 profils (mobile 390x844)"
     await confirm.click();
     const resp = await checkoutResp;
 
-    test.skip(
-      !resp || resp.status() !== 200,
-      "Endpoint /api/billing/checkout indisponible sur cette cible (Stripe non configure).",
+    expect(resp, "La CTA visible doit ouvrir une session de paiement").not.toBe(
+      null,
     );
+    expect(resp!.status()).toBe(200);
 
     const body = (await resp!.json().catch(() => null)) as {
       url?: string;

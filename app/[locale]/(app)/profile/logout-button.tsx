@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useToast } from "@/components/Toast";
+import { clearPrivatePwaCaches } from "@/lib/pwa-cache";
 
 export function LogoutButton() {
   const t = useTranslations("common");
@@ -16,6 +17,7 @@ export function LogoutButton() {
     try {
       const res = await fetch("/api/auth/logout", { method: "POST" });
       if (!res.ok) throw new Error("logout");
+      await clearPrivatePwaCaches();
       // Le toast survit à la navigation client : le ToastProvider est monté au
       // niveau du layout de locale, qui enveloppe aussi /login.
       toast.success(t("loggedOut"));

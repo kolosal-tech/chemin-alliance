@@ -19,6 +19,14 @@ export const getSessionUser = cache(async () => {
       faithProfile: true,
       relationshipProfile: true,
       privacySettings: true,
+      consents: {
+        where: {
+          type: "SENSITIVE_DATA_PROCESSING",
+          revokedAt: null,
+        },
+        select: { id: true },
+        take: 1,
+      },
     },
   });
   // Compte soft-supprimé (RGPD) : session invalide.
@@ -30,7 +38,7 @@ export const getSessionUser = cache(async () => {
   return user;
 });
 
-export async function requireUser() {
+export async function requireAuthenticatedUser() {
   const user = await getSessionUser();
   if (!user) {
     throw Object.assign(new Error("UNAUTHORIZED"), { status: 401 });
@@ -38,8 +46,19 @@ export async function requireUser() {
   return user;
 }
 
+export async function requireUser() {
+  const user = await requireAuthenticatedUser();
+  if (user.role === "USER" && user.consents.length === 0) {
+    throw Object.assign(new Error("SENSITIVE_DATA_CONSENT_REQUIRED"), {
+      status: 428,
+      code: "SENSITIVE_DATA_CONSENT_REQUIRED",
+    });
+  }
+  return user;
+}
+
 export async function requireAdmin() {
-  const user = await requireUser();
+  const user = await requireAuthenticatedUser();
   if (user.role !== "ADMIN") {
     throw Object.assign(new Error("FORBIDDEN"), { status: 403 });
   }

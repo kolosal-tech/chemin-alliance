@@ -3,8 +3,13 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
-import { requireMatchMember, buildActionContext } from "@/lib/alliance";
+import { requireActiveMatchMember, buildActionContext } from "@/lib/alliance";
 import { validateAction, type Locale } from "@/lib/core-engine";
+import {
+  canRespondToContactExchange,
+  CONTACT_REQUESTABLE_STATUSES,
+} from "@/lib/contact-exchange";
+import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 
 /** Demande officielle d'échange - gouvernée par le moteur doctrinal. */
 export const POST = withErrors(
@@ -13,7 +18,16 @@ export const POST = withErrors(
     { params }: { params: Promise<{ matchId: string }> },
   ) => {
     const user = await requireUser();
-    const match = await requireMatchMember((await params).matchId, user.id);
+    const match = await requireActiveMatchMember(
+      (await params).matchId,
+      user.id,
+    );
+    const rl = await rateLimit(
+      `contact-exchange:${match.id}:${user.id}`,
+      LIMITS.invite.limit,
+      LIMITS.invite.windowMs,
+    );
+    if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
     const ctx = await buildActionContext(
       match,
       user.id,
@@ -37,10 +51,20 @@ export const POST = withErrors(
         { status: 403 },
       );
     }
-    await prisma.match.update({
-      where: { id: match.id },
-      data: { contactExchange: "REQUESTED" },
+    const updated = await prisma.match.updateMany({
+      where: {
+        id: match.id,
+        status: "ACTIVE",
+        contactExchange: { in: [...CONTACT_REQUESTABLE_STATUSES] },
+      },
+      data: {
+        contactExchange: "REQUESTED",
+        contactExchangeRequestedBy: user.id,
+      },
     });
+    if (updated.count !== 1) {
+      return jsonError(409, "CONTACT_EXCHANGE_UNAVAILABLE");
+    }
     return NextResponse.json({ allowed: true, status: "REQUESTED" });
   },
 );
@@ -53,15 +77,36 @@ export const PATCH = withErrors(
     { params }: { params: Promise<{ matchId: string }> },
   ) => {
     const user = await requireUser();
-    const match = await requireMatchMember((await params).matchId, user.id);
-    if (match.contactExchange !== "REQUESTED") {
+    const match = await requireActiveMatchMember(
+      (await params).matchId,
+      user.id,
+    );
+    const rl = await rateLimit(
+      `contact-exchange:${match.id}:${user.id}`,
+      LIMITS.invite.limit,
+      LIMITS.invite.windowMs,
+    );
+    if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
+    if (!canRespondToContactExchange(match, user.id)) {
       return jsonError(409, "NO_PENDING_REQUEST");
     }
     const { accept } = respondSchema.parse(await readJsonLimited(req));
-    const updated = await prisma.match.update({
-      where: { id: match.id },
-      data: { contactExchange: accept ? "ACCEPTED" : "DECLINED" },
+    const status = accept ? "ACCEPTED" : "DECLINED";
+    const updated = await prisma.match.updateMany({
+      where: {
+        id: match.id,
+        status: "ACTIVE",
+        contactExchange: "REQUESTED",
+        contactExchangeRequestedBy: match.contactExchangeRequestedBy,
+      },
+      data: {
+        contactExchange: status,
+        contactExchangeRequestedBy: null,
+      },
     });
-    return NextResponse.json({ ok: true, status: updated.contactExchange });
+    if (updated.count !== 1) {
+      return jsonError(409, "NO_PENDING_REQUEST");
+    }
+    return NextResponse.json({ ok: true, status });
   },
 );

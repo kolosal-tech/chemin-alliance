@@ -24,18 +24,16 @@ import { DiscoveryPreview } from "@/components/DiscoveryPreview";
 import { parseFilters, matchesFilters, activeFilterCount } from "@/lib/filters";
 import { FiltersDrawer } from "@/components/product/FiltersDrawer";
 import { SafetyBlock } from "@/components/product/SafetyBlock";
+import { buildPreMatchSuggestionProfile } from "@/lib/suggestion-profile";
 
-export default async function SuggestionsPage(
-  props: {
-    params: Promise<{ locale: string }>;
-    searchParams?: Promise<{
-      ageMin?: string;
-      ageMax?: string;
-      verified?: string;
-      children?: string;
-    }>;
-  }
-) {
+export default async function SuggestionsPage(props: {
+  params: Promise<{ locale: string }>;
+  searchParams?: Promise<{
+    ageMin?: string;
+    ageMax?: string;
+    verified?: string;
+  }>;
+}) {
   const searchParams = await props.searchParams;
   const params = await props.params;
   setRequestLocale(params.locale);
@@ -78,7 +76,6 @@ export default async function SuggestionsPage(
       {
         age: s.age,
         isVerified: s.isVerified,
-        hasChildren: s.relationshipProfile?.hasChildren ?? false,
       },
       filters,
     ),
@@ -148,7 +145,7 @@ export default async function SuggestionsPage(
               {t("stages.DISCOVERY")}
             </div>
           </div>
-          <span className="text-xs text-sand-600 dark:text-[#7E7A72]">
+          <span className="text-xs text-sand-600 dark:text-[#8F8A80]">
             {t("suggestions.profilesCount", { count: shown.length })}
           </span>
         </div>
@@ -158,9 +155,9 @@ export default async function SuggestionsPage(
         // portrait n'existe pas. Une fois l'entretien fait (portrait présent),
         // on n'invite plus à « commencer ton bilan » même si onboardingDoneAt
         // n'a pas été posé - sinon l'utilisateur croit devoir tout recommencer.
-        (<div className="mt-4">
+        <div className="mt-4">
           <OnboardingIntroCard />
-        </div>)
+        </div>
       ) : gateActive ? (
         <div className="mt-4">
           <OnboardingProgress completion={completion} />
@@ -224,45 +221,32 @@ export default async function SuggestionsPage(
               // !isVerified). P3 : on montre un aperçu de silhouettes (vivier
               // vivant) + la vraie cause avec CTA de renvoi, plutôt que le
               // générique "pas de suggestion aujourd'hui".
-              (<div className="flex flex-col gap-3 lg:col-span-3">
+              <div className="flex flex-col gap-3 lg:col-span-3">
                 <DiscoveryPreview teasers={discoveryPreview} />
                 <SuggestionsVerifyNotice />
-              </div>)
+              </div>
             ) : (
               <p className="rounded-card border border-sand-200 bg-surface p-5 text-sm text-warmgray dark:border-anthracite-600 dark:bg-anthracite-800 dark:text-[#9A958B] lg:col-span-3">
                 {t("suggestions.empty")}
               </p>
             ))}
           {missing.length === 0 &&
-            shown.map((s, i) => (
-              <SuggestionCard
-                key={s.id}
-                featured={i === 1}
-                profile={{
-                  id: s.id,
-                  displayName: s.displayName,
-                  age: s.age,
-                  isVerified: s.isVerified,
-                  denomination: s.faithProfile?.denomination ?? null,
-                  vertical: s.faithProfile?.vertical ?? null,
-                  maritalStatus: s.relationshipProfile?.maritalStatus ?? null,
-                  hasChildren: s.relationshipProfile?.hasChildren ?? false,
-                  intentionStatement:
-                    s.relationshipProfile?.intentionVisibility ===
-                    "PUBLIC_CONTROLLED"
-                      ? (s.relationshipProfile?.intentionStatement ?? null)
-                      : null,
-                  gradient: i % 3,
-                  photoBlurhash: s.photoBlurhash ?? null,
-                  // P2 : axes de compatibilité viewer<->candidat pour le radar.
-                  axes: compatibilityTopics(user, s).axes,
-                  // P6 : signal de confiance "accompagné·e" (a un Parrain/Marraine).
-                  hasSponsor: s.sponsor != null,
-                  // Ecosysteme : Compagnon IA (badge clair dans la carte).
-                  kind: s.kind,
-                }}
-              />
-            ))}
+            shown.map((s, i) => {
+              const profile = buildPreMatchSuggestionProfile(s);
+              return (
+                <SuggestionCard
+                  key={s.id}
+                  featured={i === 1}
+                  profile={{
+                    ...profile,
+                    gradient: i % 3,
+                    // Pré-match : la fonction neutralise les axes issus de
+                    // données privées (famille, ville, intention masquée).
+                    axes: compatibilityTopics(user, s).axes,
+                  }}
+                />
+              );
+            })}
           {missing.length === 0 && (
             <div className="lg:col-span-3">
               <SafetyBlock />

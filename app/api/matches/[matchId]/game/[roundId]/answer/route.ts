@@ -3,7 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
-import { requireMatchMember } from "@/lib/alliance";
+import { requireActiveMatchMember } from "@/lib/alliance";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import { encryptField } from "@/lib/security/crypto";
 import { sendPushToUser } from "@/lib/push";
@@ -44,7 +44,7 @@ export const POST = withErrors(
     if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
     const { matchId, roundId } = await params;
-    const match = await requireMatchMember(matchId, user.id);
+    const match = await requireActiveMatchMember(matchId, user.id);
     const otherUserId =
       match.userAId === user.id ? match.userBId : match.userAId;
 
@@ -102,8 +102,8 @@ export const POST = withErrors(
               matchId: match.id,
             }),
           );
-        } catch (err) {
-          console.error("[push] notif reveal jeu échouée", err);
+        } catch {
+          console.error("[push] notif reveal jeu indisponible");
         }
       }
 

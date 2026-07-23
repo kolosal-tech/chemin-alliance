@@ -1,0 +1,183 @@
+name: Quality
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Types, lint, tests, build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/codex-chemin-alliance-ci?schema=public
+      APP_URL: http://127.0.0.1:3000
+      JWT_SECRET: CI-v7Jz9pQ2mX6cR4tN8wK3sF5hL1dB0yG6-uA
+      ENCRYPTION_KEY: 0719a23cb45de67f8910ab32cd54ef7618293a4b5c6d7e8f9012a3b4c5d6e7f8
+      AI_PROVIDER: fallback
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: codex-chemin-alliance-ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d codex-chemin-alliance-ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Apply and validate migrations
+        run: |
+          pnpm exec prisma migrate deploy
+          pnpm exec prisma validate
+          pnpm exec prisma generate
+
+      - name: Validate AI Coach consent linearization
+        run: pnpm exec tsx scripts/validate-ai-coach-consent-linearization.ts
+
+      - name: Validate sensitive-data consent withdrawal
+        run: pnpm test:sensitive-consent-db
+
+      - name: Type-check
+        run: pnpm exec tsc --noEmit
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Unit and route tests
+        run: pnpm test
+
+      - name: Validate browser-result gate
+        run: node scripts/assert-playwright-results.mjs --self-test
+
+      - name: Production build
+        env:
+          RESEND_API_KEY: re_ci_7Jz9pQ2mX6cR4tN8wK3sF5hL1dB0yG6
+          EMAIL_FROM: Chemin Alliance CI <ci@example.invalid>
+          UPSTASH_REDIS_REST_URL: https://redis-ci.example.invalid
+          UPSTASH_REDIS_REST_TOKEN: ci_8qW4eR7tY2uI9oP5aS3dF6gH1jK0lZxC
+          CRON_SECRET: ci-4mN8bV2cX7zL1kJ9hG5fD3sA6pO0iUeR
+        run: pnpm build
+
+  e2e:
+    name: Deterministic Chromium, Firefox and WebKit gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/codex-chemin-alliance-ci?schema=public
+      APP_URL: http://127.0.0.1:3000
+      JWT_SECRET: CI-v7Jz9pQ2mX6cR4tN8wK3sF5hL1dB0yG6-uA
+      ENCRYPTION_KEY: 0719a23cb45de67f8910ab32cd54ef7618293a4b5c6d7e8f9012a3b4c5d6e7f8
+      AI_PROVIDER: fallback
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: codex-chemin-alliance-ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d codex-chemin-alliance-ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install browser matrix
+        run: pnpm exec playwright install --with-deps chromium firefox webkit
+
+      - name: Prepare deterministic database
+        env:
+          E2E_MANAGED_FIXTURES: "1"
+        run: |
+          pnpm exec prisma migrate deploy
+          pnpm exec prisma generate
+          pnpm seed
+          pnpm test:e2e-fixtures
+
+      # Les 30 scénarios métier restent exécutés une fois sous Chromium. Les
+      # 9 scénarios visuels/authentifiés non destructifs sont répétés sous
+      # Firefox et WebKit, soit 48 exécutions sans skip.
+      - name: Run full no-skip browser gate
+        env:
+          E2E_EMAIL: jonathan@demo.chemin-alliance.app
+          E2E_MATCH_EMAIL: jonathan@demo.chemin-alliance.app
+          E2E_COUPLE_EMAIL: emmanuel@demo.chemin-alliance.app
+          E2E_SENSITIVE_CONSENT_EMAIL: jonathan@demo.chemin-alliance.app
+          E2E_PASSWORD: Alliance2026!
+          PROFILE_ENGAGED_EMAIL: david@demo.chemin-alliance.app
+          PROFILE_MARRIED_EMAIL: emmanuel@demo.chemin-alliance.app
+          WATCHMAN_EMAIL: sarah@demo.chemin-alliance.app
+          E2E_LOCALES: fr,en,es,pt
+          E2E_MANAGED_FIXTURES: "1"
+          E2E_LOCAL_MEMORY_RATE_LIMIT: "1"
+          E2E_LOCAL_INSECURE_COOKIE: "1"
+          RESEND_API_KEY: re_ci_7Jz9pQ2mX6cR4tN8wK3sF5hL1dB0yG6
+          EMAIL_FROM: Chemin Alliance CI <ci@example.invalid>
+          UPSTASH_REDIS_REST_URL: https://redis-ci.example.invalid
+          UPSTASH_REDIS_REST_TOKEN: ci_8qW4eR7tY2uI9oP5aS3dF6gH1jK0lZxC
+          CRON_SECRET: ci-4mN8bV2cX7zL1kJ9hG5fD3sA6pO0iUeR
+        run: pnpm exec playwright test --workers=1
+
+      - name: Reject skipped or missing browser coverage
+        run: node scripts/assert-playwright-results.mjs 48
+
+      - name: Upload Playwright evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-critical-${{ github.run_id }}-${{ github.run_attempt }}
+          path: test-results/
+          if-no-files-found: warn
+          retention-days: 14

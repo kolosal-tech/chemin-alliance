@@ -5,7 +5,7 @@
  * `messages/<locale>.json` sous le namespace `home` et se référence ici par
  * `id` (cf. règle i18n). On centralise ici la STRUCTURE et les données non
  * traduisibles : URLs, identifiants, ordres, dégradés de placeholders,
- * valeurs de repli des compteurs, références d'icônes.
+ * références d'icônes.
  *
  * Aucun visuel/logo réel - uniquement des placeholders fictifs et du line-art.
  */
@@ -20,59 +20,6 @@ export type IconKey =
   | "respect"
   | "purity"
   | "truth";
-
-/* ------------------------------------------------------------------ */
-/* « On parle de nous » - noms de presse FICTIFS (placeholders).        */
-/* Aucun média réel ; rendus en wordmark typographique, pas en logo.    */
-/* ------------------------------------------------------------------ */
-export const pressLogos = [
-  { id: "lumiere", name: "Lumière Mag" },
-  { id: "lecep", name: "Le Cep" },
-  { id: "horizon", name: "Horizon Foi" },
-  { id: "lasource", name: "La Source" },
-  { id: "veillee", name: "Veillée" },
-] as const;
-
-/* ------------------------------------------------------------------ */
-/* Bandeau de statistiques - preuve sociale.                           */
-/* `prismaCount` (optionnel) = modèle interrogé côté serveur ;          */
-/* `fallback` sert si la requête échoue ou renvoie un total trop bas.   */
-/* ------------------------------------------------------------------ */
-export type StatId = "members" | "alliances" | "messages" | "rating";
-
-export const stats: {
-  id: StatId;
-  prismaCount?: "user" | "match" | "message";
-  fallback: number;
-  /** suffixe affiché tel quel (non localisé : symboles). */
-  suffix?: string;
-  /** arrondi « joli » : on plancher au multiple le plus proche. */
-  roundTo?: number;
-  decimals?: number;
-}[] = [
-  {
-    id: "members",
-    prismaCount: "user",
-    fallback: 12400,
-    roundTo: 100,
-    suffix: "+",
-  },
-  {
-    id: "alliances",
-    prismaCount: "match",
-    fallback: 3200,
-    roundTo: 50,
-    suffix: "+",
-  },
-  {
-    id: "messages",
-    prismaCount: "message",
-    fallback: 148000,
-    roundTo: 1000,
-    suffix: "+",
-  },
-  { id: "rating", fallback: 4.8, decimals: 1, suffix: "/5" },
-];
 
 /* ------------------------------------------------------------------ */
 /* « Pourquoi nous » - nos forces différenciantes.                     */
@@ -105,33 +52,6 @@ export const values: { id: string; icon: IconKey }[] = [
   { id: "respect", icon: "respect" },
   { id: "purity", icon: "purity" },
   { id: "truth", icon: "truth" },
-];
-
-/* ------------------------------------------------------------------ */
-/* Témoignages - citations dans i18n (`home.testimonials.items.<id>`). */
-/* `gradient` = dégradé Tailwind du placeholder d'avatar (pas de photo).*/
-/* `months` = ancienneté, rendue via i18n.                              */
-/* ------------------------------------------------------------------ */
-export const testimonials: {
-  id: string;
-  name: string;
-  months: number;
-  gradient: string;
-}[] = [
-  {
-    id: "t1",
-    name: "Élodie & Samuel",
-    months: 14,
-    gradient: "from-gold/70 to-navy",
-  },
-  { id: "t2", name: "Marie-Claire", months: 6, gradient: "from-sage to-navy" },
-  {
-    id: "t3",
-    name: "Jonathan & Esther",
-    months: 22,
-    gradient: "from-amberink to-night",
-  },
-  { id: "t4", name: "Paul", months: 3, gradient: "from-gold to-sage" },
 ];
 
 /* ------------------------------------------------------------------ */

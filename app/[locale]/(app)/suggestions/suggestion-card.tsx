@@ -8,6 +8,7 @@ import { Spinner } from "@/components/Spinner";
 import { BlurhashImage } from "@/components/BlurhashImage";
 import { Radar } from "@/components/Radar";
 import { optionLabel, DENOMINATION_LABELS } from "@/lib/profile-options";
+import type { PreMatchSuggestionProfile } from "@/lib/suggestion-profile";
 
 const GRADIENTS = [
   "radial-gradient(110% 90% at 35% 25%, #6E7790 0%, #41506E 50%, #222F4C 100%)",
@@ -15,16 +16,18 @@ const GRADIENTS = [
   "radial-gradient(110% 90% at 30% 25%, #6F8478 0%, #43564B 50%, #26342C 100%)",
 ];
 
-type Profile = {
-  id: string;
-  displayName: string;
-  age: number;
-  isVerified: boolean;
-  denomination: string | null;
-  vertical: string | null;
-  maritalStatus: string | null;
-  hasChildren: boolean;
-  intentionStatement: string | null;
+type Profile = Pick<
+  PreMatchSuggestionProfile,
+  | "id"
+  | "displayName"
+  | "age"
+  | "isVerified"
+  | "denomination"
+  | "vertical"
+  | "intentionStatement"
+  | "hasSponsor"
+  | "kind"
+> & {
   gradient: number;
   photoBlurhash?: string | null;
   // P2 : axes de compatibilité (0..1) pour le radar « sujets à approfondir ».
@@ -35,10 +38,6 @@ type Profile = {
     location: number;
     vision: number;
   } | null;
-  // P6 : a désigné un Parrain/Marraine (signal de confiance "accompagné·e").
-  hasSponsor?: boolean;
-  // Ecosysteme : Compagnon IA (badge clair, jamais le sceau humain).
-  kind?: string | null;
 };
 
 export function SuggestionCard({
@@ -85,15 +84,6 @@ export function SuggestionCard({
   }
 
   if (state === "passed") return null;
-
-  const statusKey =
-    profile.maritalStatus === "widowed"
-      ? "widowed"
-      : profile.maritalStatus === "divorced"
-        ? "divorced"
-        : profile.maritalStatus === "single_parent"
-          ? "singleParent"
-          : null;
 
   return (
     <article
@@ -150,7 +140,13 @@ export function SuggestionCard({
         {profile.kind === "AI_COMPANION" ? (
           // Profil IA : badge clair, jamais le sceau "verifie" humain (trompeur).
           <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full border border-[#9C8FCB]/60 bg-night/55 px-2.5 py-1 text-[13px] font-semibold text-[#E7E2F2] backdrop-blur-[2px]">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden
+            >
               <path
                 d="M12 3l1.6 4.2L18 9l-4.4 1.8L12 15l-1.6-4.2L6 9l4.4-1.8L12 3Z"
                 fill="currentColor"
@@ -226,11 +222,6 @@ export function SuggestionCard({
                   />
                 </svg>
                 {t("suggestions.accompaniedBadge")}
-              </span>
-            )}
-            {statusKey && (
-              <span className="rounded-full border border-[#F7F5F0]/20 bg-[#F7F5F0]/15 px-2.5 py-0.5 text-[13px] font-semibold backdrop-blur-[3px]">
-                {t(`profile.${statusKey}`)}
               </span>
             )}
           </div>

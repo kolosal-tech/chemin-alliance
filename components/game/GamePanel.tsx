@@ -68,12 +68,17 @@ export function GamePanel({
   const tc = useTranslations("common");
   const toast = useToast();
 
+  const [hydrated, setHydrated] = useState(false);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [state, setState] = useState<GameState | null>(null);
   const [draft, setDraft] = useState("");
   const [creating, setCreating] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -198,7 +203,8 @@ export function GamePanel({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="btn-glass btn-glass-neutral flex items-center gap-1.5 rounded-btnsm px-3.5 py-2 text-[14px] font-semibold"
+        disabled={!hydrated}
+        className="btn-glass btn-glass-neutral flex items-center gap-1.5 rounded-btnsm px-3.5 py-2 text-[14px] font-semibold disabled:cursor-wait disabled:opacity-60"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden>
           <path
@@ -225,7 +231,7 @@ export function GamePanel({
           type="button"
           onClick={() => setOpen(false)}
           aria-label={tc("close")}
-          className="flex-none text-warmgray dark:text-[#7E7A72]"
+          className="flex-none text-warmgray dark:text-[#8F8A80]"
         >
           <svg
             width="16"
@@ -263,7 +269,7 @@ export function GamePanel({
       {state && (
         <div className="mt-4">
           {!current ? (
-            <div className="rounded-btn bg-sand-100 px-3.5 py-3 text-center text-[15px] text-sand-600 dark:bg-anthracite-700 dark:text-[#7E7A72]">
+            <div className="rounded-btn bg-sand-100 px-3.5 py-3 text-center text-[15px] text-sand-600 dark:bg-anthracite-700 dark:text-[#8F8A80]">
               {t("ui.empty")}
             </div>
           ) : (
@@ -377,7 +383,7 @@ function RoundCard({
           {round.mode === "SHARED" ? t("ui.modeShared") : t("ui.modeGuess")}
         </span>
         {round.questionKey === null && round.questionText !== null && (
-          <span className="text-[11px] text-warmgray dark:text-[#7E7A72]">
+          <span className="text-[11px] text-warmgray dark:text-[#8F8A80]">
             {t("ui.aiGenerated")}
           </span>
         )}
@@ -399,7 +405,7 @@ function RoundCard({
           t={t}
         />
       ) : mySubmitted ? (
-        <p className="mt-3 rounded-btn bg-sand-100 px-3 py-2.5 text-[14px] text-sand-600 dark:bg-anthracite-700 dark:text-[#7E7A72]">
+        <p className="mt-3 rounded-btn bg-sand-100 px-3 py-2.5 text-[14px] text-sand-600 dark:bg-anthracite-700 dark:text-[#8F8A80]">
           {t("ui.sealed")}
         </p>
       ) : (

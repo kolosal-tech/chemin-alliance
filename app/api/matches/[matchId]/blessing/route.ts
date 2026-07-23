@@ -1,12 +1,16 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
 import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
-import { generateBlessingToken } from "@/lib/sponsor";
-import { sendBlessingRequestEmail } from "@/lib/email";
-import { env } from "@/lib/env";
 import type { Locale } from "@/lib/core-engine";
+import { requireActiveMatchMember } from "@/lib/alliance";
+import {
+  BlessingDeliveryError,
+  BlessingDeliveryInProgressError,
+  BlessingSponsorMissingError,
+  BlessingStateChangedError,
+  issueBlessingRequest,
+} from "@/lib/blessing";
 
 export const runtime = "nodejs";
 
@@ -27,42 +31,32 @@ export const POST = withErrors(
     if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
     const { matchId } = await params;
-    const match = await prisma.match.findUnique({
-      where: { id: matchId },
-    });
-    if (!match || (match.userAId !== user.id && match.userBId !== user.id)) {
-      return jsonError(404, "NOT_FOUND");
-    }
+    // Garde rapide puis revalidation dans la transaction SERIALIZABLE
+    // d'émission : le match peut changer ou être bloqué entre deux await.
+    await requireActiveMatchMember(matchId, user.id);
 
-    const sponsor = await prisma.sponsor.findUnique({
-      where: { userId: user.id },
-    });
-    if (!sponsor) return jsonError(409, "NO_SPONSOR");
-
-    // Dédup anti-spam : réutilise une demande PENDING existante pour ce match.
-    let blessing = await prisma.blessing.findFirst({
-      where: { userId: user.id, matchId: match.id, status: "PENDING" },
-    });
-    if (!blessing) {
-      blessing = await prisma.blessing.create({
-        data: {
-          sponsorId: sponsor.id,
-          matchId: match.id,
-          userId: user.id,
-          token: generateBlessingToken(),
-        },
+    try {
+      await issueBlessingRequest({
+        userId: user.id,
+        displayName: user.displayName,
+        locale: (user.locale ?? "fr") as Locale,
+        matchId,
       });
+    } catch (error) {
+      if (error instanceof BlessingSponsorMissingError) {
+        return jsonError(409, "NO_SPONSOR");
+      }
+      if (error instanceof BlessingDeliveryError) {
+        return jsonError(502, "BLESSING_EMAIL_DELIVERY_FAILED");
+      }
+      if (error instanceof BlessingDeliveryInProgressError) {
+        return jsonError(503, "BLESSING_EMAIL_DELIVERY_IN_PROGRESS");
+      }
+      if (error instanceof BlessingStateChangedError) {
+        return jsonError(409, "MATCH_STATE_CHANGED");
+      }
+      throw error;
     }
-
-    const locale = (user.locale ?? "fr") as Locale;
-    const link = `${env.APP_URL}/${locale}/parrain/${blessing.token}`;
-    await sendBlessingRequestEmail(
-      sponsor.email,
-      sponsor.name,
-      user.displayName,
-      link,
-      locale,
-    );
 
     return NextResponse.json({ ok: true });
   },

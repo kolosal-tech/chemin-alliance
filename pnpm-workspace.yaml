@@ -8,3 +8,12 @@ allowBuilds:
   "@node-rs/argon2": true
   "@parcel/watcher": true
   "@swc/core": true
+
+overrides:
+  "brace-expansion@^1.0.0": 1.1.16
+  "brace-expansion@^2.0.0": 2.1.2
+  esbuild: 0.28.1
+  fast-uri: 3.1.4
+  postcss: 8.5.22
+  serialize-javascript: 7.0.5
+  sharp: 0.35.3

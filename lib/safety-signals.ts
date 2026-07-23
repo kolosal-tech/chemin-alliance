@@ -1,5 +1,8 @@
 import { prisma } from "@/lib/db";
-import { openInsight } from "@/lib/agent-insight";
+import {
+  AgentInsightIntegrityError,
+  openInsightStrict,
+} from "@/lib/agent-insight";
 
 // Surface anti-arnaque côté utilisateur : on lit le dernier signal du Veilleur
 // (watchman) pour un match. Seuls les signaux de sévérité HIGH (extraction
@@ -11,6 +14,11 @@ export type SafetySignal = {
   signals: string[];
 };
 
+function failClosedSignal(insightId: string): SafetySignal {
+  console.warn("[safety-signal] donnée illisible", insightId);
+  return { flagged: true, severity: "high", signals: [] };
+}
+
 export async function getSafetySignalForMatch(
   matchId: string,
 ): Promise<SafetySignal> {
@@ -20,18 +28,30 @@ export async function getSafetySignalForMatch(
   });
   if (!insight) return { flagged: false, severity: "none", signals: [] };
 
-  const data = openInsight<{
-    signals?: string[];
-    severity?: "none" | "medium" | "high";
-  }>(insight.dataJson);
-  if (data === null) {
-    console.warn("[safety-signal] déchiffrement impossible", insight.id);
-    return { flagged: false, severity: "none", signals: [] };
+  let data: unknown;
+  try {
+    data = openInsightStrict(insight.dataJson);
+  } catch (error) {
+    if (error instanceof AgentInsightIntegrityError) {
+      return failClosedSignal(insight.id);
+    }
+    throw error;
+  }
+  if (
+    typeof data !== "object" ||
+    data === null ||
+    !("severity" in data) ||
+    !["none", "medium", "high"].includes(String(data.severity)) ||
+    !("signals" in data) ||
+    !Array.isArray(data.signals) ||
+    !data.signals.every((signal) => typeof signal === "string")
+  ) {
+    return failClosedSignal(insight.id);
   }
 
-  const severity = data.severity ?? "none";
+  const severity = data.severity as "none" | "medium" | "high";
   if (severity !== "high") {
     return { flagged: false, severity, signals: [] };
   }
-  return { flagged: true, severity, signals: data.signals ?? [] };
+  return { flagged: true, severity, signals: data.signals };
 }

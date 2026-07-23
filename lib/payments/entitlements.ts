@@ -42,10 +42,7 @@ export type FreeFeature = (typeof FREE_FOREVER)[number];
  * de FREE_FOREVER (vérifié au chargement). N'inclut jamais sécurité/dignité.
  */
 export const PREMIUM_FEATURES = [
-  "unlimited_discovery", // découverte sans quota quotidien
-  "deep_discernement_report", // rapport de discernement approfondi
-  "internal_calls", // appels audio/vidéo internes gradués
-  "priority_coach_session", // session coach humain prioritaire
+  "unlimited_ai_coach", // lève le quota quotidien du coach IA
   "premium_llm_tier", // palier LLM premium (nuance maximale)
 ] as const;
 export type PremiumFeature = (typeof PREMIUM_FEATURES)[number];

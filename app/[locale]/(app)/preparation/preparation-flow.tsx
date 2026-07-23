@@ -179,10 +179,14 @@ export function PreparationFlow({
             ))}
           </div>
           <div className="rounded-cardlg border border-sand-200 bg-surface p-5 dark:border-anthracite-600 dark:bg-anthracite-800">
-            <p className="font-display text-[21px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]">
+            <p
+              id={`preparation-question-${questions[step].id}`}
+              className="font-display text-[21px] italic leading-snug text-[#3A372F] dark:text-[#CFCAC0]"
+            >
               {questions[step].text}
             </p>
             <textarea
+              aria-labelledby={`preparation-question-${questions[step].id}`}
               value={answers[questions[step].id] ?? ""}
               onChange={(e) =>
                 setAnswers((a) => ({
@@ -236,7 +240,7 @@ export function PreparationFlow({
             <h2 className="lbl text-[12px] text-gold-deep dark:text-gold-light">
               {t("portraitTitle")}
             </h2>
-            <span className="text-[13px] text-sand-500 dark:text-[#65625B]">
+            <span className="text-[13px] text-sand-500 dark:text-[#9A958B]">
               {t("neverScore")}
             </span>
           </div>

@@ -5,6 +5,7 @@ import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit } from "@/lib/security/rate-limit";
 import { encryptField, decryptField } from "@/lib/security/crypto";
+import { consentingCoupleSpaceMemberWhere } from "@/lib/sensitive-data-consent";
 
 export const runtime = "nodejs";
 
@@ -17,9 +18,9 @@ export const runtime = "nodejs";
 async function activeSpace(userId: string) {
   return prisma.coupleSpace.findFirst({
     where: {
+      AND: [consentingCoupleSpaceMemberWhere(userId)],
       status: "ACTIVE",
       userBId: { not: null },
-      OR: [{ userAId: userId }, { userBId: userId }],
     },
     select: { id: true },
   });

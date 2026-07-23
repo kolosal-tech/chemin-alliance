@@ -4,22 +4,32 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { AsyncButton } from "@/components/AsyncButton";
+import { useToast } from "@/components/Toast";
 
 export function ReportActions({ reportId }: { reportId: string }) {
   const t = useTranslations("admin");
   const router = useRouter();
+  const toast = useToast();
   const [busy, setBusy] = useState(false);
   const [confirmBan, setConfirmBan] = useState(false);
 
   async function update(action: "RESOLVED" | "DISMISSED" | "BAN") {
     setBusy(true);
-    await fetch(`/api/admin/reports/${reportId}`, {
-      method: "PATCH",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ action }),
-    });
-    setConfirmBan(false);
-    router.refresh();
+    try {
+      const response = await fetch(`/api/admin/reports/${reportId}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+      if (!response.ok) throw new Error("report_update_failed");
+      setConfirmBan(false);
+      toast.success(t("actionSuccess"));
+      router.refresh();
+    } catch {
+      toast.error(t("actionError"));
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (

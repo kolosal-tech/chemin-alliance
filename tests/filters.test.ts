@@ -7,11 +7,10 @@ import {
   type FilterableProfile,
 } from "@/lib/filters";
 
-const p = (
-  age: number,
-  isVerified = false,
-  hasChildren = false,
-): FilterableProfile => ({ age, isVerified, hasChildren });
+const p = (age: number, isVerified = false): FilterableProfile => ({
+  age,
+  isVerified,
+});
 
 describe("lib/filters - parseFilters (Zod défensif)", () => {
   it("parse des valeurs valides", () => {
@@ -20,9 +19,8 @@ describe("lib/filters - parseFilters (Zod défensif)", () => {
         ageMin: "25",
         ageMax: "40",
         verified: "1",
-        children: "no",
       }),
-    ).toEqual({ ageMin: 25, ageMax: 40, verified: "1", children: "no" });
+    ).toEqual({ ageMin: 25, ageMax: 40, verified: "1" });
   });
 
   it("ignore les valeurs hors-bornes (catch → undefined)", () => {
@@ -38,11 +36,6 @@ describe("lib/filters - parseFilters (Zod défensif)", () => {
   it('verified n\'est retenu que pour la valeur "1"', () => {
     expect(parseFilters({ verified: "true" }).verified).toBeUndefined();
     expect(parseFilters({ verified: "1" }).verified).toBe("1");
-  });
-
-  it("children n'accepte que yes|no", () => {
-    expect(parseFilters({ children: "maybe" }).children).toBeUndefined();
-    expect(parseFilters({ children: "yes" }).children).toBe("yes");
   });
 
   it("searchParams vide / undefined → filtres vides", () => {
@@ -69,14 +62,8 @@ describe("lib/filters - matchesFilters", () => {
     expect(matchesFilters(p(30, true), { verified: "1" })).toBe(true);
   });
 
-  it("enfants tri-état", () => {
-    expect(matchesFilters(p(30, false, true), { children: "no" })).toBe(false);
-    expect(matchesFilters(p(30, false, true), { children: "yes" })).toBe(true);
-    expect(matchesFilters(p(30, false, false), { children: "no" })).toBe(true);
-  });
-
   it("filtres vides ⇒ tout passe", () => {
-    expect(matchesFilters(p(99, false, true), {})).toBe(true);
+    expect(matchesFilters(p(99, false), {})).toBe(true);
   });
 });
 
@@ -94,9 +81,8 @@ describe("lib/filters - applyFilters & activeFilterCount", () => {
         ageMin: 25,
         ageMax: 40,
         verified: "1",
-        children: "no",
       }),
-    ).toBe(4);
+    ).toBe(3);
     expect(activeFilterCount({ ageMin: 25 })).toBe(1);
   });
 });

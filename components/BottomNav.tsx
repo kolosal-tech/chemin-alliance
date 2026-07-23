@@ -87,15 +87,18 @@ export function BottomNav({ married = false }: { married?: boolean }) {
           {tc("appName")}
         </span>
       </Link>
-      <div className="mx-auto flex w-full max-w-md justify-around px-2 py-1.5 lg:mx-0 lg:max-w-none lg:flex-col lg:justify-start lg:gap-1 lg:px-3">
+      <div className="mx-auto grid w-full max-w-md grid-cols-6 px-1 py-1.5 lg:mx-0 lg:flex lg:max-w-none lg:flex-col lg:justify-start lg:gap-1 lg:px-3">
         {tabs.map((tab) => {
-          const active = pathname.startsWith(tab.href);
+          const active =
+            tab.key === "settings"
+              ? pathname.startsWith("/settings")
+              : pathname.startsWith(tab.href);
           return (
             <Link
               key={tab.href}
               href={tab.href}
               aria-current={active ? "page" : undefined}
-              className={`relative flex min-w-[60px] flex-col items-center gap-0.5 rounded-btn px-2 py-1.5 text-[12px] font-medium lg:min-w-0 lg:flex-row lg:gap-3 lg:px-4 lg:py-3 lg:text-sm ${
+              className={`relative flex min-w-0 flex-col items-center gap-0.5 rounded-btn px-0 py-1.5 text-[10px] font-medium min-[360px]:px-0.5 min-[360px]:text-[11px] min-[400px]:text-[12px] lg:flex-row lg:gap-3 lg:px-4 lg:py-3 lg:text-sm ${
                 active
                   ? "nav-active text-gold-deep dark:text-[#C0AA6E]"
                   : "text-warmgray hover:lg:bg-sand-100/60 dark:text-[#9A958B] dark:hover:lg:bg-anthracite-700/60"
@@ -121,7 +124,7 @@ export function BottomNav({ married = false }: { married?: boolean }) {
                   {unread > 9 ? "9+" : unread}
                 </span>
               )}
-              {t(tab.key)}
+              <span className="max-w-full truncate">{t(tab.key)}</span>
             </Link>
           );
         })}

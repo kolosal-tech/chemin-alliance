@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/db";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { buildMatchProfileView } from "@/lib/match-profile";
+import { activeMatchGrantsProfileVisibility } from "@/lib/matching";
 import {
   localizeList,
   INTEREST_LABELS,
@@ -13,6 +14,7 @@ import { decryptOptional } from "@/lib/security/crypto";
 import { TrustBadge } from "@/components/TrustBadge";
 import { MemberAvatar } from "@/components/MemberAvatar";
 import { BlessingRequest } from "./blessing-request";
+import { activeMatchMemberWhere } from "@/lib/alliance";
 
 // Étape d'alliance (1..3) → clé de stage, pour le libellé « se révèle à… ».
 const STEP_STAGE: Record<number, string> = {
@@ -64,36 +66,47 @@ export default async function MatchProfilePage(props: {
   const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations();
-  // requirePageUser (session) et le chargement du Match ne dépendent pas l'un
-  // de l'autre (le `where` du Match ne porte que sur matchId) → parallélisés.
-  const [user, match] = await Promise.all([
-    requirePageUser(params.locale),
-    prisma.match.findUnique({
-      where: { id: params.matchId },
-      select: {
-        id: true,
-        userAId: true,
-        userBId: true,
-        stage: true,
-        userA: { select: MEMBER_SELECT },
-        userB: { select: MEMBER_SELECT },
-      },
-    }),
-  ]);
-  if (!match || (match.userAId !== user.id && match.userBId !== user.id)) {
+  const user = await requirePageUser(params.locale);
+  const match = await prisma.match.findFirst({
+    where: activeMatchMemberWhere(params.matchId, user.id),
+    select: {
+      id: true,
+      userAId: true,
+      userBId: true,
+      status: true,
+      stage: true,
+      userA: { select: MEMBER_SELECT },
+      userB: { select: MEMBER_SELECT },
+    },
+  });
+  if (!match) {
     notFound();
   }
 
   const other = match.userAId === user.id ? match.userB : match.userA;
   const fields = buildMatchProfileView(
     { faith: other.faithProfile, relationship: other.relationshipProfile },
-    { matched: true, stage: match.stage },
+    {
+      matched: activeMatchGrantsProfileVisibility(match.status),
+      stage: match.stage,
+    },
   );
 
   // Ma demande de bénédiction pour CE match (la plus récente) : dépend de
   // match.id (résultat de la requête ci-dessus) → reste APRÈS, non parallélisé.
   const myBlessing = await prisma.blessing.findFirst({
-    where: { userId: user.id, matchId: match.id },
+    where: {
+      userId: user.id,
+      matchId: match.id,
+      OR: [
+        { status: { in: ["BLESSED", "CAUTION"] } },
+        {
+          status: "PENDING",
+          emailSentAt: { not: null },
+          expiresAt: { gt: new Date() },
+        },
+      ],
+    },
     orderBy: { createdAt: "desc" },
   });
 
@@ -190,7 +203,7 @@ export default async function MatchProfilePage(props: {
                           : f.value}
                 </p>
               ) : (
-                <p className="flex items-center gap-1.5 text-[15px] text-sand-500 dark:text-[#7E7A72]">
+                <p className="flex items-center gap-1.5 text-[15px] text-sand-500 dark:text-[#8F8A80]">
                   <svg
                     width="13"
                     height="13"

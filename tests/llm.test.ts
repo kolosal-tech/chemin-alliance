@@ -112,6 +112,12 @@ describe("matrix - validation Zod de LLM_MATRIX_JSON", () => {
       await import("@/lib/llm/matrix");
     const models = resolveModelsFresh("dialogue", "standard");
     expect(models[0]).toBe("custom/model-x");
+    expect(resolveModelsFresh("dialogue", "premium")[0]).toBe(
+      "anthropic/claude-sonnet-4.6",
+    );
+    expect(resolveModelsFresh("safety", "standard")[0]).toBe(
+      "deepseek/deepseek-chat-v3.1",
+    );
     expect(errSpy).not.toHaveBeenCalled();
   });
 });

@@ -44,7 +44,7 @@ export function CopilotPanel({
       <p className="mt-1 text-[15px] leading-snug text-warmgray dark:text-[#9A958B]">
         {t("desc")}
       </p>
-      <p className="lbl mt-2 text-[11px] text-sand-600 dark:text-[#7E7A72]">
+      <p className="lbl mt-2 text-[11px] text-sand-600 dark:text-[#8F8A80]">
         {t("matchLabel")} · {otherName}
       </p>
       {state === "idle" && (

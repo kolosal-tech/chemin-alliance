@@ -4,43 +4,23 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { DailyDevotion } from "@/lib/devotional";
 import { Spinner } from "@/components/Spinner";
+import { appendJournal, type JournalEntry } from "@/lib/devotional-journal";
 
 // Session de méditation immersive : préparation → respiration guidée (cercle
 // animé + verset comme ancre, écran maintenu allumé via Wake Lock, sortie
 // confirmée) → réflexion personnelle (journal privé local) → clôture (marque le
 // dévotionnel fait + streak). Aucun stockage serveur : la réflexion reste sur
-// l'appareil (clé localStorage), choix volontaire pour ces notes intimes.
+// l'appareil dans un espace isolé par compte, choix volontaire pour ces notes
+// intimes.
 
 const DURATIONS = [1, 3, 5] as const; // minutes
 const CYCLE_SEC = 8; // cycle respiratoire (4s inspire / 4s expire)
-export const JOURNAL_KEY = "ca:meditation:journal";
-
-export type JournalEntry = {
-  ts: number;
-  devotionId: string;
-  reference: string;
-  text: string;
-  /** Texte complet du verset, mémorisé pour pouvoir le réafficher plus tard. */
-  verse?: string;
-};
-
 type Step = "intro" | "breathing" | "reflection" | "done";
 
 type WakeLockSentinelLike = { release: () => Promise<void> };
 type WakeLockNavigator = Navigator & {
   wakeLock?: { request: (type: "screen") => Promise<WakeLockSentinelLike> };
 };
-
-function appendJournal(entry: JournalEntry) {
-  try {
-    const raw = localStorage.getItem(JOURNAL_KEY);
-    const list: JournalEntry[] = raw ? JSON.parse(raw) : [];
-    list.unshift(entry);
-    localStorage.setItem(JOURNAL_KEY, JSON.stringify(list.slice(0, 30)));
-  } catch {
-    /* localStorage indisponible (mode privé) : on n'échoue pas la séance */
-  }
-}
 
 function fmt(sec: number): string {
   const m = Math.floor(sec / 60);
@@ -50,10 +30,12 @@ function fmt(sec: number): string {
 
 export function MeditationSession({
   devotion,
+  journalKey,
   onCompleted,
   onClose,
 }: {
   devotion: DailyDevotion;
+  journalKey: string;
   onCompleted: (data: {
     current: number;
     longest: number;
@@ -121,13 +103,17 @@ export function MeditationSession({
   const finish = useCallback(async () => {
     const text = reflection.trim();
     if (text) {
-      appendJournal({
-        ts: Date.now(),
-        devotionId: devotion.id,
-        reference: devotion.reference,
-        text,
-        verse: devotion.verse,
-      });
+      try {
+        appendJournal(localStorage, journalKey, {
+          ts: Date.now(),
+          devotionId: devotion.id,
+          reference: devotion.reference,
+          text,
+          verse: devotion.verse,
+        } satisfies JournalEntry);
+      } catch {
+        /* localStorage indisponible (mode privé) : la séance reste utilisable */
+      }
       window.dispatchEvent(new Event("meditation:journal"));
     }
     setSaving(true);
@@ -149,7 +135,7 @@ export function MeditationSession({
       setSaving(false);
       setStep("done");
     }
-  }, [reflection, devotion, onCompleted]);
+  }, [reflection, devotion, journalKey, onCompleted]);
 
   return (
     <div

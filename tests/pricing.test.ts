@@ -5,7 +5,7 @@ import {
   formatOffer,
 } from "@/lib/payments/pricing";
 
-describe("pricing - prix segmenté diaspora vs zone XOF", () => {
+describe("pricing - catalogue dormant diaspora vs zone XOF", () => {
   it("reconnaît les pays UEMOA (codes et noms, casse/espaces)", () => {
     for (const c of [
       "BF",

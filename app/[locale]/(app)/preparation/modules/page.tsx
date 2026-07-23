@@ -69,7 +69,7 @@ export default async function CurriculumPage(props: {
                 ))}
               </div>
 
-              <h3 className="lbl mt-4 text-[11px] text-sand-600 dark:text-[#7E7A72]">
+              <h3 className="lbl mt-4 text-[11px] text-sand-600 dark:text-[#8F8A80]">
                 {t("themes")}
               </h3>
               <ul className="mt-1.5 flex flex-col gap-1.5">
@@ -86,7 +86,7 @@ export default async function CurriculumPage(props: {
                 ))}
               </ul>
 
-              <h3 className="lbl mt-4 text-[11px] text-sand-600 dark:text-[#7E7A72]">
+              <h3 className="lbl mt-4 text-[11px] text-sand-600 dark:text-[#8F8A80]">
                 {t("reflection")}
               </h3>
               <ul className="mt-1.5 flex flex-col gap-2">

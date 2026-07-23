@@ -15,7 +15,7 @@ export type LegalKey = "terms" | "privacy" | "cookies";
 const fr: Record<LegalKey, LegalDoc> = {
   terms: {
     title: "Conditions Générales d'Utilisation",
-    updated: "12 juin 2026",
+    updated: "23 juillet 2026",
     sections: [
       {
         h: "1. Objet",
@@ -51,7 +51,7 @@ const fr: Record<LegalKey, LegalDoc> = {
       {
         h: "6. Coachs humains",
         p: [
-          "Les accompagnateurs référencés sont vérifiés (identité, affiliation, charte). Les séances sont conclues directement entre vous et l'accompagnateur ; la plateforme n'est pas partie au contrat d'accompagnement.",
+          "La marketplace de coachs, la réservation de coachs humains et le copilote destiné aux coachs ne sont pas disponibles dans cette version. Aucun résultat de vérification humaine de l'identité, de l'affiliation ou de la charte d'un coach n'est publiquement démontré ; la plateforme ne peut donc pas garantir qu'un coach soit vérifié ou certifié.",
         ],
       },
       {
@@ -69,7 +69,7 @@ const fr: Record<LegalKey, LegalDoc> = {
       {
         h: "9. Résiliation",
         p: [
-          "Vous pouvez supprimer votre compte à tout moment depuis Réglages → Confidentialité. La suppression est réelle et entraîne l'effacement en cascade de vos données (voir Politique de confidentialité).",
+          "Vous pouvez supprimer votre compte à tout moment depuis Réglages → Confidentialité. Cette opération efface vos données propres et pseudonymise le compte. Les données appartenant à des tiers, les signalements et les traces dont la conservation reste nécessaire pour la sécurité, une obligation applicable ou la défense de droits peuvent être conservés pendant la durée nécessaire (voir Politique de confidentialité).",
         ],
       },
       {
@@ -82,7 +82,7 @@ const fr: Record<LegalKey, LegalDoc> = {
   },
   privacy: {
     title: "Politique de Confidentialité",
-    updated: "12 juin 2026",
+    updated: "23 juillet 2026",
     sections: [
       {
         h: "1. Qui sommes-nous",
@@ -93,8 +93,8 @@ const fr: Record<LegalKey, LegalDoc> = {
       {
         h: "2. Données sensibles - article 9 RGPD",
         p: [
-          "Vos convictions religieuses, votre situation familiale, vos témoignages et vos messages sont des données sensibles au sens de l'article 9 du RGPD. Elles ne sont traitées qu'avec votre consentement explicite, recueilli à l'inscription et révocable à tout moment.",
-          "Chaque champ sensible possède un niveau de visibilité (5 niveaux) que vous contrôlez. Témoignage, église locale, vision familiale et messages sont chiffrés au repos (AES-256-GCM).",
+          "Vos convictions religieuses, votre situation familiale, vos témoignages et vos messages sont des données sensibles au sens de l'article 9 du RGPD. Elles ne sont traitées qu'avec votre consentement explicite, recueilli à l'inscription. Le consentement général se retire à tout moment depuis Réglages → Confidentialité tout en conservant le compte ; ce retrait suspend les traitements métier et les notifications jusqu'à une nouvelle décision explicite. Le consentement distinct AGENT_PROFILING se gère depuis l'interface Préparation ; le consentement distinct AI_COACH_INTERACTION se recueille et se retire depuis l'écran Coach IA.",
+          "Les champs sensibles exposés dans le profil disposent de règles de visibilité progressive que vous contrôlez. Témoignage, église locale, vision familiale et messages sont chiffrés au repos (AES-256-GCM).",
         ],
       },
       {
@@ -113,25 +113,25 @@ const fr: Record<LegalKey, LegalDoc> = {
         h: "5. Agents IA et profilage",
         p: [
           "Le portrait de préparation est établi par un agent IA uniquement avec votre consentement dédié (AGENT_PROFILING), révocable et effaçable en un clic depuis la page Préparation. Il n'est jamais montré aux autres membres et ne conditionne jamais automatiquement votre accès : toute conséquence d'accès passe par un humain.",
-          "Les questions au coach IA peuvent être traitées par un fournisseur de modèle de langage (via OpenRouter). Aucune donnée de profil n'y est jointe au-delà de votre question, de l'étape en cours et de votre langue.",
+          "Lorsqu'un appel tiers est nécessaire pour le coach IA, le fournisseur IA actif reçoit la question, jusqu'aux dix messages récents utiles à la continuité, l'étape, la langue, un contexte de vocabulaire issu de la tradition et du ruleset du compte, ainsi qu'un contexte culturel dérivé du pays enregistré. Les PII détectées par la passerelle (emails, téléphones, URL, pseudonymes @ et longues séquences numériques) sont expurgées de la question, de l'historique et du contexte système avant l'envoi ; les prénoms et le texte libre ne sont pas automatiquement expurgés.",
         ],
       },
       {
         h: "6. Destinataires",
         p: [
-          "Hébergement : Vercel (UE/USA, clauses contractuelles types). Base de données : Supabase, région Stockholm (UE). Emails transactionnels : Resend. Modèles de langage : OpenRouter (uniquement le texte de vos questions au coach IA).",
+          "Selon la configuration réelle du déploiement, peuvent recevoir des données : Vercel s'il héberge l'application ; l'hébergeur configuré de la base de données et du stockage d'images (Supabase lorsqu'il est activé, sans région prédéfinie ici) ; Resend pour les emails transactionnels ; Upstash pour la limitation de débit distribuée ; Stripe pour les paiements et abonnements ; et, pour le Coach IA, soit Anthropic ou OpenAI en direct, soit OpenRouter avec les seuls opérateurs d'inférence explicitement autorisés par la configuration active. Le périmètre IA exact est affiché avant l'accord et son empreinte change dès qu'un modèle, un opérateur ou la politique de routage change, ce qui impose un nouvel accord. OpenRouter reçoit une allowlist exacte, les fallbacks sont désactivés et les filtres deny/ZDR sont exigés ; ces filtres techniques ne prouvent toutefois ni une région, ni un DPA/SCC, ni une absence contractuelle d'entraînement. Le fallback déterministe local n'a aucun destinataire IA externe. Twilio pour la vérification SMS et les services Web Push du navigateur ne reçoivent des données que s'ils sont activés. Un service absent ou non configuré ne reçoit aucune donnée.",
         ],
       },
       {
         h: "7. Durées de conservation",
         p: [
-          "Compte actif : durée d'utilisation. Compte supprimé : effacement immédiat en cascade (profil, messages, parcours, portraits, consentements). Signalements : conservés 12 mois à des fins de sécurité.",
+          "Le compte actif est conservé pendant son utilisation. Lors de sa suppression, les données propres du membre (profil, contenus envoyés, parcours, productions IA et consentements) sont effacées et la ligne du compte est pseudonymisée. Les contenus appartenant à des tiers ou partagés avec eux, les signalements et les traces de sécurité ou d'audit nécessaires à une obligation applicable ou à la défense de droits peuvent subsister sous cette identité pseudonymisée, avec un accès limité, pendant la durée nécessaire. Les signalements sont purgés au plus tard 12 mois après leur création.",
         ],
       },
       {
         h: "8. Vos droits",
         p: [
-          "Accès et portabilité : export JSON complet en un clic (Réglages → Confidentialité → Exporter mes données). Effacement : suppression de compte en un clic, réelle et définitive. Opposition et retrait du consentement : à tout moment, sans frais, sans justification. Réclamation : CNIL (cnil.fr).",
+          "L'export JSON en libre-service (Réglages → Confidentialité → Exporter mes données) est borné à 2 000 éléments par collection. Le champ export.complete indique si toutes les collections ont été exportées ; lorsqu'il vaut false, export.collections identifie chaque collection tronquée. Pour obtenir le complément ou exercer un autre droit d'accès, de portabilité, de rectification, d'opposition ou d'effacement, écrivez à alliance@kolosaltech.com. Le consentement général aux données sensibles, AGENT_PROFILING et AI_COACH_INTERACTION disposent chacun d'une commande de retrait autonome dans leur interface ; la suppression du compte reste disponible séparément. Vous pouvez aussi saisir la CNIL (cnil.fr).",
         ],
       },
       {
@@ -161,7 +161,7 @@ const fr: Record<LegalKey, LegalDoc> = {
       {
         h: "2. Cookies strictement nécessaires",
         p: [
-          "Nous n'utilisons que des cookies indispensables au fonctionnement de la plateforme : un cookie de session sécurisé (httpOnly, Secure, SameSite) qui vous garde connecté·e, un jeton anti-CSRF qui protège vos formulaires, et de petites préférences techniques (langue d'affichage, thème clair ou sombre). Sans eux, l'authentification et la sécurité ne peuvent pas fonctionner.",
+          "Nous utilisons un cookie de session strictement nécessaire, httpOnly, Secure en production et SameSite, afin de vous garder connecté·e. Les mutations sont aussi protégées par le contrôle de l'origine de la requête ; aucun cookie publicitaire ou jeton de suivi n'est utilisé. Le thème est conservé localement sur votre appareil, pas dans un cookie serveur.",
         ],
       },
       {
@@ -185,7 +185,7 @@ const fr: Record<LegalKey, LegalDoc> = {
       {
         h: "6. Durée de conservation",
         p: [
-          "Le cookie de session expire à la fin de votre session ou après une période d'inactivité. Les préférences techniques (langue, thème) sont conservées jusqu'à leur modification ou leur suppression manuelle. Aucun cookie nécessaire n'est conservé au-delà de ce qui est utile à son usage.",
+          "Le cookie de session expire au plus tard sept jours après sa création, ou plus tôt en cas de déconnexion, suppression du compte ou révocation de la session. Les préférences stockées localement restent sur l'appareil jusqu'à leur modification ou leur suppression manuelle.",
         ],
       },
       {
@@ -201,7 +201,7 @@ const fr: Record<LegalKey, LegalDoc> = {
 const en: Record<LegalKey, LegalDoc> = {
   terms: {
     title: "Terms of Service",
-    updated: "June 12, 2026",
+    updated: "July 23, 2026",
     sections: [
       {
         h: "1. Purpose",
@@ -237,7 +237,7 @@ const en: Record<LegalKey, LegalDoc> = {
       {
         h: "6. Human coaches",
         p: [
-          "Listed companions are verified (identity, affiliation, charter). Sessions are concluded directly between you and the companion; the platform is not a party to that contract.",
+          "The coach marketplace, human-coach booking and coach copilot are not available in this version. No result of a human review of a coach's identity, affiliation or charter is publicly demonstrated, so the platform cannot guarantee that a coach is verified or certified.",
         ],
       },
       {
@@ -255,7 +255,7 @@ const en: Record<LegalKey, LegalDoc> = {
       {
         h: "9. Termination",
         p: [
-          "You may delete your account at any time from Settings → Privacy. Deletion is real and cascades to your data (see Privacy Policy).",
+          "You may delete your account at any time from Settings → Privacy. This erases data you own and pseudonymizes the account. Data belonging to other people, reports and records that still need to be retained for safety, an applicable obligation or the defense of legal claims may be kept for the necessary period (see Privacy Policy).",
         ],
       },
       {
@@ -268,7 +268,7 @@ const en: Record<LegalKey, LegalDoc> = {
   },
   privacy: {
     title: "Privacy Policy",
-    updated: "June 12, 2026",
+    updated: "July 23, 2026",
     sections: [
       {
         h: "1. Who we are",
@@ -279,8 +279,8 @@ const en: Record<LegalKey, LegalDoc> = {
       {
         h: "2. Sensitive data - GDPR article 9",
         p: [
-          "Your religious beliefs, family situation, testimonies and messages are sensitive data under GDPR article 9. They are processed only with your explicit consent, given at sign-up and revocable at any time.",
-          "Every sensitive field has a visibility level (5 levels) under your control. Testimony, local church, family vision and messages are encrypted at rest (AES-256-GCM).",
+          "Your religious beliefs, family situation, testimonies and messages are sensitive data under GDPR article 9. They are processed only with your explicit consent, given at sign-up. General consent can be withdrawn at any time from Settings → Privacy while keeping the account; withdrawal suspends business processing and notifications until a new explicit decision. The separate AGENT_PROFILING consent is managed from the Preparation interface; the separate AI_COACH_INTERACTION consent is given and withdrawn from the AI Coach screen.",
+          "Sensitive fields exposed in the profile have progressive visibility rules under your control. Testimony, local church, family vision and messages are encrypted at rest (AES-256-GCM).",
         ],
       },
       {
@@ -299,25 +299,25 @@ const en: Record<LegalKey, LegalDoc> = {
         h: "5. AI agents and profiling",
         p: [
           "The preparation portrait is built by an AI agent only with your dedicated consent (AGENT_PROFILING), revocable and erasable in one click from the Preparation page. It is never shown to other members and never automatically conditions your access: any access consequence goes through a human.",
-          "AI coach questions may be processed by a language-model provider (via OpenRouter). No profile data is attached beyond your question, current stage and language.",
+          "When the AI coach requires a third-party call, the active AI provider receives the question, up to ten recent messages used for continuity, the stage, language, vocabulary context derived from the account's tradition and ruleset, and cultural context derived from the recorded country. PII detected by gateway patterns (email addresses, phone numbers, URLs, @handles and long numeric sequences) is redacted from the question, history and system context before transmission; names and free text are not automatically redacted.",
         ],
       },
       {
         h: "6. Recipients",
         p: [
-          "Hosting: Vercel (EU/US, standard contractual clauses). Database: Supabase, Stockholm region (EU). Transactional email: Resend. Language models: OpenRouter (only the text of your AI-coach questions).",
+          "Depending on the actual deployment configuration, data may be received by: Vercel if it hosts the application; the configured database and image-storage host (Supabase when enabled, with no region assumed here); Resend for transactional email; Upstash for distributed rate limiting; Stripe for payments and subscriptions; and, for the AI Coach, either Anthropic or OpenAI directly, or OpenRouter with only the inference operators explicitly allowed by the active configuration. The exact AI scope is shown before consent and its fingerprint changes whenever a model, operator or routing policy changes, requiring new consent. OpenRouter receives the exact allowlist, fallbacks are disabled and deny/ZDR filters are required; these technical filters do not prove a region, DPA/SCC, or a contractual no-training commitment. The local deterministic fallback has no external AI recipient. Twilio for SMS verification and browser Web Push services receive data only when enabled. A service that is absent or not configured receives no data.",
         ],
       },
       {
         h: "7. Retention",
         p: [
-          "Active account: for the duration of use. Deleted account: immediate cascading erasure (profile, messages, journey, portraits, consents). Reports: kept 12 months for safety purposes.",
+          "An active account is kept while it is in use. On deletion, member-owned data (profile, sent content, journey, AI outputs and consents) is erased and the account row is pseudonymized. Content belonging to or shared with other people, reports, and security or audit records needed for an applicable obligation or the defense of legal claims may remain under that pseudonymous identity, with restricted access, for the necessary period. Reports are purged no later than 12 months after creation.",
         ],
       },
       {
         h: "8. Your rights",
         p: [
-          "Access and portability: full JSON export in one click (Settings → Privacy → Export my data). Erasure: one-click, real and final account deletion. Objection and consent withdrawal: anytime, free, no justification. Complaint: your local data-protection authority (CNIL in France).",
+          "The self-service JSON export (Settings → Privacy → Export my data) is limited to 2,000 items per collection. The export.complete field says whether every collection was exported; when it is false, export.collections identifies each truncated collection. To obtain the remainder or exercise another right of access, portability, correction, objection or erasure, email alliance@kolosaltech.com. General sensitive-data consent, AGENT_PROFILING and AI_COACH_INTERACTION each have a standalone withdrawal control in their interface; account deletion remains available separately. You may also complain to your local data-protection authority (CNIL in France).",
         ],
       },
       {
@@ -345,7 +345,7 @@ const en: Record<LegalKey, LegalDoc> = {
       {
         h: "2. Strictly necessary cookies",
         p: [
-          "We use only cookies essential to running the platform: a secure session cookie (httpOnly, Secure, SameSite) that keeps you signed in, an anti-CSRF token that protects your forms, and small technical preferences (display language, light or dark theme). Without them, authentication and security cannot work.",
+          "We use one strictly necessary session cookie, httpOnly, Secure in production and SameSite, to keep you signed in. Mutations are also protected by request-origin checks; no advertising cookie or tracking token is used. The theme is stored locally on your device, not in a server cookie.",
         ],
       },
       {
@@ -369,7 +369,7 @@ const en: Record<LegalKey, LegalDoc> = {
       {
         h: "6. Retention",
         p: [
-          "The session cookie expires at the end of your session or after a period of inactivity. Technical preferences (language, theme) are kept until you change or clear them manually. No necessary cookie is kept beyond what its purpose requires.",
+          "The session cookie expires no later than seven days after it is created, or sooner when you sign out, delete the account or the session is revoked. Locally stored preferences remain on the device until you change or clear them manually.",
         ],
       },
       {
@@ -385,7 +385,7 @@ const en: Record<LegalKey, LegalDoc> = {
 const es: Record<LegalKey, LegalDoc> = {
   terms: {
     title: "Condiciones Generales de Uso",
-    updated: "12 de junio de 2026",
+    updated: "23 de julio de 2026",
     sections: [
       {
         h: "1. Objeto",
@@ -421,7 +421,7 @@ const es: Record<LegalKey, LegalDoc> = {
       {
         h: "6. Coaches humanos",
         p: [
-          "Los acompañantes están verificados (identidad, afiliación, carta). Las sesiones se conciertan directamente contigo; la plataforma no es parte de ese contrato.",
+          "El marketplace de coaches, la reserva de coaches humanos y el copiloto destinado a los coaches no están disponibles en esta versión. No se demuestra públicamente ningún resultado de una revisión humana de la identidad, afiliación o carta de un coach; por tanto, la plataforma no puede garantizar que un coach esté verificado o certificado.",
         ],
       },
       {
@@ -439,7 +439,7 @@ const es: Record<LegalKey, LegalDoc> = {
       {
         h: "9. Baja",
         p: [
-          "Puedes eliminar tu cuenta en cualquier momento desde Ajustes → Confidencialidad. La eliminación es real y borra tus datos en cascada.",
+          "Puedes eliminar tu cuenta en cualquier momento desde Ajustes → Confidencialidad. Esta operación borra tus datos propios y seudonimiza la cuenta. Los datos pertenecientes a terceros, las denuncias y los registros que aún deban conservarse por seguridad, una obligación aplicable o la defensa de reclamaciones pueden mantenerse durante el periodo necesario.",
         ],
       },
       {
@@ -452,7 +452,7 @@ const es: Record<LegalKey, LegalDoc> = {
   },
   privacy: {
     title: "Política de Privacidad",
-    updated: "12 de junio de 2026",
+    updated: "23 de julio de 2026",
     sections: [
       {
         h: "1. Quiénes somos",
@@ -463,8 +463,8 @@ const es: Record<LegalKey, LegalDoc> = {
       {
         h: "2. Datos sensibles - artículo 9 RGPD",
         p: [
-          "Tus convicciones religiosas, situación familiar, testimonios y mensajes son datos sensibles (art. 9 RGPD). Solo se tratan con tu consentimiento explícito, revocable en todo momento.",
-          "Cada campo sensible tiene un nivel de visibilidad (5 niveles) bajo tu control. Testimonio, iglesia local, visión familiar y mensajes se cifran en reposo (AES-256-GCM).",
+          "Tus convicciones religiosas, situación familiar, testimonios y mensajes son datos sensibles (art. 9 RGPD). Solo se tratan con tu consentimiento explícito, recogido al registrarte. El consentimiento general puede retirarse en cualquier momento desde Ajustes → Privacidad conservando la cuenta; la retirada suspende los tratamientos del servicio y las notificaciones hasta una nueva decisión explícita. El consentimiento separado AGENT_PROFILING se gestiona desde la interfaz Preparación; el consentimiento separado AI_COACH_INTERACTION se otorga y se retira desde la pantalla Coach IA.",
+          "Los campos sensibles expuestos en el perfil tienen reglas de visibilidad progresiva bajo tu control. Testimonio, iglesia local, visión familiar y mensajes se cifran en reposo (AES-256-GCM).",
         ],
       },
       {
@@ -483,25 +483,25 @@ const es: Record<LegalKey, LegalDoc> = {
         h: "5. Agentes de IA y perfilado",
         p: [
           "El retrato de preparación se elabora solo con tu consentimiento dedicado (AGENT_PROFILING), revocable y borrable con un clic. Nunca se muestra a otros miembros y nunca condiciona automáticamente tu acceso: toda consecuencia pasa por un humano.",
-          "Las preguntas al coach IA pueden tratarse por un proveedor de modelos de lenguaje (OpenRouter). No se adjunta ningún dato de perfil más allá de tu pregunta, la etapa y tu idioma.",
+          "Cuando el coach IA requiere una llamada a un tercero, el proveedor de IA activo recibe la pregunta, hasta diez mensajes recientes usados para la continuidad, la etapa, el idioma, un contexto de vocabulario derivado de la tradición y del ruleset de la cuenta, y un contexto cultural derivado del país registrado. Las PII detectadas por los patrones de la pasarela (correos, teléfonos, URL, alias @ y secuencias numéricas largas) se expurgan de la pregunta, el historial y el contexto del sistema antes del envío; los nombres y el texto libre no se expurgan automáticamente.",
         ],
       },
       {
         h: "6. Destinatarios",
         p: [
-          "Alojamiento: Vercel (UE/EE. UU., cláusulas contractuales tipo). Base de datos: Supabase, región Estocolmo (UE). Correo transaccional: Resend. Modelos de lenguaje: OpenRouter (solo el texto de tus preguntas).",
+          "Según la configuración real del despliegue, pueden recibir datos: Vercel si aloja la aplicación; el proveedor configurado de base de datos y almacenamiento de imágenes (Supabase cuando está activado, sin presuponer aquí una región); Resend para el correo transaccional; Upstash para la limitación distribuida de peticiones; Stripe para pagos y suscripciones; y, para el Coach IA, Anthropic u OpenAI directamente, o bien OpenRouter con los únicos operadores de inferencia autorizados explícitamente por la configuración activa. El alcance exacto de IA se muestra antes del consentimiento y su huella cambia cuando cambia un modelo, operador o política de enrutamiento, lo que exige un nuevo consentimiento. OpenRouter recibe la lista exacta, se desactivan los fallbacks y se exigen los filtros deny/ZDR; estos filtros técnicos no prueban una región, un DPA/SCC ni un compromiso contractual de no entrenamiento. El fallback determinista local no tiene destinatario externo de IA. Twilio para la verificación por SMS y los servicios Web Push del navegador solo reciben datos si están activados. Un servicio ausente o no configurado no recibe datos.",
         ],
       },
       {
         h: "7. Conservación",
         p: [
-          "Cuenta activa: mientras dure el uso. Cuenta eliminada: borrado inmediato en cascada. Denuncias: 12 meses por motivos de seguridad.",
+          "La cuenta activa se conserva mientras se usa. Al eliminarla, se borran los datos propios del miembro (perfil, contenido enviado, camino, producciones de IA y consentimientos) y la fila de la cuenta se seudonimiza. Los contenidos pertenecientes o compartidos con terceros, las denuncias y los registros de seguridad o auditoría necesarios para una obligación aplicable o la defensa de reclamaciones pueden mantenerse bajo esa identidad seudonimizada, con acceso restringido, durante el periodo necesario. Las denuncias se purgan a más tardar 12 meses después de su creación.",
         ],
       },
       {
         h: "8. Tus derechos",
         p: [
-          "Acceso y portabilidad: exportación JSON completa con un clic. Supresión: eliminación de cuenta real y definitiva con un clic. Oposición y retirada del consentimiento: en cualquier momento. Reclamación: tu autoridad de protección de datos.",
+          "La exportación JSON de autoservicio está limitada a 2.000 elementos por colección. El campo export.complete indica si se exportaron todas las colecciones; cuando vale false, export.collections identifica cada colección truncada. Para obtener el resto o ejercer otro derecho de acceso, portabilidad, rectificación, oposición o supresión, escribe a alliance@kolosaltech.com. El consentimiento general para datos sensibles, AGENT_PROFILING y AI_COACH_INTERACTION disponen cada uno de un control autónomo de retirada en su interfaz; la eliminación de la cuenta sigue disponible por separado. También puedes reclamar ante tu autoridad de protección de datos.",
         ],
       },
       {
@@ -529,7 +529,7 @@ const es: Record<LegalKey, LegalDoc> = {
       {
         h: "2. Cookies estrictamente necesarias",
         p: [
-          "Solo usamos cookies imprescindibles para el funcionamiento de la plataforma: una cookie de sesión segura (httpOnly, Secure, SameSite) que te mantiene conectado·a, un token anti-CSRF que protege tus formularios y pequeñas preferencias técnicas (idioma, tema claro u oscuro). Sin ellas, la autenticación y la seguridad no pueden funcionar.",
+          "Usamos una cookie de sesión estrictamente necesaria, httpOnly, Secure en producción y SameSite, para mantener tu sesión. Las mutaciones también están protegidas mediante controles del origen de la solicitud; no usamos cookies publicitarias ni tokens de seguimiento. El tema se guarda localmente en tu dispositivo, no en una cookie del servidor.",
         ],
       },
       {
@@ -553,7 +553,7 @@ const es: Record<LegalKey, LegalDoc> = {
       {
         h: "6. Conservación",
         p: [
-          "La cookie de sesión caduca al final de tu sesión o tras un periodo de inactividad. Las preferencias técnicas (idioma, tema) se conservan hasta que las cambies o las borres manualmente. Ninguna cookie necesaria se conserva más allá de lo útil para su finalidad.",
+          "La cookie de sesión caduca como máximo siete días después de su creación, o antes si cierras sesión, eliminas la cuenta o se revoca la sesión. Las preferencias almacenadas localmente permanecen en el dispositivo hasta que las cambias o borras.",
         ],
       },
       {
@@ -569,7 +569,7 @@ const es: Record<LegalKey, LegalDoc> = {
 const pt: Record<LegalKey, LegalDoc> = {
   terms: {
     title: "Termos e Condições de Utilização",
-    updated: "12 de junho de 2026",
+    updated: "23 de julho de 2026",
     sections: [
       {
         h: "1. Objeto",
@@ -605,7 +605,7 @@ const pt: Record<LegalKey, LegalDoc> = {
       {
         h: "6. Coaches humanos",
         p: [
-          "Os acompanhantes são verificados (identidade, afiliação, carta). As sessões são acordadas diretamente contigo; a plataforma não é parte nesse contrato.",
+          "O marketplace de coaches, a reserva de coaches humanos e o copiloto destinado aos coaches não estão disponíveis nesta versão. Não é publicamente demonstrado qualquer resultado de uma verificação humana da identidade, afiliação ou carta de um coach; por isso, a plataforma não pode garantir que um coach seja verificado ou certificado.",
         ],
       },
       {
@@ -623,7 +623,7 @@ const pt: Record<LegalKey, LegalDoc> = {
       {
         h: "9. Cancelamento",
         p: [
-          "Podes eliminar a tua conta a qualquer momento em Definições → Confidencialidade. A eliminação é real e apaga os teus dados em cascata.",
+          "Podes eliminar a tua conta a qualquer momento em Definições → Confidencialidade. Esta operação apaga os dados que te pertencem e pseudonimiza a conta. Os dados pertencentes a terceiros, as denúncias e os registos que ainda tenham de ser conservados por segurança, uma obrigação aplicável ou a defesa de direitos podem ser mantidos durante o período necessário.",
         ],
       },
       {
@@ -636,7 +636,7 @@ const pt: Record<LegalKey, LegalDoc> = {
   },
   privacy: {
     title: "Política de Privacidade",
-    updated: "12 de junho de 2026",
+    updated: "23 de julho de 2026",
     sections: [
       {
         h: "1. Quem somos",
@@ -647,8 +647,8 @@ const pt: Record<LegalKey, LegalDoc> = {
       {
         h: "2. Dados sensíveis - artigo 9.º RGPD",
         p: [
-          "As tuas convicções religiosas, situação familiar, testemunhos e mensagens são dados sensíveis (art. 9.º RGPD). Só são tratados com o teu consentimento explícito, revogável a qualquer momento.",
-          "Cada campo sensível tem um nível de visibilidade (5 níveis) sob o teu controlo. Testemunho, igreja local, visão familiar e mensagens são cifrados em repouso (AES-256-GCM).",
+          "As tuas convicções religiosas, situação familiar, testemunhos e mensagens são dados sensíveis (art. 9.º RGPD). Só são tratados com o teu consentimento explícito, recolhido no registo. O consentimento geral pode ser retirado a qualquer momento em Definições → Privacidade mantendo a conta; a retirada suspende os tratamentos do serviço e as notificações até uma nova decisão explícita. O consentimento separado AGENT_PROFILING é gerido na interface Preparação; o consentimento separado AI_COACH_INTERACTION é dado e retirado no ecrã Coach IA.",
+          "Os campos sensíveis expostos no perfil têm regras de visibilidade progressiva sob o teu controlo. Testemunho, igreja local, visão familiar e mensagens são cifrados em repouso (AES-256-GCM).",
         ],
       },
       {
@@ -667,25 +667,25 @@ const pt: Record<LegalKey, LegalDoc> = {
         h: "5. Agentes de IA e definição de perfis",
         p: [
           "O retrato de preparação é elaborado apenas com o teu consentimento dedicado (AGENT_PROFILING), revogável e apagável num clique. Nunca é mostrado a outros membros e nunca condiciona automaticamente o teu acesso: qualquer consequência passa por um humano.",
-          "As perguntas ao coach IA podem ser tratadas por um fornecedor de modelos de linguagem (OpenRouter). Não é anexado nenhum dado de perfil além da tua pergunta, etapa e idioma.",
+          "Quando o coach IA exige uma chamada a terceiros, o fornecedor de IA ativo recebe a pergunta, até dez mensagens recentes usadas para continuidade, a etapa, o idioma, um contexto de vocabulário derivado da tradição e do ruleset da conta, e um contexto cultural derivado do país registado. As PII detetadas pelos padrões da gateway (emails, telefones, URL, identificadores @ e sequências numéricas longas) são expurgadas da pergunta, do histórico e do contexto do sistema antes do envio; os nomes e o texto livre não são automaticamente expurgados.",
         ],
       },
       {
         h: "6. Destinatários",
         p: [
-          "Alojamento: Vercel (UE/EUA, cláusulas contratuais-tipo). Base de dados: Supabase, região de Estocolmo (UE). Email transacional: Resend. Modelos de linguagem: OpenRouter (apenas o texto das tuas perguntas).",
+          "Consoante a configuração real da implementação, podem receber dados: a Vercel, se alojar a aplicação; o fornecedor configurado da base de dados e do armazenamento de imagens (Supabase quando ativado, sem presumir aqui uma região); a Resend para email transacional; a Upstash para limitação distribuída de pedidos; a Stripe para pagamentos e subscrições; e, para o Coach IA, a Anthropic ou a OpenAI diretamente, ou a OpenRouter apenas com os operadores de inferência explicitamente autorizados pela configuração ativa. O âmbito exato da IA é apresentado antes do consentimento e a respetiva impressão digital muda quando muda um modelo, operador ou política de encaminhamento, exigindo novo consentimento. A OpenRouter recebe a lista exata, os fallbacks são desativados e os filtros deny/ZDR são exigidos; estes filtros técnicos não provam uma região, um DPA/SCC nem um compromisso contratual de não treino. O fallback determinístico local não tem destinatário externo de IA. A Twilio para verificação por SMS e os serviços Web Push do navegador só recebem dados quando ativados. Um serviço ausente ou não configurado não recebe dados.",
         ],
       },
       {
         h: "7. Conservação",
         p: [
-          "Conta ativa: durante a utilização. Conta eliminada: apagamento imediato em cascata. Denúncias: 12 meses por razões de segurança.",
+          "A conta ativa é conservada enquanto estiver em uso. Ao eliminá-la, são apagados os dados próprios do membro (perfil, conteúdo enviado, percurso, produções de IA e consentimentos) e a linha da conta é pseudonimizada. Os conteúdos pertencentes ou partilhados com terceiros, as denúncias e os registos de segurança ou auditoria necessários para uma obrigação aplicável ou para a defesa de direitos podem permanecer sob essa identidade pseudonimizada, com acesso limitado, durante o período necessário. As denúncias são purgadas o mais tardar 12 meses após a criação.",
         ],
       },
       {
         h: "8. Os teus direitos",
         p: [
-          "Acesso e portabilidade: exportação JSON completa num clique. Apagamento: eliminação de conta real e definitiva num clique. Oposição e retirada do consentimento: a qualquer momento. Reclamação: a tua autoridade de proteção de dados (CNPD/CNIL).",
+          "A exportação JSON em autosserviço está limitada a 2 000 elementos por coleção. O campo export.complete indica se todas as coleções foram exportadas; quando vale false, export.collections identifica cada coleção truncada. Para obter o restante ou exercer outro direito de acesso, portabilidade, retificação, oposição ou apagamento, escreve para alliance@kolosaltech.com. O consentimento geral para dados sensíveis, AGENT_PROFILING e AI_COACH_INTERACTION têm, cada um, um controlo autónomo de retirada na respetiva interface; a eliminação da conta continua disponível em separado. Também podes reclamar junto da tua autoridade de proteção de dados (CNPD/CNIL).",
         ],
       },
       {
@@ -713,7 +713,7 @@ const pt: Record<LegalKey, LegalDoc> = {
       {
         h: "2. Cookies estritamente necessários",
         p: [
-          "Usamos apenas cookies indispensáveis ao funcionamento da plataforma: um cookie de sessão seguro (httpOnly, Secure, SameSite) que te mantém ligado·a, um token anti-CSRF que protege os teus formulários e pequenas preferências técnicas (idioma, tema claro ou escuro). Sem eles, a autenticação e a segurança não podem funcionar.",
+          "Usamos um cookie de sessão estritamente necessário, httpOnly, Secure em produção e SameSite, para manter a sessão. As mutações também são protegidas por controlos da origem do pedido; não usamos cookies publicitários nem tokens de rastreio. O tema é guardado localmente no dispositivo, não num cookie do servidor.",
         ],
       },
       {
@@ -737,7 +737,7 @@ const pt: Record<LegalKey, LegalDoc> = {
       {
         h: "6. Conservação",
         p: [
-          "O cookie de sessão expira no fim da tua sessão ou após um período de inatividade. As preferências técnicas (idioma, tema) são conservadas até as alterares ou apagares manualmente. Nenhum cookie necessário é conservado além do necessário à sua finalidade.",
+          "O cookie de sessão expira no máximo sete dias após a criação, ou antes quando termina a sessão, elimina a conta ou a sessão é revogada. As preferências guardadas localmente permanecem no dispositivo até serem alteradas ou apagadas.",
         ],
       },
       {

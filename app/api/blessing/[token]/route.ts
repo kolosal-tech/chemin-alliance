@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { prisma } from "@/lib/db";
 import {
   clientIp,
   jsonError,
@@ -8,8 +7,11 @@ import {
   withErrors,
 } from "@/lib/api-helpers";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
-import { statusForDecision } from "@/lib/sponsor";
-import { encryptField } from "@/lib/security/crypto";
+import {
+  BlessingStateChangedError,
+  getPendingBlessingView,
+  respondToBlessing,
+} from "@/lib/blessing";
 
 export const runtime = "nodejs";
 
@@ -26,24 +28,13 @@ export const GET = withErrors(
     if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
     const { token } = await params;
-    const b = await prisma.blessing.findUnique({
-      where: { token },
-      include: {
-        sponsor: { include: { user: { select: { displayName: true } } } },
-      },
-    });
-    if (!b) return jsonError(404, "NOT_FOUND");
-    return NextResponse.json({
-      filleulName: b.sponsor.user.displayName,
-      sponsorName: b.sponsor.name,
-      status: b.status,
-    });
+    return NextResponse.json(await getPendingBlessingView(token));
   },
 );
 
 const schema = z.object({
   decision: z.enum(["bless", "caution"]),
-  note: z.string().max(500).optional(),
+  note: z.string().trim().max(500).optional(),
 });
 
 export const POST = withErrors(
@@ -53,20 +44,14 @@ export const POST = withErrors(
 
     const { token } = await params;
     const { decision, note } = schema.parse(await readJsonLimited(req));
-    const b = await prisma.blessing.findUnique({
-      where: { token },
-    });
-    if (!b) return jsonError(404, "NOT_FOUND");
-    if (b.status !== "PENDING") return jsonError(409, "ALREADY_ANSWERED");
-
-    await prisma.blessing.update({
-      where: { id: b.id },
-      data: {
-        status: statusForDecision(decision),
-        noteEncrypted: note ? encryptField(note) : null,
-        respondedAt: new Date(),
-      },
-    });
+    try {
+      await respondToBlessing(token, decision, note);
+    } catch (error) {
+      if (error instanceof BlessingStateChangedError) {
+        return jsonError(409, "BLESSING_STATE_CHANGED");
+      }
+      throw error;
+    }
     return NextResponse.json({ ok: true });
   },
 );

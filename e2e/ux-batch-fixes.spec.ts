@@ -20,6 +20,7 @@ const LOCALES = (process.env.E2E_LOCALES ?? "fr,en,es,pt").split(",");
 const PRIMARY = LOCALES[0] ?? "fr";
 
 async function login(page: Page, locale: string): Promise<void> {
+  await page.setExtraHTTPHeaders({ "x-forwarded-for": "203.0.113.40" });
   await page.goto(`/${locale}/login`);
   await page.fill('input[name="email"]', EMAIL);
   await page.fill('input[name="password"]', PASSWORD as string);
@@ -35,15 +36,32 @@ test.describe("Lot UX P0-P2", () => {
     "Définir E2E_PASSWORD pour exécuter les tests authentifiés.",
   );
 
-  // P0.1 - Page coaches : l'un des états testables est toujours rendu
-  // (liste OU vide), jamais un écran blanc. data-testid stables.
+  // P0.1 - Page coaches : l'un des états contractuels est toujours rendu
+  // (liste, vide ou marketplace honnêtement indisponible), jamais un écran
+  // blanc. Les data-testid restent stables.
   for (const locale of LOCALES) {
-    test(`[${locale}] coaches : liste ou état vide rendu`, async ({ page }) => {
+    test(`[${locale}] coaches : état explicite rendu`, async ({ page }) => {
       await login(page, locale);
       await page.goto(`/${locale}/coaches`);
       const list = page.getByTestId("coaches-list");
       const empty = page.getByTestId("coaches-empty");
-      await expect(list.or(empty)).toBeVisible({ timeout: 15_000 });
+      const unavailable = page.getByTestId("coaches-unavailable");
+      await expect(list.or(empty).or(unavailable)).toBeVisible({
+        timeout: 15_000,
+      });
+
+      // Largeur minimale supportée : les six libellés de navigation doivent
+      // rester complets dans chaque langue, sans ellipsis ni débordement.
+      await page.setViewportSize({ width: 320, height: 568 });
+      const clippedLabels = await page
+        .getByRole("navigation", { name: "Navigation" })
+        .locator("a span:last-child")
+        .evaluateAll((labels) =>
+          labels
+            .filter((label) => label.scrollWidth > label.clientWidth + 1)
+            .map((label) => label.textContent?.trim()),
+        );
+      expect(clippedLabels).toEqual([]);
     });
   }
 

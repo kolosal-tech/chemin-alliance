@@ -1,5 +1,6 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  createMomoCheckout,
   flutterwaveEnabled,
   verifyFlutterwaveSignature,
   buildMomoPaymentPayload,
@@ -17,6 +18,8 @@ describe("flutterwave - Mobile Money XOF (dormant + webhook)", () => {
     else process.env.FLUTTERWAVE_SECRET_KEY = savedSecret;
     if (savedHash === undefined) delete process.env.FLUTTERWAVE_WEBHOOK_HASH;
     else process.env.FLUTTERWAVE_WEBHOOK_HASH = savedHash;
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 
   it("dormant sans clé secrète, actif avec", () => {
@@ -65,5 +68,31 @@ describe("flutterwave - Mobile Money XOF (dormant + webhook)", () => {
       redirectUrl: "x",
     });
     expect(p.tx_ref).toMatch(/^ca-momo-u1-/);
+  });
+
+  it("ne journalise jamais le corps fournisseur contenant des données client", async () => {
+    process.env.FLUTTERWAVE_SECRET_KEY = "FLWSECK_secure";
+    const reflected = "a@b.co user-1 provider-private-detail";
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(new Response(reflected, { status: 400 })),
+    );
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    await expect(
+      createMomoCheckout({
+        userId: "user-1",
+        email: "a@b.co",
+        amountXof: 2000,
+        redirectUrl: "https://app.example/return",
+        txRef: "fixed-ref",
+      }),
+    ).rejects.toMatchObject({ message: "FLUTTERWAVE_ERROR", status: 502 });
+
+    const logs = JSON.stringify(error.mock.calls);
+    expect(logs).toContain("400");
+    expect(logs).not.toContain(reflected);
+    expect(logs).not.toContain("a@b.co");
+    expect(logs).not.toContain("user-1");
   });
 });

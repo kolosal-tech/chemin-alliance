@@ -1,6 +1,7 @@
 import webpush from "web-push";
 import { prisma } from "@/lib/db";
 import { env } from "@/lib/env";
+import { activeSensitiveDataConsentUserWhere } from "@/lib/sensitive-data-consent";
 
 /**
  * Web Push (PWA, iOS 16.4+ / Android).
@@ -70,9 +71,18 @@ export async function sendPushToUser(
 
   let subs;
   try {
-    subs = await prisma.pushSubscription.findMany({ where: { userId } });
-  } catch (err) {
-    console.error("[push] lecture abonnements échouée", err);
+    subs = await prisma.pushSubscription.findMany({
+      where: {
+        userId,
+        // Dernière barrière avant tout transfert à un service Push tiers. Une
+        // route appelante ne suffit pas : le destinataire peut avoir retiré
+        // son consentement entre la décision métier et cet envoi best-effort.
+        user: { is: activeSensitiveDataConsentUserWhere },
+      },
+    });
+  } catch {
+    // Les erreurs Prisma brutes peuvent contenir une valeur d'abonnement.
+    console.error("[push] lecture abonnements indisponible");
     return 0;
   }
   if (subs.length === 0) return 0;
@@ -108,13 +118,13 @@ export async function sendPushToUser(
     // On NE purge PAS sur 400 (payload, notre faute, transitoire) ni 401 (auth
     // serveur, GLOBAL) : ces codes ne doivent pas effacer des abonnements valides.
     if (code === 404 || code === 410 || code === 403) expired.push(subs[i].id);
-    else console.error("[push] envoi échoué", code ?? r.reason);
+    else console.error(`[push] envoi échoué (${code ?? "transport"})`);
   });
 
   if (expired.length > 0) {
     await prisma.pushSubscription
       .deleteMany({ where: { id: { in: expired } } })
-      .catch((err) => console.error("[push] purge échouée", err));
+      .catch(() => console.error("[push] purge abonnements indisponible"));
   }
   return ok;
 }

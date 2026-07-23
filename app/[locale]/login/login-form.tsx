@@ -33,8 +33,10 @@ export function LoginForm() {
     });
     setBusy(false);
     if (res.ok) {
-      router.push("/suggestions");
-      router.refresh();
+      // La navigation RSC relit elle-même le cookie de session fraîchement
+      // posé. Un refresh lancé en parallèle annulait parfois la navigation
+      // suivante (double transition concurrente).
+      router.replace("/suggestions");
     } else if (res.status === 429) {
       setError(t("rateLimited"));
     } else {

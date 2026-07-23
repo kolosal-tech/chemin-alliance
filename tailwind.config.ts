@@ -17,7 +17,7 @@ const config: Config = {
         gold: {
           DEFAULT: "#C9A84C",
           light: "#D8B860", // doré mode sombre
-          deep: "#9A7B2E",
+          deep: "#7A6020",
           ink: "#7A6020",
           surface: "#FBF6E9", // fond doré clair
           darkSurface: "#2C2818",
@@ -46,8 +46,8 @@ const config: Config = {
           200: "#D8CDB9",
           300: "#E2DDD2",
           400: "#D4CDBE",
-          500: "#A9A293",
-          600: "#8B8579",
+          500: "#746F65",
+          600: "#6B665C",
         },
         // ----- CONFIANCE / SÉCURITÉ (vert sauge) -----
         sage: {

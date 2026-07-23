@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { sealInsight } from "@/lib/agent-insight";
 import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
-import { requireMatchMember, buildActionContext } from "@/lib/alliance";
+import { buildActionContext } from "@/lib/alliance";
 import { decryptOptional, encryptField } from "@/lib/security/crypto";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import { validateAction, type Locale } from "@/lib/core-engine";
@@ -13,7 +13,7 @@ import {
   leakKindsToActions,
 } from "@/lib/moderation/contact-detection";
 import { analyzeRisk } from "@/lib/agents/watchman";
-import { isBlockedBetween } from "@/lib/blocks";
+import { accessibleConversationWhere } from "@/lib/blocks";
 import { sendPushToUser } from "@/lib/push";
 import { newMessageNotification } from "@/lib/push-messages";
 import { generateCompanionReply } from "@/lib/companions/reply";
@@ -29,14 +29,20 @@ export const GET = withErrors(
     { params }: { params: Promise<{ matchId: string }> },
   ) => {
     const user = await requireUser();
-    const match = await requireMatchMember((await params).matchId, user.id);
-    const messages = await prisma.message.findMany({
-      where: { matchId: match.id },
-      orderBy: { createdAt: "asc" },
-      take: 200,
+    const match = await prisma.match.findFirst({
+      where: accessibleConversationWhere((await params).matchId, user.id),
+      include: {
+        messages: {
+          orderBy: { createdAt: "asc" },
+          take: 200,
+        },
+      },
     });
+    if (!match) {
+      throw Object.assign(new Error("NOT_FOUND"), { status: 404 });
+    }
     return NextResponse.json(
-      messages
+      match.messages
         // un message bloqué n'est visible que par son expéditeur
         .filter(
           (m) => m.moderationStatus !== "BLOCKED" || m.senderId === user.id,
@@ -78,12 +84,13 @@ export const POST = withErrors(
     );
     if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
-    const match = await requireMatchMember((await params).matchId, user.id);
-    // Blocage (gratuit à vie) : tout échange est coupé dans les deux sens.
-    const otherId = match.userAId === user.id ? match.userBId : match.userAId;
-    if (await isBlockedBetween(user.id, otherId)) {
-      return jsonError(403, "RELATION_BLOCKED");
+    const match = await prisma.match.findFirst({
+      where: accessibleConversationWhere((await params).matchId, user.id),
+    });
+    if (!match) {
+      throw Object.assign(new Error("NOT_FOUND"), { status: 404 });
     }
+    const otherId = match.userAId === user.id ? match.userBId : match.userAId;
     // Demande non encore acceptée : seul le demandeur peut envoyer (message
     // d'ouverture). Le destinataire doit d'abord accepter la rencontre.
     if (
@@ -273,8 +280,8 @@ export const POST = withErrors(
         otherId,
         newMessageNotification(recipient?.locale, match.id),
       );
-    } catch (err) {
-      console.error("[push] notif message échouée", err);
+    } catch {
+      console.error("[push] notif message indisponible");
     }
     return NextResponse.json(
       { blocked: false, messageId: message.id },

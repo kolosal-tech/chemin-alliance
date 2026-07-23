@@ -1,6 +1,6 @@
-import type { AllianceAnswer, AllianceStage } from "@prisma/client";
+import type { AllianceStage } from "@prisma/client";
 import type { Locale } from "@/lib/core-engine";
-import { completeText } from "./llm";
+import type { ReadableAllianceAnswer } from "@/lib/alliance-answer";
 
 /**
  * Agent 4 - Bilan d'Étape. Relecture PRIVÉE pour un seul membre :
@@ -15,7 +15,7 @@ type StageReview = {
 };
 
 export function buildReviewData(
-  myAnswers: AllianceAnswer[],
+  myAnswers: ReadableAllianceAnswer[],
   otherAnsweredQuestionIds: string[],
   questionThemes: Record<string, string>,
 ): Omit<StageReview, "narrative"> {
@@ -43,23 +43,59 @@ export function buildReviewData(
   };
 }
 
-const SYSTEM = `Tu rédiges un court bilan d'étape personnel pour une personne en parcours de discernement chrétien vers le mariage.
-Règles : tu t'adresses à ELLE seule, à partir de SES réponses ; ton chaleureux et sobre ;
-tu ne juges pas l'autre personne ; tu ne dis jamais "vous devez vous marier" ni l'inverse ;
-tu n'affirmes jamais une volonté divine ; 4-6 phrases maximum ; termine par UNE question ouverte.`;
+const REVIEW_COPY: Record<
+  Locale,
+  {
+    intro: string;
+    aligned: string;
+    open: string;
+    none: string;
+    question: string;
+  }
+> = {
+  fr: {
+    intro: "Ce bilan local résume simplement l’avancement de cette étape.",
+    aligned: "Les thèmes abordés par chacun sont",
+    open: "Les thèmes qui restent ouverts sont",
+    none: "aucun pour le moment",
+    question: "Quel thème souhaites-tu approfondir avec calme maintenant ?",
+  },
+  en: {
+    intro: "This local review simply summarizes progress at this stage.",
+    aligned: "Themes addressed by both people are",
+    open: "Themes that remain open are",
+    none: "none for now",
+    question: "Which theme would you like to explore calmly now?",
+  },
+  es: {
+    intro: "Este balance local resume sencillamente el avance de esta etapa.",
+    aligned: "Los temas abordados por ambas personas son",
+    open: "Los temas que siguen abiertos son",
+    none: "ninguno por ahora",
+    question: "¿Qué tema te gustaría profundizar con calma ahora?",
+  },
+  pt: {
+    intro:
+      "Este balanço local resume de forma simples o progresso desta etapa.",
+    aligned: "Os temas abordados por ambos são",
+    open: "Os temas que continuam em aberto são",
+    none: "nenhum por enquanto",
+    question: "Que tema gostarias de aprofundar com calma agora?",
+  },
+};
 
 export async function narrateReview(
   data: Omit<StageReview, "narrative">,
   stage: AllianceStage,
   locale: Locale,
 ): Promise<string | null> {
+  void stage;
   if (data.myHighlights.length === 0) return null;
-  return completeText(
-    `${SYSTEM}\nLangue: ${locale}. Étape: ${stage}.`,
-    `Thèmes partagés à deux: ${data.alignedThemes.join(", ") || "aucun"}.
-Thèmes encore ouverts: ${data.openThemes.join(", ") || "aucun"}.
-Mes réponses (extraits): ${data.myHighlights.map((h) => h.excerpt).join(" | ")}`,
-    400,
-    locale,
-  );
+  const copy = REVIEW_COPY[locale] ?? REVIEW_COPY.fr;
+  return [
+    copy.intro,
+    `${copy.aligned}: ${data.alignedThemes.join(", ") || copy.none}.`,
+    `${copy.open}: ${data.openThemes.join(", ") || copy.none}.`,
+    copy.question,
+  ].join(" ");
 }

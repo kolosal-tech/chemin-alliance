@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { safeStripeRedirectUrl } from "@/lib/payments/redirect";
 
 /** Ouvre le Stripe Billing Portal pour gérer / annuler l'abonnement. */
 export function PortalButton({ label }: { label: string }) {
@@ -20,8 +21,9 @@ export function PortalButton({ label }: { label: string }) {
         body: JSON.stringify({ locale }),
       });
       const data = await res.json().catch(() => null);
-      if (res.ok && data?.url) {
-        window.location.href = data.url;
+      const redirect = safeStripeRedirectUrl(data?.url, "portal");
+      if (res.ok && redirect) {
+        window.location.href = redirect;
         return;
       }
       setError(true);

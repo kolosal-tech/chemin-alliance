@@ -100,7 +100,7 @@ export function OnboardingSlides() {
             </div>
           </div>
         </div>
-        <p className="pb-4 text-[14px] text-sand-500 dark:text-[#65625B]">
+        <p className="pb-4 text-[14px] text-sand-500 dark:text-[#9A958B]">
           <Link href="/legal/terms" className="underline">
             {tl("terms")}
           </Link>
@@ -279,7 +279,7 @@ export function OnboardingSlides() {
         )}
       </div>
 
-      <p className="pb-2 pt-5 text-center text-[13px] text-sand-500 dark:text-[#65625B] lg:hidden">
+      <p className="pb-2 pt-5 text-center text-[13px] text-sand-500 dark:text-[#9A958B] lg:hidden">
         <Link href="/legal/terms" className="underline">
           {tl("terms")}
         </Link>

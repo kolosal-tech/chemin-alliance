@@ -1,6 +1,5 @@
 import type { AllianceStage } from "@prisma/client";
 import type { Locale } from "@/lib/core-engine";
-import { completeText } from "./llm";
 
 /**
  * Agent 7 - Copilote du Coach Humain.
@@ -16,6 +15,20 @@ type CopilotSummaryInput = {
   openThemes: string[];
   compatibility: Array<{ key: string; status: string }>;
 };
+
+/**
+ * Le modèle Consent courant ne sait pas persister ces quatre dimensions.
+ * Tant qu'une migration dédiée ne les rend pas toutes vérifiables, la route
+ * reste volontairement indisponible plutôt que d'inférer un consentement.
+ */
+export const REQUIRED_COACH_CONSENT_SCOPE = {
+  relation: "MATCH",
+  recipient: "VERIFIED_HUMAN_COACH",
+  purpose: "SESSION_PREPARATION",
+  version: "coach-sharing-v1",
+} as const;
+
+export const SCOPED_COACH_CONSENT_SUPPORTED = false;
 
 export function deterministicSummary(
   input: CopilotSummaryInput,
@@ -58,21 +71,4 @@ export function deterministicSummary(
     `${openL}: ${input.openThemes.join(", ") || "-"}`,
     input.compatibility.map((c) => `• ${c.key}: ${c.status}`).join("\n"),
   ].join("\n\n");
-}
-
-const SYSTEM = `Tu prépares une note de séance pour un accompagnateur de couple chrétien (coach, pasteur, conseiller).
-À partir de données factuelles (étape, thèmes couverts, sujets ouverts), rédige une note
-professionnelle de 6-8 lignes : où en est le couple, points d'appui, points d'attention,
-2 pistes pour la séance. Tu ne cites aucun message privé. Ton neutre et bienveillant.`;
-
-export async function polishSummary(
-  input: CopilotSummaryInput,
-  locale: Locale,
-): Promise<string | null> {
-  return completeText(
-    `${SYSTEM}\nLangue: ${locale}.`,
-    deterministicSummary(input, locale),
-    500,
-    locale,
-  );
 }

@@ -1,16 +1,11 @@
 import { describe, it, expect } from "vitest";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import fr from "@/messages/fr.json";
 import en from "@/messages/en.json";
 import es from "@/messages/es.json";
 import pt from "@/messages/pt.json";
-import {
-  stats,
-  journeySteps,
-  values,
-  whyUs,
-  testimonials,
-  footerNav,
-} from "@/content/home";
+import { journeySteps, values, whyUs, footerNav } from "@/content/home";
 import { guideTopics } from "@/content/guides";
 import { posts, getPost, localizedContent } from "@/content/blog";
 
@@ -23,9 +18,18 @@ function keyPaths(obj: unknown, prefix = ""): string[] {
 }
 
 describe("content/home - intégrité de la config", () => {
-  it("stats : 4 entrées, ids uniques", () => {
-    expect(stats).toHaveLength(4);
-    expect(new Set(stats.map((s) => s.id)).size).toBe(4);
+  it("n'affiche aucune preuve sociale fictive", () => {
+    const page = readFileSync(
+      path.join(process.cwd(), "app/[locale]/page.tsx"),
+      "utf8",
+    );
+    const content = readFileSync(
+      path.join(process.cwd(), "content/home.ts"),
+      "utf8",
+    );
+
+    expect(page).not.toMatch(/PressLogos|StatsBanner|LazyTestimonials/);
+    expect(content).not.toMatch(/pressLogos|fallback:\s*12400|testimonials/);
   });
 
   it("journeySteps : 6 étapes numérotées 1→6", () => {
@@ -36,13 +40,6 @@ describe("content/home - intégrité de la config", () => {
   it("values & whyUs : 4 cartes chacun", () => {
     expect(values).toHaveLength(4);
     expect(whyUs).toHaveLength(4);
-  });
-
-  it("testimonials : ids uniques, mois positifs", () => {
-    expect(new Set(testimonials.map((t) => t.id)).size).toBe(
-      testimonials.length,
-    );
-    expect(testimonials.every((t) => t.months > 0)).toBe(true);
   });
 
   it("footerNav : sections product / resources / legal", () => {

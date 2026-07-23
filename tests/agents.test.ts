@@ -247,7 +247,7 @@ describe("Gardien du Couple", () => {
   it("code d'invitation lisible, sans caractères ambigus", () => {
     for (let i = 0; i < 20; i++) {
       const c = generateInviteCode();
-      expect(c).toMatch(/^ALLIANCE-[23456789ABCDEFGHJKMNPQRSTUVWXYZ]{6}$/);
+      expect(c).toMatch(/^ALLIANCE-[23456789ABCDEFGHJKMNPQRSTUVWXYZ]{12}$/);
     }
   });
 });

@@ -7,7 +7,6 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { BlockedUsers } from "@/components/BlockedUsers";
 import { PhoneVerify } from "@/components/PhoneVerify";
-import { AsyncButton } from "@/components/AsyncButton";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { Switch } from "@/components/Switch";
 import { LogoutButton } from "@/components/LogoutButton";
@@ -15,6 +14,8 @@ import { useToast } from "@/components/Toast";
 import { VaultToggle } from "@/components/VaultToggle";
 import type { VaultField } from "@/app/actions/vault";
 import type { VisibilityLevel } from "@prisma/client";
+import { clearJournalStorage } from "@/lib/devotional-journal";
+import { clearPrivatePwaCaches } from "@/lib/pwa-cache";
 
 const LEVEL_SEGMENTS: Record<string, { filled: number; cls: string }> = {
   PUBLIC_CONTROLLED: { filled: 1, cls: "bg-sage" },
@@ -28,13 +29,20 @@ const LEVEL_SEGMENTS: Record<string, { filled: number; cls: string }> = {
 
 export function PrivacyPanel({
   initial,
+  initialSensitiveConsent,
+  journalOwnerId,
   fieldLevels,
 }: {
   initial: {
     antiMalaiseEnabled: boolean;
-    antiMalaiseRadiusKm: number;
     invisibleMode: boolean;
   };
+  initialSensitiveConsent: {
+    active: boolean;
+    grantedAt: Date | null;
+    version: string;
+  };
+  journalOwnerId: string;
   fieldLevels: Record<string, VisibilityLevel>;
 }) {
   const t = useTranslations();
@@ -42,6 +50,12 @@ export function PrivacyPanel({
   const toast = useToast();
   const [state, setState] = useState(initial);
   const [saving, setSaving] = useState(false);
+  const [sensitiveConsent, updateSensitiveConsent] = useState(
+    initialSensitiveConsent,
+  );
+  const [consentBusy, setConsentBusy] = useState(false);
+  const [confirmConsentWithdrawal, setConfirmConsentWithdrawal] =
+    useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   // Désactiver le filtre anti-malaise = action sensible (le profil redevient
   // visible à la communauté) : on confirme avant.
@@ -68,10 +82,49 @@ export function PrivacyPanel({
   }
 
   async function deleteAccount() {
-    const res = await fetch("/api/me", { method: "DELETE" });
-    if (res.ok) {
+    try {
+      const res = await fetch("/api/me", { method: "DELETE" });
+      if (!res.ok) throw new Error("account_delete_failed");
+      try {
+        clearJournalStorage(localStorage, journalOwnerId);
+      } catch {
+        // La suppression serveur reste prioritaire si le stockage est bloqué.
+      }
+      await clearPrivatePwaCaches();
       router.push("/");
       router.refresh();
+    } catch {
+      toast.error(t("privacy.deleteError"));
+    }
+  }
+
+  async function changeSensitiveConsent(active: boolean) {
+    setConsentBusy(true);
+    try {
+      const res = await fetch("/api/me/consents/sensitive-data", {
+        method: active ? "POST" : "DELETE",
+      });
+      if (!res.ok) throw new Error("consent_save_failed");
+      const next = (await res.json()) as {
+        active: boolean;
+        grantedAt?: string;
+      };
+      updateSensitiveConsent({
+        active: next.active,
+        grantedAt: next.grantedAt ? new Date(next.grantedAt) : null,
+        version: initialSensitiveConsent.version,
+      });
+      if (!active) {
+        setState((current) => ({ ...current, invisibleMode: true }));
+      }
+      toast.success(
+        t(active ? "privacy.consentGranted" : "privacy.consentWithdrawn"),
+      );
+    } catch {
+      toast.error(t("privacy.consentError"));
+    } finally {
+      setConsentBusy(false);
+      setConfirmConsentWithdrawal(false);
     }
   }
 
@@ -215,39 +268,6 @@ export function PrivacyPanel({
             label={t("privacy.antiMalaiseTitle")}
           />
         </div>
-        <div className="mt-3.5 border-t border-sand-100 pt-3.5 dark:border-anthracite-700">
-          <div className="mb-2 flex items-baseline justify-between">
-            <span className="lbl text-[11px] text-sand-600 dark:text-[#9A958B]">
-              {t("privacy.radius")}
-            </span>
-            <span className="font-mono text-xs text-gold-deep dark:text-gold-light">
-              {state.antiMalaiseRadiusKm} km
-            </span>
-          </div>
-          <input
-            type="range"
-            min={5}
-            max={100}
-            step={5}
-            value={state.antiMalaiseRadiusKm}
-            onChange={(e) =>
-              setState((s) => ({
-                ...s,
-                antiMalaiseRadiusKm: Number(e.target.value),
-              }))
-            }
-            onMouseUp={() =>
-              save({ antiMalaiseRadiusKm: state.antiMalaiseRadiusKm })
-            }
-            onTouchEnd={() =>
-              save({ antiMalaiseRadiusKm: state.antiMalaiseRadiusKm })
-            }
-            aria-label={t("privacy.radius")}
-            aria-valuenow={state.antiMalaiseRadiusKm}
-            aria-valuetext={`${state.antiMalaiseRadiusKm} km`}
-            className="w-full accent-[#1A2744] dark:accent-[#D8B860]"
-          />
-        </div>
       </section>
 
       <h2 className="lbl mb-2.5 text-[12px] text-gold-deep dark:text-gold-light">
@@ -302,7 +322,62 @@ export function PrivacyPanel({
         />
       </section>
 
-      {/* RGPD - export et suppression, jamais cachés */}
+      <section
+        data-testid="sensitive-data-consent"
+        className="mb-4 rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800"
+      >
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-[18px] font-semibold text-night dark:text-[#ECE7DD]">
+              {t("privacy.consentTitle")}
+            </h2>
+            <p className="mt-1 text-[15px] leading-snug text-[#6B665C] dark:text-[#9A958B]">
+              {t(
+                sensitiveConsent.active
+                  ? "privacy.consentActive"
+                  : "privacy.consentInactive",
+              )}
+            </p>
+          </div>
+          <span
+            className={`rounded-full px-2.5 py-1 text-[12px] font-semibold ${
+              sensitiveConsent.active
+                ? "bg-[#EAF0EB] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]"
+                : "bg-info-surface text-info-ink dark:bg-info-darkSurface dark:text-info-darkInk"
+            }`}
+          >
+            {t(
+              sensitiveConsent.active
+                ? "privacy.consentStatusActive"
+                : "privacy.consentStatusInactive",
+            )}
+          </span>
+        </div>
+        <p className="mt-3 text-[14px] leading-relaxed text-warmgray dark:text-[#9A958B]">
+          {t("privacy.consentEffect")}
+        </p>
+        {sensitiveConsent.active ? (
+          <button
+            type="button"
+            disabled={consentBusy}
+            onClick={() => setConfirmConsentWithdrawal(true)}
+            className="mt-4 w-full rounded-btnsm border border-[#D8B6B0] py-3 text-[16px] font-medium text-danger disabled:opacity-60 dark:border-[#5A3A34]"
+          >
+            {t("privacy.consentWithdraw")}
+          </button>
+        ) : (
+          <button
+            type="button"
+            disabled={consentBusy}
+            onClick={() => changeSensitiveConsent(true)}
+            className="mt-4 w-full rounded-btnsm bg-navy py-3 text-[16px] font-semibold text-[#F4F1EA] disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
+          >
+            {t("privacy.consentGrant")}
+          </button>
+        )}
+      </section>
+
+      {/* RGPD - consentement, export et suppression, jamais cachés */}
       <PhoneVerify />
 
       <BlockedUsers />
@@ -332,7 +407,7 @@ export function PrivacyPanel({
         <LogoutButton />
       </section>
 
-      <p className="pb-8 pt-7 text-center text-[14px] text-sand-500 dark:text-[#65625B]">
+      <p className="pb-8 pt-7 text-center text-[14px] text-sand-500 dark:text-[#9A958B]">
         <Link href="/legal/terms" className="underline">
           {t("legal.terms")}
         </Link>
@@ -342,37 +417,27 @@ export function PrivacyPanel({
         </Link>
       </p>
 
-      {confirmDelete && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-night/60 px-4"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="w-full max-w-sm rounded-cardlg bg-surface p-5 dark:bg-anthracite-800">
-            <h3 className="font-display text-xl text-night dark:text-[#ECE7DD]">
-              {t("privacy.deleteConfirmTitle")}
-            </h3>
-            <p className="mt-2 text-[16px] leading-normal text-warmgray dark:text-[#9A958B]">
-              {t("privacy.deleteConfirmBody")}
-            </p>
-            <div className="mt-4 flex gap-2.5">
-              <button
-                type="button"
-                onClick={() => setConfirmDelete(false)}
-                className="flex-1 rounded-btnsm border border-sand-400 py-3 text-sm font-medium dark:border-anthracite-600 dark:text-[#CFCAC0]"
-              >
-                {t("common.cancel")}
-              </button>
-              <AsyncButton
-                onClick={deleteAccount}
-                className="flex-1 rounded-btnsm bg-danger py-3 text-sm font-semibold text-white"
-              >
-                {t("privacy.deleteConfirmCta")}
-              </AsyncButton>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        open={confirmConsentWithdrawal}
+        title={t("privacy.consentWithdrawConfirmTitle")}
+        body={t("privacy.consentWithdrawConfirmBody")}
+        confirmLabel={t("privacy.consentWithdrawConfirmCta")}
+        cancelLabel={t("common.cancel")}
+        tone="danger"
+        onConfirm={() => changeSensitiveConsent(false)}
+        onCancel={() => setConfirmConsentWithdrawal(false)}
+      />
+
+      <ConfirmDialog
+        open={confirmDelete}
+        title={t("privacy.deleteConfirmTitle")}
+        body={t("privacy.deleteConfirmBody")}
+        confirmLabel={t("privacy.deleteConfirmCta")}
+        cancelLabel={t("common.cancel")}
+        tone="danger"
+        onConfirm={deleteAccount}
+        onCancel={() => setConfirmDelete(false)}
+      />
 
       <ConfirmDialog
         open={confirmAntiMalaiseOff}

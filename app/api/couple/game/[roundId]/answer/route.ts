@@ -13,6 +13,7 @@ import {
   GameValidationError,
   type GameSurface,
 } from "@/lib/games/engine";
+import { consentingCoupleSpaceMemberWhere } from "@/lib/sensitive-data-consent";
 
 export const runtime = "nodejs";
 
@@ -31,9 +32,9 @@ const schema = z.object({
 async function activeSpace(userId: string) {
   return prisma.coupleSpace.findFirst({
     where: {
+      AND: [consentingCoupleSpaceMemberWhere(userId)],
       status: "ACTIVE",
       userBId: { not: null },
-      OR: [{ userAId: userId }, { userBId: userId }],
     },
     select: { id: true, userAId: true, userBId: true },
   });
@@ -99,8 +100,8 @@ export const POST = withErrors(
             otherUserId,
             gameRevealNotification(other?.locale, { kind: "couple" }),
           );
-        } catch (err) {
-          console.error("[push] notif reveal jeu couple échouée", err);
+        } catch {
+          console.error("[push] notif reveal jeu couple indisponible");
         }
       }
 

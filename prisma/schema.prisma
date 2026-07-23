@@ -101,6 +101,7 @@ enum ConsentType {
   COUPLE_COACH_SHARING
   CONTACT_EXCHANGE
   AGENT_PROFILING
+  AI_COACH_INTERACTION
 }
 
 model User {
@@ -145,33 +146,35 @@ model User {
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
 
-  faithProfile        FaithProfile?
-  relationshipProfile RelationshipProfile?
-  privacySettings     PrivacySettings?
-  consents            Consent[]
-  messages            Message[]
-  matchesA            Match[]              @relation("MatchUserA")
-  matchesB            Match[]              @relation("MatchUserB")
-  allianceAnswers     AllianceAnswer[]
-  reportsMade         Report[]             @relation("Reporter")
-  reportsReceived     Report[]             @relation("ReportTarget")
-  blocksMade          Block[]              @relation("Blocker")
-  blocksReceived      Block[]              @relation("Blocked")
-  passesMade          Pass[]               @relation("Passer")
-  passesReceived      Pass[]               @relation("Passed")
-  phoneVerifications  PhoneVerification[]
-  bookings            Booking[]
-  aiCoachUsages       AiCoachUsage[]
-  coachMessages       CoachMessage[]
-  agentInsights       AgentInsight[]
-  coupleSpaceA        CoupleSpace?         @relation("CoupleUserA")
-  coupleSpaceB        CoupleSpace?         @relation("CoupleUserB")
-  coupleMessages      CoupleMessage[]      @relation("CoupleMessageSender")
-  pushSubscriptions   PushSubscription[]
-  sponsor             Sponsor?             @relation("UserSponsor")
-  aiCompanionMeta     AiCompanionMeta? // present si kind == AI_COMPANION
-  initiatedGameRounds GameRound[]          @relation("GameRoundInitiator")
-  gameRoundAnswers    GameRoundAnswer[]    @relation("GameRoundAnswerUser")
+  faithProfile          FaithProfile?
+  relationshipProfile   RelationshipProfile?
+  privacySettings       PrivacySettings?
+  consents              Consent[]
+  messages              Message[]
+  matchesA              Match[]                @relation("MatchUserA")
+  matchesB              Match[]                @relation("MatchUserB")
+  allianceAnswers       AllianceAnswer[]
+  reportsMade           Report[]               @relation("Reporter")
+  reportsReceived       Report[]               @relation("ReportTarget")
+  blocksMade            Block[]                @relation("Blocker")
+  blocksReceived        Block[]                @relation("Blocked")
+  passesMade            Pass[]                 @relation("Passer")
+  passesReceived        Pass[]                 @relation("Passed")
+  phoneVerifications    PhoneVerification[]
+  bookings              Booking[]
+  aiCoachUsages         AiCoachUsage[]
+  coachMessages         CoachMessage[]
+  aiCoachTransferLeases AiCoachTransferLease[]
+  agentInsights         AgentInsight[]
+  coupleSpaceA          CoupleSpace?           @relation("CoupleUserA")
+  coupleSpaceB          CoupleSpace?           @relation("CoupleUserB")
+  coupleMessages        CoupleMessage[]        @relation("CoupleMessageSender")
+  pushSubscriptions     PushSubscription[]
+  sponsor               Sponsor?               @relation("UserSponsor")
+  blessings             Blessing[]             @relation("BlessingUser")
+  aiCompanionMeta       AiCompanionMeta? // present si kind == AI_COMPANION
+  initiatedGameRounds   GameRound[]            @relation("GameRoundInitiator")
+  gameRoundAnswers      GameRoundAnswer[]      @relation("GameRoundAnswerUser")
 
   // Vivier de matching : getSuggestions (lib/matching.ts) filtre TOUJOURS sur
   // deletedAt + season + isVerified ; gender est optionnel (spread conditionnel,
@@ -230,19 +233,37 @@ model PhoneVerification {
 // d'invitation pour les couples déjà mariés hors plateforme.
 // Un utilisateur en saison MARRIED/PARENTS est invisible du matching.
 model CoupleSpace {
-  id         String            @id @default(cuid())
-  userAId    String            @unique
-  userA      User              @relation("CoupleUserA", fields: [userAId], references: [id], onDelete: Cascade)
-  userBId    String?           @unique
-  userB      User?             @relation("CoupleUserB", fields: [userBId], references: [id], onDelete: SetNull)
-  status     CoupleSpaceStatus @default(PENDING)
-  origin     String            @default("EXTERNAL") // MATCH | EXTERNAL
-  matchId    String?
-  inviteCode String            @unique
-  season     LifeSeason        @default(MARRIED)
-  marriedAt  DateTime?
-  createdAt  DateTime          @default(now())
-  updatedAt  DateTime          @updatedAt
+  id      String            @id @default(cuid())
+  userAId String            @unique
+  userA   User              @relation("CoupleUserA", fields: [userAId], references: [id], onDelete: Restrict)
+  userBId String?           @unique
+  userB   User?             @relation("CoupleUserB", fields: [userBId], references: [id], onDelete: Restrict)
+  status  CoupleSpaceStatus @default(PENDING)
+  origin  String            @default("EXTERNAL") // MATCH | EXTERNAL
+
+  // Clé canonique "plus-petit-id:plus-grand-id". L'index unique empêche deux
+  // espaces pour la même paire, même si les rôles A/B sont inversés.
+  pairKey String? @unique
+  matchId String? @unique
+  match   Match?  @relation(fields: [matchId], references: [id], onDelete: SetNull)
+
+  // inviteCode n'est conservé que pour rendre la migration de l'ancien schéma
+  // compatible. Les nouveaux codes ne sont jamais persistés en clair : seuls
+  // leur HMAC, leur destinataire et leur expiration le sont.
+  inviteCode      String?   @unique
+  inviteCodeHash  String?   @unique
+  inviteEmailHash String?
+  inviteExpiresAt DateTime?
+
+  season                LifeSeason  @default(MARRIED)
+  // Une transition de saison n'est appliquée qu'après confirmation de l'autre
+  // membre. Les deux champs sont posés/effacés ensemble par CAS.
+  seasonRequestedBy     String?
+  seasonRequestedTarget LifeSeason?
+  seasonRequestedAt     DateTime?
+  marriedAt             DateTime?
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
 
   agentInsights AgentInsight[]
   messages      CoupleMessage[]
@@ -269,6 +290,7 @@ model CoupleMessage {
   createdAt        DateTime    @default(now())
 
   @@index([spaceId, createdAt])
+  @@index([senderId])
 }
 
 model FaithProfile {
@@ -314,28 +336,33 @@ model PrivacySettings {
 }
 
 model Match {
-  id                 String                @id @default(cuid())
-  userAId            String
-  userBId            String
-  userA              User                  @relation("MatchUserA", fields: [userAId], references: [id], onDelete: Cascade)
-  userB              User                  @relation("MatchUserB", fields: [userBId], references: [id], onDelete: Cascade)
-  stage              AllianceStage         @default(DISCOVERY)
-  status             MatchStatus           @default(PENDING)
-  compatibilityJson  Json?
-  contactExchange    ContactExchangeStatus @default(NOT_ALLOWED)
-  advanceRequestedBy String?
-  requestedById      String?
-  closedBy           String?
-  closeMessage       String?
-  createdAt          DateTime              @default(now())
-  updatedAt          DateTime              @updatedAt
-  lastReadAtUserA    DateTime?
-  lastReadAtUserB    DateTime?
+  id                         String                @id @default(cuid())
+  userAId                    String
+  userBId                    String
+  userA                      User                  @relation("MatchUserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB                      User                  @relation("MatchUserB", fields: [userBId], references: [id], onDelete: Cascade)
+  stage                      AllianceStage         @default(DISCOVERY)
+  status                     MatchStatus           @default(PENDING)
+  compatibilityJson          Json?
+  contactExchange            ContactExchangeStatus @default(NOT_ALLOWED)
+  // Identifie l'auteur de la demande afin que seul l'autre membre puisse
+  // l'accepter. Null hors de l'état REQUESTED.
+  contactExchangeRequestedBy String?
+  advanceRequestedBy         String?
+  requestedById              String?
+  closedBy                   String?
+  closeMessage               String?
+  createdAt                  DateTime              @default(now())
+  updatedAt                  DateTime              @updatedAt
+  lastReadAtUserA            DateTime?
+  lastReadAtUserB            DateTime?
 
   messages        Message[]
   allianceAnswers AllianceAnswer[]
   agentInsights   AgentInsight[]
   gameRounds      GameRound[]
+  coupleSpace     CoupleSpace?
+  blessings       Blessing[]
 
   @@unique([userAId, userBId])
   @@index([userBId])
@@ -363,28 +390,55 @@ model Message {
 }
 
 model AllianceAnswer {
-  id         String        @id @default(cuid())
-  matchId    String
-  match      Match         @relation(fields: [matchId], references: [id], onDelete: Cascade)
-  userId     String
-  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  stage      AllianceStage
-  questionId String
-  answer     String
-  createdAt  DateTime      @default(now())
+  id              String        @id @default(cuid())
+  matchId         String
+  match           Match         @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stage           AllianceStage
+  questionId      String
+  // Colonne historique conservée uniquement pendant le backfill 0022.
+  // Toute nouvelle écriture doit utiliser answerEncrypted.
+  answerLegacy    String        @map("answer")
+  answerEncrypted String?
+  createdAt       DateTime      @default(now())
 
   @@unique([matchId, userId, questionId])
 }
 
 model Consent {
-  id        String      @id @default(cuid())
-  userId    String
-  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type      ConsentType
-  grantedAt DateTime    @default(now())
-  revokedAt DateTime?
+  id                    String                 @id @default(cuid())
+  userId                String
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type                  ConsentType
+  // Les consentements historiques restent valides dans leur périmètre initial.
+  // Ces dimensions sont nullables uniquement pour permettre une migration sûre
+  // sans transformer les lignes existantes en consentements implicites.
+  version               String?
+  purpose               String?
+  recipient             String?
+  grantedAt             DateTime               @default(now())
+  revokedAt             DateTime?
+  aiCoachTransferLeases AiCoachTransferLease[]
 
   @@index([userId, type])
+  @@index([userId, type, version, revokedAt])
+}
+
+// Bail technique très court d'un transfert Coach IA déjà admis.
+// Il rend la révocation linéarisable sans garder une transaction ou une
+// connexion PostgreSQL ouverte pendant l'appel réseau.
+model AiCoachTransferLease {
+  id         String   @id
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  consentId  String
+  consent    Consent  @relation(fields: [consentId], references: [id], onDelete: Cascade)
+  admittedAt DateTime @default(now())
+  expiresAt  DateTime
+
+  @@index([userId, admittedAt, expiresAt])
+  @@index([expiresAt])
 }
 
 model Report {
@@ -430,6 +484,7 @@ model Booking {
   createdAt DateTime      @default(now())
 
   @@unique([coachId, slotStart])
+  @@index([userId])
 }
 
 // Productions des agents intelligents (portrait de préparation, bilans,
@@ -519,25 +574,30 @@ enum BlessingStatus {
 }
 
 // Demande de bénédiction : l'utilisateur (filleul·e) demande l'avis de son
-// Parrain/Marraine avant d'avancer dans une mise en relation. Le parrain répond
-// via un lien magique tokenisé (page publique). Note chiffrée au repos. Non
-// bloquant (advisory). `matchId` sans FK Match : validé en route (migration légère).
+// Parrain/Marraine avant d'avancer dans une mise en relation. Le bearer brut
+// n'est jamais persisté : tokenHash contient uniquement son SHA-256. Une
+// demande PENDING est expirante et n'est utilisable qu'après confirmation de
+// l'envoi email. Les réponses historiques n'ont plus aucun bearer utilisable.
 model Blessing {
   id            String         @id @default(cuid())
-  sponsorId     String
-  sponsor       Sponsor        @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+  sponsorId     String?
+  sponsor       Sponsor?       @relation(fields: [sponsorId], references: [id], onDelete: SetNull)
   matchId       String
+  match         Match          @relation(fields: [matchId], references: [id], onDelete: Cascade)
   userId        String
-  token         String         @unique
+  user          User           @relation("BlessingUser", fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash     String?        @unique
+  expiresAt     DateTime?
+  emailSentAt   DateTime?
   status        BlessingStatus @default(PENDING)
   noteEncrypted String?
   createdAt     DateTime       @default(now())
   respondedAt   DateTime?
 
-  // Dédup anti-spam (app/api/matches/[matchId]/blessing/route.ts) :
-  // findFirst({ userId, matchId, status: "PENDING" }). Étendu pour couvrir
-  // le filtre status sans lookup supplémentaire.
+  // La migration ajoute aussi un index UNIQUE partiel sur (userId, matchId)
+  // WHERE status = 'PENDING'. Prisma ne sait pas encore exprimer cet index.
   @@index([userId, matchId, status])
+  @@index([matchId])
 }
 
 // =====================================================================

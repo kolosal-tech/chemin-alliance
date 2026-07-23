@@ -11,19 +11,29 @@ export function ForgotPasswordForm() {
   const tc = useTranslations("common");
   const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(false);
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setBusy(true);
+    setError(false);
     const fd = new FormData(e.currentTarget);
-    await fetch("/api/auth/forgot-password", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ email: fd.get("email") }),
-    });
-    setBusy(false);
-    // Toujours « envoyé » : aucune fuite sur l'existence du compte.
-    setSent(true);
+    try {
+      const response = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email: fd.get("email") }),
+      });
+      if (!response.ok) throw new Error("forgot_password_failed");
+      // Toujours « envoyé » en cas de réponse acceptée : aucune fuite sur
+      // l'existence du compte.
+      setSent(true);
+    } catch {
+      // Erreur générique : ne révèle jamais si l'adresse existe.
+      setError(true);
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
@@ -48,6 +58,14 @@ export function ForgotPasswordForm() {
             {t("forgotIntro")}
           </p>
           <form onSubmit={submit} className="mt-7 flex flex-col gap-4">
+            {error && (
+              <p
+                role="alert"
+                className="rounded-btnsm border border-danger-border bg-danger-surface px-3 py-2.5 text-[15px] text-danger dark:border-danger-darkBorder dark:bg-danger-darkSurface dark:text-danger-darkInk"
+              >
+                {t("forgotError")}
+              </p>
+            )}
             <label className="flex flex-col gap-1.5">
               <span className="lbl text-[12px] text-sand-600 dark:text-[#9A958B]">
                 {t("email")}

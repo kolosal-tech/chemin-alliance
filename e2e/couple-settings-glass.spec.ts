@@ -12,7 +12,10 @@ import { test, expect, type Page } from "@playwright/test";
  * Viewport mobile par défaut (iPhone/Pixel ~390x844, cf. playwright.config.ts).
  * Aucune action sensible (suppression, export, paiement, SMS) n'est déclenchée.
  */
-const EMAIL = process.env.E2E_EMAIL ?? "mrkolosal+chemintest@gmail.com";
+const EMAIL =
+  process.env.E2E_COUPLE_EMAIL ??
+  process.env.E2E_EMAIL ??
+  "mrkolosal+chemintest@gmail.com";
 const PASSWORD = process.env.E2E_PASSWORD;
 const LOCALE = process.env.LOCALE ?? "fr";
 
@@ -20,13 +23,31 @@ const SEND_RE = /envoyer|send|enviar/i;
 const LOGOUT_RE = /se déconnecter|log out|cerrar sesión|terminar sessão/i;
 
 async function login(page: Page): Promise<void> {
+  const browserName =
+    page.context().browser()?.browserType().name() ?? "chromium";
+  const testIp = {
+    chromium: "203.0.113.30",
+    firefox: "203.0.113.31",
+    webkit: "203.0.113.32",
+  }[browserName];
+  await page.setExtraHTTPHeaders({
+    "x-forwarded-for": testIp ?? "203.0.113.39",
+  });
   await page.goto(`/${LOCALE}/login`);
   await page.fill('input[name="email"]', EMAIL);
   await page.fill('input[name="password"]', PASSWORD as string);
   await page.locator('form button[type="submit"]').click();
-  await page.waitForURL((url) => !url.pathname.endsWith("/login"), {
+  // Un compte marié passe brièvement par /suggestions avant que la règle
+  // serveur le redirige vers /couple. Attendre la destination contractuelle
+  // évite de lancer une navigation concurrente sous Firefox/WebKit.
+  await page.waitForURL((url) => url.pathname.endsWith("/couple"), {
     timeout: 20_000,
+    waitUntil: "domcontentloaded",
   });
+  await page
+    .locator('input[name="email"]')
+    .waitFor({ state: "detached", timeout: 10_000 });
+  await expect(page.getByRole("navigation").first()).toBeVisible();
 }
 
 test.describe("Messagerie couple + réglages (glass)", () => {
@@ -39,7 +60,6 @@ test.describe("Messagerie couple + réglages (glass)", () => {
     page,
   }) => {
     await login(page);
-    await page.goto(`/${LOCALE}/couple`);
     await page.waitForTimeout(800);
 
     // Aucun message de debug ne doit jamais apparaître en prod.
@@ -76,13 +96,17 @@ test.describe("Messagerie couple + réglages (glass)", () => {
     const logout = page.getByRole("button", { name: LOGOUT_RE });
     await expect(logout).toBeVisible();
 
-    // Le bouton n'est pas recouvert par la bottom-nav : son haut est au-dessus
-    // du haut de la nav (le padding-bas de page dégage la barre).
+    // Le bouton n'est pas recouvert par la bottom-nav une fois amené dans le
+    // viewport : son bord bas reste au-dessus du bord haut de la nav fixe.
+    await logout.evaluate((element) =>
+      element.scrollIntoView({ block: "center", inline: "nearest" }),
+    );
+    await page.waitForTimeout(100);
     const nav = page.getByRole("navigation").first();
     const lb = await logout.boundingBox();
     const nb = await nav.boundingBox();
     if (lb && nb) {
-      expect(lb.y).toBeLessThan(nb.y + 1);
+      expect(lb.y + lb.height).toBeLessThanOrEqual(nb.y + 1);
     }
   });
 

@@ -16,6 +16,7 @@ import {
   getGuideTopic,
   localizedGuide,
 } from "@/content/guides";
+import { serializeJsonLd } from "@/lib/security/json-ld";
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -23,11 +24,9 @@ export function generateStaticParams() {
   );
 }
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string; topic: string }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string; topic: string }>;
+}): Promise<Metadata> {
   const params = await props.params;
   const topic = getGuideTopic(params.topic);
   if (!topic) return {};
@@ -51,11 +50,9 @@ export async function generateMetadata(
   };
 }
 
-export default async function GuideDetailPage(
-  props: {
-    params: Promise<{ locale: string; topic: string }>;
-  }
-) {
+export default async function GuideDetailPage(props: {
+  params: Promise<{ locale: string; topic: string }>;
+}) {
   const params = await props.params;
   setRequestLocale(params.locale);
   const topic = getGuideTopic(params.topic);
@@ -168,7 +165,7 @@ export default async function GuideDetailPage(
       <MarketingFooter />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
     </>
   );

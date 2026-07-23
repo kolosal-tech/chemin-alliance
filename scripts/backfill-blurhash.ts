@@ -18,6 +18,7 @@
 import { PrismaClient } from "@prisma/client";
 import { encode } from "blurhash";
 import sharp from "sharp";
+import { safeErrorDetails } from "../lib/security/safe-error";
 
 const prisma = new PrismaClient();
 
@@ -115,17 +116,19 @@ async function main() {
         .jpeg({ quality: 62 })
         .toBuffer();
       const vpath = path.replace(/\.[^./]+$/, "") + ".blur.jpg";
-      await uploadObject(vpath, "image/jpeg", variant);
+      if (!(await uploadObject(vpath, "image/jpeg", variant))) {
+        throw new Error("BlurredVariantUploadError");
+      }
 
       await prisma.user.update({
         where: { id: u.id },
         data: { photoBlurhash: blurhash },
       });
       done++;
-      console.log(`[backfill] ✓ ${u.id}`);
     } catch (err) {
       failed++;
-      console.error(`[backfill] ✗ ${u.id}`, err);
+      // Aucun identifiant utilisateur, URL ni objet fournisseur brut.
+      console.error("[backfill] photo non traitée", safeErrorDetails(err));
     }
   }
 
@@ -135,7 +138,7 @@ async function main() {
 main()
   .then(() => prisma.$disconnect())
   .catch(async (err) => {
-    console.error(err);
+    console.error("[backfill] échec global", safeErrorDetails(err));
     await prisma.$disconnect();
     process.exit(1);
   });

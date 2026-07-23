@@ -54,13 +54,13 @@ export async function startVerification(to: string): Promise<boolean> {
       },
     );
     if (!res.ok) {
-      // On logge le code d'erreur Twilio (ex. 60xxx) + message en plus du status
-      // HTTP : un 403 nu ne dit pas POURQUOI (geo-permissions, compte trial,
-      // solde, numéro non vérifié...). Le code Twilio, lui, tranche.
+      // Le code Twilio (ex. 60xxx) suffit au diagnostic. Son message libre
+      // peut refléter le numéro destinataire : il ne doit pas atteindre les
+      // journaux de production.
       let detail = "";
       try {
-        const e = (await res.json()) as { code?: number; message?: string };
-        detail = ` code=${e.code ?? "?"} ${e.message ?? ""}`.trimEnd();
+        const e = (await res.json()) as { code?: number };
+        detail = ` code=${e.code ?? "?"}`;
       } catch {
         /* corps non-JSON : on garde juste le status */
       }
@@ -97,8 +97,8 @@ export async function checkVerification(
     if (!res.ok) {
       let detail = "";
       try {
-        const e = (await res.json()) as { code?: number; message?: string };
-        detail = ` code=${e.code ?? "?"} ${e.message ?? ""}`.trimEnd();
+        const e = (await res.json()) as { code?: number };
+        detail = ` code=${e.code ?? "?"}`;
       } catch {
         /* corps non-JSON */
       }

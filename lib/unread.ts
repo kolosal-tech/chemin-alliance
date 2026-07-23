@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { unblockedMatchWhere } from "@/lib/blocks";
 
 // Suivi des messages non lus par conversation. Le "lu" = lastReadAtUserA/B sur
 // Match. Un message est non lu s'il vient de l'AUTRE membre (senderId != moi),
@@ -47,8 +48,7 @@ export async function unreadByMatch(
 ): Promise<Record<string, number>> {
   const matches = await prisma.match.findMany({
     where: {
-      OR: [{ userAId: userId }, { userBId: userId }],
-      status: { not: "CLOSED" },
+      AND: [unblockedMatchWhere(userId), { status: "ACTIVE" }],
     },
     select: {
       id: true,

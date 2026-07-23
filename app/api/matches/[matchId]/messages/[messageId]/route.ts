@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
-import { requireMatchMember } from "@/lib/alliance";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
+import { accessibleConversationWhere } from "@/lib/blocks";
 
 /**
  * Supprimer SON propre message (corriger une erreur de saisie).
@@ -25,19 +25,22 @@ export const DELETE = withErrors(
     if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
     const { matchId, messageId } = await params;
-    // Vérifie l'appartenance à la conversation (404/403 sinon).
-    await requireMatchMember(matchId, user.id);
-
-    const msg = await prisma.message.findUnique({
-      where: { id: messageId },
-      select: { id: true, matchId: true, senderId: true },
+    // Suppression conditionnelle en une seule requête : le message doit être
+    // le sien, dans ce fil précis, encore ouvert et sans blocage dans la paire.
+    const deleted = await prisma.message.deleteMany({
+      where: {
+        id: messageId,
+        matchId,
+        senderId: user.id,
+        match: {
+          is: accessibleConversationWhere(matchId, user.id),
+        },
+      },
     });
-    // On n'efface que SON message, et seulement dans CETTE conversation.
-    if (!msg || msg.matchId !== matchId || msg.senderId !== user.id) {
+    if (deleted.count !== 1) {
       return jsonError(404, "NOT_FOUND");
     }
 
-    await prisma.message.delete({ where: { id: msg.id } });
     return NextResponse.json({ ok: true });
   },
 );

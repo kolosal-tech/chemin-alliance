@@ -4,9 +4,10 @@ import { prisma } from "@/lib/db";
 import { sealInsight } from "@/lib/agent-insight";
 import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
-import { requireMatchMember } from "@/lib/alliance";
+import { requireActiveMatchMember } from "@/lib/alliance";
 import { rateLimit } from "@/lib/security/rate-limit";
 import { buildReviewData, narrateReview } from "@/lib/agents/stage-review";
+import { toReadableAllianceAnswer } from "@/lib/alliance-answer";
 import { loadRuleset, type Locale } from "@/lib/core-engine";
 
 const schema = z.object({ matchId: z.string().min(1) });
@@ -16,15 +17,25 @@ export const POST = withErrors(async (req: Request) => {
   const rl = await rateLimit(`review:${user.id}`, 6, 60 * 60_000);
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
   const { matchId } = schema.parse(await readJsonLimited(req));
-  const match = await requireMatchMember(matchId, user.id);
+  const match = await requireActiveMatchMember(matchId, user.id);
 
-  const answers = await prisma.allianceAnswer.findMany({
-    where: { matchId: match.id },
-  });
-  const mine = answers.filter((a) => a.userId === user.id);
-  const otherIds = answers
-    .filter((a) => a.userId !== user.id)
-    .map((a) => a.questionId);
+  const [myStoredAnswers, otherAnswers] = await Promise.all([
+    prisma.allianceAnswer.findMany({
+      where: { matchId: match.id, userId: user.id },
+      select: {
+        questionId: true,
+        userId: true,
+        answerEncrypted: true,
+        answerLegacy: true,
+      },
+    }),
+    prisma.allianceAnswer.findMany({
+      where: { matchId: match.id, userId: { not: user.id } },
+      select: { questionId: true },
+    }),
+  ]);
+  const mine = myStoredAnswers.map(toReadableAllianceAnswer);
+  const otherIds = otherAnswers.map((a) => a.questionId);
 
   const ruleset = loadRuleset(user.rulesetId);
   const questionThemes: Record<string, string> = {};

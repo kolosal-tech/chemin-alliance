@@ -1,8 +1,10 @@
-import type {
-  User,
-  FaithProfile,
-  RelationshipProfile,
-  PrivacySettings,
+import {
+  Prisma,
+  type MatchStatus,
+  type User,
+  type FaithProfile,
+  type RelationshipProfile,
+  type PrivacySettings,
 } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { blockedUserIds } from "@/lib/blocks";
@@ -13,6 +15,8 @@ import {
   matchingGateBlocked,
 } from "@/lib/profile-completion";
 import type { MaturityResult, MaturityAxis } from "@/lib/maturity";
+import { openInsight } from "@/lib/agent-insight";
+import { activeSensitiveDataConsentUserWhere } from "@/lib/sensitive-data-consent";
 
 // Sous-ensemble structurel de User + relations strictement suffisant pour le
 // pipeline de suggestions (scoring, filtre anti-malaise, JSX de la page
@@ -77,6 +81,293 @@ export function missingMinimumProfile(user: {
   if (!user.relationshipProfile?.intentionStatement?.trim())
     missing.push("intention");
   return missing;
+}
+
+type MatchRequestUser = {
+  id: string;
+  deletedAt: Date | null;
+  season: User["season"];
+  isVerified: boolean;
+  gender: string | null;
+  photoUrl: string | null;
+  onboardingDoneAt: Date | null;
+  cityApprox: string | null;
+  faithProfile: {
+    denomination: string | null;
+    engagementFrequency: string | null;
+  } | null;
+  relationshipProfile: {
+    intentionStatement: string | null;
+    wantsChildren: boolean | null;
+    interests: string | null;
+    personality: string | null;
+    aspirations: string | null;
+  } | null;
+  privacySettings: {
+    antiMalaiseEnabled: boolean;
+    invisibleMode: boolean;
+  } | null;
+};
+
+export type MatchRequestRejection =
+  | "ACTOR_NOT_ELIGIBLE"
+  | "TARGET_NOT_ELIGIBLE";
+
+/**
+ * Décision pure et fail-closed pour une demande directe. La cible reçoit aussi
+ * les règles d'entrée du vivier de suggestions ; blocages, signalements actifs
+ * et filtre anti-malaise s'appliquent symétriquement à la paire.
+ *
+ * Le mode invisible ne bloque que l'exposition de la cible. Une personne qui
+ * l'a activé peut toujours agir sur les suggestions déjà reçues : ce réglage
+ * n'est pas un verrou de compte.
+ */
+export function matchRequestRejection(
+  actor: MatchRequestUser | null,
+  target: MatchRequestUser | null,
+  pair: {
+    hasBlock: boolean;
+    hasActiveReport: boolean;
+    actorPassedTarget?: boolean;
+    actorProfileGateBlocked?: boolean;
+  },
+): MatchRequestRejection | null {
+  if (
+    !actor ||
+    actor.deletedAt !== null ||
+    actor.season !== "JOURNEY" ||
+    !actor.isVerified ||
+    missingMinimumProfile(actor).length > 0 ||
+    pair.actorProfileGateBlocked === true
+  ) {
+    return "ACTOR_NOT_ELIGIBLE";
+  }
+
+  if (
+    !target ||
+    target.deletedAt !== null ||
+    target.season !== "JOURNEY" ||
+    !target.isVerified ||
+    target.privacySettings?.invisibleMode === true ||
+    missingMinimumProfile(target).length > 0 ||
+    pair.hasBlock ||
+    pair.hasActiveReport ||
+    pair.actorPassedTarget === true
+  ) {
+    return "TARGET_NOT_ELIGIBLE";
+  }
+
+  const expectedTargetGender =
+    actor.gender === "M" ? "F" : actor.gender === "F" ? "M" : null;
+  if (expectedTargetGender && target.gender !== expectedTargetGender) {
+    return "TARGET_NOT_ELIGIBLE";
+  }
+
+  const eitherAntiMalaise =
+    actor.privacySettings?.antiMalaiseEnabled === true ||
+    target.privacySettings?.antiMalaiseEnabled === true;
+  if (
+    eitherAntiMalaise &&
+    actor.cityApprox &&
+    actor.cityApprox === target.cityApprox &&
+    actor.faithProfile?.denomination &&
+    actor.faithProfile.denomination === target.faithProfile?.denomination
+  ) {
+    return "TARGET_NOT_ELIGIBLE";
+  }
+
+  return null;
+}
+
+/** Seul un Match accepté ouvre les champs AFTER_MATCH. */
+export function activeMatchGrantsProfileVisibility(
+  status: MatchStatus,
+): boolean {
+  return status === "ACTIVE";
+}
+
+const MATCH_REQUEST_USER_SELECT = {
+  id: true,
+  deletedAt: true,
+  season: true,
+  isVerified: true,
+  gender: true,
+  photoUrl: true,
+  onboardingDoneAt: true,
+  cityApprox: true,
+  kind: true,
+  locale: true,
+  displayName: true,
+  faithProfile: {
+    select: { denomination: true, engagementFrequency: true },
+  },
+  relationshipProfile: {
+    select: {
+      intentionStatement: true,
+      wantsChildren: true,
+      interests: true,
+      personality: true,
+      aspirations: true,
+    },
+  },
+  privacySettings: {
+    select: { antiMalaiseEnabled: true, invisibleMode: true },
+  },
+} satisfies Prisma.UserSelect;
+
+type MatchRequestDatabaseUser = Prisma.UserGetPayload<{
+  select: typeof MATCH_REQUEST_USER_SELECT;
+}>;
+
+export type MatchRequestErrorCode =
+  | MatchRequestRejection
+  | "INVALID_TARGET"
+  | "MATCH_EXISTS";
+
+export class MatchRequestError extends Error {
+  constructor(readonly code: MatchRequestErrorCode) {
+    super(code);
+    this.name = "MatchRequestError";
+  }
+}
+
+export type CreatedMatchRequest = {
+  matchId: string;
+  status: MatchStatus;
+  target: Pick<
+    MatchRequestDatabaseUser,
+    "id" | "kind" | "locale" | "displayName"
+  >;
+};
+
+/**
+ * Revalide auteur, cible et contraintes de paire dans la même transaction que
+ * la création. SERIALIZABLE réduit la fenêtre TOCTOU ; P2034 est rejoué deux
+ * fois, tandis que l'unicité canonique de Match tranche les demandes en course.
+ */
+export async function createEligibleMatchRequest(
+  actorId: string,
+  targetId: string,
+): Promise<CreatedMatchRequest> {
+  if (actorId === targetId) throw new MatchRequestError("INVALID_TARGET");
+
+  const [userAId, userBId] = [actorId, targetId].sort();
+  const maxAttempts = 3;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      return await prisma.$transaction(
+        async (tx) => {
+          const [actor, target, blockingPair, activeReport, passed, existing] =
+            await Promise.all([
+              tx.user.findFirst({
+                where: { id: actorId, ...activeSensitiveDataConsentUserWhere },
+                select: MATCH_REQUEST_USER_SELECT,
+              }),
+              tx.user.findFirst({
+                where: { id: targetId, ...activeSensitiveDataConsentUserWhere },
+                select: MATCH_REQUEST_USER_SELECT,
+              }),
+              tx.block.findFirst({
+                where: {
+                  OR: [
+                    { blockerId: actorId, blockedId: targetId },
+                    { blockerId: targetId, blockedId: actorId },
+                  ],
+                },
+                select: { id: true },
+              }),
+              tx.report.findFirst({
+                where: {
+                  status: { in: ["OPEN", "REVIEWING"] },
+                  OR: [
+                    { reporterId: actorId, targetUserId: targetId },
+                    { reporterId: targetId, targetUserId: actorId },
+                  ],
+                },
+                select: { id: true },
+              }),
+              tx.pass.findUnique({
+                where: {
+                  passerId_passedId: {
+                    passerId: actorId,
+                    passedId: targetId,
+                  },
+                },
+                select: { id: true },
+              }),
+              tx.match.findUnique({
+                where: { userAId_userBId: { userAId, userBId } },
+                select: { id: true },
+              }),
+            ]);
+
+          const actorProfileGateBlocked = actor
+            ? matchingGateBlocked({
+                gateEnabled: isProfileGateEnabled(),
+                completion: profileCompletion(actor),
+                onboardingDone: actor.onboardingDoneAt !== null,
+              })
+            : true;
+          const rejection = matchRequestRejection(actor, target, {
+            hasBlock: blockingPair !== null,
+            hasActiveReport: activeReport !== null,
+            actorPassedTarget: passed !== null,
+            actorProfileGateBlocked,
+          });
+          if (rejection) throw new MatchRequestError(rejection);
+          if (existing) throw new MatchRequestError("MATCH_EXISTS");
+
+          // Le garde ci-dessus rend target non-null ; cette vérification garde
+          // néanmoins le narrowing TypeScript explicite et fail-closed.
+          if (!target) throw new MatchRequestError("TARGET_NOT_ELIGIBLE");
+          const status: MatchStatus =
+            target.kind === "AI_COMPANION" ? "ACTIVE" : "PENDING";
+          const match = await tx.match.create({
+            data: {
+              userAId,
+              userBId,
+              status,
+              requestedById: actorId,
+            },
+            select: { id: true },
+          });
+
+          return {
+            matchId: match.id,
+            status,
+            target: {
+              id: target.id,
+              kind: target.kind,
+              locale: target.locale,
+              displayName: target.displayName,
+            },
+          };
+        },
+        { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+      );
+    } catch (error) {
+      if (error instanceof MatchRequestError) throw error;
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        throw new MatchRequestError("MATCH_EXISTS");
+      }
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2034" &&
+        attempt < maxAttempts
+      ) {
+        continue;
+      }
+      throw error;
+    }
+  }
+
+  // Le flux ne peut atteindre ce point (la dernière tentative retourne ou
+  // relance), mais ce throw protège contre une modification future de boucle.
+  throw new Error("MATCH_REQUEST_TRANSACTION_EXHAUSTED");
 }
 
 // P1 : nudge de classement selon le bilan de maturité du viewer (JAMAIS un
@@ -169,6 +460,7 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
       season: "JOURNEY",
       isVerified: true,
       deletedAt: null,
+      ...activeSensitiveDataConsentUserWhere,
       privacySettings: { isNot: { invisibleMode: true } },
       // Profil minimum requis pour être proposé (symétrie avec le gate sortant) :
       // ville approx + phrase d'intention. /profile/edit stocke les vides en null.
@@ -239,8 +531,9 @@ export async function getSuggestions(me: Me): Promise<Candidate[]> {
     where: { userId: me.id, agentId: "maturity", revokedAt: null },
     orderBy: { createdAt: "desc" },
   });
-  const maturity =
-    (maturityInsight?.dataJson as unknown as MaturityResult | null) ?? null;
+  const maturity = maturityInsight
+    ? openInsight<MaturityResult>(maturityInsight.dataJson)
+    : null;
 
   // Classement par affinité de fond (jamais montré comme score). Un jitter
   // déterministe par jour casse l'ordre figé sans hasard non-reproductible :
@@ -281,6 +574,7 @@ export async function getDiscoveryPreview(
       season: "JOURNEY",
       isVerified: true,
       deletedAt: null,
+      ...activeSensitiveDataConsentUserWhere,
       privacySettings: { isNot: { invisibleMode: true } },
       cityApprox: { not: null },
       relationshipProfile: { is: { intentionStatement: { not: null } } },
@@ -462,20 +756,35 @@ export type CompatibilityInput = {
 export function compatibilityTopics(
   a: CompatibilityInput,
   b: CompatibilityInput,
+  disclosure: {
+    revealFamily?: boolean;
+    revealLocation?: boolean;
+    revealVision?: boolean;
+  } = {},
 ) {
   const axes = {
     faith: a.faithProfile?.vertical === b.faithProfile?.vertical ? 0.95 : 0.55,
-    children: childAxis(a.relationshipProfile, b.relationshipProfile),
+    children: disclosure.revealFamily
+      ? childAxis(a.relationshipProfile, b.relationshipProfile)
+      : 0.5,
     finances: 0.5, // à approfondir tant que non discuté en Dialogue
     location:
-      a.cityApprox && b.cityApprox && a.cityApprox === b.cityApprox
+      disclosure.revealLocation &&
+      a.cityApprox &&
+      b.cityApprox &&
+      a.cityApprox === b.cityApprox
         ? 0.85
-        : 0.45,
+        : disclosure.revealLocation
+          ? 0.45
+          : 0.5,
     vision:
+      disclosure.revealVision &&
       a.relationshipProfile?.intentionStatement &&
       b.relationshipProfile?.intentionStatement
         ? 0.8
-        : 0.6,
+        : disclosure.revealVision
+          ? 0.6
+          : 0.5,
   };
   const topics = Object.entries(axes).map(([key, value]) => ({
     key,

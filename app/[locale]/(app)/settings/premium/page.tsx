@@ -1,20 +1,18 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { requirePageUser } from "@/lib/security/page-auth";
 import { prisma } from "@/lib/db";
-import { stripeEnabled } from "@/lib/payments/provider";
+import { stripeCheckoutEnabled, stripeEnabled } from "@/lib/payments/provider";
 import { SubscribeButton } from "./subscribe-button";
 import { PortalButton } from "./portal-button";
 
 export const dynamic = "force-dynamic";
 
-const FEATURES = ["discovery", "report", "ai", "calls"] as const;
+const FEATURES = ["ai", "mission"] as const;
 
-export default async function PremiumPage(
-  props: {
-    params: Promise<{ locale: string }>;
-    searchParams: Promise<{ status?: string }>;
-  }
-) {
+export default async function PremiumPage(props: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ status?: string }>;
+}) {
   const searchParams = await props.searchParams;
   const params = await props.params;
   setRequestLocale(params.locale);
@@ -28,7 +26,8 @@ export default async function PremiumPage(
   // Retour de Stripe : le webhook peut tarder quelques secondes à basculer le
   // statut. On accuse réception du paiement plutôt que de réafficher l'état
   // « non abonné » (qui se lirait « rien ne s'est passé »).
-  const justPaid = !active && searchParams?.status === "success";
+  const justPaid =
+    user.isVerified && !active && searchParams?.status === "success";
 
   return (
     <main className="px-3 pt-6 safe-top lg:mx-auto lg:max-w-xl">
@@ -72,11 +71,15 @@ export default async function PremiumPage(
             </p>
             {stripeEnabled && <PortalButton label={t("manage")} />}
           </>
+        ) : !user.isVerified ? (
+          <p className="mt-4 rounded-btn bg-info-surface px-3.5 py-3 text-center text-[16px] text-info-ink dark:bg-info-darkSurface dark:text-info-darkInk">
+            {t("verifyBeforeSubscribe")}
+          </p>
         ) : justPaid ? (
           <p className="mt-4 rounded-btn bg-[#FBF6E9] px-3.5 py-3 text-center text-[16px] font-semibold text-gold-ink dark:bg-[#272117] dark:text-[#E0C77A]">
             {t("pendingActivation")}
           </p>
-        ) : stripeEnabled ? (
+        ) : stripeCheckoutEnabled ? (
           <SubscribeButton label={t("cta")} />
         ) : (
           <p className="mt-4 rounded-btn bg-surface px-3.5 py-3 text-center text-[16px] text-warmgray dark:bg-anthracite-800 dark:text-[#9A958B]">
@@ -85,7 +88,7 @@ export default async function PremiumPage(
         )}
       </div>
 
-      <p className="mt-4 text-center text-[15px] leading-normal text-sand-500 dark:text-[#65625B]">
+      <p className="mt-4 text-center text-[15px] leading-normal text-sand-500 dark:text-[#9A958B]">
         {t("freeNote")}
       </p>
     </main>

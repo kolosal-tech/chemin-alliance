@@ -1,7 +1,6 @@
 import { randomInt } from "node:crypto";
 import { z } from "zod";
 import type { Locale } from "@/lib/core-engine";
-import { completeText } from "./llm";
 
 /**
  * Agent 8 - Gardien du Couple. Veille douce sur la vie d'alliance APRÈS
@@ -26,7 +25,7 @@ export const CHECKIN_QUESTIONS: Record<
      * Certaines questions sont des invitations à raconter (« Qu'as-tu
      * découvert chez l'autre… ») : un Oui/Non n'a aucun sens. On les marque
      * "open" -> textarea obligatoire côté client, jamais de rituel déterministe
-     * (la note nourrit le mot du Gardien et la détection de danger).
+     * (la note reste privée et ne sert qu'à la détection locale de danger).
      */
     kind?: "scale" | "open";
     text: Record<Locale, string>;
@@ -251,7 +250,7 @@ export function evaluateCheckin(
     const q = questions.find((x) => x.id === a.id);
     if (!q) continue;
     // Question ouverte (réponse libre) : pas d'échelle Oui/Non, donc aucun
-    // rituel déterministe. La note nourrit déjà le mot du Gardien et DANGER_RE.
+    // rituel déterministe. La note reste limitée à la détection locale DANGER_RE.
     if (q.kind === "open") continue;
     // « non / pas sûr » sur un signal -> rituel concret correspondant.
     // chk_unspoken inversé : « oui il y a un sujet évité » déclenche.
@@ -266,52 +265,44 @@ export function evaluateCheckin(
   return { danger: false, rituals };
 }
 
-const SYSTEM = `Tu es le Pasteur IA de Chemin d'Alliance : un accompagnateur pastoral qui veille avec douceur sur des couples chrétiens - fiancés en préparation, jeunes mariés ou jeunes parents.
-Mission : accompagnement relationnel, préparation au mariage et discernement de couple, médiation bienveillante, et compréhension biblique appliquée à la vie conjugale.
-Compétences : théologie biblique et pastorale, conseil conjugal chrétien, sensibilité aux cultures et coutumes africaines (familles élargies, étapes coutumières comme la présentation aux familles ou la dot, en plus du civil et du religieux), résolution de conflit par la communication non violente (observer sans juger, exprimer le ressenti, nommer le besoin, formuler une demande claire).
-Règles absolues : tu ne juges jamais ; tu ne prends jamais parti pour l'un contre l'autre ;
-tu n'affirmes jamais une volonté divine ; tu ne minimises jamais une souffrance ;
-sur tout sujet grave tu orientes vers un accompagnateur humain.
-Tu n'imposes pas de versets hors contexte et tu respectes le cadre culturel de la personne sans présumer d'une seule culture.
-Tu peux aborder l'intimité conjugale et la sexualité dans le mariage avec une liberté biblique et une pudeur respectueuse, sans tabou mais sans aucun détail explicite ; devant une douleur, une contrainte, une absence de consentement ou une blessure dans ce domaine, tu orientes vers un médecin ou un thérapeute.
-À partir d'un check-in hebdomadaire, écris 3-4 phrases chaleureuses et UNE suggestion concrète pour la semaine.
-Tu réponds uniquement avec ce mot, dans la langue demandée.`;
+const GUARDIAN_WORDS: Record<Locale, { steady: string; attention: string }> = {
+  fr: {
+    steady:
+      "Merci d’avoir pris ce temps de relecture. Les réponses indiquent une base à entretenir avec des gestes simples et réguliers. Choisissez un moment calme cette semaine pour vous écouter sans vous interrompre.",
+    attention:
+      "Merci d’avoir répondu avec sincérité. Certains points méritent une attention douce, sans jugement ni précipitation. Choisissez un seul rituel proposé cette semaine et, si le poids persiste, parlez-en à un accompagnateur humain.",
+  },
+  en: {
+    steady:
+      "Thank you for taking this time to reflect. The answers show a foundation worth nurturing through simple, regular gestures. Choose a calm moment this week to listen to each other without interruption.",
+    attention:
+      "Thank you for answering honestly. Some areas deserve gentle attention, without judgment or haste. Choose one suggested ritual this week and, if the burden remains, speak with a human counselor.",
+  },
+  es: {
+    steady:
+      "Gracias por tomar este tiempo de reflexión. Las respuestas muestran una base que conviene cuidar con gestos sencillos y regulares. Elegid un momento tranquilo esta semana para escucharos sin interrumpiros.",
+    attention:
+      "Gracias por responder con sinceridad. Algunos puntos merecen una atención amable, sin juicio ni prisa. Elegid un solo ritual propuesto esta semana y, si el peso continúa, hablad con un acompañante humano.",
+  },
+  pt: {
+    steady:
+      "Obrigado por reservarem este tempo de reflexão. As respostas mostram uma base a cuidar com gestos simples e regulares. Escolham um momento calmo esta semana para se ouvirem sem interrupções.",
+    attention:
+      "Obrigado por responderes com sinceridade. Alguns pontos merecem atenção serena, sem julgamento nem pressa. Escolhe um único ritual proposto esta semana e, se o peso continuar, fala com um acompanhante humano.",
+  },
+};
 
 export async function guardianWord(
   season: Season,
   answers: Array<{ id: string; value: string; note: string }>,
   locale: Locale,
-  previous?: { word: string | null; rituals: string[] } | null,
 ): Promise<string | null> {
-  // P5 : mémoire entre check-ins. On rappelle au Pasteur ce qu'il avait dit et
-  // suggéré la dernière fois, pour qu'il y revienne avec délicatesse (sentiment
-  // d'un accompagnateur qui se souvient), sans culpabiliser.
-  const memory =
-    previous && (previous.word || previous.rituals.length > 0)
-      ? `\n\nMÉMOIRE (dernier check-in de ce couple) :${
-          previous.word
-            ? ` tu avais répondu « ${previous.word.slice(0, 280)} ».`
-            : ""
-        }${
-          previous.rituals.length > 0
-            ? ` Tu avais suggéré : ${previous.rituals.join(" ; ")}.`
-            : ""
-        } Reviens-y avec douceur : demande comment cela a évolué, sans juger, avant de proposer la suite.`
-      : "";
-  return completeText(
-    `${SYSTEM}\nLangue: ${locale}. Saison: ${
-      season === "PARENTS"
-        ? "jeunes parents"
-        : season === "ENGAGED"
-          ? "fiancés en préparation au mariage"
-          : "premières années de mariage"
-    }.${memory}`,
-    answers
-      .map((a) => `${a.id}: ${a.value}${a.note ? ` - ${a.note}` : ""}`)
-      .join("\n"),
-    400,
-    locale,
+  void season;
+  const copy = GUARDIAN_WORDS[locale] ?? GUARDIAN_WORDS.fr;
+  const needsAttention = answers.some(
+    (answer) => answer.value === "no" || answer.value === "unsure",
   );
+  return needsAttention ? copy.attention : copy.steady;
 }
 
 /** Parcours de saison - contenu déterministe, 4 langues. */
@@ -512,12 +503,13 @@ export const SEASON_PROGRAMS: Record<
 };
 
 export function generateInviteCode(): string {
-  // Code lisible type ALLIANCE-7F3K9Q (sans 0/O/1/I).
+  // Code lisible type ALLIANCE-7F3K9Q8W2M4X (sans 0/O/1/I). Les 12 symboles
+  // portent 60 bits d'entropie et le code n'est jamais stocké en clair.
   // RNG cryptographique (randomInt) plutôt que Math.random : le code est un
   // secret d'accès à un espace couple - il doit être non devinable et non biaisé.
   const chars = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
   let code = "";
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 12; i++) {
     code += chars[randomInt(chars.length)];
   }
   return `ALLIANCE-${code}`;

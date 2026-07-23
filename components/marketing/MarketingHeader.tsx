@@ -28,7 +28,6 @@ function Wordmark() {
 const navLinks = [
   { href: "/#why", key: "features" },
   { href: "/#journey", key: "journey" },
-  { href: "/#testimonials", key: "testimonials" },
 ] as const;
 
 export function MarketingHeader() {

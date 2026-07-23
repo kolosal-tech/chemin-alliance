@@ -7,16 +7,15 @@ import { z } from "zod";
  * ni endpoint mutant n'est créé, donc pas de surface de rate-limit nouvelle.
  * La validation Zod reste exigée (cf. contrainte sécurité du brief) : toute
  * valeur hors-bornes ou mal typée est silencieusement ignorée (filtre absent),
- * jamais propagée. On ne filtre QUE sur des champs robustes et toujours
- * présents (âge, vérifié, enfants) pour ne pas coupler à un enum incertain.
+ * jamais propagée. On ne filtre QUE sur des champs publics avant match (âge et
+ * vérification de l'email). Un filtre familial permettrait d'inférer une donnée
+ * masquée par simple comparaison des résultats.
  */
 export const filtersSchema = z.object({
   ageMin: z.coerce.number().int().min(18).max(99).optional().catch(undefined),
   ageMax: z.coerce.number().int().min(18).max(99).optional().catch(undefined),
-  /** présence de "1" ⇒ profils vérifiés uniquement */
+  /** présence de "1" ⇒ adresses email vérifiées uniquement */
   verified: z.literal("1").optional().catch(undefined),
-  /** tri-état via présence : "yes" | "no" | absent */
-  children: z.enum(["yes", "no"]).optional().catch(undefined),
 });
 
 export type Filters = z.infer<typeof filtersSchema>;
@@ -25,7 +24,6 @@ export type Filters = z.infer<typeof filtersSchema>;
 export type FilterableProfile = {
   age: number;
   isVerified: boolean;
-  hasChildren: boolean;
 };
 
 /** Parse défensif des searchParams ⇒ filtres validés (ou vides). */
@@ -41,8 +39,6 @@ export function matchesFilters(p: FilterableProfile, f: Filters): boolean {
   if (f.ageMin != null && p.age < f.ageMin) return false;
   if (f.ageMax != null && p.age > f.ageMax) return false;
   if (f.verified === "1" && !p.isVerified) return false;
-  if (f.children === "yes" && !p.hasChildren) return false;
-  if (f.children === "no" && p.hasChildren) return false;
   return true;
 }
 
@@ -59,6 +55,5 @@ export function activeFilterCount(f: Filters): number {
   if (f.ageMin != null) n++;
   if (f.ageMax != null) n++;
   if (f.verified === "1") n++;
-  if (f.children) n++;
   return n;
 }

@@ -415,13 +415,49 @@ body {
   a,
   [role="button"] {
     min-height: 44px;
+    min-width: 44px;
   }
 }
 
-/* Safe areas iOS (encoches) */
+/* Safe areas iOS (encoches). La valeur de base reste explicite pour que
+   `safe-top`/`safe-bottom` s'ajoutent aux espacements Tailwind au lieu de
+   remplacer les padding par zéro sur les appareils sans encoche. */
 .safe-top {
-  padding-top: env(safe-area-inset-top);
+  --safe-top-base: 0rem;
+  padding-top: calc(var(--safe-top-base) + env(safe-area-inset-top));
 }
 .safe-bottom {
-  padding-bottom: env(safe-area-inset-bottom);
+  --safe-bottom-base: 0rem;
+  padding-bottom: calc(var(--safe-bottom-base) + env(safe-area-inset-bottom));
+}
+.safe-top.pt-3,
+.safe-top.py-3 {
+  --safe-top-base: 0.75rem;
+}
+.safe-top.pt-4 {
+  --safe-top-base: 1rem;
+}
+.safe-top.pt-5 {
+  --safe-top-base: 1.25rem;
+}
+.safe-top.pt-6 {
+  --safe-top-base: 1.5rem;
+}
+.safe-top.pt-8 {
+  --safe-top-base: 2rem;
+}
+.safe-top.py-2 {
+  --safe-top-base: 0.5rem;
+}
+.safe-top.py-10 {
+  --safe-top-base: 2.5rem;
+}
+.safe-top.py-12 {
+  --safe-top-base: 3rem;
+}
+.safe-bottom.pb-8 {
+  --safe-bottom-base: 2rem;
+}
+.safe-bottom.py-12 {
+  --safe-bottom-base: 3rem;
 }

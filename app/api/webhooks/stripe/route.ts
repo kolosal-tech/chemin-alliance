@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "@/lib/db";
+import {
+  reconcileStripeBillingEvent,
+  type StripeBillingStore,
+} from "@/lib/payments/stripe-webhook";
+import { safeErrorDetails } from "@/lib/security/safe-error";
 
 // Webhook Stripe - met à jour User.subscriptionStatus. Signature vérifiée
 // (STRIPE_WEBHOOK_SECRET). Corps BRUT requis -> req.text(), pas de parsing.
@@ -9,19 +14,29 @@ export const dynamic = "force-dynamic";
 
 const secret = process.env.STRIPE_SECRET_KEY;
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+const premiumPrice = process.env.STRIPE_PRICE_PREMIUM;
 const stripe = secret ? new Stripe(secret) : null;
 
-async function setStatusByCustomer(customerId: string, status: string) {
-  await prisma.user.updateMany({
-    where: { stripeCustomerId: customerId },
-    data: { subscriptionStatus: status },
-  });
-}
+const billingStore: StripeBillingStore = {
+  async findByCustomerId(customerId) {
+    return prisma.user.findUnique({
+      where: { stripeCustomerId: customerId },
+      select: { id: true, subscriptionStatus: true },
+    });
+  },
+  async setStatus(userId, customerId, status) {
+    const result = await prisma.user.updateMany({
+      where: { id: userId, stripeCustomerId: customerId },
+      data: { subscriptionStatus: status },
+    });
+    return result.count === 1;
+  },
+};
 
 export async function POST(req: Request) {
-  if (!stripe || !webhookSecret) {
+  if (!stripe || !webhookSecret || !premiumPrice) {
     console.error(
-      "[webhooks/stripe] événement reçu mais billing non configuré - STRIPE_SECRET_KEY ou STRIPE_WEBHOOK_SECRET manquant en prod",
+      "[webhooks/stripe] événement reçu mais billing non configuré",
     );
     return NextResponse.json({ error: "BILLING_DISABLED" }, { status: 503 });
   }
@@ -33,46 +48,29 @@ export async function POST(req: Request) {
   } catch (err) {
     console.error(
       "[webhooks/stripe] signature invalide - STRIPE_WEBHOOK_SECRET ne correspond pas au secret de l'endpoint (ou mauvais mode test/live)",
-      err,
+      safeErrorDetails(err),
     );
     return NextResponse.json({ error: "BAD_SIGNATURE" }, { status: 400 });
   }
 
-  switch (event.type) {
-    case "checkout.session.completed": {
-      const s = event.data.object as Stripe.Checkout.Session;
-      const userId = s.metadata?.userId ?? s.client_reference_id ?? null;
-      const customerId =
-        typeof s.customer === "string" ? s.customer : (s.customer?.id ?? null);
-      if (userId) {
-        await prisma.user.update({
-          where: { id: userId },
-          data: {
-            subscriptionStatus: "active",
-            ...(customerId ? { stripeCustomerId: customerId } : {}),
-          },
-        });
-      } else if (customerId) {
-        await setStatusByCustomer(customerId, "active");
-      }
-      break;
-    }
-    case "customer.subscription.created":
-    case "customer.subscription.updated": {
-      const sub = event.data.object as Stripe.Subscription;
-      const customerId =
-        typeof sub.customer === "string" ? sub.customer : sub.customer.id;
-      const active = sub.status === "active" || sub.status === "trialing";
-      await setStatusByCustomer(customerId, active ? "active" : "none");
-      break;
-    }
-    case "customer.subscription.deleted": {
-      const sub = event.data.object as Stripe.Subscription;
-      const customerId =
-        typeof sub.customer === "string" ? sub.customer : sub.customer.id;
-      await setStatusByCustomer(customerId, "none");
-      break;
-    }
+  try {
+    const result = await reconcileStripeBillingEvent(
+      event,
+      stripe,
+      billingStore,
+      premiumPrice,
+    );
+    return NextResponse.json({ received: true, ...result });
+  } catch (err) {
+    // Une erreur Stripe/DB est transitoire : 500 force Stripe à relivrer
+    // l'événement. Aucun détail interne n'est exposé au client.
+    console.error(
+      "[webhooks/stripe] réconciliation impossible",
+      safeErrorDetails(err),
+    );
+    return NextResponse.json(
+      { error: "WEBHOOK_PROCESSING_FAILED" },
+      { status: 500 },
+    );
   }
-  return NextResponse.json({ received: true });
 }

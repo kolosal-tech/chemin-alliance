@@ -3,7 +3,8 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
-import { requireMatchMember } from "@/lib/alliance";
+import { requireActiveMatchMember } from "@/lib/alliance";
+import { sealAllianceAnswer } from "@/lib/alliance-answer";
 import { getStageQuestions } from "@/lib/core-engine";
 
 const schema = z.object({
@@ -17,7 +18,10 @@ export const POST = withErrors(
     { params }: { params: Promise<{ matchId: string }> },
   ) => {
     const user = await requireUser();
-    const match = await requireMatchMember((await params).matchId, user.id);
+    const match = await requireActiveMatchMember(
+      (await params).matchId,
+      user.id,
+    );
     if (match.stage === "CLOSED") return jsonError(409, "MATCH_CLOSED");
     const body = schema.parse(await readJsonLimited(req));
 
@@ -26,6 +30,7 @@ export const POST = withErrors(
       return jsonError(400, "UNKNOWN_QUESTION");
     }
 
+    const sealed = sealAllianceAnswer(body.answer);
     await prisma.allianceAnswer.upsert({
       where: {
         matchId_userId_questionId: {
@@ -39,9 +44,9 @@ export const POST = withErrors(
         userId: user.id,
         stage: match.stage,
         questionId: body.questionId,
-        answer: body.answer,
+        ...sealed,
       },
-      update: { answer: body.answer },
+      update: sealed,
     });
     return NextResponse.json({ ok: true });
   },

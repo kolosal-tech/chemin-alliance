@@ -3,7 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
-import { requireMatchMember } from "@/lib/alliance";
+import { requireActiveMatchMember } from "@/lib/alliance";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import type { Locale } from "@/lib/core-engine";
 import {
@@ -32,7 +32,7 @@ async function resolveMatchSurface(
   userId: string,
   locale: Locale,
 ): Promise<GameSurface | { error: NextResponse }> {
-  const match = await requireMatchMember(matchId, userId);
+  const match = await requireActiveMatchMember(matchId, userId);
   const otherUserId = match.userAId === userId ? match.userBId : match.userAId;
   const other = await prisma.user.findUnique({
     where: { id: otherUserId },

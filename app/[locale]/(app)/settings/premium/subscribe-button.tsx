@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useToast } from "@/components/Toast";
+import { safeStripeRedirectUrl } from "@/lib/payments/redirect";
 
 /**
  * Action sensible (paiement). Demande une confirmation explicite, montre une
@@ -23,9 +24,10 @@ export function SubscribeButton({ label }: { label: string }) {
       body: JSON.stringify({ locale }),
     }).catch(() => null);
     const data = res ? await res.json().catch(() => null) : null;
-    if (data?.url) {
+    const redirect = safeStripeRedirectUrl(data?.url, "checkout");
+    if (res?.ok && redirect) {
       // Redirection vers Stripe : on quitte l'app, pas de toast de succès.
-      window.location.href = data.url;
+      window.location.href = redirect;
     } else {
       toast.error(t("premium.checkoutError"));
       setConfirming(false);

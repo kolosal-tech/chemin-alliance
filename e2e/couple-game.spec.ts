@@ -23,11 +23,15 @@ import { test, expect, type Page } from "@playwright/test";
  *   npx playwright test e2e/couple-game.spec.ts
  */
 
-const EMAIL = process.env.E2E_EMAIL ?? "mrkolosal+chemintest@gmail.com";
+const EMAIL =
+  process.env.E2E_MATCH_EMAIL ??
+  process.env.E2E_EMAIL ??
+  "mrkolosal+chemintest@gmail.com";
 const PASSWORD = process.env.E2E_PASSWORD;
 const LOCALE = process.env.LOCALE ?? "fr";
 
 async function login(page: Page): Promise<void> {
+  await page.setExtraHTTPHeaders({ "x-forwarded-for": "203.0.113.20" });
   await page.goto(`/${LOCALE}/login`);
   await page.fill('input[name="email"]', EMAIL);
   await page.fill('input[name="password"]', PASSWORD as string);
@@ -35,6 +39,9 @@ async function login(page: Page): Promise<void> {
   await page.waitForURL((url) => !url.pathname.endsWith("/login"), {
     timeout: 20_000,
   });
+  await page
+    .locator('input[name="email"]')
+    .waitFor({ state: "detached", timeout: 10_000 });
 }
 
 /**
@@ -45,16 +52,32 @@ async function login(page: Page): Promise<void> {
  */
 async function openFirstPlayableConversation(page: Page): Promise<boolean> {
   await page.goto(`/${LOCALE}/messages`);
-  const links = page.locator('a[href*="/messages/"]');
-  const count = await links.count();
-  for (let i = 0; i < count; i += 1) {
-    await links.nth(i).click();
-    await page.waitForLoadState("networkidle");
+  const hrefs = await page
+    .locator('a[href*="/messages/"]')
+    .evaluateAll((links) =>
+      [
+        ...new Set(
+          links
+            .map((link) => link.getAttribute("href"))
+            .filter((href): href is string => Boolean(href)),
+        ),
+      ].filter((href) => !href.endsWith("/messages")),
+    );
+
+  for (const href of hrefs) {
+    // La page de conversation maintient des requêtes longues/polling : l'état
+    // `networkidle` n'est donc pas un signal de disponibilité fiable. Le DOM
+    // et le contrôle métier visible sont les critères réellement utiles.
+    await page.goto(href, { waitUntil: "domcontentloaded" });
     const playButton = page.getByRole("button", { name: "Jouer" });
-    if (await playButton.isVisible().catch(() => false)) {
+    if (
+      await playButton
+        .waitFor({ state: "visible", timeout: 3_000 })
+        .then(() => true)
+        .catch(() => false)
+    ) {
       return true;
     }
-    await page.goto(`/${LOCALE}/messages`);
   }
   return false;
 }
@@ -75,9 +98,34 @@ test.describe("Jeu des questions — match humain-humain", () => {
       "Aucune conversation humain-humain non-PENDING trouvée pour ce compte de test.",
     );
 
+    await page.setViewportSize({ width: 320, height: 568 });
+    const partnerNameFits = await page
+      .getByTestId("conversation-partner-name")
+      .evaluate((name) => name.scrollWidth <= name.clientWidth + 1);
+    expect(partnerNameFits).toBeTruthy();
+
+    // Les questions suggérées constituent un carrousel mobile : aucun texte
+    // ne doit déborder de son bouton ni recouvrir la suggestion suivante.
+    const suggestions = page.getByTestId("ai-suggestions");
+    if (await suggestions.isVisible().catch(() => false)) {
+      const suggestionButtons = suggestions.getByRole("button");
+      const suggestionCount = await suggestionButtons.count();
+      for (let index = 0; index < suggestionCount; index += 1) {
+        const fitsButton = await suggestionButtons
+          .nth(index)
+          .evaluate(
+            (button) =>
+              button.scrollWidth <= button.clientWidth + 1 &&
+              button.scrollHeight <= button.clientHeight + 1,
+          );
+        expect(fitsButton).toBeTruthy();
+      }
+    }
+
     // Ouvrir le panneau de jeu (fermé par défaut, monté sous forme de bouton).
     const playButton = page.getByRole("button", { name: "Jouer" });
     await expect(playButton).toBeVisible();
+    await expect(playButton).toBeEnabled();
     await playButton.click();
 
     // Le panneau s'ouvre : titre + sous-titre du jeu visibles.
@@ -90,18 +138,28 @@ test.describe("Jeu des questions — match humain-humain", () => {
     const sharedHint = page.getByText(
       "Vous répondez chacun·e honnêtement. Les réponses restent secrètes jusqu'à ce que vous ayez tou·te·s les deux répondu.",
     );
-    const alreadyOpenRound = await sharedHint.isVisible().catch(() => false);
+    const guessHint = page.getByText(
+      "L'un·e répond honnêtement, l'autre devine sa réponse. Le résultat dira si vous êtes proches !",
+    );
+    const newRoundLabel = page.getByText("Nouvelle manche", { exact: true });
 
-    if (!alreadyOpenRound) {
-      const newRoundLabel = page.getByText("Nouvelle manche", { exact: true });
+    // Le premier GET du panneau est asynchrone : attendre un état métier
+    // chargé évite de décider pendant l'affichage transitoire du spinner.
+    await expect(sharedHint.or(guessHint).or(newRoundLabel)).toBeVisible({
+      timeout: 15_000,
+    });
+    test.skip(
+      await guessHint.isVisible().catch(() => false),
+      "Une manche « Devine ma réponse » est déjà ouverte sur ce compte.",
+    );
+
+    if (await newRoundLabel.isVisible().catch(() => false)) {
       const sharedModeButton = page.getByRole("button", {
         name: "Question partagée",
       });
-      // "Nouvelle manche" n'apparaît que si aucune manche n'est OPEN — sinon
-      // une manche GUESS pourrait déjà être en cours (pas notre mode cible).
-      if (await newRoundLabel.isVisible().catch(() => false)) {
-        await sharedModeButton.click();
-      }
+      await expect(sharedModeButton).toBeEnabled();
+      await sharedModeButton.click();
+      await expect(sharedHint).toBeVisible({ timeout: 15_000 });
     }
 
     // Une question doit maintenant être affichée, avec un des deux états
@@ -121,7 +179,10 @@ test.describe("Jeu des questions — match humain-humain", () => {
       const textarea = page.getByPlaceholder("Écris ta réponse ici...");
       await expect(textarea).toBeVisible();
       await textarea.fill("Réponse e2e — jeu des questions.");
-      await page.getByRole("button", { name: "Envoyer" }).click();
+      await textarea
+        .locator("..")
+        .getByRole("button", { name: "Envoyer" })
+        .click();
 
       // Après soumission : soit la réponse est scellée (l'autre n'a pas
       // encore répondu), soit la manche est immédiatement révélée si

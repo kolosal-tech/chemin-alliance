@@ -98,7 +98,7 @@ export default async function LegalPage(props: {
       <h1 className="mt-7 font-display text-[38px] leading-tight text-night dark:text-[#ECE7DD]">
         {doc.title}
       </h1>
-      <p className="lbl mt-2 text-[12px] text-sand-600 dark:text-[#7E7A72]">
+      <p className="lbl mt-2 text-[12px] text-sand-600 dark:text-[#8F8A80]">
         {doc.updated}
       </p>
 
@@ -111,7 +111,7 @@ export default async function LegalPage(props: {
             </span>
           </p>
           <div className="mt-3">
-            <span className="lbl text-[11px] text-sand-600 dark:text-[#7E7A72]">
+            <span className="lbl text-[11px] text-sand-600 dark:text-[#8F8A80]">
               {ui.change}
             </span>
             <div className="mt-1.5 flex flex-wrap gap-1.5">
@@ -133,7 +133,7 @@ export default async function LegalPage(props: {
               })}
             </div>
           </div>
-          <p className="mt-3 text-[13px] leading-snug text-sand-500 dark:text-[#65625B]">
+          <p className="mt-3 text-[13px] leading-snug text-sand-500 dark:text-[#9A958B]">
             {ui.note}
           </p>
         </div>

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
-import { requireMatchMember } from "@/lib/alliance";
+import { requireActiveMatchMember } from "@/lib/alliance";
 import { compatibilityTopics } from "@/lib/matching";
 import { getStageQuestions, type Locale } from "@/lib/core-engine";
 
@@ -12,7 +12,10 @@ export const GET = withErrors(
     { params }: { params: Promise<{ matchId: string }> },
   ) => {
     const user = await requireUser();
-    const match = await requireMatchMember((await params).matchId, user.id);
+    const match = await requireActiveMatchMember(
+      (await params).matchId,
+      user.id,
+    );
     const otherId = match.userAId === user.id ? match.userBId : match.userAId;
     const locale = (user.locale ?? "fr") as Locale;
 
@@ -27,6 +30,7 @@ export const GET = withErrors(
       }),
       prisma.allianceAnswer.findMany({
         where: { matchId: match.id, stage: match.stage },
+        select: { questionId: true, userId: true },
       }),
     ]);
 

@@ -1,6 +1,7 @@
 import "server-only";
 import { encode } from "blurhash";
 import sharp from "sharp";
+import { safeErrorDetails } from "@/lib/security/safe-error";
 
 /**
  * Pipeline photo sécurisé - palier « avant révélation ».
@@ -23,7 +24,7 @@ export async function encodeBlurhash(
       .toBuffer({ resolveWithObject: true });
     return encode(new Uint8ClampedArray(data), info.width, info.height, 4, 4);
   } catch (err) {
-    console.error("[blurhash] encode échoué", err);
+    console.error("[blurhash] encode échoué", safeErrorDetails(err));
     return null;
   }
 }
@@ -48,7 +49,7 @@ export async function blurredVariant(
       .jpeg({ quality: 62 })
       .toBuffer();
   } catch (err) {
-    console.error("[blurhash] variante floutée échouée", err);
+    console.error("[blurhash] variante floutée échouée", safeErrorDetails(err));
     return null;
   }
 }

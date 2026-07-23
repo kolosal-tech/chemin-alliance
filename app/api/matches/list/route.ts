@@ -3,12 +3,16 @@ import { prisma } from "@/lib/db";
 import { withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { blockedUserIds } from "@/lib/blocks";
+import { activeSensitiveDataConsentPairWhere } from "@/lib/sensitive-data-consent";
 
 export const GET = withErrors(async () => {
   const user = await requireUser();
   const [matches, blocked] = await Promise.all([
     prisma.match.findMany({
-      where: { OR: [{ userAId: user.id }, { userBId: user.id }] },
+      where: {
+        OR: [{ userAId: user.id }, { userBId: user.id }],
+        ...activeSensitiveDataConsentPairWhere,
+      },
       include: {
         userA: { select: { id: true, displayName: true, isVerified: true } },
         userB: { select: { id: true, displayName: true, isVerified: true } },

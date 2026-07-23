@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { sealInsight, openInsight } from "@/lib/agent-insight";
+import { sealInsight } from "@/lib/agent-insight";
 import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import { rateLimit } from "@/lib/security/rate-limit";
@@ -12,6 +12,7 @@ import {
 } from "@/lib/agents/guardian";
 import { emergencyLine } from "@/lib/emergency";
 import type { Locale } from "@/lib/core-engine";
+import { consentingCoupleSpaceMemberWhere } from "@/lib/sensitive-data-consent";
 
 /**
  * Check-in du Gardien - INDIVIDUEL et PRIVÉ : le conjoint ne voit jamais
@@ -26,7 +27,7 @@ export const POST = withErrors(async (req: Request) => {
 
   const space = await prisma.coupleSpace.findFirst({
     where: {
-      OR: [{ userAId: user.id }, { userBId: user.id }],
+      AND: [consentingCoupleSpaceMemberWhere(user.id)],
       status: "ACTIVE",
     },
   });
@@ -59,26 +60,7 @@ export const POST = withErrors(async (req: Request) => {
     });
   }
 
-  // P5 : mémoire du Pasteur - charge le dernier check-in (mot + rituels) pour
-  // qu'il y revienne avec délicatesse. Privé, propre à l'utilisateur ici.
-  const prev = await prisma.agentInsight.findFirst({
-    where: {
-      coupleSpaceId: space.id,
-      userId: user.id,
-      agentId: "guardian",
-      kind: "CHECKIN",
-      revokedAt: null,
-    },
-    orderBy: { createdAt: "desc" },
-  });
-  const prevData = prev
-    ? openInsight<{ word?: string; rituals?: string[] }>(prev.dataJson)
-    : null;
-  const previous = prevData
-    ? { word: prevData.word ?? null, rituals: prevData.rituals ?? [] }
-    : null;
-
-  const word = await guardianWord(season, body.answers, locale, previous);
+  const word = await guardianWord(season, body.answers, locale);
   await prisma.agentInsight.create({
     data: {
       userId: user.id,

@@ -7,7 +7,7 @@ import {
   readJsonLimited,
   withErrors,
 } from "@/lib/api-helpers";
-import { verifyPassword } from "@/lib/security/password";
+import { verifyPasswordOrDummy } from "@/lib/security/password";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import {
   SESSION_COOKIE,
@@ -30,8 +30,12 @@ export const POST = withErrors(async (req: Request) => {
 
   const body = schema.parse(await readJsonLimited(req));
   const user = await prisma.user.findUnique({ where: { email: body.email } });
+  const passwordValid = await verifyPasswordOrDummy(
+    user?.passwordHash,
+    body.password,
+  );
   // Réponse identique email inconnu / mauvais mot de passe (anti-énumération)
-  if (!user || !(await verifyPassword(user.passwordHash, body.password))) {
+  if (!user || user.deletedAt !== null || !passwordValid) {
     return jsonError(401, "INVALID_CREDENTIALS");
   }
 

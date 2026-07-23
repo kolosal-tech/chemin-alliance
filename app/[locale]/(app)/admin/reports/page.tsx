@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { openInsight } from "@/lib/agent-insight";
 import { getSessionUser } from "@/lib/security/session";
 import { Link } from "@/i18n/navigation";
+import { auditAdmin } from "@/lib/audit";
 import { ReportActions } from "./report-actions";
 
 export default async function AdminReportsPage(props: {
@@ -12,31 +13,61 @@ export default async function AdminReportsPage(props: {
   const params = await props.params;
   setRequestLocale(params.locale);
   const user = await getSessionUser();
-  if (!user || user.role !== "ADMIN") notFound();
+  if (!user || user.role !== "ADMIN") {
+    auditAdmin({
+      event: "admin.reports.read",
+      action: "page",
+      result: "denied",
+      actorId: user?.id ?? "anonymous-admin-page",
+      targetId: "page:admin-reports",
+    });
+    notFound();
+  }
   const t = await getTranslations("admin");
 
   const ta = await getTranslations("agents.watch");
   // Deux lectures indépendantes → en parallèle plutôt qu'en série.
-  const [signals, reports] = await Promise.all([
-    prisma.agentInsight.findMany({
-      where: { agentId: "watchman", revokedAt: null },
-      orderBy: { createdAt: "desc" },
-      take: 30,
-      include: { user: { select: { displayName: true } } },
-    }),
-    // File de modération bornée à 100 (au lieu d'illimité) : borne raisonnable
-    // pour une page admin, évite de charger tous les signalements ouverts sans
-    // limite si leur nombre venait à grossir.
-    prisma.report.findMany({
-      where: { status: { in: ["OPEN", "REVIEWING"] } },
-      orderBy: { createdAt: "desc" },
-      take: 100,
-      include: {
-        reporter: { select: { displayName: true } },
-        target: { select: { displayName: true } },
-      },
-    }),
-  ]);
+  const [signals, reports] = await (async () => {
+    try {
+      const data = await Promise.all([
+        prisma.agentInsight.findMany({
+          where: { agentId: "watchman", revokedAt: null },
+          orderBy: { createdAt: "desc" },
+          take: 30,
+          include: { user: { select: { displayName: true } } },
+        }),
+        // File de modération bornée à 100 (au lieu d'illimité) : borne raisonnable
+        // pour une page admin, évite de charger tous les signalements ouverts sans
+        // limite si leur nombre venait à grossir.
+        prisma.report.findMany({
+          where: { status: { in: ["OPEN", "REVIEWING"] } },
+          orderBy: { createdAt: "desc" },
+          take: 100,
+          include: {
+            reporter: { select: { displayName: true } },
+            target: { select: { displayName: true } },
+          },
+        }),
+      ]);
+      auditAdmin({
+        event: "admin.reports.read",
+        action: "page",
+        result: "success",
+        actorId: user.id,
+        targetId: "page:admin-reports",
+      });
+      return data;
+    } catch (error) {
+      auditAdmin({
+        event: "admin.reports.read",
+        action: "page",
+        result: "failure",
+        actorId: user.id,
+        targetId: "page:admin-reports",
+      });
+      throw error;
+    }
+  })();
   // Sévérité d'abord : les signaux "high" (arnaque/argent) remontent en tête.
   const sevRank: Record<string, number> = { high: 0, medium: 1, none: 2 };
   signals.sort(
@@ -61,7 +92,7 @@ export default async function AdminReportsPage(props: {
         href="/admin/coaches"
         className="mb-4 inline-block rounded-btnsm border border-sand-300 px-3 py-1.5 text-[15px] font-semibold text-ink dark:border-anthracite-600 dark:text-[#ECE7DD]"
       >
-        Gérer les accompagnateurs (pasteurs / prêtres) →
+        {t("manageCoaches")} →
       </Link>
       <div className="flex flex-col gap-3">
         {reports.length === 0 && (
@@ -74,12 +105,14 @@ export default async function AdminReportsPage(props: {
             key={r.id}
             className="rounded-card border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800"
           >
-            <div className="mb-2 flex items-center justify-between text-xs text-sand-600 dark:text-[#7E7A72]">
+            <div className="mb-2 flex items-center justify-between text-xs text-sand-600 dark:text-[#8F8A80]">
               <span>
                 {t("reporter")} <b>{r.reporter.displayName}</b> → {t("target")}{" "}
                 <b>{r.target.displayName}</b>
               </span>
-              <span className="lbl text-[11px]">{r.status}</span>
+              <span className="lbl text-[11px]">
+                {r.status === "OPEN" ? t("statusOpen") : t("statusReviewing")}
+              </span>
             </div>
             <p className="mb-3 text-sm leading-snug text-ink dark:text-[#CFCAC0]">
               {r.reason}
@@ -127,7 +160,7 @@ export default async function AdminReportsPage(props: {
                     {ta(`signal_${sg}`)}
                   </span>
                 ))}
-                <span className="ml-auto text-[13px] text-sand-600 dark:text-[#7E7A72]">
+                <span className="ml-auto text-[13px] text-sand-600 dark:text-[#8F8A80]">
                   {sig.user?.displayName ?? "?"}
                 </span>
               </div>

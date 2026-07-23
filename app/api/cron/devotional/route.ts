@@ -4,6 +4,7 @@ import { withErrors } from "@/lib/api-helpers";
 import { requireCronAuth } from "@/lib/cron/auth";
 import { pushEnabled, sendPushToUser } from "@/lib/push";
 import { devotionPushPayload } from "@/lib/push-messages";
+import { activeSensitiveDataConsentUserWhere } from "@/lib/sensitive-data-consent";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,16 +20,22 @@ export const GET = withErrors(async (req: Request) => {
   }
 
   const PAGE = 200;
-  let skip = 0;
+  let afterId: string | null = null;
   let total = 0;
   let sent = 0;
   for (;;) {
-    const users = await prisma.user.findMany({
-      where: { deletedAt: null, pushSubscriptions: { some: {} } },
-      select: { id: true, locale: true },
-      skip,
-      take: PAGE,
-    });
+    const users: Array<{ id: string; locale: string }> =
+      await prisma.user.findMany({
+        where: {
+          deletedAt: null,
+          ...activeSensitiveDataConsentUserWhere,
+          pushSubscriptions: { some: {} },
+          ...(afterId === null ? {} : { id: { gt: afterId } }),
+        },
+        select: { id: true, locale: true },
+        orderBy: { id: "asc" },
+        take: PAGE,
+      });
     if (users.length === 0) break;
     total += users.length;
     const results = await Promise.allSettled(
@@ -39,7 +46,10 @@ export const GET = withErrors(async (req: Request) => {
       0,
     );
     if (users.length < PAGE) break;
-    skip += PAGE;
+    // L'envoi peut purger le dernier abonnement d'un utilisateur. Une
+    // pagination par `skip` déplacerait alors l'ensemble et sauterait des
+    // membres. Le curseur monotone reste stable malgré ces suppressions.
+    afterId = users[users.length - 1].id;
   }
 
   return NextResponse.json({ ok: true, total, sent });

@@ -1,7 +1,15 @@
 # Parrain / Marraine - design (MVP)
 
 **Date :** 2026-06-18
-**Statut :** validé (périmètre + nom) - prêt à implémenter
+**Statut :** document de conception historique — fonctionnalité implémentée puis
+durcie
+
+> Ce document conserve l'intention produit initiale. Il ne constitue plus une
+> spécification technique à implémenter telle quelle. Le modèle, les invariants
+> de sécurité, la rotation des liens et la procédure de déploiement canoniques
+> sont décrits dans
+> [`docs/security/blessing-links.md`](../../security/blessing-links.md) et
+> [`prisma/migrations/PROD_DEPLOY.md`](../../../prisma/migrations/PROD_DEPLOY.md).
 
 ## But
 
@@ -19,13 +27,22 @@ L'utilisateur désigne **un** Parrain/Marraine de confiance (parent, pasteur·e,
 
 ## Vie privée
 
-- Le Parrain/Marraine ne lit **jamais** les conversations (aucun déchiffrement tiers, zéro enjeu RGPD).
+- Le Parrain/Marraine ne lit **jamais** les conversations et aucun contenu de
+  conversation n'est déchiffré pour un tiers.
+- Le nom, l'email, la relation, la décision et la note restent néanmoins des
+  données personnelles : information, minimisation, durée de conservation,
+  droits des personnes et suppression doivent être respectés.
 - Le badge n'expose que la **relation** (jamais email/nom du parrain).
 - La page magique ne révèle au parrain que le prénom de son **filleul·e** (l'utilisateur, qui l'a choisi) - **aucune donnée de l'autre partie** du match.
 - Note du parrain **chiffrée au repos** (AES-256-GCM, `encryptField`/`decryptOptional`).
 - Lien magique = token unique aléatoire (`crypto`), route publique rate-limitée.
 
-## Données (migration prod manuelle - recette Monaco)
+## Données — esquisse historique, ne pas implémenter
+
+Le schéma ci-dessous est conservé pour expliquer la conception de juin 2026.
+Il est obsolète : le schéma courant n'enregistre aucun jeton brut, lie la
+bénédiction au match par une clé étrangère et impose les contraintes de
+propriété et d'unicité en base.
 
 ```prisma
 model Sponsor {
@@ -55,9 +72,14 @@ model Blessing {
   @@index([userId, matchId])
 }
 ```
-+ `User.sponsor Sponsor? @relation("UserSponsor")`.
+
+- `User.sponsor Sponsor? @relation("UserSponsor")`.
 
 ## API
+
+La liste suivante décrit le périmètre fonctionnel initial. Les contrats et
+contrôles actuels sont ceux du code et de la documentation de sécurité
+canonique citée en tête de document.
 
 - `GET/POST/DELETE /api/me/sponsor` - lire / désigner / retirer (auth user).
 - `POST /api/matches/[matchId]/blessing` - demander une bénédiction (crée Blessing PENDING + token, email parrain). Garde : membre du match + parrain existant.
@@ -81,4 +103,7 @@ Clés `sponsor.*` et `blessing.*` × fr/en/es/pt + textes email.
 
 ## Cycle
 
-coder → tester (tsc/lint/vitest/build) → **migration prod Monaco (avec l'utilisateur)** → déployer → test en ligne.
+Le déploiement actuel suit le runbook versionné
+[`prisma/migrations/PROD_DEPLOY.md`](../../../prisma/migrations/PROD_DEPLOY.md) :
+validation Prisma, migrations immuables, tests, build, déploiement puis
+contrôles de production.

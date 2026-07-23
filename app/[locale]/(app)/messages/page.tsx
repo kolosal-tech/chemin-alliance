@@ -6,6 +6,8 @@ import { StageBadge } from "@/components/StageBadge";
 import { MemberAvatar } from "@/components/MemberAvatar";
 import { silenceDetected } from "@/lib/agents/exit-helper";
 import { unreadByMatch } from "@/lib/unread";
+import { unblockedMatchWhere } from "@/lib/blocks";
+import { pendingMatchDecisionsWhere } from "@/lib/alliance";
 
 export default async function MessagesListPage(props: {
   params: Promise<{ locale: string }>;
@@ -14,34 +16,63 @@ export default async function MessagesListPage(props: {
   setRequestLocale(params.locale);
   const t = await getTranslations();
   const user = await requirePageUser(params.locale);
-  // Trois lectures indépendantes (liste des matchs, compteur de non-lus,
-  // compteur de conversations closes) : en parallèle plutôt qu'en série.
-  const [matches, unread, closedCount] = await Promise.all([
-    prisma.match.findMany({
-      where: {
-        OR: [{ userAId: user.id }, { userBId: user.id }],
-        status: { not: "CLOSED" },
-      },
-      include: {
-        userA: { select: { id: true, displayName: true, photoBlurhash: true } },
-        userB: { select: { id: true, displayName: true, photoBlurhash: true } },
-        messages: {
-          where: { kind: "USER" },
-          orderBy: { createdAt: "desc" },
-          take: 6,
-          select: { senderId: true, createdAt: true },
+  // Les demandes PENDING ne chargent aucun contenu de conversation : elles ne
+  // servent qu'à proposer l'acceptation ou le refus au destinataire.
+  const [activeMatches, pendingMatches, unread, closedCount] =
+    await Promise.all([
+      prisma.match.findMany({
+        where: {
+          AND: [unblockedMatchWhere(user.id), { status: "ACTIVE" }],
         },
-      },
-      orderBy: { updatedAt: "desc" },
-    }),
-    unreadByMatch(user.id),
-    prisma.match.count({
-      where: {
-        OR: [{ userAId: user.id }, { userBId: user.id }],
-        status: "CLOSED",
-      },
-    }),
-  ]);
+        include: {
+          userA: {
+            select: { id: true, displayName: true, photoBlurhash: true },
+          },
+          userB: {
+            select: { id: true, displayName: true, photoBlurhash: true },
+          },
+          messages: {
+            where: { kind: "USER" },
+            orderBy: { createdAt: "desc" },
+            take: 6,
+            select: { senderId: true, createdAt: true },
+          },
+        },
+        orderBy: { updatedAt: "desc" },
+      }),
+      prisma.match.findMany({
+        where: pendingMatchDecisionsWhere(user.id),
+        select: {
+          id: true,
+          userAId: true,
+          userBId: true,
+          requestedById: true,
+          status: true,
+          updatedAt: true,
+          userA: {
+            select: { id: true, displayName: true, photoBlurhash: true },
+          },
+          userB: {
+            select: { id: true, displayName: true, photoBlurhash: true },
+          },
+        },
+        orderBy: { updatedAt: "desc" },
+      }),
+      unreadByMatch(user.id),
+      prisma.match.count({
+        where: {
+          AND: [unblockedMatchWhere(user.id), { status: "CLOSED" }],
+        },
+      }),
+    ]);
+  const matches = [
+    ...activeMatches,
+    ...pendingMatches.map((match) => ({
+      ...match,
+      stage: null,
+      messages: [],
+    })),
+  ].sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
 
   return (
     <main className="px-3 pt-6 safe-top lg:mx-auto lg:max-w-2xl">
@@ -93,7 +124,9 @@ export default async function MessagesListPage(props: {
                   {other.displayName}
                 </div>
                 <div className="mt-1 flex items-center gap-2">
-                  <StageBadge stage={m.stage} />
+                  {m.status === "ACTIVE" && m.stage && (
+                    <StageBadge stage={m.stage} />
+                  )}
                   {m.status === "PENDING" &&
                     m.requestedById &&
                     m.requestedById !== user.id && (

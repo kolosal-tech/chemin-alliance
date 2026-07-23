@@ -5,6 +5,8 @@
 import { PrismaClient } from "@prisma/client";
 import { hash } from "@node-rs/argon2";
 import { createCipheriv, randomBytes } from "node:crypto";
+import { SENSITIVE_DATA_CONSENT } from "../lib/sensitive-data-consent-scope";
+import { TERMS_OF_SERVICE_CONSENT } from "../lib/legal/consent-scope";
 
 const prisma = new PrismaClient();
 
@@ -73,8 +75,11 @@ async function main() {
         hasChildren: false,
         wantsChildren: true,
         acceptsChildren: true,
-        intentionStatement: "Un projet de vie clair : le mariage, sans précipitation.",
-        familyVisionEncrypted: enc("Des enfants élevés dans la foi, ouverts au monde."),
+        intentionStatement:
+          "Un projet de vie clair : le mariage, sans précipitation.",
+        familyVisionEncrypted: enc(
+          "Des enfants élevés dans la foi, ouverts au monde.",
+        ),
       },
     },
     {
@@ -98,7 +103,8 @@ async function main() {
         hasChildren: true,
         wantsChildren: false,
         acceptsChildren: true,
-        intentionStatement: "Recommencer avec pudeur, respect et accompagnement.",
+        intentionStatement:
+          "Recommencer avec pudeur, respect et accompagnement.",
         familyVisionEncrypted: enc(
           "Une famille recomposée dans la grâce, où chacun a sa place.",
         ),
@@ -116,7 +122,9 @@ async function main() {
         denomination: "Évangélique",
         ministry: "Accueil",
         engagementFrequency: "régulier",
-        localChurchEncrypted: enc("Église Protestante Évangélique de Marseille"),
+        localChurchEncrypted: enc(
+          "Église Protestante Évangélique de Marseille",
+        ),
         testimonyEncrypted: enc(
           "Divorcé, reconstruit dans la grâce. Je crois aux secondes chances vécues dans la vérité.",
         ),
@@ -126,8 +134,11 @@ async function main() {
         hasChildren: false,
         wantsChildren: true,
         acceptsChildren: true,
-        intentionStatement: "Discerner avec vérité, accompagnement et responsabilité.",
-        familyVisionEncrypted: enc("Un foyer simple, honnête, tourné vers les autres."),
+        intentionStatement:
+          "Discerner avec vérité, accompagnement et responsabilité.",
+        familyVisionEncrypted: enc(
+          "Un foyer simple, honnête, tourné vers les autres.",
+        ),
       },
     },
     {
@@ -192,7 +203,10 @@ async function main() {
     const { faith, rel, rulesetId, ...base } = u;
     const user = await prisma.user.upsert({
       where: { email: base.email },
-      update: {},
+      // Le seed est un outil de développement reproductible : une relance
+      // doit restaurer le mot de passe documenté et la vérification des comptes
+      // de démonstration, sans réactiver un compte soft-supprimé.
+      update: { passwordHash: password, isVerified: true },
       create: {
         ...base,
         passwordHash: password,
@@ -204,21 +218,18 @@ async function main() {
         privacySettings: { create: {} },
         consents: {
           createMany: {
-            data: [
-              { type: "SENSITIVE_DATA_PROCESSING" },
-              { type: "TERMS_OF_SERVICE" },
-            ],
+            data: [SENSITIVE_DATA_CONSENT, TERMS_OF_SERVICE_CONSENT],
           },
         },
       },
     });
-    created[user.displayName] = user.id;
+    created[base.displayName] = user.id;
   }
 
   // Admin (modération)
   await prisma.user.upsert({
     where: { email: "admin@chemin-alliance.app" },
-    update: {},
+    update: { passwordHash: password, isVerified: true },
     create: {
       email: "admin@chemin-alliance.app",
       passwordHash: password,
@@ -287,10 +298,26 @@ async function main() {
   });
   // Réponses Dialogue (pour remplir minimum_dialogue_completed)
   const dialogueAnswers = [
-    { user: created["Élodie"], q: "dial_church", a: "Mon église est ma seconde famille ; j'y sers chaque semaine." },
-    { user: created["Élodie"], q: "dial_children", a: "L'exemple d'abord, la parole ensuite." },
-    { user: created["Jonathan"], q: "dial_church", a: "Engagé dans l'enseignement des jeunes depuis 8 ans." },
-    { user: created["Jonathan"], q: "dial_finances", a: "Budget commun, transparence totale, dîme assumée." },
+    {
+      user: created["Élodie"],
+      q: "dial_church",
+      a: "Mon église est ma seconde famille ; j'y sers chaque semaine.",
+    },
+    {
+      user: created["Élodie"],
+      q: "dial_children",
+      a: "L'exemple d'abord, la parole ensuite.",
+    },
+    {
+      user: created["Jonathan"],
+      q: "dial_church",
+      a: "Engagé dans l'enseignement des jeunes depuis 8 ans.",
+    },
+    {
+      user: created["Jonathan"],
+      q: "dial_finances",
+      a: "Budget commun, transparence totale, dîme assumée.",
+    },
   ];
   for (const d of dialogueAnswers) {
     await prisma.allianceAnswer.upsert({
@@ -307,7 +334,8 @@ async function main() {
         userId: d.user,
         stage: "DIALOGUE",
         questionId: d.q,
-        answer: d.a,
+        answerEncrypted: enc(d.a),
+        answerLegacy: "",
       },
     });
   }
@@ -343,7 +371,11 @@ async function main() {
     {
       displayName: "Daniel Mercier",
       certified: true,
-      specialties: ["Préparation au mariage", "Familles recomposées", "Accompagnement parental"],
+      specialties: [
+        "Préparation au mariage",
+        "Familles recomposées",
+        "Accompagnement parental",
+      ],
       affiliation: "Église Réformée de Lyon · accompagnement pastoral",
       bio: "Vingt ans d'accompagnement de couples, avec un cœur pour les familles recomposées.",
       pricePerSessionEUR: 70,
@@ -378,7 +410,11 @@ async function main() {
     if (!exists) await prisma.coach.create({ data: c });
   }
 
-  console.log("Seed terminé :", Object.keys(created).join(", "), "+ admin + 3 coachs");
+  console.log(
+    "Seed terminé :",
+    Object.keys(created).join(", "),
+    "+ admin + 3 coachs",
+  );
 }
 
 main()

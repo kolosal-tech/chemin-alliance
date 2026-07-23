@@ -12,12 +12,14 @@ export function StageActions({
   matchId,
   questions,
   contactExchange,
+  contactExchangeCanRespond,
   stage,
   otherName,
 }: {
   matchId: string;
   questions: Question[];
   contactExchange: ContactExchangeStatus;
+  contactExchangeCanRespond: boolean;
   stage: AllianceStage;
   otherName: string;
 }) {
@@ -37,6 +39,9 @@ export function StageActions({
   const [exitReason, setExitReason] = useState("no_alignment");
   const [draftBusy, setDraftBusy] = useState(false);
   const [ce, setCe] = useState(contactExchange);
+  const [canRespondContact, setCanRespondContact] = useState(
+    contactExchangeCanRespond,
+  );
 
   async function saveAnswer(qid: string) {
     const res = await fetch(`/api/matches/${matchId}/alliance-path/answer`, {
@@ -75,10 +80,28 @@ export function StageActions({
     const data = await res.json();
     if (data.allowed) {
       setCe("REQUESTED");
+      setCanRespondContact(false);
       setNotice(t("contactRequested", { name: otherName }));
     } else {
-      setNotice(data.userMessage);
+      setNotice(data.userMessage ?? tc("error"));
     }
+  }
+
+  async function respondContact(accept: boolean) {
+    const res = await fetch(`/api/matches/${matchId}/contact-exchange`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ accept }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      setNotice(data.userMessage ?? tc("error"));
+      return;
+    }
+    setCanRespondContact(false);
+    setCe(data.status);
+    setNotice(accept ? t("contactAccepted") : t("contactDeclined"));
+    router.refresh();
   }
 
   async function closeElegantly() {
@@ -210,13 +233,38 @@ export function StageActions({
       )}
 
       <div className="mt-4 flex flex-col gap-2.5">
-        {stage === "DISCERNMENT" && ce === "NOT_ALLOWED" && (
-          <AsyncButton
-            onClick={requestContact}
-            className="rounded-btnsm border border-gold bg-surface py-3 text-sm font-semibold text-gold-ink dark:border-gold-light/60 dark:bg-anthracite-800 dark:text-gold-light"
-          >
-            {t("contactRequest")}
-          </AsyncButton>
+        {stage === "DISCERNMENT" &&
+          (ce === "NOT_ALLOWED" ||
+            ce === "AVAILABLE" ||
+            ce === "DECLINED" ||
+            ce === "REVOKED") && (
+            <AsyncButton
+              onClick={requestContact}
+              className="rounded-btnsm border border-gold bg-surface py-3 text-sm font-semibold text-gold-ink dark:border-gold-light/60 dark:bg-anthracite-800 dark:text-gold-light"
+            >
+              {t("contactRequest")}
+            </AsyncButton>
+          )}
+        {ce === "REQUESTED" && canRespondContact && (
+          <div className="grid grid-cols-2 gap-2">
+            <AsyncButton
+              onClick={() => respondContact(false)}
+              className="rounded-btnsm border border-sand-400 bg-surface py-3 text-sm font-semibold text-warmgray dark:border-anthracite-500 dark:bg-anthracite-800 dark:text-[#CFCAC0]"
+            >
+              {t("contactDecline")}
+            </AsyncButton>
+            <AsyncButton
+              onClick={() => respondContact(true)}
+              className="rounded-btnsm bg-navy py-3 text-sm font-semibold text-[#F4F1EA] dark:bg-gold-light dark:text-anthracite-900"
+            >
+              {t("contactAccept")}
+            </AsyncButton>
+          </div>
+        )}
+        {ce === "REQUESTED" && !canRespondContact && (
+          <p className="rounded-btn bg-[#EAEDF2] px-3.5 py-2.5 text-[16px] text-[#2A3550] dark:bg-[#1A2233] dark:text-[#B9C6E0]">
+            {t("contactRequested", { name: otherName })}
+          </p>
         )}
         {ce === "ACCEPTED" && (
           <p className="rounded-btn bg-[#EAF0EB] px-3.5 py-2.5 text-[16px] text-[#2E5440] dark:bg-[#1B2A20] dark:text-[#9FC7AC]">
@@ -252,7 +300,7 @@ export function StageActions({
           <button
             type="button"
             onClick={() => setExitOpen(true)}
-            className="flex items-center gap-1.5 text-[16px] text-sand-500 dark:text-[#7E7A72]"
+            className="flex items-center gap-1.5 text-[16px] text-sand-500 dark:text-[#8F8A80]"
           >
             <svg
               width="14"

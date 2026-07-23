@@ -10,6 +10,10 @@ type PurgePlan = {
   tokenBefore: Date;
   /** Supprimer les compteurs Coach IA antérieurs à cette date (~90 j). */
   aiCoachBefore: Date;
+  /** Supprimer les baux techniques Coach IA déjà expirés. */
+  aiCoachTransferBefore: Date;
+  /** Supprimer les signalements ayant atteint la rétention annoncée (12 mois). */
+  reportBefore: Date;
 };
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -20,6 +24,8 @@ export function buildPurgePlan(now: Date): PurgePlan {
     phoneBefore: now,
     tokenBefore: now,
     aiCoachBefore: new Date(now.getTime() - 90 * DAY_MS),
+    aiCoachTransferBefore: now,
+    reportBefore: new Date(now.getTime() - 365 * DAY_MS),
   };
 }
 

@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { matchScore } from "@/lib/matching";
+import {
+  activeMatchGrantsProfileVisibility,
+  matchRequestRejection,
+  matchScore,
+} from "@/lib/matching";
+import { buildMatchProfileView } from "@/lib/match-profile";
 
 // Epoch fixe -> activityScore déterministe (pas de dépendance à l'horloge).
 const NOW = 1_700_000_000_000;
@@ -56,6 +61,184 @@ const STRONG = {
   city: "Ouagadougou",
   country: "BF",
 };
+
+function requestUser(
+  over: Partial<Parameters<typeof matchRequestRejection>[0]> = {},
+): NonNullable<Parameters<typeof matchRequestRejection>[0]> {
+  return {
+    id: "user",
+    deletedAt: null,
+    season: "JOURNEY",
+    isVerified: true,
+    gender: "M",
+    photoUrl: "/portrait.jpg",
+    onboardingDoneAt: new Date(),
+    cityApprox: "Ouagadougou",
+    faithProfile: {
+      denomination: "Baptiste",
+      engagementFrequency: "weekly",
+    },
+    relationshipProfile: {
+      intentionStatement: "Fonder un foyer chrétien",
+      wantsChildren: true,
+      interests: "Lecture",
+      personality: "Calme",
+      aspirations: "Servir",
+    },
+    privacySettings: {
+      antiMalaiseEnabled: false,
+      invisibleMode: false,
+    },
+    ...over,
+  };
+}
+
+describe("demande directe - garde d'éligibilité", () => {
+  it.each([
+    ["supprimée", { deletedAt: new Date() }],
+    ["non vérifiée", { isVerified: false }],
+    ["hors JOURNEY", { season: "ENGAGED" as const }],
+    ["sans ville", { cityApprox: null }],
+    ["sans intention", { relationshipProfile: null }],
+  ])("rejette une cible %s", (_label, targetOverride) => {
+    expect(
+      matchRequestRejection(
+        requestUser({ id: "actor" }),
+        requestUser({ id: "target", gender: "F", ...targetOverride }),
+        { hasBlock: false, hasActiveReport: false },
+      ),
+    ).toBe("TARGET_NOT_ELIGIBLE");
+  });
+
+  it("rejette une cible en mode invisible sans révéler la raison", () => {
+    const actor = requestUser({ id: "actor" });
+    const target = requestUser({
+      id: "target",
+      gender: "F",
+      privacySettings: {
+        antiMalaiseEnabled: false,
+        invisibleMode: true,
+      },
+    });
+
+    expect(
+      matchRequestRejection(actor, target, {
+        hasBlock: false,
+        hasActiveReport: false,
+      }),
+    ).toBe("TARGET_NOT_ELIGIBLE");
+  });
+
+  it("rejette un blocage dans l'un ou l'autre sens", () => {
+    expect(
+      matchRequestRejection(
+        requestUser({ id: "actor" }),
+        requestUser({ id: "target", gender: "F" }),
+        { hasBlock: true, hasActiveReport: false },
+      ),
+    ).toBe("TARGET_NOT_ELIGIBLE");
+  });
+
+  it("rejette un signalement actif pertinent pour la paire", () => {
+    expect(
+      matchRequestRejection(
+        requestUser({ id: "actor" }),
+        requestUser({ id: "target", gender: "F" }),
+        { hasBlock: false, hasActiveReport: true },
+      ),
+    ).toBe("TARGET_NOT_ELIGIBLE");
+  });
+
+  it("applique l'anti-malaise dès que l'un des deux l'active", () => {
+    expect(
+      matchRequestRejection(
+        requestUser({
+          id: "actor",
+          privacySettings: {
+            antiMalaiseEnabled: true,
+            invisibleMode: false,
+          },
+        }),
+        requestUser({ id: "target", gender: "F" }),
+        { hasBlock: false, hasActiveReport: false },
+      ),
+    ).toBe("TARGET_NOT_ELIGIBLE");
+  });
+
+  it("rejette également un auteur inéligible", () => {
+    expect(
+      matchRequestRejection(
+        requestUser({ id: "actor", isVerified: false }),
+        requestUser({ id: "target", gender: "F" }),
+        { hasBlock: false, hasActiveReport: false },
+      ),
+    ).toBe("ACTOR_NOT_ELIGIBLE");
+  });
+
+  it("rejette le contournement du filtre de genre et d'un profil déjà passé", () => {
+    const actor = requestUser({ id: "actor", gender: "M" });
+    const sameGenderTarget = requestUser({ id: "target", gender: "M" });
+    const oppositeGenderTarget = requestUser({ id: "target", gender: "F" });
+
+    expect(
+      matchRequestRejection(actor, sameGenderTarget, {
+        hasBlock: false,
+        hasActiveReport: false,
+      }),
+    ).toBe("TARGET_NOT_ELIGIBLE");
+    expect(
+      matchRequestRejection(actor, oppositeGenderTarget, {
+        hasBlock: false,
+        hasActiveReport: false,
+        actorPassedTarget: true,
+      }),
+    ).toBe("TARGET_NOT_ELIGIBLE");
+  });
+
+  it("respecte aussi le gate de profil fort lorsqu'il est activé", () => {
+    expect(
+      matchRequestRejection(
+        requestUser({ id: "actor" }),
+        requestUser({ id: "target", gender: "F" }),
+        {
+          hasBlock: false,
+          hasActiveReport: false,
+          actorProfileGateBlocked: true,
+        },
+      ),
+    ).toBe("ACTOR_NOT_ELIGIBLE");
+  });
+
+  it("n'ouvre AFTER_MATCH que pour un Match ACTIVE, jamais PENDING", () => {
+    expect(activeMatchGrantsProfileVisibility("PENDING")).toBe(false);
+    expect(activeMatchGrantsProfileVisibility("ACTIVE")).toBe(true);
+    expect(activeMatchGrantsProfileVisibility("CLOSED")).toBe(false);
+
+    const pendingFields = buildMatchProfileView(
+      {
+        faith: null,
+        relationship: {
+          intentionStatement: "Fonder un foyer chrétien",
+          intentionVisibility: "PUBLIC_CONTROLLED",
+          hasChildren: false,
+          childrenVisibility: "AFTER_MATCH",
+          familyVisionEncrypted: null,
+          familyVisionVisibility: "AFTER_DIALOGUE",
+          interests: null,
+          personality: null,
+          aspirations: null,
+        },
+      },
+      {
+        matched: activeMatchGrantsProfileVisibility("PENDING"),
+        stage: "DISCOVERY",
+      },
+    );
+    expect(
+      pendingFields.find((field) => field.key === "children")?.visible,
+    ).toBe(false);
+  });
+});
 
 describe("matchScore - score d'affinité pondéré 0..100", () => {
   it("deux profils fortement alignés et actifs atteignent 100", () => {

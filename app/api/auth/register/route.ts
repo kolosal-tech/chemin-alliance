@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import { randomBytes } from "node:crypto";
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import {
@@ -12,6 +13,8 @@ import { hashPassword } from "@/lib/security/password";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import { sendVerificationEmail } from "@/lib/email";
 import { EMAIL_VERIFY_TTL_MS } from "@/lib/auth/email-verification";
+import { SENSITIVE_DATA_CONSENT } from "@/lib/sensitive-data-consent-scope";
+import { TERMS_OF_SERVICE_CONSENT } from "@/lib/legal/consent-scope";
 
 const schema = z.object({
   email: z.string().email().toLowerCase(),
@@ -46,12 +49,9 @@ export const POST = withErrors(async (req: Request) => {
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
   const body = schema.parse(await readJsonLimited(req));
-
-  const existing = await prisma.user.findUnique({
-    where: { email: body.email },
-  });
-  if (existing) return jsonError(409, "EMAIL_TAKEN");
-
+  // Travail coûteux exécuté dans les deux cas (adresse nouvelle ou existante)
+  // afin de ne pas créer un oracle temporel trivial sur Argon2.
+  const passwordHash = await hashPassword(body.password);
   const token = randomBytes(32).toString("hex");
   const rulesetId =
     body.vertical === "CHRISTIAN_CATHOLIC"
@@ -72,43 +72,67 @@ export const POST = withErrors(async (req: Request) => {
         ? "engaged"
         : "single";
 
-  const user = await prisma.user.create({
-    data: {
-      email: body.email,
-      passwordHash: await hashPassword(body.password),
-      displayName: body.displayName,
-      age: body.age,
-      gender: body.gender,
-      country: body.country,
-      locale: body.locale,
-      rulesetId,
-      season,
-      emailVerifyToken: token,
-      // Le lien d'inscription expire après EMAIL_VERIFY_TTL_MS (7 j). 24 h était
-      // trop court quand l'email tombait en spam. verify-email vérifie cette
-      // date (null-safe).
-      emailVerifyExpires: new Date(Date.now() + EMAIL_VERIFY_TTL_MS),
-      faithProfile: { create: { vertical: body.vertical } },
-      relationshipProfile: {
-        create: { maritalStatus },
-      },
-      privacySettings: { create: {} },
-      consents: {
-        createMany: {
-          data: [
-            { type: "SENSITIVE_DATA_PROCESSING" },
-            { type: "TERMS_OF_SERVICE" },
-          ],
+  let user: { email: string } | null = null;
+  try {
+    user = await prisma.user.create({
+      data: {
+        email: body.email,
+        passwordHash,
+        displayName: body.displayName,
+        age: body.age,
+        gender: body.gender,
+        country: body.country,
+        locale: body.locale,
+        rulesetId,
+        season,
+        emailVerifyToken: token,
+        // Le lien d'inscription expire après EMAIL_VERIFY_TTL_MS (7 j). 24 h
+        // était trop court quand l'email tombait en spam.
+        emailVerifyExpires: new Date(Date.now() + EMAIL_VERIFY_TTL_MS),
+        faithProfile: { create: { vertical: body.vertical } },
+        relationshipProfile: {
+          create: { maritalStatus },
+        },
+        privacySettings: { create: {} },
+        consents: {
+          createMany: {
+            data: [SENSITIVE_DATA_CONSENT, TERMS_OF_SERVICE_CONSENT],
+          },
         },
       },
-    },
-    select: { id: true, email: true },
-  });
+      select: { email: true },
+    });
+  } catch (error) {
+    if (
+      !(
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      )
+    ) {
+      throw error;
+    }
+    // Même statut et même corps qu'une création réussie : ni l'adresse
+    // existante ni une course concurrente ne deviennent énumérables.
+  }
 
-  // Non bloquant : la latence du fournisseur email ne doit pas retarder la
-  // réponse 201. Rien après ne dépend du résultat de l'envoi.
-  void sendVerificationEmail(user.email, token, body.locale).catch((err) =>
-    console.error("[register] verification email", err),
-  );
-  return NextResponse.json({ ok: true, userId: user.id }, { status: 201 });
+  // Toujours planifié, même si l'adresse existe : le chemin synchrone et le
+  // coût d'ordonnancement restent identiques. Aucun email n'est envoyé dans ce
+  // cas, afin de ne pas permettre à un tiers de déclencher du spam.
+  after(async () => {
+    if (user) {
+      try {
+        const delivered = await sendVerificationEmail(
+          user.email,
+          token,
+          body.locale,
+        );
+        if (!delivered) {
+          console.error("[register] envoi de vérification refusé");
+        }
+      } catch {
+        console.error("[register] envoi de vérification échoué");
+      }
+    }
+  });
+  return NextResponse.json({ ok: true }, { status: 201 });
 });

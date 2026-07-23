@@ -3,8 +3,52 @@ import type { Locale } from "@/lib/core-engine";
 
 /**
  * Email transactionnel via Resend (domaine vérifié kolosaltech.com).
- * Sans RESEND_API_KEY : le lien est loggé côté serveur (mode dev).
+ * Sans RESEND_API_KEY : les aperçus contenant un secret ne sont journalisés
+ * qu'en développement local explicite, jamais en test ni en production.
  */
+function escapeHtml(value: string): string {
+  return value.replace(
+    /[&<>"']/g,
+    (character) =>
+      (
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        }) as const
+      )[character as "&" | "<" | ">" | '"' | "'"],
+  );
+}
+
+function safeAppLinkAttribute(link: string): string {
+  try {
+    const candidate = new URL(link);
+    const app = new URL(env.APP_URL);
+    if (
+      (candidate.protocol === "https:" || candidate.protocol === "http:") &&
+      candidate.origin === app.origin
+    ) {
+      return escapeHtml(candidate.toString());
+    }
+  } catch {
+    // URL invalide : lien neutralisé ci-dessous.
+  }
+  return escapeHtml(env.APP_URL);
+}
+
+function safeSubject(subject: string): string {
+  return subject
+    .replace(/[\r\n]+/g, " ")
+    .trim()
+    .slice(0, 200);
+}
+
+function developmentPreview(message: string): void {
+  if (env.NODE_ENV === "development") console.info(message);
+}
+
 const SUBJECTS: Record<Locale, string> = {
   fr: "Vérifie ton adresse - Chemin d'Alliance",
   en: "Verify your address - Chemin d'Alliance",
@@ -53,7 +97,7 @@ function verificationHtml(link: string, locale: Locale): string {
     <div style="background:#131D33;border-radius:18px;padding:36px 32px;margin-top:18px;">
       <h1 style="font-weight:400;font-size:28px;line-height:1.2;color:#F4F1EA;margin:0;">${t.title}</h1>
       <p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#A6AEC0;margin:18px 0 28px;">${t.body}</p>
-      <a href="${link}" style="display:inline-block;background:#C9A84C;color:#131D33;font-family:Helvetica,Arial,sans-serif;font-weight:600;font-size:15px;padding:14px 28px;border-radius:12px;text-decoration:none;">${t.cta}</a>
+      <a href="${safeAppLinkAttribute(link)}" style="display:inline-block;background:#C9A84C;color:#131D33;font-family:Helvetica,Arial,sans-serif;font-weight:600;font-size:15px;padding:14px 28px;border-radius:12px;text-decoration:none;">${t.cta}</a>
     </div>
     <p style="font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#8B8579;margin-top:18px;">${t.ignore}</p>
   </div></body></html>`;
@@ -78,31 +122,40 @@ function htmlToText(html: string): string {
 }
 
 async function sendViaResend(to: string, subject: string, html: string) {
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      authorization: `Bearer ${env.RESEND_API_KEY}`,
-    },
-    body: JSON.stringify({
-      from: env.EMAIL_FROM,
-      to: [to],
-      subject,
-      html,
-      // Levier delivrabilite #1 : une partie texte (multipart) reduit le score
-      // spam Gmail. reply_to + List-Unsubscribe (mailto, un-clic) sont des
-      // signaux positifs supplementaires. SPF/DKIM/DMARC restent cote DNS.
-      text: htmlToText(html),
-      reply_to: env.EMAIL_FROM,
+  let res: Response;
+  try {
+    res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
       headers: {
-        "List-Unsubscribe": `<mailto:${FROM_ADDRESS}?subject=unsubscribe>`,
-        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+        "content-type": "application/json",
+        authorization: `Bearer ${env.RESEND_API_KEY}`,
       },
-    }),
-  });
+      body: JSON.stringify({
+        from: env.EMAIL_FROM,
+        to: [to],
+        subject: safeSubject(subject),
+        html,
+        // Levier delivrabilite #1 : une partie texte (multipart) reduit le score
+        // spam Gmail. reply_to + List-Unsubscribe (mailto, un-clic) sont des
+        // signaux positifs supplementaires. SPF/DKIM/DMARC restent cote DNS.
+        text: htmlToText(html),
+        reply_to: env.EMAIL_FROM,
+        headers: {
+          "List-Unsubscribe": `<mailto:${FROM_ADDRESS}?subject=unsubscribe>`,
+          "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+        },
+      }),
+    });
+  } catch {
+    // Ne pas propager/journaliser l'erreur brute : certains clients HTTP
+    // incluent requête ou corps dans leur message, donc potentiellement le lien.
+    console.error("[email] Resend transport indisponible");
+    return false;
+  }
   if (!res.ok) {
-    const detail = await res.text().catch(() => "");
-    console.error(`[email] Resend ${res.status}: ${detail.slice(0, 200)}`);
+    // Le corps fournisseur peut refléter le HTML et donc un jeton à usage
+    // unique. Le statut suffit pour l'observabilité sans fuite de secret.
+    console.error(`[email] Resend a refusé la requête (${res.status})`);
   }
   return res.ok;
 }
@@ -111,20 +164,23 @@ export async function sendVerificationEmail(
   email: string,
   token: string,
   locale: Locale = "fr",
-) {
+): Promise<boolean> {
   // Segment de chemin (pas `?token=`) : le `=` est corrompu par l'encodage
   // quoted-printable des emails (`=11` -> octet 0x11), ce qui cassait le lien.
-  const link = `${env.APP_URL}/api/auth/verify-email/${token}`;
+  const link = `${env.APP_URL}/api/auth/verify-email/${encodeURIComponent(token)}`;
   if (env.RESEND_API_KEY) {
     const ok = await sendViaResend(
       email,
       SUBJECTS[locale] ?? SUBJECTS.fr,
       verificationHtml(link, locale),
     );
-    if (ok) return;
+    if (ok) return true;
     // panne fournisseur -> trace serveur, l'inscription n'échoue jamais pour ça
   }
-  console.info(`\n[email] Lien de vérification pour ${email} :\n${link}\n`);
+  developmentPreview(
+    `\n[email:dev] Lien de vérification pour ${email} :\n${link}\n`,
+  );
+  return env.NODE_ENV === "development";
 }
 
 // --- Invitation à rejoindre l'espace couple (code partagé au conjoint/fiancé·e) ---
@@ -196,18 +252,19 @@ function inviteHtml(
   locale: Locale,
 ): string {
   const t = INVITE_BODIES[locale] ?? INVITE_BODIES.fr;
+  const title = escapeHtml(t.title(name));
   return `<!doctype html><html><body style="margin:0;background:#F7F5F0;font-family:Georgia,serif;">
   <div style="max-width:520px;margin:0 auto;padding:40px 24px;">
     <div style="font-family:monospace;font-size:11px;letter-spacing:.16em;color:#9A7B2E;text-transform:uppercase;">
       &mdash;&mdash; Chemin d'Alliance
     </div>
     <div style="background:#131D33;border-radius:18px;padding:36px 32px;margin-top:18px;">
-      <h1 style="font-weight:400;font-size:26px;line-height:1.25;color:#F4F1EA;margin:0;">${t.title(name)}</h1>
+      <h1 style="font-weight:400;font-size:26px;line-height:1.25;color:#F4F1EA;margin:0;">${title}</h1>
       <p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#A6AEC0;margin:18px 0 24px;">${t.intro}</p>
       <div style="font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#C9A84C;margin-bottom:8px;">${t.codeLabel}</div>
-      <div style="font-family:monospace;font-size:24px;letter-spacing:.18em;color:#F4F1EA;background:#0C1424;border:1px solid #2A3550;border-radius:12px;padding:16px 20px;text-align:center;">${code}</div>
+      <div style="font-family:monospace;font-size:24px;letter-spacing:.18em;color:#F4F1EA;background:#0C1424;border:1px solid #2A3550;border-radius:12px;padding:16px 20px;text-align:center;">${escapeHtml(code)}</div>
       <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.6;color:#A6AEC0;margin:24px 0 28px;">${t.steps}</p>
-      <a href="${link}" style="display:inline-block;background:#C9A84C;color:#131D33;font-family:Helvetica,Arial,sans-serif;font-weight:600;font-size:15px;padding:14px 28px;border-radius:12px;text-decoration:none;">${t.cta}</a>
+      <a href="${safeAppLinkAttribute(link)}" style="display:inline-block;background:#C9A84C;color:#131D33;font-family:Helvetica,Arial,sans-serif;font-weight:600;font-size:15px;padding:14px 28px;border-radius:12px;text-decoration:none;">${t.cta}</a>
     </div>
     <p style="font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#8B8579;margin-top:18px;">${t.ignore}</p>
   </div></body></html>`;
@@ -215,8 +272,9 @@ function inviteHtml(
 
 /**
  * Envoie le code d'invitation de l'espace couple à l'email du conjoint/fiancé·e.
- * Renvoie true si l'email part (Resend), false sinon (l'appelant peut alors
- * inviter l'utilisateur à copier le code manuellement).
+ * Renvoie true si l'email part (Resend), false sinon. Le code n'est jamais
+ * journalisé : même le mode développement doit conserver les secrets d'accès
+ * hors des logs.
  */
 export async function sendCoupleInviteEmail(
   to: string,
@@ -236,7 +294,9 @@ export async function sendCoupleInviteEmail(
     );
     if (ok) return true;
   }
-  console.info(`\n[email] Invitation couple pour ${to} (code ${code})\n`);
+  developmentPreview(
+    `\n[email:dev] Invitation couple non envoyée pour ${to}\n`,
+  );
   return false;
 }
 
@@ -293,7 +353,7 @@ function resetHtml(link: string, locale: Locale): string {
     <div style="background:#131D33;border-radius:18px;padding:36px 32px;margin-top:18px;">
       <h1 style="font-weight:400;font-size:28px;line-height:1.2;color:#F4F1EA;margin:0;">${t.title}</h1>
       <p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#A6AEC0;margin:18px 0 28px;">${t.body}</p>
-      <a href="${link}" style="display:inline-block;background:#C9A84C;color:#131D33;font-family:Helvetica,Arial,sans-serif;font-weight:600;font-size:15px;padding:14px 28px;border-radius:12px;text-decoration:none;">${t.cta}</a>
+      <a href="${safeAppLinkAttribute(link)}" style="display:inline-block;background:#C9A84C;color:#131D33;font-family:Helvetica,Arial,sans-serif;font-weight:600;font-size:15px;padding:14px 28px;border-radius:12px;text-decoration:none;">${t.cta}</a>
     </div>
     <p style="font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#8B8579;margin-top:18px;">${t.ignore}</p>
   </div></body></html>`;
@@ -310,7 +370,7 @@ export async function sendPasswordResetEmail(
   locale: Locale = "fr",
 ) {
   // Segment de chemin (pas `?token=`) : même corruption quoted-printable du `=`.
-  const link = `${env.APP_URL}/${locale}/reset-password/${token}`;
+  const link = `${env.APP_URL}/${locale}/reset-password/${encodeURIComponent(token)}`;
   if (env.RESEND_API_KEY) {
     const ok = await sendViaResend(
       email,
@@ -319,7 +379,9 @@ export async function sendPasswordResetEmail(
     );
     if (ok) return;
   }
-  console.info(`\n[email] Lien de réinitialisation pour ${email} :\n${link}\n`);
+  developmentPreview(
+    `\n[email:dev] Lien de réinitialisation pour ${email} :\n${link}\n`,
+  );
 }
 
 // --- Demande de bénédiction au Parrain / Marraine (lien magique) ---
@@ -378,8 +440,8 @@ function blessingHtml(
   locale: Locale,
 ): string {
   const t = BLESSING_BODIES[locale] ?? BLESSING_BODIES.fr;
-  const title = (BLESSING_SUBJECTS[locale] ?? BLESSING_SUBJECTS.fr)(
-    filleulName,
+  const title = escapeHtml(
+    (BLESSING_SUBJECTS[locale] ?? BLESSING_SUBJECTS.fr)(filleulName),
   );
   return `<!doctype html><html><body style="margin:0;background:#F7F5F0;font-family:Georgia,serif;">
   <div style="max-width:520px;margin:0 auto;padding:40px 24px;">
@@ -387,10 +449,10 @@ function blessingHtml(
       &mdash;&mdash; Chemin d'Alliance
     </div>
     <div style="background:#131D33;border-radius:18px;padding:36px 32px;margin-top:18px;">
-      <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#C9A84C;margin:0 0 10px;">${t.greeting(sponsorName)}</p>
+      <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;color:#C9A84C;margin:0 0 10px;">${escapeHtml(t.greeting(sponsorName))}</p>
       <h1 style="font-weight:400;font-size:26px;line-height:1.2;color:#F4F1EA;margin:0;">${title}</h1>
       <p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#A6AEC0;margin:18px 0 28px;">${t.intro}</p>
-      <a href="${link}" style="display:inline-block;background:#C9A84C;color:#131D33;font-family:Helvetica,Arial,sans-serif;font-weight:600;font-size:15px;padding:14px 28px;border-radius:12px;text-decoration:none;">${t.cta}</a>
+      <a href="${safeAppLinkAttribute(link)}" style="display:inline-block;background:#C9A84C;color:#131D33;font-family:Helvetica,Arial,sans-serif;font-weight:600;font-size:15px;padding:14px 28px;border-radius:12px;text-decoration:none;">${t.cta}</a>
     </div>
     <p style="font-family:Helvetica,Arial,sans-serif;font-size:12px;color:#8B8579;margin-top:18px;">${t.ignore}</p>
   </div></body></html>`;
@@ -441,7 +503,7 @@ function matchAcceptedHtml(
   locale: Locale,
 ): string {
   const t = MATCH_ACCEPTED_BODIES[locale] ?? MATCH_ACCEPTED_BODIES.fr;
-  const link = `${env.APP_URL}/${locale}/messages/${matchId}`;
+  const link = `${env.APP_URL}/${locale}/messages/${encodeURIComponent(matchId)}`;
   return `<!doctype html><html><body style="margin:0;background:#F7F5F0;font-family:Georgia,serif;">
   <div style="max-width:520px;margin:0 auto;padding:40px 24px;">
     <div style="font-family:monospace;font-size:11px;letter-spacing:.16em;color:#9A7B2E;text-transform:uppercase;">
@@ -449,8 +511,8 @@ function matchAcceptedHtml(
     </div>
     <div style="background:#131D33;border-radius:18px;padding:36px 32px;margin-top:18px;">
       <h1 style="font-weight:400;font-size:28px;line-height:1.2;color:#F4F1EA;margin:0;">${t.title}</h1>
-      <p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#A6AEC0;margin:18px 0 28px;">${t.body(acceptorName)}</p>
-      <a href="${link}" style="display:inline-block;background:#C9A84C;color:#131D33;font-family:Helvetica,Arial,sans-serif;font-weight:600;font-size:15px;padding:14px 28px;border-radius:12px;text-decoration:none;">${t.cta}</a>
+      <p style="font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#A6AEC0;margin:18px 0 28px;">${escapeHtml(t.body(acceptorName))}</p>
+      <a href="${safeAppLinkAttribute(link)}" style="display:inline-block;background:#C9A84C;color:#131D33;font-family:Helvetica,Arial,sans-serif;font-weight:600;font-size:15px;padding:14px 28px;border-radius:12px;text-decoration:none;">${t.cta}</a>
     </div>
   </div></body></html>`;
 }
@@ -473,8 +535,8 @@ export async function sendMatchAcceptedEmail(
     );
     if (ok) return;
   }
-  console.info(
-    `\n[email] Match accepté pour ${to} (accepteur ${acceptorName}, matchId ${matchId})\n`,
+  developmentPreview(
+    `\n[email:dev] Match accepté pour ${to} (accepteur ${acceptorName}, matchId ${matchId})\n`,
   );
 }
 
@@ -497,8 +559,8 @@ export async function sendBlessingRequestEmail(
     );
     if (ok) return true;
   }
-  console.info(
-    `\n[email] Demande de bénédiction pour ${to} (filleul·e ${filleulName}) :\n${link}\n`,
+  developmentPreview(
+    `\n[email:dev] Demande de bénédiction pour ${to} (filleul·e ${filleulName}) :\n${link}\n`,
   );
   return false;
 }

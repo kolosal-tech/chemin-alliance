@@ -94,16 +94,15 @@ export async function createMomoCheckout(
       },
       body: JSON.stringify(payload),
     });
-  } catch (err) {
-    console.error("[flutterwave] réseau échoué", err);
+  } catch {
+    // Ne jamais journaliser l'erreur brute : un client HTTP peut y attacher le
+    // payload (email, userId, référence de transaction).
+    console.error("[flutterwave] transport indisponible");
     throw Object.assign(new Error("FLUTTERWAVE_ERROR"), { status: 502 });
   }
   if (!res.ok) {
-    console.error(
-      "[flutterwave] paiement refusé",
-      res.status,
-      await res.text().catch(() => ""),
-    );
+    // Le corps fournisseur peut refléter les données client. Le statut suffit.
+    console.error(`[flutterwave] paiement refusé (${res.status})`);
     throw Object.assign(new Error("FLUTTERWAVE_ERROR"), { status: 502 });
   }
   const json = (await res.json()) as { data?: { link?: string } };

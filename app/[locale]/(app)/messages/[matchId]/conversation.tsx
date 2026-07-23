@@ -40,13 +40,14 @@ export function Conversation({
   other,
   isCompanion,
   currentUserId,
+  pendingDecisionOnly,
   awaitingMyAccept,
   awaitingOther,
   suggestions,
   initialMessages,
 }: {
   matchId: string;
-  stage: AllianceStage;
+  stage: AllianceStage | null;
   other: {
     id: string;
     displayName: string;
@@ -57,6 +58,8 @@ export function Conversation({
   isCompanion?: boolean;
   /** id du user courant (auteur du fil) — nécessaire pour le Jeu (rôle initiateur/autre). */
   currentUserId: string;
+  /** PENDING : surface minimale d'acceptation/refus, sans données du fil. */
+  pendingDecisionOnly?: boolean;
   awaitingMyAccept?: boolean;
   awaitingOther?: boolean;
   suggestions: string[];
@@ -79,6 +82,7 @@ export function Conversation({
   const [celebrate, setCelebrate] = useState(false);
 
   useEffect(() => {
+    if (pendingDecisionOnly) return;
     // Marque la conversation comme lue à l'ouverture réelle (pas au prefetch
     // serveur du lien, qui exécuterait un render et fausserait le "lu").
     // Puis : rafraîchit le badge nav tout de suite (sans attendre le poll 25 s)
@@ -91,7 +95,7 @@ export function Conversation({
       .then((reg) => reg.getNotifications({ tag: `msg-${matchId}` }))
       .then((list) => list.forEach((n) => n.close()))
       .catch(() => {});
-  }, [matchId]);
+  }, [matchId, pendingDecisionOnly]);
 
   async function acceptMatch() {
     if (acceptBusy) return;
@@ -318,7 +322,7 @@ export function Conversation({
       <SacredMotif variant="dove" className="right-[-100px] bottom-[200px]" />
 
       {/* Header verre */}
-      <header className="glass safe-top z-30 flex items-center gap-3 border-b border-sand-200/50 px-3 py-3 dark:border-anthracite-600/50">
+      <header className="glass safe-top z-30 grid grid-cols-[auto_auto_minmax(0,1fr)] items-center gap-x-2 gap-y-2 border-b border-sand-200/50 px-3 py-3 dark:border-anthracite-600/50 min-[360px]:flex min-[360px]:gap-3">
         <Link href="/messages" aria-label={t("common.back")} className="p-1">
           <svg
             width="20"
@@ -344,7 +348,10 @@ export function Conversation({
         />
         <div className="min-w-0 flex-1">
           <div className="flex min-w-0 items-center gap-1.5">
-            <span className="truncate font-display text-[20px] text-night dark:text-[#ECE7DD]">
+            <span
+              data-testid="conversation-partner-name"
+              className="truncate font-display text-[20px] text-night dark:text-[#ECE7DD]"
+            >
               {other.displayName}
             </span>
             {isCompanion ? (
@@ -382,40 +389,49 @@ export function Conversation({
               )
             )}
           </div>
-          <div className="mt-0.5">
-            <StageBadge stage={stage} />
-          </div>
+          {!pendingDecisionOnly && stage && (
+            <div className="mt-0.5">
+              <StageBadge stage={stage} />
+            </div>
+          )}
         </div>
-        <Link
-          href={`/alliance/${matchId}`}
-          aria-label={t("nav.path")}
-          className="flex flex-none items-center gap-1.5 rounded-full border border-gold/40 bg-gold/10 px-2.5 py-1.5 text-[13px] font-semibold text-gold-deep transition-colors hover:bg-gold/20 dark:border-gold-light/30 dark:bg-gold-light/10 dark:text-gold-light"
-        >
-          <svg
-            width="13"
-            height="13"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden
-          >
-            <circle
-              cx="12"
-              cy="12"
-              r="9"
-              stroke="currentColor"
-              strokeWidth="1.7"
+        {!pendingDecisionOnly && (
+          <div className="col-span-3 flex items-center justify-end gap-2 min-[360px]:contents">
+            <Link
+              href={`/alliance/${matchId}`}
+              aria-label={t("nav.path")}
+              className="flex flex-none items-center gap-1.5 rounded-full border border-gold/40 bg-gold/10 px-2.5 py-1.5 text-[13px] font-semibold text-gold-deep transition-colors hover:bg-gold/20 dark:border-gold-light/30 dark:bg-gold-light/10 dark:text-gold-light"
+            >
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                />
+                <path
+                  d="M15.6 8.4l-2.1 5.1-5.1 2.1 2.1-5.1 5.1-2.1Z"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span className="hidden min-[420px]:inline">{t("nav.path")}</span>
+            </Link>
+            <ReportButton targetUserId={other.id} />
+            <BlockButton
+              targetUserId={other.id}
+              targetName={other.displayName}
             />
-            <path
-              d="M15.6 8.4l-2.1 5.1-5.1 2.1 2.1-5.1 5.1-2.1Z"
-              stroke="currentColor"
-              strokeWidth="1.7"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <span className="hidden min-[420px]:inline">{t("nav.path")}</span>
-        </Link>
-        <ReportButton targetUserId={other.id} />
-        <BlockButton targetUserId={other.id} targetName={other.displayName} />
+          </div>
+        )}
       </header>
 
       {/* Compagnon IA : rappel de transparence PERSISTANT, en bandeau pleine
@@ -440,392 +456,410 @@ export function Conversation({
         </div>
       )}
 
-      <SafetyBanner matchId={matchId} />
+      {/* Alerte, jeu et messages partagent le même scroller. Sinon ces deux
+          premiers blocs, placés avant l'ancien scroller des messages, pouvaient
+          pousser le jeu hors du viewport sans aucun moyen de l'atteindre sur
+          un petit écran. */}
+      <div
+        data-testid="conversation-scroll"
+        className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain"
+      >
+        {!pendingDecisionOnly && <SafetyBanner matchId={matchId} />}
 
-      {celebrate && (
-        <AllianceMoment
-          name={other.displayName}
-          onContinue={() => {
-            setCelebrate(false);
-            router.refresh();
-          }}
-        />
-      )}
+        {celebrate && (
+          <AllianceMoment
+            name={other.displayName}
+            onContinue={() => {
+              setCelebrate(false);
+              router.refresh();
+            }}
+          />
+        )}
 
-      {pending && (
-        <div className="mx-3 mt-3 rounded-card border border-info-border bg-info-surface/80 p-4 dark:border-info-darkBorder dark:bg-info-darkSurface/70">
-          <p className="text-[16px] leading-snug text-info-ink dark:text-info-darkInk">
-            {t("messaging.acceptPrompt", { name: other.displayName })}
-          </p>
-          <div className="mt-3 flex gap-2">
-            <AsyncButton
-              onClick={acceptMatch}
-              disabled={acceptBusy}
-              className="flex-1 rounded-btnsm bg-navy py-2.5 text-[16px] font-semibold text-navy-foreground disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
-            >
-              {t("messaging.acceptCta")}
-            </AsyncButton>
-            <AsyncButton
-              onClick={declineMatch}
-              disabled={acceptBusy}
-              className="rounded-btnsm border border-sand-300 px-3 py-2.5 text-[16px] font-medium text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
-            >
-              {t("messaging.declineCta")}
-            </AsyncButton>
-          </div>
-          {actionError && (
-            <p role="alert" className="mt-2 text-[15px] text-danger">
-              {actionError}
+        {pending && (
+          <div className="mx-3 mt-3 rounded-card border border-info-border bg-info-surface/80 p-4 dark:border-info-darkBorder dark:bg-info-darkSurface/70">
+            <p className="text-[16px] leading-snug text-info-ink dark:text-info-darkInk">
+              {t("messaging.acceptPrompt", { name: other.displayName })}
             </p>
-          )}
-        </div>
-      )}
-      {awaitingOther && !pending && (
-        <p className="mx-3 mt-3 rounded-card border border-info-border bg-info-surface px-3 py-3 text-[15px] text-info-ink dark:border-info-darkBorder dark:bg-info-darkSurface dark:text-info-darkInk">
-          {t("messaging.awaitingOther", { name: other.displayName })}
-        </p>
-      )}
+            <div className="mt-3 flex gap-2">
+              <AsyncButton
+                onClick={acceptMatch}
+                disabled={acceptBusy}
+                className="flex-1 rounded-btnsm bg-navy py-2.5 text-[16px] font-semibold text-navy-foreground disabled:opacity-60 dark:bg-gold-light dark:text-anthracite-900"
+              >
+                {t("messaging.acceptCta")}
+              </AsyncButton>
+              <AsyncButton
+                onClick={declineMatch}
+                disabled={acceptBusy}
+                className="rounded-btnsm border border-sand-300 px-3 py-2.5 text-[16px] font-medium text-warmgray disabled:opacity-60 dark:border-anthracite-600 dark:text-[#9A958B]"
+              >
+                {t("messaging.declineCta")}
+              </AsyncButton>
+            </div>
+            {actionError && (
+              <p role="alert" className="mt-2 text-[15px] text-danger">
+                {actionError}
+              </p>
+            )}
+          </div>
+        )}
+        {awaitingOther && !pending && (
+          <p className="mx-3 mt-3 rounded-card border border-info-border bg-info-surface px-3 py-3 text-[15px] text-info-ink dark:border-info-darkBorder dark:bg-info-darkSurface dark:text-info-darkInk">
+            {t("messaging.awaitingOther", { name: other.displayName })}
+          </p>
+        )}
 
-      {/* Jeu des questions — réservé aux fils HUMAIN-HUMAIN (les Compagnons IA
+        {/* Jeu des questions — réservé aux fils HUMAIN-HUMAIN (les Compagnons IA
           gardent leurs "Outils de discernement" existants ; pas de double
           surface). Masqué tant que le match est PENDING (personne n'a encore
           accepté la mise en relation). */}
-      {!isCompanion && !pending && (
-        <div className="mx-3 mt-3">
-          <GamePanel
-            surface="match"
-            apiBase={`/api/matches/${matchId}/game`}
-            currentUserId={currentUserId}
-          />
-        </div>
-      )}
-
-      {/* Messages - verre liquide. min-h-0 indispensable : sans lui, flex-1
-          ne se contraint pas, la colonne déborde et le bloc de saisie collant
-          recouvre les derniers messages. */}
-      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-3 py-4 pb-2 [&>*]:shrink-0">
-        {messages.length === 0 && (
-          <p className="mx-auto mt-8 max-w-[32ch] text-center text-sm text-sand-600 dark:text-[#7E7A72]">
-            {t("messaging.emptyState")}
-          </p>
+        {!pendingDecisionOnly && !isCompanion && !pending && (
+          <div className="mx-3 mt-3">
+            <GamePanel
+              surface="match"
+              apiBase={`/api/matches/${matchId}/game`}
+              currentUserId={currentUserId}
+            />
+          </div>
         )}
-        {messages.map((m) => {
-          if (m.kind === "SYSTEM") {
-            return (
-              <div
-                key={m.id}
-                role="status"
-                className="glass glass-bubble max-w-[90%] self-center rounded-[14px] border-warn-border/70 bg-warn-surface/70 px-3 py-3 dark:border-warn-darkBorder/70 dark:bg-warn-darkSurface/60"
-              >
-                <div className="flex gap-2.5">
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    className="mt-0.5 flex-none text-warn dark:text-warn-darkInk"
-                    aria-hidden
+
+        {/* Messages - verre liquide. Le parent commun assure désormais le
+            défilement de toute la surface conversationnelle. */}
+        {!pendingDecisionOnly && (
+          <div className="flex flex-none flex-col gap-3 px-3 py-4 pb-2 [&>*]:shrink-0">
+            {messages.length === 0 && (
+              <p className="mx-auto mt-8 max-w-[32ch] text-center text-sm text-sand-600 dark:text-[#8F8A80]">
+                {t("messaging.emptyState")}
+              </p>
+            )}
+            {messages.map((m) => {
+              if (m.kind === "SYSTEM") {
+                return (
+                  <div
+                    key={m.id}
+                    role="status"
+                    className="glass glass-bubble max-w-[90%] self-center rounded-[14px] border-warn-border/70 bg-warn-surface/70 px-3 py-3 dark:border-warn-darkBorder/70 dark:bg-warn-darkSurface/60"
                   >
-                    <rect
-                      x="5"
-                      y="11"
-                      width="14"
-                      height="9"
-                      rx="2"
-                      stroke="currentColor"
-                      strokeWidth="1.7"
-                    />
-                    <path
-                      d="M8 11V8a4 4 0 0 1 8 0v3"
-                      stroke="currentColor"
-                      strokeWidth="1.7"
-                    />
-                    <circle cx="12" cy="15.5" r="1.3" fill="currentColor" />
-                  </svg>
-                  <div>
-                    <div className="mb-0.5 text-[16px] font-semibold text-warn-ink dark:text-warn-darkInk">
-                      {t("messaging.contactPendingTitle")}
+                    <div className="flex gap-2.5">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        className="mt-0.5 flex-none text-warn dark:text-warn-darkInk"
+                        aria-hidden
+                      >
+                        <rect
+                          x="5"
+                          y="11"
+                          width="14"
+                          height="9"
+                          rx="2"
+                          stroke="currentColor"
+                          strokeWidth="1.7"
+                        />
+                        <path
+                          d="M8 11V8a4 4 0 0 1 8 0v3"
+                          stroke="currentColor"
+                          strokeWidth="1.7"
+                        />
+                        <circle cx="12" cy="15.5" r="1.3" fill="currentColor" />
+                      </svg>
+                      <div>
+                        <div className="mb-0.5 text-[16px] font-semibold text-warn-ink dark:text-warn-darkInk">
+                          {t("messaging.contactPendingTitle")}
+                        </div>
+                        <p className="text-[15px] leading-normal text-warn-ink dark:text-warn-darkInk">
+                          {m.content}
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-[15px] leading-normal text-warn-ink dark:text-warn-darkInk">
-                      {m.content}
-                    </p>
                   </div>
-                </div>
-              </div>
-            );
-          }
+                );
+              }
 
-          const text = (
-            // Bulle envoyée : on laisse `.glass-self` (globals.css) gérer la
-            // couleur du texte, qui est déjà adaptée au thème (#18243f en clair,
-            // #eaf0fa en sombre). Forcer une couleur ici cassait le contraste
-            // (texte quasi blanc sur bulle bleu pâle en mode clair).
-            <p
-              className={`text-sm leading-snug ${
-                m.mine ? "" : "text-[#2A2823] dark:text-[#CFCAC0]"
-              } ${m.blocked ? "line-through decoration-[#9B4A3E]/60" : ""}`}
-            >
-              {m.content}
-            </p>
-          );
-
-          // Message reçu : bulle simple alignée à gauche + heure dessous.
-          if (!m.mine) {
-            return (
-              <div
-                key={m.id}
-                className="flex max-w-[78%] flex-col items-start gap-0.5 self-start"
-              >
-                <div
-                  className={`glass glass-bubble rounded-[18px] rounded-tl-[4px] px-3.5 py-2.5 ${
-                    m.blocked ? "opacity-60" : ""
-                  }`}
+              const text = (
+                // Bulle envoyée : on laisse `.glass-self` (globals.css) gérer la
+                // couleur du texte, qui est déjà adaptée au thème (#18243f en clair,
+                // #eaf0fa en sombre). Forcer une couleur ici cassait le contraste
+                // (texte quasi blanc sur bulle bleu pâle en mode clair).
+                <p
+                  className={`text-sm leading-snug ${
+                    m.mine ? "" : "text-[#2A2823] dark:text-[#CFCAC0]"
+                  } ${m.blocked ? "line-through decoration-[#9B4A3E]/60" : ""}`}
                 >
-                  {text}
-                </div>
-                <span className="px-1 text-[11px] text-warmgray dark:text-[#7E7A72]">
-                  {fmtTime(m.createdAt)}
-                </span>
-              </div>
-            );
-          }
+                  {m.content}
+                </p>
+              );
 
-          // Mon message : bulle + icône corbeille (corriger une erreur).
-          return (
-            <div
-              key={m.id}
-              className="flex max-w-[85%] flex-col items-end gap-1 self-end"
-            >
-              <div className="flex items-end gap-1.5">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setConfirmId((c) => (c === m.id ? null : m.id))
-                  }
-                  aria-label={t("messaging.delete")}
-                  className="mb-1 flex-none rounded-full p-1 text-warmgray/55 transition-colors hover:text-danger dark:text-[#7E7A72]"
-                >
-                  <svg
-                    width="15"
-                    height="15"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    aria-hidden
+              // Message reçu : bulle simple alignée à gauche + heure dessous.
+              if (!m.mine) {
+                return (
+                  <div
+                    key={m.id}
+                    className="flex max-w-[78%] flex-col items-start gap-0.5 self-start"
                   >
-                    <path
-                      d="M5 7h14M10 7V5h4v2M7 7l1 13h8l1-13"
-                      stroke="currentColor"
-                      strokeWidth="1.7"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
+                    <div
+                      className={`glass glass-bubble rounded-[18px] rounded-tl-[4px] px-3.5 py-2.5 ${
+                        m.blocked ? "opacity-60" : ""
+                      }`}
+                    >
+                      {text}
+                    </div>
+                    <span className="px-1 text-[11px] text-warmgray dark:text-[#8F8A80]">
+                      {fmtTime(m.createdAt)}
+                    </span>
+                  </div>
+                );
+              }
+
+              // Mon message : bulle + icône corbeille (corriger une erreur).
+              return (
                 <div
-                  className={`glass-bubble glass-self min-w-0 rounded-[18px] rounded-tr-[4px] px-3.5 py-2.5 ${
-                    m.blocked ? "opacity-60" : ""
-                  }`}
+                  key={m.id}
+                  className="flex max-w-[85%] flex-col items-end gap-1 self-end"
                 >
-                  {text}
-                </div>
-              </div>
-              <span className="px-1 text-[11px] text-warmgray dark:text-[#7E7A72]">
-                {fmtTime(m.createdAt)}
-              </span>
-              {confirmId === m.id && (
-                <div
-                  role="group"
-                  className="flex items-center gap-2.5 pr-1 text-[14px]"
-                >
-                  <span className="text-warmgray dark:text-[#9A958B]">
-                    {t("messaging.deleteConfirm")}
+                  <div className="flex items-end gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setConfirmId((c) => (c === m.id ? null : m.id))
+                      }
+                      aria-label={t("messaging.delete")}
+                      className="mb-1 flex-none rounded-full p-1 text-warmgray/55 transition-colors hover:text-danger dark:text-[#8F8A80]"
+                    >
+                      <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden
+                      >
+                        <path
+                          d="M5 7h14M10 7V5h4v2M7 7l1 13h8l1-13"
+                          stroke="currentColor"
+                          strokeWidth="1.7"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      className={`glass-bubble glass-self min-w-0 rounded-[18px] rounded-tr-[4px] px-3.5 py-2.5 ${
+                        m.blocked ? "opacity-60" : ""
+                      }`}
+                    >
+                      {text}
+                    </div>
+                  </div>
+                  <span className="px-1 text-[11px] text-warmgray dark:text-[#8F8A80]">
+                    {fmtTime(m.createdAt)}
                   </span>
-                  <AsyncButton
-                    onClick={() => deleteMessage(m.id)}
-                    className="font-semibold text-danger"
-                  >
-                    {t("messaging.delete")}
-                  </AsyncButton>
-                  <button
-                    type="button"
-                    onClick={() => setConfirmId(null)}
-                    className="text-warmgray dark:text-[#9A958B]"
-                  >
-                    {t("common.cancel")}
-                  </button>
+                  {confirmId === m.id && (
+                    <div
+                      role="group"
+                      className="flex items-center gap-2.5 pr-1 text-[14px]"
+                    >
+                      <span className="text-warmgray dark:text-[#9A958B]">
+                        {t("messaging.deleteConfirm")}
+                      </span>
+                      <AsyncButton
+                        onClick={() => deleteMessage(m.id)}
+                        className="font-semibold text-danger"
+                      >
+                        {t("messaging.delete")}
+                      </AsyncButton>
+                      <button
+                        type="button"
+                        onClick={() => setConfirmId(null)}
+                        className="text-warmgray dark:text-[#9A958B]"
+                      >
+                        {t("common.cancel")}
+                      </button>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          );
-        })}
-        <div ref={endRef} />
+              );
+            })}
+            <div ref={endRef} />
+          </div>
+        )}
       </div>
 
       {/* Suggestions IA + saisie - verre. Masqué tant que la rencontre n'est
           pas acceptée par le destinataire (il doit d'abord accepter). */}
       <div
-        className={`glass z-30 border-t border-sand-200/50 px-3.5 pb-[calc(env(safe-area-inset-bottom)+88px)] lg:pb-4 pt-2.5 dark:border-anthracite-600/50 ${
-          pending ? "hidden" : ""
+        className={`glass z-30 flex max-h-[45dvh] flex-none flex-col border-t border-sand-200/50 px-3.5 pb-[calc(env(safe-area-inset-bottom)+88px)] pt-2.5 dark:border-anthracite-600/50 lg:max-h-none lg:pb-4 ${
+          pending || pendingDecisionOnly ? "hidden" : ""
         }`}
       >
-        {/* Compagnon IA : outils de discernement. Un appui pose une question
+        <div
+          data-testid="conversation-composer-extras"
+          className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
+        >
+          {/* Compagnon IA : outils de discernement. Un appui pose une question
             curee posee PAR le Compagnon ; l'utilisateur y repond dans la saisie
             (l'auto-reply LLM reagit ensuite). Reutilise le registre Questions
             profondes / Decouverte emotionnelle / Finances du couple. */}
-        {isCompanion && (
-          <div className="mb-2.5">
-            <button
-              type="button"
-              onClick={() => setToolsOpen((o) => !o)}
-              aria-expanded={toolsOpen}
-              className="flex items-center gap-1.5 rounded-full border border-[#8C7DB8]/40 bg-[#EDE9F6]/60 px-3 py-1.5 text-[13px] font-semibold text-[#5B4F87] transition-colors hover:bg-[#EDE9F6] dark:border-gold-light/25 dark:bg-gold-light/[0.07] dark:text-gold-light dark:hover:bg-gold-light/15"
-            >
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden
+          {isCompanion && (
+            <div className="mb-2.5">
+              <button
+                type="button"
+                onClick={() => setToolsOpen((o) => !o)}
+                aria-expanded={toolsOpen}
+                className="flex items-center gap-1.5 rounded-full border border-[#8C7DB8]/40 bg-[#EDE9F6]/60 px-3 py-1.5 text-[13px] font-semibold text-[#5B4F87] transition-colors hover:bg-[#EDE9F6] dark:border-gold-light/25 dark:bg-gold-light/[0.07] dark:text-gold-light dark:hover:bg-gold-light/15"
               >
-                <path
-                  d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
-                  fill="currentColor"
-                />
-              </svg>
-              {t("discovery_ecosystem.toolsButton")}
-              <span
-                aria-hidden
-                className={`text-[11px] transition-transform ${toolsOpen ? "rotate-90" : ""}`}
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden
+                >
+                  <path
+                    d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                {t("discovery_ecosystem.toolsButton")}
+                <span
+                  aria-hidden
+                  className={`text-[11px] transition-transform ${toolsOpen ? "rotate-90" : ""}`}
+                >
+                  ›
+                </span>
+              </button>
+              {toolsOpen && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {DISCERNMENT_MODULES.map((mod) => (
+                    <AsyncButton
+                      key={mod}
+                      onClick={() => launchTool(mod)}
+                      disabled={toolBusy}
+                      className="glass whitespace-nowrap rounded-[18px] px-3 py-2 text-xs font-medium text-[#3A372F] disabled:opacity-50 dark:text-[#CFCAC0]"
+                    >
+                      {t(`discovery_ecosystem.modules.${mod}`)}
+                    </AsyncButton>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+          {suggestions.length > 0 && (
+            <>
+              <div className="mb-2 flex items-center gap-1.5">
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden
+                >
+                  <path
+                    d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
+                    fill="#9A7B2E"
+                  />
+                </svg>
+                <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
+                  {t("messaging.aiSuggestions")}
+                </span>
+              </div>
+              <div
+                data-testid="ai-suggestions"
+                className="mb-2.5 flex snap-x snap-proximity gap-2 overflow-x-auto pb-1"
               >
-                ›
-              </span>
-            </button>
-            {toolsOpen && (
-              <div className="mt-2 flex flex-wrap gap-2">
-                {DISCERNMENT_MODULES.map((mod) => (
+                {suggestions.map((s) => (
                   <AsyncButton
-                    key={mod}
-                    onClick={() => launchTool(mod)}
-                    disabled={toolBusy}
-                    className="glass whitespace-nowrap rounded-[18px] px-3 py-2 text-xs font-medium text-[#3A372F] disabled:opacity-50 dark:text-[#CFCAC0]"
+                    key={s}
+                    onClick={() => send(s)}
+                    className="glass max-w-[78vw] flex-none snap-start whitespace-normal rounded-[18px] px-3 py-2 text-left text-xs leading-relaxed text-[#3A372F] dark:text-[#CFCAC0] sm:max-w-sm"
                   >
-                    {t(`discovery_ecosystem.modules.${mod}`)}
+                    {s}
                   </AsyncButton>
                 ))}
               </div>
-            )}
-          </div>
-        )}
-        {suggestions.length > 0 && (
-          <>
-            <div className="mb-2 flex items-center gap-1.5">
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden
-              >
-                <path
-                  d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3Z"
-                  fill="#9A7B2E"
-                />
-              </svg>
-              <span className="lbl text-[11px] text-gold-deep dark:text-gold-light">
-                {t("messaging.aiSuggestions")}
-              </span>
-            </div>
-            <div className="mb-2.5 flex gap-2 overflow-x-auto pb-0.5">
-              {suggestions.map((s) => (
-                <AsyncButton
-                  key={s}
-                  onClick={() => send(s)}
-                  className="glass whitespace-nowrap rounded-[18px] px-3 py-2 text-xs text-[#3A372F] dark:text-[#CFCAC0]"
-                >
-                  {s}
-                </AsyncButton>
-              ))}
-            </div>
-          </>
-        )}
-        {!isCompanion && (
-          <div className="mb-2">
-            {icebreakerQ ? (
-              <div className="flex items-start gap-2">
-                <AsyncButton
-                  onClick={() => {
-                    send(icebreakerQ);
-                    setIcebreakerQ(null);
-                  }}
-                  className="glass min-w-0 flex-1 whitespace-normal rounded-[18px] px-3 py-2 text-left text-xs text-[#3A372F] dark:text-[#CFCAC0]"
-                >
-                  {icebreakerQ}
-                </AsyncButton>
+            </>
+          )}
+          {!isCompanion && (
+            <div className="mb-2">
+              {icebreakerQ ? (
+                <div className="flex items-start gap-2">
+                  <AsyncButton
+                    onClick={() => {
+                      send(icebreakerQ);
+                      setIcebreakerQ(null);
+                    }}
+                    className="glass min-w-0 flex-1 whitespace-normal rounded-[18px] px-3 py-2 text-left text-xs text-[#3A372F] dark:text-[#CFCAC0]"
+                  >
+                    {icebreakerQ}
+                  </AsyncButton>
+                  <button
+                    type="button"
+                    onClick={() => setIcebreakerQ(null)}
+                    aria-label={t("common.cancel")}
+                    className="mt-1.5 flex-none text-warmgray dark:text-[#8F8A80]"
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden
+                    >
+                      <path
+                        d="M18 6 6 18M6 6l12 12"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              ) : (
                 <button
                   type="button"
-                  onClick={() => setIcebreakerQ(null)}
-                  aria-label={t("common.cancel")}
-                  className="mt-1.5 flex-none text-warmgray dark:text-[#7E7A72]"
+                  onClick={fetchIcebreaker}
+                  disabled={iceBusy}
+                  className="flex items-center gap-1.5 rounded-full border border-gold/40 bg-gold/[0.08] px-3 py-1.5 text-[12px] font-medium text-gold-deep transition-colors hover:bg-gold/15 disabled:opacity-50 dark:border-gold-light/30 dark:bg-gold-light/[0.07] dark:text-gold-light"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    aria-hidden
-                  >
-                    <path
-                      d="M18 6 6 18M6 6l12 12"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+                  {iceBusy ? (
+                    <Spinner className="h-3 w-3" />
+                  ) : (
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden
+                    >
+                      <path
+                        d="M12 3l1.6 4.2L18 9l-4.4 1.8L12 15l-1.6-4.2L6 9l4.4-1.8L12 3Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  )}
+                  {iceBusy
+                    ? t("messaging.icebreakerLoading")
+                    : t("messaging.icebreakerBtn")}
                 </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={fetchIcebreaker}
-                disabled={iceBusy}
-                className="flex items-center gap-1.5 rounded-full border border-gold/40 bg-gold/[0.08] px-3 py-1.5 text-[12px] font-medium text-gold-deep transition-colors hover:bg-gold/15 disabled:opacity-50 dark:border-gold-light/30 dark:bg-gold-light/[0.07] dark:text-gold-light"
-              >
-                {iceBusy ? (
-                  <Spinner className="h-3 w-3" />
-                ) : (
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    aria-hidden
-                  >
-                    <path
-                      d="M12 3l1.6 4.2L18 9l-4.4 1.8L12 15l-1.6-4.2L6 9l4.4-1.8L12 3Z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                )}
-                {iceBusy
-                  ? t("messaging.icebreakerLoading")
-                  : t("messaging.icebreakerBtn")}
-              </button>
-            )}
-          </div>
-        )}
+              )}
+            </div>
+          )}
+        </div>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             send(draft);
           }}
-          className="glass flex items-center gap-2 rounded-[24px] border border-sand-300 py-1.5 pl-4 pr-1.5 dark:border-anthracite-600 dark:bg-anthracite-800/80"
+          className="glass flex flex-none items-center gap-2 rounded-[24px] border border-sand-300 py-1.5 pl-4 pr-1.5 dark:border-anthracite-600 dark:bg-anthracite-800/80"
         >
           <input
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             placeholder={t("messaging.placeholder")}
             aria-label={t("messaging.placeholder")}
-            className="flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-sand-500 dark:text-[#ECE7DD] dark:placeholder:text-[#65625B]"
+            className="flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-sand-500 dark:text-[#ECE7DD] dark:placeholder:text-[#9A958B]"
           />
           <button
             type="submit"

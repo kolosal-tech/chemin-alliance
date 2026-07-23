@@ -18,11 +18,9 @@ import {
 /** Articles par page (la pagination ne s'affiche qu'au-delà de ce seuil). */
 const PAGE_SIZE = 6;
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
   const params = await props.params;
   const t = await getTranslations({
     locale: params.locale,
@@ -39,12 +37,10 @@ export async function generateMetadata(
   };
 }
 
-export default async function BlogIndexPage(
-  props: {
-    params: Promise<{ locale: string }>;
-    searchParams?: Promise<{ cat?: string; page?: string }>;
-  }
-) {
+export default async function BlogIndexPage(props: {
+  params: Promise<{ locale: string }>;
+  searchParams?: Promise<{ cat?: string; page?: string }>;
+}) {
   const searchParams = await props.searchParams;
   const params = await props.params;
   setRequestLocale(params.locale);
@@ -145,7 +141,7 @@ export default async function BlogIndexPage(
                         />
                       </div>
                       <div className="flex flex-1 flex-col p-6">
-                        <div className="lbl text-[12px] text-sand-600 dark:text-[#7E7A72]">
+                        <div className="lbl text-[12px] text-sand-600 dark:text-[#8F8A80]">
                           {format.dateTime(new Date(post.date), {
                             dateStyle: "long",
                           })}{" "}

@@ -50,7 +50,12 @@ export const POST = withErrors(async (req: Request) => {
       emailVerifyExpires: new Date(Date.now() + EMAIL_VERIFY_TTL_MS),
     },
   });
-  await sendVerificationEmail(newEmail, token, (user.locale as Locale) ?? "fr");
+  const delivered = await sendVerificationEmail(
+    newEmail,
+    token,
+    (user.locale as Locale) ?? "fr",
+  );
+  if (!delivered) return jsonError(502, "EMAIL_FAILED");
   // PII : on journalise l'événement et l'utilisateur, jamais la nouvelle adresse.
   audit("email.change", user.id);
   return NextResponse.json({ ok: true });

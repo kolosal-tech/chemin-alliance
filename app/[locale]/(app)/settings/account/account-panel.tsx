@@ -166,7 +166,7 @@ export function AccountPanel({
               className={inputCls}
             />
           </label>
-          <p className="text-[14px] text-sand-500 dark:text-[#7E7A72]">
+          <p className="text-[14px] text-sand-500 dark:text-[#8F8A80]">
             {t("account.passwordRules")}
           </p>
           <button

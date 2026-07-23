@@ -588,7 +588,7 @@ export function EditProfileForm({ photoEnabled }: { photoEnabled: boolean }) {
               <span className="lbl text-[12px] text-gold-deep dark:text-gold-light">
                 {t("secMore")}
               </span>
-              <span className="text-[14px] font-normal text-sand-500 dark:text-[#7E7A72]">
+              <span className="text-[14px] font-normal text-sand-500 dark:text-[#8F8A80]">
                 {t("secMoreHint")}
               </span>
             </span>

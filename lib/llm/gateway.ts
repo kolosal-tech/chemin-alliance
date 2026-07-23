@@ -3,6 +3,12 @@ import type { Locale } from "@/lib/core-engine";
 import { redactPII } from "./redaction";
 import { resolveModels, type Step, type Tier } from "./matrix";
 import { recordLlmCall } from "./telemetry";
+import { currentLlmAbortSignal } from "./deadline";
+import {
+  currentAiRecipientScope,
+  DIRECT_ANTHROPIC_MODEL,
+  DIRECT_OPENAI_MODEL,
+} from "./scope";
 
 // Passerelle LLM unique : tous les agents et le Coach IA passent par ici.
 // Garanties (document d'architecture LLM) :
@@ -61,6 +67,10 @@ async function withTimeout<T>(
   onError: T,
 ): Promise<T> {
   const ctrl = new AbortController();
+  const outerSignal = currentLlmAbortSignal();
+  const abortFromOuter = () => ctrl.abort();
+  if (outerSignal?.aborted) ctrl.abort();
+  else outerSignal?.addEventListener("abort", abortFromOuter, { once: true });
   const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   try {
     return await fn(ctrl.signal);
@@ -68,6 +78,7 @@ async function withTimeout<T>(
     return onError;
   } finally {
     clearTimeout(timer);
+    outerSignal?.removeEventListener("abort", abortFromOuter);
   }
 }
 
@@ -161,9 +172,6 @@ async function anthropic(
   );
 }
 
-const ANTHROPIC_MODEL = "claude-haiku-4-5-20251001";
-const OPENAI_MODEL = "gpt-4o-mini";
-
 export async function callLLM(req: LlmRequest): Promise<string | null> {
   if (aiProvider === "fallback") return null;
 
@@ -174,7 +182,8 @@ export async function callLLM(req: LlmRequest): Promise<string | null> {
   const redact = req.redact ?? true;
   const rs = redact ? redactPII(req.system) : { text: req.system, count: 0 };
   const ru = redact ? redactPII(req.user) : { text: req.user, count: 0 };
-  const system = rs.text + EMDASH_BAN + (req.locale ? LANG_LOCK[req.locale] : "");
+  const system =
+    rs.text + EMDASH_BAN + (req.locale ? LANG_LOCK[req.locale] : "");
   const user = ru.text;
   // Memoire : on purge aussi les PII de chaque tour precedent avant envoi tiers.
   const history: LlmTurn[] = (req.history ?? []).map((h) => ({
@@ -187,15 +196,26 @@ export async function callLLM(req: LlmRequest): Promise<string | null> {
   let result: LlmResult = { text: null, usage: NO_USAGE };
   let model: string | null = null;
   let attempts = 0;
+  const outerSignal = currentLlmAbortSignal();
 
   if (aiProvider === "anthropic") {
     // Anthropic 1P : canal direct (pas de tiers), pas de matrice OpenRouter.
     attempts = 1;
-    model = ANTHROPIC_MODEL;
-    result = await anthropic(ANTHROPIC_MODEL, system, user, maxTokens, history);
+    model = DIRECT_ANTHROPIC_MODEL;
+    result = await anthropic(
+      DIRECT_ANTHROPIC_MODEL,
+      system,
+      user,
+      maxTokens,
+      history,
+    );
   } else if (aiProvider === "openrouter") {
-    // OpenRouter : matrice multi-modèles + opt-out de collecte des données.
+    // OpenRouter : les opérateurs d'inférence sont bornés par l'allowlist
+    // consentie. Aucun fallback vers un opérateur non fingerprinté n'est permis.
+    const routing = currentAiRecipientScope().routing;
+    if (!routing) throw new Error("OPENROUTER_ROUTING_SCOPE_UNAVAILABLE");
     for (const m of resolveModels(req.step, tier)) {
+      if (outerSignal?.aborted) break;
       attempts++;
       const r = await openAiCompatible(
         "https://openrouter.ai/api/v1",
@@ -204,7 +224,7 @@ export async function callLLM(req: LlmRequest): Promise<string | null> {
         system,
         user,
         maxTokens,
-        { provider: { data_collection: "deny" } },
+        { provider: routing },
         history,
       );
       if (r.text) {
@@ -216,11 +236,11 @@ export async function callLLM(req: LlmRequest): Promise<string | null> {
   } else if (aiProvider === "openai") {
     // OpenAI direct (palier de repli).
     attempts = 1;
-    model = OPENAI_MODEL;
+    model = DIRECT_OPENAI_MODEL;
     result = await openAiCompatible(
       "https://api.openai.com/v1",
       env.OPENAI_API_KEY!,
-      OPENAI_MODEL,
+      DIRECT_OPENAI_MODEL,
       system,
       user,
       maxTokens,

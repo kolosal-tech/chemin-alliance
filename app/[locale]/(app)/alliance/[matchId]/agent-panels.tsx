@@ -91,7 +91,7 @@ export function ReviewPanel({ matchId }: { matchId: string }) {
             <h3 className="font-display text-[21px] text-night dark:text-[#ECE7DD]">
               {t("title")}
             </h3>
-            <span className="text-[12px] text-sand-500 dark:text-[#65625B]">
+            <span className="text-[12px] text-sand-500 dark:text-[#9A958B]">
               {t("private")}
             </span>
           </div>

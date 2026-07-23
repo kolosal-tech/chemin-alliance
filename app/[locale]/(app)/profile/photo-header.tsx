@@ -44,7 +44,7 @@ export function PhotoHeader({
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0E1422]/35 via-transparent to-[#0E1422]/85" />
-      <span className="lbl absolute left-5 top-5 rounded-[20px] bg-[#0E1422]/40 px-2.5 py-1.5 text-[11px] text-white/70 backdrop-blur-sm safe-top">
+      <span className="lbl absolute left-5 top-5 rounded-[20px] bg-[#0E1422]/40 px-2.5 py-1.5 text-[11px] text-white/70 backdrop-blur-sm">
         {t("profile.blurredDefault", { level: t("stages.DISCOVERY") })}
       </span>
       {/* Bouton discret, descendu dans la zone de photo (juste au-dessus du

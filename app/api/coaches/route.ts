@@ -1,25 +1,8 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
-import { withErrors } from "@/lib/api-helpers";
+import { jsonError, withErrors } from "@/lib/api-helpers";
 
-// Champs "vitrine" uniquement : liste publique (pas d'authentification), donc
-// pas de risque de sur-projection accidentelle si le modèle Coach gagne un
-// jour un champ interne (ex. notes admin, coordonnées privées).
-export const GET = withErrors(async () => {
-  const coaches = await prisma.coach.findMany({
-    orderBy: { ratingAvg: "desc" },
-    select: {
-      id: true,
-      displayName: true,
-      photoUrl: true,
-      certified: true,
-      specialties: true,
-      affiliation: true,
-      bio: true,
-      pricePerSessionEUR: true,
-      ratingAvg: true,
-      reviewsCount: true,
-    },
-  });
-  return NextResponse.json(coaches);
-});
+// Le marketplace humain n'est pas ouvert tant qu'une disponibilité réelle,
+// vérifiable et administrable n'est pas modélisée. Ne jamais exposer les
+// fiches de démonstration comme un catalogue public.
+export const GET = withErrors(async () =>
+  jsonError(503, "COACH_MARKETPLACE_UNAVAILABLE"),
+);

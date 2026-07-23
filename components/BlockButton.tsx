@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
-import { AsyncButton } from "@/components/AsyncButton";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { useToast } from "@/components/Toast";
+import { isConfirmedBlockResponse } from "@/lib/block-response";
 
 /**
  * Bloquer une personne - GRATUIT À VIE, jamais derrière un paywall.
@@ -24,18 +25,28 @@ export function BlockButton({
   targetName: string;
 }) {
   const t = useTranslations("block");
+  const tMessaging = useTranslations("messaging");
   const router = useRouter();
+  const toast = useToast();
   const [open, setOpen] = useState(false);
 
   async function block() {
-    await fetch("/api/blocks", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ targetUserId }),
-    });
-    setOpen(false);
-    router.push("/messages");
-    router.refresh();
+    try {
+      const response = await fetch("/api/blocks", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ targetUserId }),
+      });
+      if (!(await isConfirmedBlockResponse(response))) {
+        toast.error(tMessaging("actionFailed"));
+        return;
+      }
+      setOpen(false);
+      router.push("/messages");
+      router.refresh();
+    } catch {
+      toast.error(tMessaging("actionFailed"));
+    }
   }
 
   return (
@@ -70,43 +81,17 @@ export function BlockButton({
         </svg>
       </button>
 
-      {open &&
-        typeof document !== "undefined" &&
-        createPortal(
-          <div
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-night/50 p-5 backdrop-blur-sm"
-            onClick={() => setOpen(false)}
-          >
-            <div
-              className="w-full max-w-sm rounded-cardlg border border-sand-200 bg-cream p-5 shadow-[0_20px_60px_-15px_rgba(19,29,51,0.5)] dark:border-anthracite-600 dark:bg-anthracite-850"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h3 className="font-display text-[21px] text-night dark:text-[#ECE7DD]">
-                {t("confirmTitle", { name: targetName })}
-              </h3>
-              <p className="mt-2 text-[16px] leading-relaxed text-warmgray dark:text-[#9A958B]">
-                {t("confirmBody")}
-              </p>
-              <p className="mt-2 text-[14px] text-sage">{t("free")}</p>
-              <div className="mt-5 flex gap-2.5">
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="flex-1 rounded-btnsm border border-sand-400 py-3 text-[16px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
-                >
-                  {t("cancel")}
-                </button>
-                <AsyncButton
-                  onClick={block}
-                  className="flex-1 rounded-btnsm bg-danger py-3 text-[16px] font-semibold text-white disabled:opacity-50"
-                >
-                  {t("confirm")}
-                </AsyncButton>
-              </div>
-            </div>
-          </div>,
-          document.body,
-        )}
+      <ConfirmDialog
+        open={open}
+        title={t("confirmTitle", { name: targetName })}
+        body={t("confirmBody")}
+        note={t("free")}
+        confirmLabel={t("confirm")}
+        cancelLabel={t("cancel")}
+        tone="danger"
+        onConfirm={block}
+        onCancel={() => setOpen(false)}
+      />
     </>
   );
 }

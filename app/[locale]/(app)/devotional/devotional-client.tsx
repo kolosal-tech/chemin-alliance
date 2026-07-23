@@ -3,22 +3,28 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { DailyDevotion } from "@/lib/devotional";
+import { MeditationSession } from "./meditation-session";
 import {
-  MeditationSession,
-  JOURNAL_KEY,
+  clearJournalStorage,
+  journalStorageKey,
+  LEGACY_JOURNAL_KEY,
+  readJournal,
   type JournalEntry,
-} from "./meditation-session";
+} from "@/lib/devotional-journal";
 import { Spinner } from "@/components/Spinner";
 import { useToast } from "@/components/Toast";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 
 export function DevotionalClient({
   devotion,
   initialStreak,
   initialCompleted,
+  journalOwnerId,
 }: {
   devotion: DailyDevotion;
   initialStreak: { current: number; longest: number };
   initialCompleted: boolean;
+  journalOwnerId: string;
 }) {
   const t = useTranslations();
   const toast = useToast();
@@ -28,18 +34,22 @@ export function DevotionalClient({
   const [newRecord, setNewRecord] = useState(false);
   const [error, setError] = useState(false);
   const [sessionOpen, setSessionOpen] = useState(false);
+  const [confirmClearJournal, setConfirmClearJournal] = useState(false);
   const [lastReflection, setLastReflection] = useState<JournalEntry | null>(
     null,
   );
   const [showVerse, setShowVerse] = useState(false); // déplie le verset de la dernière réflexion
   const pendingRef = useRef(false); // anti double-soumission de markDone
+  const journalKey = journalStorageKey(journalOwnerId);
 
   // Dernière réflexion (journal privé local) - affichée en rappel.
   useEffect(() => {
     const load = () => {
       try {
-        const raw = localStorage.getItem(JOURNAL_KEY);
-        const list: JournalEntry[] = raw ? JSON.parse(raw) : [];
+        // L'ancien journal global est supprimé : il ne peut pas être attribué
+        // sans risque au compte actuellement connecté sur un appareil partagé.
+        localStorage.removeItem(LEGACY_JOURNAL_KEY);
+        const list = readJournal(localStorage, journalKey);
         setLastReflection(list[0] ?? null);
       } catch {
         setLastReflection(null);
@@ -48,7 +58,7 @@ export function DevotionalClient({
     load();
     window.addEventListener("meditation:journal", load);
     return () => window.removeEventListener("meditation:journal", load);
-  }, []);
+  }, [journalKey, journalOwnerId]);
 
   async function markDone() {
     if (pendingRef.current) return;
@@ -78,6 +88,19 @@ export function DevotionalClient({
     } finally {
       pendingRef.current = false;
       setBusy(false);
+    }
+  }
+
+  function clearJournal() {
+    try {
+      clearJournalStorage(localStorage, journalOwnerId);
+      setLastReflection(null);
+      setShowVerse(false);
+      toast.success(t("devotional.journalCleared"));
+    } catch {
+      toast.error(t("devotional.journalClearError"));
+    } finally {
+      setConfirmClearJournal(false);
     }
   }
 
@@ -226,6 +249,13 @@ export function DevotionalClient({
               {lastReflection.reference}
             </p>
           )}
+          <button
+            type="button"
+            onClick={() => setConfirmClearJournal(true)}
+            className="mt-3 text-[13px] font-medium text-danger underline underline-offset-2"
+          >
+            {t("devotional.journalClear")}
+          </button>
         </section>
       )}
 
@@ -284,6 +314,7 @@ export function DevotionalClient({
       {sessionOpen && (
         <MeditationSession
           devotion={devotion}
+          journalKey={journalKey}
           onCompleted={(d) => {
             setStreak({ current: d.current, longest: d.longest });
             setNewRecord(d.newRecord);
@@ -292,6 +323,16 @@ export function DevotionalClient({
           onClose={() => setSessionOpen(false)}
         />
       )}
+      <ConfirmDialog
+        open={confirmClearJournal}
+        title={t("devotional.journalClearConfirmTitle")}
+        body={t("devotional.journalClearConfirmBody")}
+        confirmLabel={t("devotional.journalClear")}
+        cancelLabel={t("common.cancel")}
+        tone="danger"
+        onConfirm={clearJournal}
+        onCancel={() => setConfirmClearJournal(false)}
+      />
     </main>
   );
 }

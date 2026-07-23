@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { env } from "@/lib/env";
+import { MAX_PROFILE_PHOTO_BYTES } from "@/lib/profile-photo";
 
 /**
  * Photos de profil - Supabase Storage via l'API REST (pas de SDK).
@@ -17,8 +18,6 @@ const EXT_BY_TYPE = new Map<string, string>([
   ["image/png", "png"],
   ["image/webp", "webp"],
 ]);
-const MAX_BYTES = 5 * 1024 * 1024; // 5 Mo
-
 export type UploadResult =
   | { ok: true; url: string }
   | { ok: false; error: "disabled" | "type" | "size" | "upload" };
@@ -29,16 +28,26 @@ export type UploadResult =
  */
 export async function uploadProfilePhoto(
   userId: string,
-  file: { type: string; bytes: ArrayBuffer },
+  file: { type: string; bytes: ArrayBuffer | Buffer },
 ): Promise<UploadResult> {
   if (!photoUploadEnabled()) return { ok: false, error: "disabled" };
   const ext = EXT_BY_TYPE.get(file.type);
   if (!ext) return { ok: false, error: "type" };
-  if (file.bytes.byteLength > MAX_BYTES) return { ok: false, error: "size" };
+  if (
+    file.bytes.byteLength === 0 ||
+    file.bytes.byteLength > MAX_PROFILE_PHOTO_BYTES
+  ) {
+    return { ok: false, error: "size" };
+  }
 
   const bucket = env.SUPABASE_PHOTO_BUCKET;
   const base = env.SUPABASE_URL!.replace(/\/$/, "");
   const path = `${userId}/${randomUUID()}.${ext}`;
+
+  const body = new ArrayBuffer(file.bytes.byteLength);
+  new Uint8Array(body).set(
+    Buffer.isBuffer(file.bytes) ? file.bytes : new Uint8Array(file.bytes),
+  );
 
   let res: Response;
   try {
@@ -49,24 +58,60 @@ export async function uploadProfilePhoto(
         "content-type": file.type,
         "cache-control": "public, max-age=31536000",
       },
-      body: file.bytes,
+      body,
     });
-  } catch (err) {
-    console.error("[storage] upload réseau échoué", err);
+  } catch {
+    // Une erreur HTTP brute peut contenir URL signée, headers ou payload.
+    console.error("[storage] transport upload indisponible");
     return { ok: false, error: "upload" };
   }
   if (!res.ok) {
-    console.error(
-      "[storage] upload refusé",
-      res.status,
-      await res.text().catch(() => ""),
-    );
+    // Le corps fournisseur peut refléter le chemin utilisateur.
+    console.error(`[storage] upload refusé (${res.status})`);
     return { ok: false, error: "upload" };
   }
   return {
     ok: true,
     url: `${base}/storage/v1/object/public/${bucket}/${path}`,
   };
+}
+
+/**
+ * Supprime l'original et sa variante floutée via l'API Storage. La fonction
+ * renvoie false si une photo existe mais ne peut pas être supprimée : l'appelant
+ * RGPD peut alors échouer sans annoncer à tort un effacement complet.
+ */
+export async function deleteProfilePhotoObjects(
+  stored: string | null | undefined,
+): Promise<boolean> {
+  if (!stored) return true;
+  if (!photoUploadEnabled()) return false;
+
+  const bucket = env.SUPABASE_PHOTO_BUCKET;
+  const path = extractPhotoPath(stored, bucket);
+  if (!path) return false;
+  const variant = blurredVariantPath(stored);
+  const prefixes = [...new Set([path, variant].filter(Boolean))] as string[];
+  const base = env.SUPABASE_URL!.replace(/\/$/, "");
+
+  try {
+    const res = await fetch(`${base}/storage/v1/object/${bucket}`, {
+      method: "DELETE",
+      headers: {
+        authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ prefixes }),
+    });
+    if (!res.ok) {
+      console.error("[storage] suppression photo refusée", res.status);
+      return false;
+    }
+    return true;
+  } catch {
+    console.error("[storage] suppression photo réseau échouée");
+    return false;
+  }
 }
 
 /**
@@ -135,8 +180,8 @@ export async function signedPhotoUrl(
     const { signedURL } = (await res.json()) as { signedURL?: string };
     if (!signedURL) return stored;
     return `${base}/storage/v1${signedURL.startsWith("/") ? "" : "/"}${signedURL}`;
-  } catch (err) {
-    console.error("[storage] signature URL échouée", err);
+  } catch {
+    console.error("[storage] signature URL indisponible");
     return stored;
   }
 }
@@ -186,16 +231,12 @@ export async function putPhotoObject(
       body,
     });
     if (!res.ok) {
-      console.error(
-        "[storage] putPhotoObject refusé",
-        res.status,
-        await res.text().catch(() => ""),
-      );
+      console.error(`[storage] putPhotoObject refusé (${res.status})`);
       return false;
     }
     return true;
-  } catch (err) {
-    console.error("[storage] putPhotoObject réseau échoué", err);
+  } catch {
+    console.error("[storage] transport putPhotoObject indisponible");
     return false;
   }
 }

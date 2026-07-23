@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
 import {
-  requireMatchMember,
+  requireActiveMatchMember,
   buildActionContext,
   nextStage,
 } from "@/lib/alliance";
@@ -20,7 +20,10 @@ export const POST = withErrors(
     { params }: { params: Promise<{ matchId: string }> },
   ) => {
     const user = await requireUser();
-    const match = await requireMatchMember((await params).matchId, user.id);
+    const match = await requireActiveMatchMember(
+      (await params).matchId,
+      user.id,
+    );
     const target = nextStage(match.stage);
     if (!target) return jsonError(409, "NO_NEXT_STAGE");
 

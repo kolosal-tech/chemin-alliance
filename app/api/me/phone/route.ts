@@ -48,6 +48,9 @@ export const GET = withErrors(async () => {
 /** POST : enregistre le numéro (non vérifié) et déclenche l'envoi du code. */
 export const POST = withErrors(async (req: Request) => {
   const user = await requireUser();
+  if (!smsEnabled() && process.env.NODE_ENV === "production") {
+    return jsonError(503, "SMS_UNAVAILABLE");
+  }
   const rl = await rateLimit(`phone-start:${user.id}`, 5, 60 * 60_000);
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
   const { phone } = startSchema.parse(await readJsonLimited(req));
@@ -91,6 +94,9 @@ export const POST = withErrors(async (req: Request) => {
 /** PATCH : valide le code -> marque le numéro vérifié. */
 export const PATCH = withErrors(async (req: Request) => {
   const user = await requireUser();
+  if (!smsEnabled() && process.env.NODE_ENV === "production") {
+    return jsonError(503, "SMS_UNAVAILABLE");
+  }
   const rl = await rateLimit(`phone-verify:${user.id}`, 10, 60 * 60_000);
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
   const { code } = verifySchema.parse(await readJsonLimited(req));

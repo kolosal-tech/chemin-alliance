@@ -9,6 +9,8 @@ import { AllianceThread } from "@/components/AllianceThread";
 import { Radar } from "@/components/Radar";
 import { StageActions } from "./stage-actions";
 import { FacilitatorPanel, ReviewPanel } from "./agent-panels";
+import { canSeeField } from "@/lib/visibility";
+import { activeMatchMemberWhere } from "@/lib/alliance";
 
 const STAGE_NUM: Record<string, number> = {
   DISCOVERY: 1,
@@ -30,9 +32,11 @@ const MEMBER_SELECT = {
   relationshipProfile: {
     select: {
       intentionStatement: true,
+      intentionVisibility: true,
       wantsChildren: true,
       hasChildren: true,
       acceptsChildren: true,
+      childrenVisibility: true,
     },
   },
 } as const;
@@ -43,28 +47,28 @@ export default async function AlliancePage(props: {
   const params = await props.params;
   setRequestLocale(params.locale);
   const t = await getTranslations();
-  // requirePageUser (session) et le chargement du Match ne dépendent pas l'un
-  // de l'autre (le `where` du Match ne porte que sur matchId) → parallélisés.
-  const [user, match] = await Promise.all([
-    requirePageUser(params.locale),
-    prisma.match.findUnique({
-      where: { id: params.matchId },
-      select: {
-        id: true,
-        userAId: true,
-        userBId: true,
-        stage: true,
-        contactExchange: true,
-        updatedAt: true,
-        allianceAnswers: true,
-        // Champs limités à ceux consommés par compatibilityTopics (lib/matching.ts)
-        // et le JSX de cette page (displayName) - jamais les *Encrypted.
-        userA: { select: MEMBER_SELECT },
-        userB: { select: MEMBER_SELECT },
+  const user = await requirePageUser(params.locale);
+  const match = await prisma.match.findFirst({
+    where: activeMatchMemberWhere(params.matchId, user.id),
+    select: {
+      id: true,
+      userAId: true,
+      userBId: true,
+      status: true,
+      stage: true,
+      contactExchange: true,
+      contactExchangeRequestedBy: true,
+      updatedAt: true,
+      allianceAnswers: {
+        select: { questionId: true, userId: true },
       },
-    }),
-  ]);
-  if (!match || (match.userAId !== user.id && match.userBId !== user.id)) {
+      // Champs limités à ceux consommés par compatibilityTopics (lib/matching.ts)
+      // et le JSX de cette page (displayName) - jamais les *Encrypted.
+      userA: { select: MEMBER_SELECT },
+      userB: { select: MEMBER_SELECT },
+    },
+  });
+  if (!match) {
     notFound();
   }
   const me = match.userAId === user.id ? match.userA : match.userB;
@@ -85,7 +89,22 @@ export default async function AlliancePage(props: {
             (a) => a.questionId === q.id && a.userId === user.id,
           ),
         }));
-  const { axes, topics } = compatibilityTopics(me, other);
+  const visibilityContext = { matched: true, stage: match.stage };
+  const { axes, topics } = compatibilityTopics(me, other, {
+    revealFamily:
+      other.relationshipProfile !== null &&
+      canSeeField(
+        other.relationshipProfile.childrenVisibility,
+        visibilityContext,
+      ),
+    revealLocation: true,
+    revealVision:
+      other.relationshipProfile !== null &&
+      canSeeField(
+        other.relationshipProfile.intentionVisibility,
+        visibilityContext,
+      ),
+  });
 
   return (
     <main className="px-3 pt-5 safe-top lg:mx-auto lg:max-w-2xl">
@@ -156,6 +175,11 @@ export default async function AlliancePage(props: {
             matchId={match.id}
             questions={questions}
             contactExchange={match.contactExchange}
+            contactExchangeCanRespond={
+              match.contactExchange === "REQUESTED" &&
+              match.contactExchangeRequestedBy !== null &&
+              match.contactExchangeRequestedBy !== user.id
+            }
             stage={match.stage}
             otherName={other.displayName}
           />
@@ -173,7 +197,7 @@ export default async function AlliancePage(props: {
         <h2 className="lbl text-[12px] text-gold-deep dark:text-gold-light">
           {t("alliance.topicsTitle")}
         </h2>
-        <span className="text-[13px] text-sand-500 dark:text-[#65625B]">
+        <span className="text-[13px] text-sand-500 dark:text-[#9A958B]">
           {t("alliance.neverScore")}
         </span>
       </div>

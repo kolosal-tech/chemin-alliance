@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
+import { safeErrorDetails } from "@/lib/security/safe-error";
 
 export function jsonError(status: number, code: string, message?: string) {
   return NextResponse.json({ error: code, message }, { status });
@@ -35,8 +36,10 @@ export function withErrors<T extends unknown[]>(
       if (status === 403) return jsonError(403, "FORBIDDEN");
       if (status === 404) return jsonError(404, "NOT_FOUND");
       if (status === 413) return jsonError(413, "PAYLOAD_TOO_LARGE");
+      if (status === 428)
+        return jsonError(428, "SENSITIVE_DATA_CONSENT_REQUIRED");
       if (status === 503) return jsonError(503, "SERVICE_UNAVAILABLE");
-      console.error("[api]", err);
+      console.error("[api]", safeErrorDetails(err));
       return jsonError(500, "INTERNAL_ERROR");
     }
   };
@@ -95,6 +98,14 @@ export async function readJsonLimited<T = unknown>(
   req: Request,
   maxBytes: number = MAX_JSON_BYTES,
 ): Promise<T> {
+  return JSON.parse(await readBodyLimited(req, maxBytes)) as T;
+}
+
+/** Lit un body borné sans lui attribuer une sémantique JSON. */
+async function readBodyLimited(
+  req: Request,
+  maxBytes: number,
+): Promise<string> {
   // Fast-path : Content-Length annonce > plafond -> rejet immediat.
   const declared = Number(req.headers.get("content-length") ?? "");
   if (Number.isFinite(declared) && declared > maxBytes) {
@@ -103,8 +114,7 @@ export async function readJsonLimited<T = unknown>(
 
   const reader = req.body?.getReader();
   if (!reader) {
-    // Pas de corps (ex. body vide) : laisse JSON.parse lever comme req.json().
-    return JSON.parse("") as T;
+    return "";
   }
 
   const chunks: Uint8Array[] = [];
@@ -122,6 +132,18 @@ export async function readJsonLimited<T = unknown>(
     }
   }
 
-  const text = Buffer.concat(chunks).toString("utf8");
+  return Buffer.concat(chunks).toString("utf8");
+}
+
+/**
+ * Variante pour les endpoints dont le body est réellement optionnel : seul
+ * un body vide devient null; un JSON malformé ou trop grand reste une erreur.
+ */
+export async function readOptionalJsonLimited<T = unknown>(
+  req: Request,
+  maxBytes: number = MAX_JSON_BYTES,
+): Promise<T | null> {
+  const text = await readBodyLimited(req, maxBytes);
+  if (text.trim() === "") return null;
   return JSON.parse(text) as T;
 }

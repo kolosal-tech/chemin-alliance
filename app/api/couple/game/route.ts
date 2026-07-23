@@ -10,6 +10,7 @@ import {
   getGameState,
   type GameSurface,
 } from "@/lib/games/engine";
+import { consentingCoupleSpaceMemberWhere } from "@/lib/sensitive-data-consent";
 
 // callLLM (via lib/games/engine) requiert le runtime Node.
 export const runtime = "nodejs";
@@ -26,9 +27,9 @@ export const runtime = "nodejs";
 async function activeSpace(userId: string) {
   return prisma.coupleSpace.findFirst({
     where: {
+      AND: [consentingCoupleSpaceMemberWhere(userId)],
       status: "ACTIVE",
       userBId: { not: null },
-      OR: [{ userAId: userId }, { userBId: userId }],
     },
     select: { id: true, userAId: true, userBId: true },
   });

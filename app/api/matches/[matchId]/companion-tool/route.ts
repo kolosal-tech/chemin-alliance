@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/db";
 import { jsonError, readJsonLimited, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
-import { requireMatchMember } from "@/lib/alliance";
+import { requireActiveMatchMember } from "@/lib/alliance";
 import { encryptField } from "@/lib/security/crypto";
 import { rateLimit, LIMITS } from "@/lib/security/rate-limit";
 import {
@@ -44,7 +44,10 @@ export const POST = withErrors(
     );
     if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
 
-    const match = await requireMatchMember((await params).matchId, user.id);
+    const match = await requireActiveMatchMember(
+      (await params).matchId,
+      user.id,
+    );
     const otherId = match.userAId === user.id ? match.userBId : match.userAId;
 
     const otherUser = await prisma.user.findUnique({

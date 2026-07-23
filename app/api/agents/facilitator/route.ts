@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { jsonError, withErrors } from "@/lib/api-helpers";
 import { requireUser } from "@/lib/security/session";
-import { requireMatchMember } from "@/lib/alliance";
+import { requireActiveMatchMember } from "@/lib/alliance";
 import { questionText, uncoveredThemes } from "@/lib/agents/facilitator";
 import { rateLimit } from "@/lib/security/rate-limit";
 import type { Locale } from "@/lib/core-engine";
@@ -13,7 +13,7 @@ export const GET = withErrors(async (req: Request) => {
   if (!rl.allowed) return jsonError(429, "RATE_LIMITED");
   const matchId = new URL(req.url).searchParams.get("matchId");
   if (!matchId) return jsonError(400, "MATCH_ID_REQUIRED");
-  const match = await requireMatchMember(matchId, user.id);
+  const match = await requireActiveMatchMember(matchId, user.id);
   const answers = await prisma.allianceAnswer.findMany({
     where: { matchId: match.id },
     select: { questionId: true },

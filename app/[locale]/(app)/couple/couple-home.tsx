@@ -23,9 +23,15 @@ type CoupleData = {
     season: "ENGAGED" | "MARRIED" | "PARENTS";
     origin: string;
     inviteCode: string | null;
+    invitePending: boolean;
+    inviteExpiresAt: string | null;
     partner: string | null;
     iAmCreator: boolean;
     pendingMyConfirmation: boolean;
+    seasonRequest: {
+      season: "MARRIED" | "PARENTS";
+      mine: boolean;
+    } | null;
   } | null;
   season?: "JOURNEY" | "ENGAGED" | "MARRIED" | "PARENTS";
   eligibleMatch?: { id: string; other: string } | null;
@@ -58,6 +64,8 @@ export function CoupleHome({ currentUserId }: { currentUserId: string }) {
   const [attempted, setAttempted] = useState(false);
   const [copied, setCopied] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
+  const [freshInviteCode, setFreshInviteCode] = useState<string | null>(null);
+  const [inviteDelivered, setInviteDelivered] = useState<boolean | null>(null);
   const [sendState, setSendState] = useState<
     "idle" | "sending" | "sent" | "error"
   >("idle");
@@ -197,14 +205,19 @@ export function CoupleHome({ currentUserId }: { currentUserId: string }) {
         body: JSON.stringify({ season }),
       });
       if (res.ok) {
-        setGuidance(null);
-        setAnswers({});
-        // Attendre le rechargement : le toast ne doit annoncer la nouvelle
-        // saison qu'une fois l'état interne (parcours, check-in) réellement à jour.
+        const result = (await res.json()) as {
+          state: "REQUESTED" | "ALREADY_REQUESTED" | "ADVANCED";
+        };
         await load();
-        toast.success(
-          season === "PARENTS" ? t("childArrivedDone") : t("marriedDone"),
-        );
+        if (result.state === "ADVANCED") {
+          setGuidance(null);
+          setAnswers({});
+          toast.success(
+            season === "PARENTS" ? t("childArrivedDone") : t("marriedDone"),
+          );
+        } else {
+          toast.success(t("seasonRequestSent"));
+        }
       } else {
         toast.error(t("seasonError"));
       }
@@ -288,6 +301,12 @@ export function CoupleHome({ currentUserId }: { currentUserId: string }) {
       body: JSON.stringify({ email }),
     }).catch(() => null);
     if (res && res.ok) {
+      const result = (await res.json()) as {
+        code: string;
+        delivered: boolean;
+      };
+      setFreshInviteCode(result.code);
+      setInviteDelivered(result.delivered);
       setSendState("sent");
       setInviteEmail("");
     } else {
@@ -337,7 +356,7 @@ export function CoupleHome({ currentUserId }: { currentUserId: string }) {
               {t("marriedCta")} · {data.eligibleMatch.other}
             </AsyncButton>
           ) : (
-            <p className="mt-5 rounded-btn bg-sand-100 px-3.5 py-2.5 text-[15px] text-sand-600 dark:bg-anthracite-700 dark:text-[#7E7A72]">
+            <p className="mt-5 rounded-btn bg-sand-100 px-3.5 py-2.5 text-[15px] text-sand-600 dark:bg-anthracite-700 dark:text-[#8F8A80]">
               {t("marriedHint")}
             </p>
           ))}
@@ -364,7 +383,7 @@ export function CoupleHome({ currentUserId }: { currentUserId: string }) {
             />
             <AsyncButton
               onClick={join}
-              disabled={code.length < 8}
+              disabled={code.length < 21}
               className="rounded-btnsm bg-navy px-3 py-2.5 text-sm font-semibold text-[#F4F1EA] disabled:opacity-50 dark:bg-gold-light dark:text-anthracite-900"
             >
               {t("join")}
@@ -407,7 +426,7 @@ export function CoupleHome({ currentUserId }: { currentUserId: string }) {
     return (
       <main className="relative px-3 pt-6 safe-top lg:mx-auto lg:max-w-3xl">
         {head}
-        {s.inviteCode ? (
+        {!s.partner && s.iAmCreator ? (
           <div className="rounded-cardlg border border-sand-200 bg-surface p-5 text-center dark:border-anthracite-600 dark:bg-anthracite-800">
             <h2 className="font-display text-[21px] text-night dark:text-[#ECE7DD]">
               {t(engagedCtx ? "inviteTitleEngaged" : "inviteTitle")}
@@ -415,18 +434,22 @@ export function CoupleHome({ currentUserId }: { currentUserId: string }) {
             <p className="mt-1.5 text-[16px] text-warmgray dark:text-[#9A958B]">
               {t(engagedCtx ? "inviteBodyEngaged" : "inviteBody")}
             </p>
-            <p className="mx-auto mt-4 inline-block rounded-btn border border-gold bg-[#FBF6E9] px-3 py-3 font-mono text-lg tracking-widest text-gold-ink dark:border-[#6A5A2E] dark:bg-[#272117] dark:text-[#E0C77A]">
-              {s.inviteCode}
-            </p>
-            <div className="mt-3">
-              <button
-                type="button"
-                onClick={() => copyCode(s.inviteCode!)}
-                className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-300 px-3 py-2 text-[16px] font-semibold text-navy dark:border-anthracite-600 dark:text-gold-light"
-              >
-                {copied ? t("codeCopied") : t("copyCode")}
-              </button>
-            </div>
+            {freshInviteCode && (
+              <>
+                <p className="mx-auto mt-4 inline-block rounded-btn border border-gold bg-[#FBF6E9] px-3 py-3 font-mono text-lg tracking-widest text-gold-ink dark:border-[#6A5A2E] dark:bg-[#272117] dark:text-[#E0C77A]">
+                  {freshInviteCode}
+                </p>
+                <div className="mt-3">
+                  <button
+                    type="button"
+                    onClick={() => copyCode(freshInviteCode)}
+                    className="inline-flex items-center gap-1.5 rounded-btnsm border border-sand-300 px-3 py-2 text-[16px] font-semibold text-navy dark:border-anthracite-600 dark:text-gold-light"
+                  >
+                    {copied ? t("codeCopied") : t("copyCode")}
+                  </button>
+                </div>
+              </>
+            )}
 
             <form
               onSubmit={sendInvite}
@@ -459,7 +482,7 @@ export function CoupleHome({ currentUserId }: { currentUserId: string }) {
                   role="status"
                   className="mt-2 text-[15px] text-[#2E7D5B] dark:text-[#7FC9A6]"
                 >
-                  {t("inviteSent")}
+                  {t(inviteDelivered ? "inviteSent" : "inviteReady")}
                 </p>
               )}
               {sendState === "error" && (
@@ -492,10 +515,22 @@ export function CoupleHome({ currentUserId }: { currentUserId: string }) {
         <span className="rounded-[8px] bg-navy px-2.5 py-1 text-[13px] font-semibold text-[#E8D9A8] dark:bg-[#222C42] dark:text-[#B9C6E0]">
           {t(`season${s.season}`)}
         </span>
-        <span className="text-[13px] text-sand-600 dark:text-[#7E7A72]">
+        <span className="text-[13px] text-sand-600 dark:text-[#8F8A80]">
           {t("matchingOff")}
         </span>
       </div>
+
+      {s.seasonRequest && (
+        <p
+          role="status"
+          className="mt-3 rounded-btn border border-gold/30 bg-[#FBF6E9] px-3.5 py-3 text-[15px] text-gold-ink dark:border-[#463A1F] dark:bg-[#272117] dark:text-[#E0C77A]"
+        >
+          {t(
+            s.seasonRequest.mine ? "seasonRequestMine" : "seasonRequestOther",
+            { season: t(`season${s.seasonRequest.season}`) },
+          )}
+        </p>
+      )}
 
       {/* Messagerie privée entre conjoints */}
       <section className="mt-5 rounded-cardlg border border-sand-200 bg-surface p-4 dark:border-anthracite-600 dark:bg-anthracite-800">
@@ -503,7 +538,7 @@ export function CoupleHome({ currentUserId }: { currentUserId: string }) {
           <h2 className="font-display text-[21px] text-night dark:text-[#ECE7DD]">
             {t("messagesTitle")}
           </h2>
-          <span className="text-[12px] text-sand-500 dark:text-[#65625B]">
+          <span className="text-[12px] text-sand-500 dark:text-[#9A958B]">
             {t("messagesPrivacy")}
           </span>
         </div>
@@ -515,7 +550,7 @@ export function CoupleHome({ currentUserId }: { currentUserId: string }) {
           className="msg-scroll mt-3 flex max-h-72 flex-col gap-2.5 overflow-y-auto pl-0.5 pr-2"
         >
           {visibleMessages.length === 0 ? (
-            <p className="py-4 text-center text-[16px] text-sand-500 dark:text-[#7E7A72]">
+            <p className="py-4 text-center text-[16px] text-sand-500 dark:text-[#8F8A80]">
               {t("messagesEmpty")}
             </p>
           ) : (
@@ -537,7 +572,7 @@ export function CoupleHome({ currentUserId }: { currentUserId: string }) {
                 </div>
                 {fmtTime(m.createdAt) && (
                   <span
-                    className={`mt-1 px-1 text-[12px] text-sand-500 dark:text-[#65625B] ${
+                    className={`mt-1 px-1 text-[12px] text-sand-500 dark:text-[#9A958B] ${
                       m.mine ? "text-right" : "text-left"
                     }`}
                   >
@@ -585,7 +620,7 @@ export function CoupleHome({ currentUserId }: { currentUserId: string }) {
           <h2 className="font-display text-[21px] text-night dark:text-[#ECE7DD]">
             {t("checkinTitle")}
           </h2>
-          <span className="text-[12px] text-sand-500 dark:text-[#65625B]">
+          <span className="text-[12px] text-sand-500 dark:text-[#9A958B]">
             {t("checkinPrivacy")}
           </span>
         </div>
@@ -763,8 +798,7 @@ export function CoupleHome({ currentUserId }: { currentUserId: string }) {
         )}
       </section>
 
-      {/* Bascule saison - un changement de saison est un « événement de vie » :
-          on confirme avant (modale), et la bascule retour reste réversible. */}
+      {/* Transition monotone de saison : un membre demande, l'autre confirme. */}
       {s.season === "ENGAGED" ? (
         <button
           type="button"
@@ -781,14 +815,7 @@ export function CoupleHome({ currentUserId }: { currentUserId: string }) {
         >
           {t("childArrived")}
         </button>
-      ) : (
-        <AsyncButton
-          onClick={() => setSeason("MARRIED")}
-          className="mt-3.5 w-full rounded-btnsm border border-sand-400 py-3 text-[16px] font-medium text-warmgray dark:border-anthracite-600 dark:text-[#9A958B]"
-        >
-          {t("backToMarried")}
-        </AsyncButton>
-      )}
+      ) : null}
 
       {error && (
         <p role="alert" className="mt-2 text-[15px] text-danger">
