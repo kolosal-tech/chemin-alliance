@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { vpsDatabaseUrl } from "@/lib/vps-db";
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
@@ -16,11 +17,14 @@ const previewSchemaUrl =
 
 export const prisma =
   globalForPrisma.prisma ??
-  new PrismaClient({
+  initPrisma();
+
+function initPrisma() {
+  const url = vpsDatabaseUrl() ?? previewSchemaUrl;
+  return new PrismaClient({
     log: process.env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
-    ...(previewSchemaUrl
-      ? { datasources: { db: { url: previewSchemaUrl } } }
-      : {}),
+    ...(url ? { datasources: { db: { url } } } : {}),
   });
+}
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

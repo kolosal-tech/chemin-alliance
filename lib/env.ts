@@ -533,6 +533,18 @@ export function validateEnv(source: EnvironmentSource): Environment {
   return parsed.data;
 }
 
-export const env = validateEnv(process.env);
+function runtimeEnvironment(): EnvironmentSource {
+  if (!process.env.CHEMIN_VPS_TLS) return process.env;
+  if (!process.env.CHEMIN_VPS_STORAGE_KEY || !process.env.CHEMIN_VPS_STORAGE_URL) {
+    throw new Error("Configuration du stockage VPS Chemin incomplète");
+  }
+  return {
+    ...process.env,
+    SUPABASE_URL: process.env.CHEMIN_VPS_STORAGE_URL,
+    SUPABASE_SERVICE_ROLE_KEY: process.env.CHEMIN_VPS_STORAGE_KEY,
+  };
+}
+
+export const env = validateEnv(runtimeEnvironment());
 
 export const aiProvider: AiProvider = resolveAiProvider(env);

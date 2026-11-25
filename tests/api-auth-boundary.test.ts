@@ -36,6 +36,7 @@ const SESSIONLESS_ROUTES = new Set([
   // Authentification machine dédiée.
   "app/api/cron/devotional/route.ts",
   "app/api/cron/purge/route.ts",
+  "app/api/ops/vps/route.ts",
   // Clé publique nécessaire avant l'inscription Push.
   "app/api/push/vapid-public-key/route.ts",
   // Signature Stripe vérifiée sur le corps brut.
@@ -100,6 +101,10 @@ describe("frontière d'authentification de toutes les routes API", () => {
     for (const file of cronRoutes) {
       expect(readFileSync(file, "utf8")).toMatch(/\brequireCronAuth\s*\(/);
     }
+
+    const vpsRoute = readFileSync(path.join(API_ROOT, "ops", "vps", "route.ts"), "utf8");
+    expect(vpsRoute).toContain("timingSafeEqual(expected, actual)");
+    expect(vpsRoute).toContain("CHEMIN_VPS_VERIFY_TOKEN");
 
     const stripeWebhook = readFileSync(
       path.join(API_ROOT, "webhooks", "stripe", "route.ts"),
