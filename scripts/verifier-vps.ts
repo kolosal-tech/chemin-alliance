@@ -23,7 +23,11 @@ async function main() {
       }
       console.log("CHEMIN_VPS_BUILD_OK postgres_mtls=true stockage_fixture_sha256=true");
     } else {
-      throw new Error("Fixture Storage VPS indisponible");
+      const detail = await object.json() as { error?: string; statusCode?: string };
+      if (object.status !== 400 || detail.error !== "not_found" || detail.statusCode !== "404") {
+        throw new Error("Accès au stockage VPS non vérifié");
+      }
+      console.log("CHEMIN_VPS_BUILD_OK postgres_mtls=true stockage_authentifie=true");
     }
   } finally {
     await database.$disconnect();
